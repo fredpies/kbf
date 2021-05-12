@@ -78,4 +78,3 @@ http_response_code($statuscode);
 header('Access-Control-Allow-Origin: *');
 header($header);
 echo json_encode($response);
-

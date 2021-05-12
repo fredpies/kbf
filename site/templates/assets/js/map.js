@@ -944,7 +944,8 @@
 
   var config = {
     env: 'dev',
-    url: 'http://localhost'
+    url: 'http://localhost',
+    apiEndpoint: 'http://localhost/kbf2'
   };
 
   function _arrayLikeToArray(arr, len) {
@@ -981,6 +982,8 @@
   function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
+
+  var apiEndpoint$1 = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
 
   function isTouchDevice() {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
@@ -1059,7 +1062,7 @@
             case 0:
               $ = window.$;
               _context.next = 3;
-              return $.get("https://webplanet.biz/kbf/api/industries/");
+              return $.get("".concat(apiEndpoint$1, "/api/industries/"));
 
             case 3:
               return _context.abrupt("return", _context.sent);
@@ -1087,7 +1090,7 @@
             case 0:
               $ = window.$;
               _context2.next = 3;
-              return $.get("https://webplanet.biz/kbf/api/sub-industries/?industry=".concat(industryName));
+              return $.get("".concat(apiEndpoint$1, "/api/sub-industries/?industry=").concat(industryName));
 
             case 3:
               return _context2.abrupt("return", _context2.sent);
@@ -1119,8 +1122,8 @@
               areaName = requestData['area-name'];
               industry = requestData.industry;
               subIndustry = requestData['sub-industry'];
-              if (subIndustry.length > 0) url = "".concat(config.url, "/kbf/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry, "&sub-industry=").concat(subIndustry);
-              if (subIndustry.length === 0) url = "".concat(config.url, "/kbf/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry);
+              if (subIndustry.length > 0) url = "".concat(apiEndpoint$1, "/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry, "&sub-industry=").concat(subIndustry);
+              if (subIndustry.length === 0) url = "".concat(apiEndpoint$1, "/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry);
               _context3.next = 10;
               return $.get(url).fail(function () {
                 $('.kbf-mini-preloader').hide();
@@ -1143,6 +1146,7 @@
 
   function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   var url = config.url;
+  var apiEndpoint = config.apiEndpoint;
 
   var KbfMap = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfMap, _EventTarget);
@@ -1712,7 +1716,7 @@
   KbfMap.markerSymbol = L.icon({
     // Musi byc zmienione dla processwire
     // iconUrl: 'assets/images/marker-icon.png',
-    iconUrl: "".concat(url, "/kbf/site/templates/assets/images/marker-icon.png"),
+    iconUrl: "".concat(url, "/kbf2/site/templates/assets/images/marker-icon.png"),
     iconSize: [30, 40],
     // size of the icon
     iconAnchor: [15, 40],
@@ -1720,7 +1724,7 @@
     popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
 
   });
-  KbfMap.markersAPIEndpoint = url;
+  KbfMap.markersAPIEndpoint = apiEndpoint;
 
   function _superPropBase(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {

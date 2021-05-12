@@ -1,5 +1,7 @@
 import config from "../config/config";
 
+let apiEndpoint = config.apiEndpoint;
+
 // Sprawdza czy urzadzenie jest dotykowe
 export function isTouchDevice() {
     return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
@@ -85,13 +87,13 @@ export function getIndustriesOptions(industries) {
 // Pobiera nazwy branz z rest api
 export async function getIndustries() {
     let $ = window.$;
-    return await $.get("https://webplanet.biz/kbf/api/industries/");
+    return await $.get(`${apiEndpoint}/api/industries/`);
 }
 
 // Pobiera nazwy sub branz z rest api dla danej branzy
 export async function getSubIndustries(industryName) {
     let $ = window.$;
-    return await $.get(`https://webplanet.biz/kbf/api/sub-industries/?industry=${industryName}`);
+    return await $.get(`${apiEndpoint}/api/sub-industries/?industry=${industryName}`);
 }
 
 // Pobiera dane do markerow dla mapy
@@ -104,8 +106,8 @@ export async function getCompanyMarkersData(requestData) {
     let industry = requestData.industry;
     let subIndustry = requestData['sub-industry'];
 
-    if (subIndustry.length > 0) url = `${config.url}/kbf/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}&sub-industry=${subIndustry}`;
-    if (subIndustry.length === 0) url = `${config.url}/kbf/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}`;
+    if (subIndustry.length > 0) url = `${apiEndpoint}/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}&sub-industry=${subIndustry}`;
+    if (subIndustry.length === 0) url = `${apiEndpoint}/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}`;
 
     return await $.get(url).fail(function () {
         $('.kbf-mini-preloader').hide();
