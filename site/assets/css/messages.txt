@@ -1,0 +1,5 @@
+2021-04-13 20:02:48	admin	http://localhost/kbf/processwire/page/sort/	Updated sort for 4 pages (ProcessPageSort)
+2021-04-13 20:02:58	admin	http://localhost/kbf/processwire/page/sort/	Updated sort for 1 pages (ProcessPageSort)
+2021-04-13 20:54:14	admin	http://localhost/kbf/processwire/setup/template/removeFields	Deleted field "company_email" data in 0 row(s) from 0 page(s) using template "company". [page-by-page] (Fields)
+2021-04-13 21:05:56	admin	http://localhost/kbf/processwire/setup/field/edit?id=114	Populated initial created/modified dates for 'company_logo' (FieldtypeImage)
+2021-04-13 21:31:04	admin	http://localhost/kbf/processwire/setup/field/edit?id=120	Populated initial created/modified dates for 'product_image' (FieldtypeImage)

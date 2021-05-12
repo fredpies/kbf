@@ -1,0 +1,31 @@
+2021-04-13 19:15:15	?	?	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:16	?	?	Saved module info caches
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Saved module info caches
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Installed module 'ProcessRecentPages'
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Saved module info caches
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Saved module info caches
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Installed module 'AdminThemeUikit'
+2021-04-13 19:15:16	guest	http://localhost/kbf/http404/	Saved module info caches
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Saved module 'ProcessProfile' config data
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Saved module info caches
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Installed module 'ProcessLogger'
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Saved module info caches
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Installed module 'InputfieldIcon'
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Saved module info caches
+2021-04-13 19:15:22	guest	http://localhost/kbf/processwire/login/	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:28	guest	http://localhost/kbf/processwire/login/	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:28	?	?	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:28	?	?	Saved module info caches
+2021-04-13 19:15:28	admin	http://localhost/kbf/processwire/?login=1	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:29	admin	http://localhost/kbf/processwire/page/?login=1	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:29	?	?	Saved module info caches
+2021-04-13 19:15:29	?	?	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:29	?	?	Saved module info caches
+2021-04-13 19:15:29	admin	http://localhost/kbf/processwire/page/list/?id=1&render=JSON&start=0&lang=0&open=undefined&mode=actions	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:37	admin	http://localhost/kbf/processwire/page/add/?parent_id=1	Saved module 'SystemUpdater' config data
+2021-04-13 19:15:40	admin	http://localhost/kbf/processwire/page/?login=1	Saved module 'SystemUpdater' config data
+2021-04-13 21:13:56	admin	http://localhost/kbf/processwire/module/edit?name=InputfieldCKEditor	Saved module 'InputfieldCKEditor' config data
+2021-04-13 21:14:01	admin	http://localhost/kbf/processwire/module/edit?name=InputfieldCKEditor&collapse_info=1	Saved module 'InputfieldCKEditor' config data
+2021-04-13 21:39:23	admin	http://localhost/kbf/processwire/setup/field/edit?id=123	Installed module 'InputfieldToggle'
+2021-04-13 21:39:24	admin	http://localhost/kbf/processwire/setup/field/edit?id=123	Saved module info caches

@@ -1,0 +1,848 @@
+.go-to-top a {
+  background-color: #1565c0;
+  box-shadow: 0 12px 35px -10px rgba(21, 101, 192, 0.55), 0 8px 10px -5px rgba(0, 0, 0, 0.09), 0 4px 25px -2px rgba(0, 0, 0, 0.14);
+}
+
+.go-to-top a:hover, .go-to-top a:focus {
+  background-color: #1977e2;
+  box-shadow: 0 1px 9px 0 rgba(21, 101, 192, 0.5);
+}
+
+
+/********/
+/* Mapa */
+/********/
+
+.kbf-mini-preloader {
+  position: absolute;
+  bottom: 0;
+  right: 1rem;
+  width: 4rem;
+  height: 2rem;
+  z-index: 5000;
+}
+
+#dots {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50px;
+  width: 50px;
+  margin: -25px 0 0 -25px;
+}
+
+.kbf-button-preloader {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.kbf-button-preloader #dots {
+  position: relative;
+  height: auto;
+  top: 8px;
+  left: initial;
+  width: 50px;
+  margin: initial;
+
+}
+
+#dots span {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  animation: dots 1s infinite ease-in-out;
+}
+
+.kbf-button-preloader #dots span {
+  background: rgba(255, 255, 255, 0.3);
+  animation: dots-button 1s infinite ease-in-out;
+}
+
+#dots span:nth-child(1) {
+  left: 4px;
+  animation-delay: 0.2s;
+}
+
+#dots span:nth-child(2) {
+  left: 19px;
+  animation-delay: 0.3s;
+}
+
+#dots span:nth-child(3) {
+  left: 34px;
+  -webkit-animation-delay: 0.4s;
+  animation-delay: 0.4s;
+}
+
+#dots span:nth-child(4) {
+  left: 45px;
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+}
+
+
+
+@keyframes dots {
+  0% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+    background: rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    transform: translateY(10px);
+    background: #000000;
+  }
+  100% {
+    transform: translateY(0px);
+    background: rgba(0, 0, 0, 0.25);
+  }
+}
+
+@keyframes dots-button {
+  0% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+    background: rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    transform: translateY(10px);
+    background: #FFF;
+  }
+  100% {
+    transform: translateY(0px);
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+
+.kbf-map-info, .kbf-provinces-label {
+  position: absolute;
+  background: #333333;
+  color: white;
+  font-family: Montserrat, sans-serif;
+}
+
+.kbf-provinces-label {
+  font-size: 11px;
+  padding: 4px;
+  background: #173045;
+  border-radius: 8px;
+}
+
+/************************/
+/* Panel kontrolny mapy */
+/************************/
+
+#kbf-map-panel {
+  position: absolute;
+  z-index: 5000;
+  top: 0;
+
+}
+
+#kbf-map-panel .card {
+  height: 375px;
+}
+
+#kbf-map-panel #areas {
+  margin-bottom: 2rem !important;
+}
+
+@media (max-width: 320px) {
+  #kbf-map-panel .card-title {
+    display: none;
+  }
+}
+
+@media (max-height: 480px){
+  #kbf-map-panel .card-title {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  #kbf-map-panel {
+    /*top: 2rem;*/
+    /*left: 2rem;*/
+    width: 50%;
+  }
+}
+
+@media (min-width: 960px) {
+  #kbf-map-panel {
+    top: 2rem;
+    left: 2rem;
+    width: 35%;
+  }
+}
+
+@media (min-width: 1140px) {
+
+  #kbf-map-panel {
+    width: 30%;
+  }
+}
+
+@media (min-width: 1280px) {
+
+  #kbf-map-panel {
+    width: 25%;
+  }
+}
+
+#kbf-map-panel .btn {
+  padding: .625rem 1rem;
+}
+
+#kbf-map-panel button {
+  width: 100%;
+}
+
+#kbf-map-panel h5 {
+  color: #565656;
+  font-weight: normal;
+}
+
+#kbf-map-panel .kbf-map-panel-show-all, #kbf-map-panel .kbf-map-panel-show-province {
+  cursor: pointer;
+  color: #2196f3;
+}
+
+#kbf-map-panel .kbf-map-panel-show-all:hover {
+  opacity: 0.8;
+}
+
+#kbf-map-panel .dropdown-menu.show {
+  max-height: 610px !important;
+  overflow-y: hidden;
+}
+
+@media (max-height: 1024px) {
+  #kbf-map-panel .dropdown-menu.show {
+    max-height: 585px !important;
+  }
+}
+
+@media (max-height: 1024px) and (orientation: portrait) {
+  #kbf-map-panel .dropdown-menu.show {
+    max-height: 485px !important;
+  }
+}
+
+
+@media (max-height: 780px) {
+  #kbf-map-panel .dropdown-menu.show {
+    max-height: 350px !important;
+  }
+
+  #kbf-map-panel .card-body {
+    padding-top: 1rem !important;
+    padding-bottom: 1.2rem !important;
+  }
+}
+
+@media (max-height: 480px) {
+  #kbf-map-panel .dropdown-menu.show {
+    max-height: 320px !important;
+  }
+}
+
+.kbf-map-show-companies {
+  position: absolute;
+  width: 12rem;
+  z-index: 5000;
+  bottom: 2rem;
+  left: 50vw;
+  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
+}
+
+/*Scrollbar*/
+.ps__rail-y {   opacity: 0.6 !important; background-color: #eee !important; width: 16px !important; }
+.ps__thumb-y { width: 11px !important; }
+
+/* Menu */
+.navik-header .logo img {
+  width: auto;
+  max-height: 70px;
+}
+
+@media (min-width: 1278px) {
+  .kbf-menu-item {
+    visibility: visible;
+  }
+  .kbf-menu-item-mobile {
+    visibility: hidden;
+    display: none;
+  }
+}
+@media (max-width: 1278px) {
+  .kbf-menu-item {
+    visibility: hidden;
+    display: none;
+  }
+  .kbf-menu-item-mobile {
+    visibility: visible;
+    color: red;
+  }
+}
+/* Witryna Startowa */
+.img-container {
+  position: relative;
+}
+
+.on-img-button {
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  max-width: 65%;
+}
+
+@media (max-width: 1199.98px) {
+  .on-img-button{
+    top: 42%;
+    font-size: 14px;
+  }
+}
+
+/************************/
+/*  Produkty i uslugi   */
+/************************/
+
+.company-service-info, .product-service-info {
+  position: relative;
+}
+
+.company-service {
+  background-color: white;
+}
+
+.company-service .header-shadow-wrapper, .company-product .header-shadow-wrapper {
+  top: 99%;
+  z-index: 5000;
+}
+
+.company-service-info .company-service-info-images {
+  background-color: white;
+}
+
+.company-product-info .company-product-info-images, .company-service-info .company-service-info-images {
+  height: 28rem;
+}
+
+.company-product-info .company-product-info-images figure, .company-service-info .company-service-info-images figure {
+  width: 100%;
+  height: 19rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.company-product-info .company-product-info-details, .company-service-info .company-service-info-details {
+  width: 80%;
+  bottom: 1rem;
+  left: 2rem;
+}
+
+.company-product-phone, .company-service-phone {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.company-product-phone .company-product-info-details, .company-service-phone .company-service-info-details {
+  width: 100%;
+  bottom: 1rem;
+  left: 0;
+}
+
+
+.company-product-phone .company-product-info-details p, .company-service-phone .company-service-info-details p {
+  font-size: .875rem;
+  font-weight: 400;
+  color: #717171 !important;
+  text-transform: none;
+;
+}
+
+.company-product-phone .company-product-info .company-product-info-images, .company-service-phone .company-service-info .company-service-info-images {
+  overflow: hidden;
+  height: 35rem;
+}
+
+@media (min-width: 768px) {
+  .company-product-info .company-product-info-images, .company-service-info .company-service-info-images {
+    height: 32rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .company-product-info .company-product-info-images, .company-service-info .company-service-info-images {
+    height: 38rem;
+  }
+}
+
+/************************/
+/*        Praca         */
+/************************/
+
+.company-job {
+  height: 18rem;
+  transition: opacity 0.2s ease;
+}
+
+.company-job:hover {
+  cursor: pointer;
+  opacity: 0.95;
+}
+
+.company-job .card-text {
+  margin-bottom: 0 !important;
+}
+
+
+.company-job .show-more, .company-job-phone .show-more {
+  width: 90%;
+  right: 1.875rem;
+  bottom: 1.875rem;
+}
+
+.company-job-phone {
+  height: 22rem;
+}
+
+.company-job-phone i:before {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .company-job {
+    height: 23rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .company-job {
+    height: 26rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .company-job {
+    height: 21rem;
+  }
+}
+
+/************************/
+/*      Mini mapa       */
+/************************/
+
+#kbf-minimap {
+  overflow: hidden;
+  width: 100%;
+  height: 10rem;
+}
+
+@media (min-width: 1280px) {
+  #kbf-minimap {
+   height: 12rem;
+  }
+}
+
+/************************/
+/*      Formularze      */
+/************************/
+
+/* Textarea transition fix */
+textarea.form-control {
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+}
+
+textarea {
+ resize: none;
+}
+
+.kbf-error-message {
+  color: red;
+  padding-left: 1rem;
+  position: relative;
+  bottom: 1rem;
+}
+
+/************************/
+/*    Oferta pracy      */
+/************************/
+
+.job-details .list-group-item {
+  position: relative;
+}
+
+.job-details .list-group-item:after {
+  position: absolute;
+  content: '';
+  top: 0.7rem;
+  left: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  background-image: url("../images/check-mark.svg");
+  background-size: cover;
+}
+
+@media (min-width: 768px) {
+  .job-details .list-group-item:after {
+    left: 0.2rem;
+  }
+}
+
+
+/************************/
+/*      Listy           */
+/************************/
+
+.company-list-item .company-logo, .job-list-item .company-logo {
+  width: 18%;
+}
+
+.company-list-item .company-name, .job-list-item .job-name {
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+
+  .company-list-item .company-name, .job-list-item .job-name, .job-list-item .job-description {
+    font-size: 0.85rem;
+  }
+
+  .company-list-item .company-name:hover, .job-list-item .job-name:hover, .product-list-item .product-name:hover {
+
+    color: rgb(106, 184, 247) !important;
+
+  }
+
+
+  .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city {
+    font-size: 0.8rem;
+  }
+
+  .company-list-item .company-logo, .job-list-item .company-logo {
+    width: auto;
+    margin-top: 1.5rem;
+  }
+
+  .company-list-item .company-phone {
+    font-size: 0.7rem;
+}
+
+
+}
+
+@media (min-width: 1200px) {
+
+  .company-list-item .company-name, .job-list-item .job-name {
+    font-size: 0.95rem;
+  }
+
+  .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city {
+    font-size: 0.9rem;
+  }
+
+  .company-list-item .company-phone {
+    font-size: 0.8rem;
+  }
+
+}
+
+
+
+/************************/
+/*         Inne         */
+/************************/
+
+/* Like button */
+#kbf-like-button {
+  transition: all 0.05s ease-out;
+}
+#kbf-like-button:hover {
+  cursor: pointer;
+  transform: scale(1.05) translateY(-2px);
+}
+
+/* Tagi branż */
+.company-industry {
+  transition: opacity 0.1s ease;
+}
+
+.company-industry:hover {
+  opacity: 0.8;
+}
+
+/* Pokaż więcej */
+.show-more {
+  transition-property: all;
+  transition-duration: 0.2s;
+}
+.show-more:hover {
+  transform: translate(4px);
+}
+
+/* Logo firmy */
+@media (min-width: 768px) {
+  .company-logo img {
+    transform-origin: 0 0;
+    transform: scale(0.6);
+  }
+}
+
+/* Centrowanie elementow na karuzeli produktow */
+.product .owl-stage {
+  display: flex;
+  align-items: center;
+}
+
+/* Przelaczanie wojewodztw i powiatow */
+.kbf-index-area-switcher button {
+  width: 100%;
+}
+
+.kbf-index-area-switcher .dropdown-menu.show {
+  max-height: 200px !important;
+  overflow-y: hidden;
+}
+
+@media (min-height: 600px) {
+  .kbf-index-area-switcher .dropdown-menu.show {
+    max-height: 250px !important;
+    overflow-y: hidden;
+  }
+}
+
+@media (min-height: 768px) {
+  .kbf-index-area-switcher .dropdown-menu.show {
+    max-height: 350px !important;
+    overflow-y: hidden;
+  }
+}
+
+/* Dropdowny */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-item {
+  padding-left: 15px;
+}
+
+.dropdown-menu {
+  z-index: 5000;
+}
+
+.ps__rail-x,
+.ps__rail-y {
+  opacity: 0.6;
+}
+
+/* Tytuly tablet */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .h5, h5 {
+    font-size: 1rem;
+  }
+}
+
+/* Banery na stronie glownej */
+.kbf-banner-index {
+  background: #fff;
+  position: relative;
+  width: 100%;
+  height: 140px;
+  z-index: 100;
+}
+
+.kbf-banner-index:before, .kbf-banner-index:after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  background: linear-gradient(45deg, #e91e63, #1565c0, #4db6ac, #fbc02d, #d32f2f, #e91e63, #2196f3, #66bb6a, #fbc02d, #ef5350);
+  background-size: 400%;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  z-index: -1;
+  animation: steam 50s linear infinite;
+}
+
+@keyframes steam {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.kbf-banner-index:after {
+  filter: blur(40px);
+}
+
+.kbf-banner-index .carousel-control-next-icon, .kbf-banner-index .carousel-control-prev-icon {
+  filter: brightness(0.6);
+}
+
+.kbf-banner-index img, .kbf-banner img {
+  max-height: 100px;
+}
+@media (max-width: 991.98px) {
+  .kbf-banner-index img, .kbf-banner img {
+    max-height: 60px;
+  }
+}
+
+.img-kbf-banner-old {
+  min-height: 80px;
+  margin: auto;
+}
+
+.kbf-img-cover {
+  max-height: 100% !important;
+  height: 140px !important;
+  width: 100% !important;
+  object-fit: cover;
+}
+
+/* Narzedzia */
+.mw-15 {
+  max-width: 15%;
+}
+
+/* Back button */
+
+.kbf-back-button {
+  display: inline-flex;
+  justify-content: center;
+}
+
+/* Firmy popup na mapie */
+
+.leaflet-popup-pane {
+  z-index: 10000 !important;
+}
+
+.leaflet-popup-content p {
+  font-family: Montserrat, sans-serif;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+  font-size: 0.8rem !important;
+}
+
+.leaflet-popup-content p:last-of-type {
+  margin-bottom: 1rem !important;
+}
+
+.leaflet-popup-content a {
+  font-family: Montserrat, sans-serif;
+  color: #2196f3 !important;
+  font-size: .875rem;
+}
+
+.leaflet-popup-content a:hover {
+  opacity: 0.8;
+}
+
+/* Menu Dropdown */
+@media (min-width: 1280px) {
+  .navik-menu li>ul {
+    width: 400px;
+  }
+}
+
+/* Hover fix */
+
+.hover-flip-img > figure:nth-child(2) {
+  display: none;
+}
+
+.hover-flip-img:hover > figure:nth-child(2) {
+  display: block;
+}
+
+/* Akordeon fix */
+.custom-control-label {
+  font-size: 14px !important;
+}
+
+#sidebarMenu .card-header:hover {
+  color: #fff !important;
+  background-color: #45a7f5 !important;
+  border-color: #45a7f5 !important;
+  box-shadow: 0 1px 9px 0 rgba(33,150,243,.5) !important;
+  transition: all .2s ease-in-out !important;
+}
+
+/* Tagi branż */
+
+.company-industry {
+  cursor: pointer;
+  transition: all 0.1s ease;
+  overflow: hidden;
+}
+
+.company-industry:hover {
+  opacity: 0.8;
+}
+
+
+.kbf-filter-badges-container {
+  overflow: hidden;
+  height: 5.9rem;
+}
+
+.kbf-filter-badges {
+  position: relative;
+  height: 4rem;
+}
+
+.kbf-filter-badges {
+  display: flex;
+}
+
+.kbf-filter-badges .company-industry {
+  height: 1.5rem;
+  position: relative;
+  text-align: center;
+  padding-right: 0.4rem;
+  margin-right: 0.5rem;
+}
+
+.kbf-filter-badges .company-industry:last-child {
+  margin-right: 0;
+}
+
+.kbf-filter-badges .company-industry .badge-close {
+  position: relative;
+  display: inline-block;
+  padding-left: 0.4rem;
+}
+
+.kbf-badge-filter-actions > a {
+  font-size: 0.83rem !important;
+  cursor: pointer;
+}
+
+.kbf-badge-filter-actions > a:hover {
+  color: #0a6ebd !important;
+}
+
+

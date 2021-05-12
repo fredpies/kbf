@@ -1,0 +1,1 @@
+browser-sync start --proxy 'localhost/kbf2' --files 'site/templates/**' --serveStatic 'site' -

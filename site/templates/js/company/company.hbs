@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{> head }}
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="assets/css/leaflet.css">
+</head>
+<body>
+
+<!-- Preloader -->
+{{> preloader }}
+
+<!-- Navigation menu -->
+{{> menu }}
+
+<!-- Content -->
+<div class="main-content py-0">
+    <div class="container">
+        <!-- Company info-->
+        <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">INFORMACJE O FIRMIE</h3>
+
+        <div class="bg-white p-md-5 px-4 rounded-xl shadow-sm mb-3 mb-md-5">
+
+            <!-- Company details -->
+            <div class="row">
+                <div class="col-12 col-md-7 px-0">
+                    <div class="row no-gutters">
+                        <div class="col-2 text-center">
+                            <img class="d-inline-block img-fluid" alt="image" src="assets/images/upload/company-logo.png">
+                        </div>
+                        <div class="col-10 company-info pl-2">
+                            <h5 class="font-weight-700 mb-2 section-title-4 text-left">WebPlanet Witryny i aplikacje internetowe</h5>
+                            <div class="company-address mb-2 small">REGON: 223433412</div>
+                            <div class="company-street">Jagiellońska 115A</div>
+                            <div class="company-zip-city">
+                                <span class="company-zip">85-027</span>
+                                <span class="company-city">Bydgoszcz</span>
+                            </div>
+                            <a class="d-block text-dark text-nowrap" href="tel:+48601789633"><i class="fas fa-phone-alt mr-2"></i>+48601789633</a>
+                            <a class="d-block text-dark text-nowrap" href="fax:+358.555.1234567"><i class="fas fa-fax mr-2"></i>+358.555.1234567</a>
+                            <a class="d-block text-dark text-nowrap" href="#" target=”_blank”><i class="fas fa-globe mr-2"></i>webplanet.biz</a>
+                            <div class="company-industries">
+                                <a href="#"><span class="company-industry badge badge-pill badge-primary mb-1 mt-3">Oprogramowanie</span></a>
+                                <a href="#"><span class="company-industry badge badge-pill badge-warning mb-1 mt-1">Usługi komputerowe i informatyczne</span></a>
+                                <a href="#"><span class="company-industry badge badge-pill badge-success mb-1 mt-1">Projektowanie stron www</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 my-3 my-md-0 no-gutters">
+                    <!-- Minimap -->
+                    <div id="kbf-minimap" data-lat="53.1227812" data-lon="18.0327309282219"></div>
+                </div>
+                <div class="col-12 col-md-1 text-center text-md-right mb-3">
+                    <a href="#" class="text-dark tooltip-btn p-1 mr-n1" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych">
+                        <img src="assets/images/heart.svg" alt="heart-image" class="d-inline-block">
+                    </a>
+                </div>
+                <div class="col-12">
+                    <div class="company-description my-2 my-md-4">Donec ut nibh eu nibh fermentum volutpat pellentesque sed
+                        metus. Fusce iaculis quam nisl, a elementum est hendrerit in. Nullam lectus neque, imperdiet
+                        fringilla purus non, mattis consequat mauris. Curabitur ipsum nulla, pellentesque vitae ornare
+                        nec condimentum.
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Company products phone -->
+            <div class="company-products-phone d-sm-none font-weight-600 my-4 text-primary text-uppercase">Produkty
+            </div>
+
+            <div class="d-sm-none font-weight-600 mt-4 text-primary text-uppercase">
+
+                <div class="company-product-phone col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                        <div class="company-product-info-images hover-flip-img hover-item">
+                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 9.jpg');"></figure>
+                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 10.jpg');"></figure>
+                        </div>
+
+                        <div class="company-product-info-details bg-white p-2 position-absolute text-left z-config-9">
+                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                Sem Massa</a></h5>
+                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">22.99 PLN</span>
+                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-product-phone col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                        <div class="company-product-info-images hover-flip-img hover-item">
+                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 3.jpg');"></figure>
+                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 4.jpg');"></figure>
+                        </div>
+
+                        <div class="company-product-info-details bg-white p-2 position-absolute text-left z-config-9">
+                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                Sem Massa</a></h5>
+                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">99.99 PLN</span>
+                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-product-phone col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                        <div class="company-product-info-images hover-flip-img hover-item">
+                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 5.jpg');"></figure>
+                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 6.jpg');"></figure>
+                        </div>
+
+                        <div class="company-product-info-details bg-white p-2 position-absolute text-left z-config-9">
+                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                Sem Massa</a></h5>
+                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">32.99 PLN</span>
+                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-product-phone col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                        <div class="company-product-info-images hover-flip-img hover-item">
+                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 7.jpg');"></figure>
+                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 8.jpg');"></figure>
+                        </div>
+
+                        <div class="company-product-info-details bg-white p-2 position-absolute text-left z-config-9">
+                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                Sem Massa</a></h5>
+                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">44.99 PLN</span>
+                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-product-phone col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                        <div class="company-product-info-images hover-flip-img hover-item">
+                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 9.jpg');"></figure>
+                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 10.jpg');"></figure>
+                        </div>
+
+                        <div class="company-product-info-details bg-white p-2 position-absolute text-left z-config-9">
+                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                Sem Massa</a></h5>
+                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">22.99 PLN</span>
+                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="company-product-phone col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                        <div class="company-product-info-images hover-flip-img hover-item">
+                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 12.jpg');"></figure>
+                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 11.jpg');"></figure>
+                        </div>
+
+                        <div class="company-product-info-details bg-white p-2 position-absolute text-left z-config-9">
+                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                Sem Massa</a></h5>
+                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">119.99 PLN</span>
+                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <a href="#" class="d-block d-sm-none font-weight-400 mt-4 text-center text-primary">Zobacz więcej
+                produktów</a>
+            <div class="company-services-phone d-sm-none font-weight-600 my-4 text-primary text-uppercase">usługi</div>
+            <div class="company-service d-sm-none">
+                <h5>Usługa 1</h5>
+                <p> Aenean sed ornare orci. Nunc tincidunt aliquet tortor, ut cursus orci eu maximus quisque odio arcu,
+                    lobortis vel efficitur dolor, pretium at urna. Aliquam cursus scelerisque lectus, bibendum tincidunt
+                    erat iaculis et. Aenean congue quam ac sollicitudin risus euismod nec.</p>
+            </div>
+            <div class="company-service d-sm-none">
+                <h5>Usługa 2</h5>
+                <p>Aenean sed ornare orci. Nunc tincidunt aliquet tortor, ut cursus orci eu maximus quisque odio arcu,
+                    lobortis vel efficitur dolor, pretium at urna. Aliquam cursus scelerisque lectus, bibendum tincidunt
+                    erat iaculis et. Aenean congue quam ac sollicitudin risus euismod nec.</p>
+            </div>
+            <div class="company-service d-sm-none">
+                <h5>Usługa 3</h5>
+                <p>Aenean sed ornare orci. Nunc tincidunt aliquet tortor, ut cursus orci eu maximus quisque odio arcu,
+                    lobortis vel efficitur dolor, pretium at urna. Aliquam cursus scelerisque lectus, bibendum tincidunt
+                    erat iaculis et. Aenean congue quam ac sollicitudin risus euismod nec.</p>
+            </div>
+
+            <!-- Company jobs phone -->
+            <div class="company-jobs-phone d-sm-none font-weight-600 my-4 text-primary text-uppercase">oferty pracy</div>
+
+            <div class="row d-sm-none">
+                <div class="col-md-6 col-lg-4">
+                    <div class="company-job-phone card text-white bg-viridian-100 border-0 shadow bg-image"
+                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                        <div class="company-job-title card-header font-weight-700 text-uppercase p-2">
+                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Pracownik magazynu logistyki modowej</span>
+                            </a>
+                        </div>
+                        <div class="company-job-description card-body p-3 position-relative">
+                            <p class="card-text">
+                                Poszukujemy pracownika na stanowisko: <span class="d-block my-2 font-weight-600 text-warning">Pracownik magazynu logistyki modowej</span>
+                                Pracownik będzie zatrudniony jako wsparcie dla naszego oddziału w Großbeeren ...
+
+                            </p>
+                            <div class="show-more text-right pt-2 position-absolute">
+                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                        class="fas fa-long-arrow-alt-right "></i>Więcej informacji</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="company-job-phone card text-white bg-viridian-100 border-0 shadow bg-image"
+                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                        <div class="company-job-title card-header font-weight-700 text-uppercase p-2">
+                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Pomoc apteczna</span>
+                            </a>
+                        </div>
+                        <div class="company-job-description card-body p-3 position-relative">
+                            <p class="card-text">
+                                Poszukujemy pracownika na stanowisko: <span class="d-block my-2 font-weight-600 text-warning">Pomoc apteczna</span>
+                                Ziko Apteka to polska firma, która stale rozwija się na rynku farmaceutycznym.
+                                Naszą działalność opieramy na trosce ...
+
+                            </p>
+                            <div class="show-more text-right pt-2 position-absolute">
+                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                        class="fas fa-long-arrow-alt-right "></i>Więcej informacji</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Tabs-->
+            <div class="row pb-4 mb-5">
+                <div class="col d-none d-sm-block mt-sm-4">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="active company-products nav-item nav-link" id="nav-first-tab" data-toggle="tab"
+                               href="#company-products-pane" role="tab" aria-controls="company-products-pane"
+                               aria-selected="true">PRODUKTY</a>
+                            <a class="company-services nav-item nav-link" id="nav-second-tab" data-toggle="tab"
+                               href="#company-services-pane" role="tab" aria-controls="nav-profile"
+                               aria-selected="false">Usługi</a>
+                            <a class="company-jobs nav-item nav-link" id="nav-third-tab" data-toggle="tab"
+                               href="#company-jobs-pane" role="tab" aria-controls="company-jobs-pane"
+                               aria-selected="false">oferty pracy</a>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+
+                        <div class="tab-pane fade active show" id="company-products-pane" role="tabpanel"
+                             aria-labelledby="nav-first-tab">
+                            <div class="row">
+
+                                <!-- Company products -->
+                                <div class="company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                                        <div class="company-product-info-images hover-flip-img hover-item">
+                                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 2.jpg');"></figure>
+                                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 1.jpg');"></figure>
+                                        </div>
+
+                                        <div class="company-product-info-details bg-white p-4 position-absolute text-center z-config-9">
+                                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                                Sem Massa</a></h5>
+                                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">799.99 PLN</span>
+                                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                                        <div class="company-product-info-images hover-flip-img hover-item">
+                                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 3.jpg');"></figure>
+                                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 4.jpg');"></figure>
+                                        </div>
+
+                                        <div class="company-product-info-details bg-white p-4 position-absolute text-center z-config-9">
+                                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                                Sem Massa</a></h5>
+                                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">99.99 PLN</span>
+                                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                                        <div class="company-product-info-images hover-flip-img hover-item">
+                                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 5.jpg');"></figure>
+                                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 6.jpg');"></figure>
+                                        </div>
+
+                                        <div class="company-product-info-details bg-white p-4 position-absolute text-center z-config-9">
+                                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                                Sem Massa</a></h5>
+                                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">32.99 PLN</span>
+                                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                                        <div class="company-product-info-images hover-flip-img hover-item">
+                                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 7.jpg');"></figure>
+                                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 8.jpg');"></figure>
+                                        </div>
+
+                                        <div class="company-product-info-details bg-white p-4 position-absolute text-center z-config-9">
+                                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                                Sem Massa</a></h5>
+                                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">44.99 PLN</span>
+                                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                                        <div class="company-product-info-images hover-flip-img hover-item">
+                                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 9.jpg');"></figure>
+                                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 10.jpg');"></figure>
+                                        </div>
+
+                                        <div class="company-product-info-details bg-white p-4 position-absolute text-center z-config-9">
+                                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                                Sem Massa</a></h5>
+                                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">22.99 PLN</span>
+                                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative">
+                                    <div class="company-product-info bg-white mb-5 mb-lg-0 shadow">
+
+                                        <div class="company-product-info-images hover-flip-img hover-item">
+                                            <figure class="img-front z-config-0" style="background-image: url('assets/images/upload/product - 12.jpg');"></figure>
+                                            <figure class="z-config-0" style="background-image: url('assets/images/upload/product - 11.jpg');"></figure>
+                                        </div>
+
+                                        <div class="company-product-info-details bg-white p-4 position-absolute text-center z-config-9">
+                                            <h5 class="font-weight-700 mt-2"><a href="#" class="text-dark-gray">Fusce
+                                                Sem Massa</a></h5>
+                                            <p>Volutpat pellentesque sed metus. Fusce iaculis quam nisl, a elementum est
+                                                hendrerit in. Nullam lectus fusce iaculis quam nisl, a elementum est. Sed metus. Fusce iaculis...</p>
+                                            <h6 class="font-weight-400 font-italic mb-2"><span class="text-carrot">119.99 PLN</span>
+                                                <button href="#" class="mx-auto mt-4 d-block btn btn-lg btn-sm btn-round btn-indigo ml-2">Zobacz więcej</button>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <a href="#" class="d-block font-weight-400 h6 pt-4 text-center text-primary">Zobacz więcej produktów</a>
+
+                        </div>
+                        <div class="tab-pane fade" id="company-services-pane" role="tabpanel"
+                             aria-labelledby="nav-second-tab">
+
+                            <!-- Company services -->
+                            <div class="company-service">
+                                <h5>Usługa 1</h5>
+                                <p>Aenean sed ornare orci. Nunc tincidunt aliquet tortor, ut cursus orci eu maximus
+                                    quisque odio arcu, lobortis vel efficitur dolor, pretium at urna. Aliquam cursus
+                                    scelerisque lectus, bibendum tincidunt erat iaculis et. Aenean congue quam ac
+                                    sollicitudin risus euismod nec.</p>
+                            </div>
+                            <div class="company-service">
+                                <h5>Usługa 2</h5>
+                                <p>Aenean sed ornare orci. Nunc tincidunt aliquet tortor, ut cursus orci eu maximus
+                                    quisque odio arcu, lobortis vel efficitur dolor, pretium at urna. Aliquam cursus
+                                    scelerisque lectus, bibendum tincidunt erat iaculis et. Aenean congue quam ac
+                                    sollicitudin risus euismod nec.</p>
+                            </div>
+                            <div class="company-service">
+                                <h5>Usługa 3</h5>
+                                <p>Aenean sed ornare orci. Nunc tincidunt aliquet tortor, ut cursus orci eu maximus
+                                    quisque odio arcu, lobortis vel efficitur dolor, pretium at urna. Aliquam cursus
+                                    scelerisque lectus, bibendum tincidunt erat iaculis et. Aenean congue quam ac
+                                    sollicitudin risus euismod nec.</p>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="company-jobs-pane" role="tabpanel"
+                             aria-labelledby="nav-third-tab">
+                            <div class="row">
+
+                                <!-- Company jobs-->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="company-job card text-white bg-viridian-100 border-0 shadow bg-image"
+                                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                                        <div class="company-job-title card-header font-weight-700 text-uppercase">
+                                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">pracownik magazynu logistyki modowej</span>
+                                            </a>
+                                        </div>
+                                        <div class="company-job-description card-body position-relative">
+                                            <p class="card-text">
+                                                Poszukujemy pracownika na stanowisko: <span class="d-block my-2 font-weight-600 text-warning">Pracownik magazynu logistyki modowej</span>
+                                                Pracownik będzie zatrudniony jako wsparcie dla naszego oddziału w Großbeeren ...
+
+                                            </p>
+                                            <div class="show-more text-right pt-2 position-absolute">
+                                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                                        class="fas fa-long-arrow-alt-right "></i>Więcej informacji</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="company-job card text-white bg-viridian-100 border-0 shadow bg-image"
+                                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                                        <div class="company-job-title card-header font-weight-700 text-uppercase">
+                                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Doradca ubezpieczeniowy</span>
+                                            </a>
+                                        </div>
+                                        <div class="company-job-description card-body position-relative">
+                                            <p class="card-text">
+                                                Poszukujemy osoby na stanowisko:
+                                                <span class="d-block my-2 font-weight-600 text-warning">Doradca ubezpieczniowy</span>
+                                                Możesz liczyć na realne możliwości rozwoju już od samego początku.
+                                                Przecież nie musisz wszystkiego wiedzieć od razu ...
+                                            </p>
+                                            <div class="show-more text-right pt-2 position-absolute">
+                                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                                        class="fas fa-long-arrow-alt-right"></i>Więcej informacji</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="company-job card text-white bg-viridian-100 border-0 shadow bg-image"
+                                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                                        <div class="company-job-title card-header font-weight-700 text-uppercase">
+                                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Pomoc apteczna</span>
+                                            </a>
+                                        </div>
+                                        <div class="company-job-description card-body position-relative">
+                                            <p class="card-text">
+                                                Poszukujemy osoby na stanowisko:
+                                                <span class="d-block my-2 font-weight-600 text-warning">Pomoc apteczna</span>
+                                                Ziko Apteka to polska firma, która stale rozwija się na rynku farmaceutycznym.
+                                                Naszą działalność opieramy na trosce ...
+                                            </p>
+                                            <div class="show-more text-right pt-2 position-absolute">
+                                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                                        class="fas fa-long-arrow-alt-right"></i>Więcej informacji</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="company-job card text-white bg-viridian-100 border-0 shadow bg-image"
+                                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                                        <div class="company-job-title card-header font-weight-700 text-uppercase">
+                                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Analityk zgłoszeń serwisowych</span>
+                                            </a>
+                                        </div>
+                                        <div class="company-job-description card-body position-relative">
+                                            <p class="card-text">
+                                                Poszukujemy osoby na stanowisko:
+                                                <span class="d-block my-2 font-weight-600 text-warning">Analityk zgłoszeń serwisowych</span>
+                                                Do zakresu obowiązków będzie należeć utrzymanie i rozwój dobrych ...
+
+                                            </p>
+                                            <div class="show-more text-right pt-2 position-absolute">
+                                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                                        class="fas fa-long-arrow-alt-right"></i>Więcej informacji</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="company-job card text-white bg-viridian-100 border-0 shadow bg-image"
+                                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                                        <div class="company-job-title card-header font-weight-700 text-uppercase">
+                                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Pracownik magazynu logistyki modowej</span>
+                                            </a>
+                                        </div>
+                                        <div class="company-job-description card-body position-relative">
+                                            <p class="card-text">
+                                                Poszukujemy pracownika na stanowisko: <span class="d-block my-2 font-weight-600 text-warning">Pracownik magazynu logistyki modowej</span>
+                                                Pracownik będzie zatrudniony jako wsparcie dla naszego oddziału w Großbeeren ...
+
+                                            </p>
+                                            <div class="show-more text-right pt-2 position-absolute">
+                                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                                        class="fas fa-long-arrow-alt-right "></i>Więcej informacji</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="company-job card text-white bg-viridian-100 border-0 shadow bg-image"
+                                         data-img-src="../dist/assets/images/upload/service-card-box-01.png">
+                                        <div class="company-job-title card-header font-weight-700 text-uppercase">
+                                            <a href="#" class="d-flex align-items-center text-white"> <i
+                                                    class="fas fa-bahai fa-lg mr-2"></i> <span class="mt-1">Pomoc apteczna</span>
+                                            </a>
+                                        </div>
+                                        <div class="company-job-description card-body position-relative">
+                                            <p class="card-text">
+                                                Poszukujemy osoby na stanowisko:
+                                                <span class="d-block my-2 font-weight-600 text-warning">Pomoc apteczna</span>
+                                                Ziko Apteka to polska firma, która stale rozwija się na rynku farmaceutycznym.
+                                                Naszą działalność opieramy na trosce ...
+                                            </p>
+                                            <div class="show-more text-right pt-2 position-absolute">
+                                                <a href="#" class="btn btn-sm btn-link text-white pr-0 mb-0"><i
+                                                        class="fas fa-long-arrow-alt-right"></i>Więcej informacji</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Footer -->
+{{> footer }}
+<!-- Go to top -->
+{{> go-to-top }}
+
+{{> scripts }}
+
+<!-- Leaflet js -->
+<script src="assets/js/vendor/leaflet.js"></script>
+
+<!-- Leaflet Providers js -->
+<script src="assets/js/vendor/leaflet-providers.js"></script>
+
+<!-- Main script -->
+<script src="assets/js/company.js"></script>
+<script>
+
+    $(function () {
+
+        // Ustaw tooltips
+        $('.tooltip-btn').tooltip()
+        $('.tooltip-btn-light').tooltip({
+            template: '<div class="tooltip tooltip-light" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+        })
+
+    })
+
+</script>
+</body>
+</html>

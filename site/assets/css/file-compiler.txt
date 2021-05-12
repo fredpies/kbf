@@ -1,0 +1,1 @@
+2021-04-13 19:15:42	admin	http://localhost/kbf/	Compiled file: /site/templates/home.php
