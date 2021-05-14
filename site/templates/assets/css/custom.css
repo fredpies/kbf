@@ -668,6 +668,13 @@
 }
 
 /* Przelaczanie wojewodztw i powiatow */
+
+.kbf-index-area-switcher #provinces label, .kbf-index-area-switcher #areas label {
+  font-size: 1rem !important;
+  color: white !important;
+  margin-bottom: 1rem;
+}
+
 .kbf-index-area-switcher button {
   width: 100%;
 }
@@ -677,12 +684,19 @@
   overflow-y: hidden;
 }
 
+@media (min-width: 900px) {
+  .kbf-index-area-switcher .kbf-search {
+    margin-top: 5rem;
+  }
+}
+
 @media (min-height: 600px) {
   .kbf-index-area-switcher .dropdown-menu.show {
     max-height: 250px !important;
     overflow-y: hidden;
   }
 }
+
 
 @media (min-height: 768px) {
   .kbf-index-area-switcher .dropdown-menu.show {

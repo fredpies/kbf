@@ -1,5 +1,5 @@
 import KbfIndustryFilter from "../../components/KbfIndustryFilter";
-import KbgTag from "../../components/KbgTag";
+import KbgTag from "../../components/KbfTag";
 
 class App {
 

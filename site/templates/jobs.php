@@ -3,8 +3,20 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$sub_industry = array();
+
+// Pobierz tablice sub branz jezeli podano branze
+if ($input->industry) {
+    $sub_industry = get_sub_industries($input->industry);
+}
+
+// Pobierz sub branze jezeli wystepuja
+if ($input->sub_industry) {
+    $sub_industry[] = $sanitizer->text($input->sub_industry);
+}
+
 // Pobierz dane o ofertach pracy na podstawie filtra
-$jobs = $pages->find(get_filter_query($input, 'job', $sanitizer, $database, $db));
+$jobs = $pages->find(get_filter_selector($input, 'job'));
 
 // Paginacja ofert pracy
 $pagination = get_pagination($jobs);
@@ -963,8 +975,8 @@ $home_page_url = $pages->get(1)->url;
                             <?php
                                 // Lista ofert pracy
                                 foreach ($jobs as $job) {
-                                    $jobs_data = get_job_data($job, $sanitizer);
-                                    show_job_list_item($jobs_data,  $urls);
+                                    $jobs_data = sanitize_job_data($job);
+                                    render_job_list_item($jobs_data);
                                 }
                             ?>
 

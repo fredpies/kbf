@@ -4,7 +4,7 @@ include_once "partials/_init.php";
 include_once "lib/functions.php";
 
 // Przygotuj dane o firmie
-$company_data = get_company_data($page, $sanitizer);
+$company_data = sanitize_company_data($page);
 $lat = $company_data["lat"];
 $lon = $company_data["lon"];
 $company_description_html = $company_data["company_description_html"];
@@ -57,7 +57,7 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
             <!-- Company details -->
             <div class="row">
                 <div class="col-12 col-md-7 px-0">
-                    <?php  show_company_info($pages, $company_data); ?>
+                    <?php  render_company_info($company_data); ?>
                 </div>
 
                 <!-- Minimap -->
@@ -90,8 +90,8 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
 
                 foreach ($products as $product) {
 
-                    $product_data = get_product_data($product, $sanitizer);
-                    show_product_info($product_data, $sanitizer, "phone");
+                    $product_data = sanitize_product_data($product);
+                    render_product_info($product_data, "phone");
 
                 }
 
@@ -109,8 +109,8 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
 
                 foreach ($company_services as $company_service) {
 
-                    $service_data = get_service_data($company_service, $sanitizer);
-                    show_service_info($service_data, $sanitizer, "phone");
+                    $service_data = sanitize_service_data($company_service);
+                    render_service_info($service_data,"phone");
 
                 }
 
@@ -128,8 +128,8 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
                 echo "<div class=\"row d-sm-none px-3\">";
 
                 foreach ($jobs as $job) {
-                        $job_data = get_job_data($job, $sanitizer);
-                        show_job_info($urls, $job_data, "phone");
+                        $job_data = sanitize_job_data($job);
+                        render_job_info($job_data, "phone");
                 }
 
                 echo "</div>";
@@ -168,8 +168,8 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
 
                                 foreach ($products as $product) {
 
-                                    $product_data = get_product_data($product, $sanitizer);
-                                    show_product_info($product_data, $sanitizer);
+                                    $product_data = sanitize_product_data($product);
+                                    render_product_info($product_data);
 
                                 }
 
@@ -194,8 +194,8 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
 
                                 foreach ($company_services as $company_service) {
 
-                                    $service_data = get_service_data($company_service, $sanitizer);
-                                    show_service_info($service_data, $sanitizer);
+                                    $service_data = sanitize_service_data($company_service);
+                                    render_service_info($service_data);
 
                                 }
 
@@ -218,8 +218,8 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
 
                                 echo "<div class=\"row\">";
                                 foreach ($jobs as $job) {
-                                    $job_data = get_job_data($job, $sanitizer);
-                                    show_job_info($urls, $job_data); // Urls jest wymagane do lokalizacji obrazow
+                                    $job_data = sanitize_job_data($job);
+                                    render_job_info($job_data); // Urls jest wymagane do lokalizacji obrazow
                                 }
                             }
                             echo "</div>"

@@ -1,5 +1,5 @@
 import KbfIndustryFilter from "../../components/KbfIndustryFilter";
-import KbgTag from "../../components/KbgTag";
+import KbfTag from "../../components/KbfTag";
 
 class App {
 
@@ -12,7 +12,7 @@ class App {
         let instance = this;
 
         this.kbfIndustryFilter = new KbfIndustryFilter();
-        this.kbfTag = new KbgTag('.kbf-filter-badges');
+        this.kbfTag = new KbfTag('.kbf-filter-badges');
 
         this.kbfTag.on('reset-filter', function () {
             instance.kbfIndustryFilter.$resetButton.trigger('click');

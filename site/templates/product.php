@@ -4,7 +4,7 @@ include_once "partials/_init.php";
 include_once "lib/functions.php";
 
 // Przygotuj dane o firmie
-$company_data = get_company_data($page->parent("template=company"), $sanitizer);
+$company_data = sanitize_company_data($page->parent("template=company"));
 $lat = $company_data["lat"];
 $lon = $company_data["lon"];
 $company_keywords = $company_data["company_keywords"]; // Wymagane dla SEO
@@ -16,7 +16,7 @@ $products_page_url = $pages->get("template=products")->url;
 $message_page_url = $pages->get("template=message")->url . "?company_id=" . $company_data["company_id"];
 
 // Przygotuj dane o produkcie
-$product_data = get_product_data($page, $sanitizer);
+$product_data = sanitize_product_data($page);
 
 ?>
 
@@ -195,7 +195,7 @@ $product_data = get_product_data($page, $sanitizer);
             <div class="row p-md-5 px-4">
                 <div class="col-12 col-md-6 px-0">
 
-                    <?php show_company_info($pages, $company_data); ?>
+                    <?php render_company_info($company_data); ?>
 
                 </div>
                 <div class="col-12 col-md-4 my-3 my-md-0">

@@ -3,8 +3,20 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$sub_industry = array();
+
+// Pobierz tablice sub branz jezeli podano branze
+if ($input->industry) {
+    $sub_industry = get_sub_industries($input->industry);
+}
+
+// Pobierz sub branze jezeli wystepuja
+if ($input->sub_industry) {
+    $sub_industry[] = $sanitizer->text($input->sub_industry);
+}
+
 // Pobierz dane o firmach na podstawie filtra
-$companies = $pages->find(get_filter_query($input, 'company', $sanitizer, $database, $db));
+$companies = $pages->find(get_filter_selector($input, 'company'));
 
 // Paginacja listy firm
 $pagination = get_pagination($companies);
@@ -972,8 +984,9 @@ $home_page_url = $pages->get(1)->url;
                             <?php
                             // Lista firm
                             foreach ($companies as $company) {
-                                $company_data = get_company_data($company, $sanitizer);
-                                show_company_list_item($company_data, $urls);
+                                $company_data = sanitize_company_data($company);
+                                $message_url = $pages->get("template=message")->url . "?company_id=" . $company_data["company_id"];
+                                render_company_list_item($company_data, $message_url);
                             }
                             ?>
 

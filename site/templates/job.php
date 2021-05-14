@@ -4,10 +4,10 @@ include_once "partials/_init.php";
 include_once "lib/functions.php";
 
 // Przygotuj dane o ofercie pracy
-$job_data = get_job_data($page, $sanitizer);
+$job_data = sanitize_job_data($page);
 
 // Przygotuj dane o firmie
-$company_data = get_company_data($job_data["job_company"], $sanitizer);
+$company_data = sanitize_company_data($job_data["job_company"]);
 $company_keywords = $company_data["company_keywords"]; // Potrzebne do SEO
 
 // Inne oferty pracy firmy
@@ -36,7 +36,7 @@ $other_job_offers = $job_data["siblings"];
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">OFERTA PRACY</h3>
         <div class="row">
             <div class="col-12 col-md-6 col-xl-7 px-0">
-                <?php show_company_info($pages, $company_data);?>
+                <?php render_company_info($company_data);?>
             </div>
 
             <div class="col-md-6 col-xl-5">
@@ -184,8 +184,8 @@ $other_job_offers = $job_data["siblings"];
 
             foreach ($other_job_offers as $other_job_offer) {
                 if ($offer_counter > $max_offers) break;
-                $job_data = get_job_data($other_job_offer, $sanitizer);
-                show_job_info($urls, $job_data);
+                $job_data = sanitize_job_data($other_job_offer);
+                render_job_info($job_data);
                 $offer_counter++;
             }
 
@@ -197,8 +197,8 @@ $other_job_offers = $job_data["siblings"];
 
             foreach ($other_job_offers as $other_job_offer) {
                 if ($offer_counter > $max_offers) break;
-                $job_data = get_job_data($other_job_offer, $sanitizer);
-                show_job_info($urls, $job_data, "phone");
+                $job_data = sanitize_job_data($other_job_offer);
+                render_job_info($job_data, "phone");
                 $offer_counter++;
             }
 

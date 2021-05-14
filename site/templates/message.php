@@ -16,7 +16,7 @@ if ($input->company_id) {
     if ($pages->count()) {
 
         // Przygotuj dane o firmie
-        $company_data = get_company_data($company, $sanitizer);
+        $company_data = sanitize_company_data($company);
         $lat = $company_data["lat"];
         $lon = $company_data["lon"];
         $company_description_html = $company_data["company_description_html"];
@@ -57,7 +57,7 @@ if ($input->company_id) {
         <div class="bg-white p-md-5 px-4 rounded-xl shadow-sm mb-3">
             <div class="row">
                 <div class="col-12 col-md-7 px-0">
-                    <?php show_company_info($pages, $company_data); ?>
+                    <?php render_company_info($company_data); ?>
                 </div>
 
                 <!-- Minimap -->

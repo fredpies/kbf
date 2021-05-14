@@ -3,8 +3,20 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$sub_industry = array();
+
+// Pobierz tablice sub branz jezeli podano branze
+if ($input->industry) {
+    $sub_industry = get_sub_industries($input->industry);
+}
+
+// Pobierz sub branze jezeli wystepuja
+if ($input->sub_industry) {
+    $sub_industry[] = $sanitizer->text($input->sub_industry);
+}
+
 // Pobierz dane o produktach na podstawie filtra
-$products = $pages->find(get_filter_query($input, 'product', $sanitizer, $database, $db));
+$products = $pages->find(get_filter_selector($input, 'product'));
 
 // Paginacja listy produktow
 $pagination = get_pagination($products);
@@ -956,22 +968,20 @@ $home_page_url = $pages->get(1)->url;
                                 ?>
                             </nav>
 
-
                             <?php
                                 // Lista produktów
                                 foreach ($products as $product) {
-                                    $product_data = get_product_data($product, $sanitizer);
-                                    show_product_list_item($product_data,  $urls);
+                                    $product_data = sanitize_product_data($product);
+                                    render_product_list_item($product_data);
                                 }
                             ?>
 
-
                             <nav class="mt-3" aria-label="Companies navigation">
-                                <?php
 
+                            <?php
                                 // Paginacja
                                 echo $pagination
-                                ?>
+                            ?>
                             </nav>
 
                         </div>

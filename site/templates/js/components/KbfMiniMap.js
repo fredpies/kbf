@@ -15,7 +15,7 @@ class KbfMiniMap {
         this.lon = this.$miniMap.data('lon');
 
         // Emituj wyjatek jezeli nie podano wspolrzednych geograficznych
-        if (!this.lat || !this.lon) throw errors.noGeoCoords();
+        if (!this.lat || !this.lon) return;
 
         // Ustaw element mapy
         this.miniMapElement = this.$miniMap[0];

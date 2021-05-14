@@ -183,7 +183,8 @@
 
   var config = {
     env: 'dev',
-    url: 'http://localhost'
+    url: 'http://localhost',
+    apiEndpoint: 'http://localhost/kbf2'
   };
 
   function createCommonjsModule(fn) {
@@ -917,6 +918,7 @@
 
   function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   var url = config.url;
+  var apiEndpoint = config.apiEndpoint;
 
   var KbfMap = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfMap, _EventTarget);
@@ -1486,7 +1488,7 @@
   KbfMap.markerSymbol = L.icon({
     // Musi byc zmienione dla processwire
     // iconUrl: 'assets/images/marker-icon.png',
-    iconUrl: "".concat(url, "/kbf/site/templates/assets/images/marker-icon.png"),
+    iconUrl: "".concat(url, "/kbf2/site/templates/assets/images/marker-icon.png"),
     iconSize: [30, 40],
     // size of the icon
     iconAnchor: [15, 40],
@@ -1494,7 +1496,7 @@
     popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
 
   });
-  KbfMap.markersAPIEndpoint = url;
+  KbfMap.markersAPIEndpoint = apiEndpoint;
 
   var KbfMiniMap = /*#__PURE__*/function () {
     function KbfMiniMap(selector) {
@@ -1507,7 +1509,7 @@
       this.lat = this.$miniMap.data('lat');
       this.lon = this.$miniMap.data('lon'); // Emituj wyjatek jezeli nie podano wspolrzednych geograficznych
 
-      if (!this.lat || !this.lon) throw errors.noGeoCoords(); // Ustaw element mapy
+      if (!this.lat || !this.lon) return; // Ustaw element mapy
 
       this.miniMapElement = this.$miniMap[0];
       this.init();

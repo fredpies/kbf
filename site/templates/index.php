@@ -21,20 +21,24 @@ include_once "lib/functions.php";
 <!-- Top Search Section -->
 <div class="bg-image overflow-hidden" data-img-src="<?php echo $urls->images ?>section1-bg.png">
     <div class="container d-flex flex-column">
+
                 <div class="row page-header-block-height">
-                    <div class="col-lg-6 d-flex">
-                        <div class="align-self-center w-100 px-md-5 mt-3 mt-md-5 mb-3 mb-md-5">
+
+                    <div class="col-lg-6 d-flex d-xl-block">
+
+                        <div class="align-self-end align-self-xl-start w-100 px-md-5 mt-3 mt-md-5 mb-3 mb-lg-5">
                             <div class="text-center text-lg-left add-animate slide-animate" data-animated="fadeInRight">
 
                                 <form action="<?php echo $pages->get("template=companies")->url; ?>" type="GET">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="input-group input-group-lg input-group-round mb-4">
+                                            <p style="color: white; font-size: 1rem;" class="text-left w-100">Szukana fraza</p>
+                                            <div class="input-group input-group-lg input-group-round mb-4 mt-3">
                                                 <div class="input-group-inner">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text input-group-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
                                                     </div>
-                                                    <input autocomplete="off" type="text" name="keywords" class="form-control form-control-lg" placeholder="Szukana fraza..">
+                                                    <input id="search" autocomplete="off" type="text" name="keywords" class="form-control form-control-lg">
                                                     <div class="bg-white input-focus-bg"></div>
                                                 </div>
                                             </div>
@@ -43,34 +47,53 @@ include_once "lib/functions.php";
 
                                     <!-- Provinces area switcher-->
                                     <div class="kbf-index-area-switcher row">
-                                        <div data-name="province_name" id="provinces" class="dropdown col-12 col-md-6">
+                                        <div data-name="province_name" id="provinces" class="dropdown col-12 col-xl-6 mb-3">
+                                            <label class="text-left w-100" for="provinces-button">Województwo</label>
                                             <button class="btn btn-lg btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle w-full" type="button"
                                                     id="provinces-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                         </div>
 
-                                        <div data-name="area_name" id="areas" class="dropdown col-12 col-md-6">
+                                        <div data-name="area_name" id="areas" class="dropdown col-12 col-xl-6">
+                                            <label class="text-left w-100" for="areas-button">Powiat</label>
                                             <button class="btn btn-lg btn-round btn-primary px-3 mx-0 mb-0 dropdown-toggle w-full" type="button" id="areas-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                         </div>
                                     </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-6">
-                                            <button type="submit" class="kbf-search btn btn-round btn-lg btn-warning w-auto mb-2">Znajdź firmę</button>
-                                        </div>
-                                    </div>
+                                            <button type="submit" class="kbf-search w-100 btn btn-round btn-lg btn-warning mt-5">Znajdź firmę</button>
                                 </form>
 
-                                <h1 class="display-7 font-weight-800 text-white mb-3 mt-5">Znajdź firmę<br>gdziekolwiek jesteś</h1>
 
-                                <div class="lead-sm text-white-75 pb-2 pb-xl-3 mb-3 mb-md-5">KBF to ogólnopolski Katalog Branżowy Firm, baza firm, instytucji i urzędów. Wpisz w polu wyszukiwania frazę, określ rejon i wciśnij “ZNAJDŻ FIRMĘ”.</div>
 
-                                <div class="lead-sm text-white-75 pb-1">Jeśli chcesz zlokalizować firmę na mapie, wybierz “WYSZUKAJ NA MAPIE”.</div>
-                                <a href="<?php echo $pages->get("template=map")->url; ?>" class="d-none d-md-block text-warning mx-2 ml-md-0 mr-md-3">WYSZUKAJ NA MAPIE</a>
                             </div>
                         </div>
+
+                        <div class="d-none d-xl-block align-self-end align-self-xl-start px-5 my-5">
+                            <h1 class="display-7 font-weight-800 text-white mb-3 mb-4 mt-0 px-2">Znajdź firmę<br>gdziekolwiek jesteś</h1>
+
+                            <div class="lead-sm text-white-75 pb-3 mb-3 px-2">KBF to ogólnopolski Katalog Branżowy Firm, baza firm, instytucji i urzędów. Wpisz w polu wyszukiwania frazę, określ rejon i wciśnij “ZNAJDŻ FIRMĘ”.</div>
+
+                            <div class="lead-sm text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie, wybierz “WYSZUKAJ NA MAPIE”.</div>
+                            <a href="<?php echo $pages->get("template=map")->url; ?>" class="d-none d-md-block text-warning px-2 mx-2 ml-0 mr-3 mb-5">WYSZUKAJ NA MAPIE</a>
+
+                        </div>
+
                     </div>
 
-                    <div class="col-lg-6 d-flex">
+                    <div class="col-lg-6 d-flex d-xl-none px-md-5">
+
+                        <div class="align-self-end align-self-xl-start my-lg-5">
+                            <h1 class="display-7 font-weight-800 text-white mb-3 mb-lg-5 mt-3 px-2">Znajdź firmę<br>gdziekolwiek jesteś</h1>
+
+                            <div class="lead-sm text-white-75 pb-2 pb-xl-3 mb-3 mb-lg-5 px-2">KBF to ogólnopolski Katalog Branżowy Firm, baza firm, instytucji i urzędów. Wpisz w polu wyszukiwania frazę, określ rejon i wciśnij “ZNAJDŻ FIRMĘ”.</div>
+
+                            <div class="lead-sm text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie, wybierz “WYSZUKAJ NA MAPIE”.</div>
+                            <a href="<?php echo $pages->get("template=map")->url; ?>" class="d-none d-md-block text-warning px-2 mx-2 ml-md-0 mr-md-3 mb-md-3">WYSZUKAJ NA MAPIE</a>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-12 d-lg-none d-xl-flex col-xl-6 order-xl-2 px-md-5">
                         <div class="align-self-end w-100 px-5">
                             <div class="px-md-5 mt-md-4 img-container">
                                 <div class="d-none d-xl-block" data-height="120px"></div>
@@ -81,6 +104,9 @@ include_once "lib/functions.php";
                     </div>
 
                 </div>
+
+
+
             </div>
 </div>
 

@@ -50,10 +50,10 @@ $config->useFunctionsAPI = true;
  * Installer: Database Configuration
  * 
  */
-$config->dbHost = 'mn15.webd.pl';
-$config->dbName = 'wplanet_kbf';
-$config->dbUser = 'wplanet_kbf';
-$config->dbPass = '#Pawel17011977#';
+$config->dbHost = 'localhost';
+$config->dbName = 'kbf';
+$config->dbUser = 'root';
+$config->dbPass = '';
 $config->dbPort = '3306';
 
 /**

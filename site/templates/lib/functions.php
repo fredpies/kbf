@@ -5,7 +5,9 @@
  * *************/
 
 // Zwraca branze z bazy
-function get_industries($db) {
+function get_industries() {
+
+    $db = wire("db");
 
     $industries = array(); // Branze
     if (!isset($db)) return $industries;
@@ -28,7 +30,10 @@ function get_industries($db) {
 }
 
 // Zwraca sub branze z bazy na podstawie nazwy branzy
-function get_sub_industries($industry, $database, $db) {
+function get_sub_industries($industry) {
+
+    $database = wire("database");
+    $db = wire("db");
 
     $sub_industries = array(); // Sub brnaze
     if (!isset($industry)) return $sub_industries;
@@ -56,9 +61,10 @@ function get_sub_industries($industry, $database, $db) {
  * *************/
 
 // Wyswietla informacje o firmie
-function show_company_info($pages, $company_data = array()) {
+function render_company_info($company_data = array()) {
 
     if (count($company_data) === 0) return;
+    $pages = wire("pages");
 
     // Strona z lista firm
     $company_list_page_url = $pages->get("template=companies")->url;
@@ -123,9 +129,10 @@ function show_company_info($pages, $company_data = array()) {
 }
 
 // Wyswietla panel ze skrocona informacja o ofercie pracy
-function show_job_info($urls, $job_data = array(), $device = "desktop") {
+function render_job_info($job_data = array(), $device = "desktop") {
 
-    if (count($job_data) === 0 || !isset($urls)) return;
+    if (count($job_data) === 0) return;
+    $urls = wire("urls");
 
     $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png";
 
@@ -165,9 +172,10 @@ function show_job_info($urls, $job_data = array(), $device = "desktop") {
 };
 
 // Wyswietla panel z informacjami o produkcie
-function show_product_info($product_data, $sanitizer, $device="desktop") {
+function render_product_info($product_data, $device="desktop") {
 
     if (count($product_data) === 0) return;
+    $sanitizer = wire("sanitizer");
 
     if ($device === "desktop") {
         echo "<div class=\"company-product col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative\">";
@@ -226,9 +234,10 @@ function show_product_info($product_data, $sanitizer, $device="desktop") {
 }
 
 // Wyswietla panel z informacjami o usludze
-function show_service_info($service_data, $sanitizer, $device="desktop") {
+function render_service_info($service_data, $device="desktop") {
 
     if (count($service_data) === 0) return;
+    $sanitizer = wire("sanitizer");
 
     if ($device === "desktop") {
         echo "<div class=\"company-service col-md-6 col-xl-4 col-sm-12 mb-3 overflow-hidden position-relative\">";
@@ -275,177 +284,210 @@ function show_service_info($service_data, $sanitizer, $device="desktop") {
 }
 
 // Wyswietla element listy firm
-function show_company_list_item($company_data, $urls) {
+function render_company_list_item($company_data, $message_url) {
 
-    if(count($company_data) === 0 || !isset($urls)) return;
+    if(count($company_data) === 0 || !isset($message_url)) return;
+    $urls = wire("urls");
 
-    echo "<div class=\"row bg-white rounded-lg shadow-sm p-4 mb-4 company-list-item\">";
-    echo "<div class=\"col-12 col-sm-2 p-xl-4\">";
-
-    // Wyswietl logo firmy lub logo domyślne
+    // Czy logo firmy istnieje
     if (!empty($company_data["company_logo_url"])) {
-        echo "<img src=\"" . $company_data["company_logo_url"] . "\" alt=\"image\" class=\"company-logo d-block mx-auto img-fluid mt-xl-0\"></div>";
-    } else
-        echo "<img src=\"" . $urls->images . "upload/company-logo.png\" alt=\"image\" class=\"company-logo d-block mx-auto img-fluid mt-xl-0\"></div>";
+        $logo_url = $company_data["company_logo_url"];
+    } else $logo_url = $urls->images . "upload/company-logo.png";
 
+    // Czy www firmy istnieje
+    if (!empty($company_data["company_www"])) {
+        $company_www_markup = "<div class='my-2 h6 font-weight-300'><a href='" . $company_data["company_www"] . "'>" . $company_data["company_www"] . "</a></div>";
+    } else $company_www_markup = "";
 
-    echo "<div class=\"col-12 col-sm-5 col-xl-6 text-center text-sm-left\">";
-    echo "<a class=\"company-name text-dark d-block mt-3 mb-2 font-weight-500\"  href=\"" . $company_data["company_url"] . "\"><span>". $company_data["company_name"]  ."</span></a>";
-    echo "<div class=\"company-street h6 font-weight-300\">". $company_data["company_address"]  ."</div>";
-    echo "<div class=\"company-zip-city mb-2 mb-sm-0 h6 font-weight-300\"><span class=\"company-zip\">" . $company_data["company_zip"] . " </span><span class=\"company-city\">" . $company_data["company_city"] . "</span></div></div>";
-    echo "<div class=\"col-12 col-sm-4 col-xl-3 text-center text-sm-left\">";
+    // Czy drugi telefon firmy istnieje
+    if (!empty($company_data["company_phone_2"])) {
+        $second_phone_markup = "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Telefon kontaktowy' href='tel:" . $company_data["company_phone_2"] . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_data["company_phone_2"] . "</a>";
+    } else $second_phone_markup = "";
 
-    // Telefony i fax
-
-    // Tylko pierwszy telefon
-    if (!empty($company_data["company_phone_1"]) && empty($company_data["company_phone_2"])) {
-        echo "<a class=\"company-phone text-dark font-weight-300 d-block text-nowrap mt-3\" title=\"Telefon kontaktowy\" href=\"tel:" . $company_data["company_phone_1"] . "\"><i class=\"fas fa-phone-alt mr-2\"></i>" . $company_data["company_phone_1"] . "</a>";
-    }
-
-    // Obydwa telefony
-    if (!empty($company_data["company_phone_1"]) && !empty($company_data["company_phone_2"])) {
-        echo "<a class=\"company-phone text-dark font-weight-300 d-block text-nowrap mt-3\" title=\"Telefon kontaktowy\" href=\"tel:" . $company_data["company_phone_1"] . "\"><i class=\"fas fa-phone-alt mr-2\"></i>" . $company_data["company_phone_1"] . "</a>";
-        echo "<a class=\"company-phone text-dark font-weight-300 d-block text-nowrap mt-1\" title=\"Telefon kontaktowy\" href=\"tel:" . $company_data["company_phone_2"] . "\"><i class=\"fas fa-phone-alt mr-2\"></i>" . $company_data["company_phone_2"] . "</a>";
-    }
-
-    // Wyswietl fax jesli istnieje
+    // Czy fax firmy istnieje
     if (!empty($company_data["company_fax"])) {
-        echo "<a class=\"company-phone text-dark font-weight-300 d-block text-nowrap mt-1\" title=\"Numer FAX\" href=\"fax:" . $company_data["company_fax"] . "\"><i class=\"fas fa-fax mr-2\"></i>" . $company_data["company_fax"] . "</a>";
-    }
+        $fax_markup =  "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Numer FAX' href='fax:" . $company_data["company_fax"] . "'><i class='fas fa-fax mr-2'></i>" . $company_data["company_fax"] . "</a>";
+    } else $fax_markup = "";
 
-    echo "</div>";
-    echo "<div class=\"col-12 col-sm-1 p-xl-3\">";
-    echo "<a href=\"#\" class=\"text-dark tooltip-btn p-1 mr-n1\" data-toggle=\"tooltip\" data-placement=\"right\" title=\"Dodaj do ulubionych\"><img class=\"d-block d-inline-block mx-auto\" src=\"" . $urls->images . "heart.svg\" alt=\"heart-image\"></a>";
-    echo "</div></div>";
+    // Czy istnieje e-mail
+    if (!empty($company_data["company_email"])) {
+        $email_markup = "
+            <a href='" . $message_url ."' class='d-block align-self-start text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='Wyślij wiadomość'>
+                <img width='22' height='24' class='d-inline-block mx-auto' src='" . $urls->images ."email.svg' alt='email-image'>
+            </a>
+        ";
+    } else $email_markup = "";
+
+    // Renderuj markup
+    echo "
+        
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 company-list-item'>
+            
+            <div class='col-12 col-sm-2 p-xl-4'>
+                <img src='" . $logo_url . "' alt='image' class='company-logo d-block mx-auto img-fluid mt-xl-0'>
+            </div>
+            
+            <div class='col-12 col-sm-5 col-xl-6 text-center text-sm-left'>
+                <a class='company-name text-dark d-block mt-3 mb-2 font-weight-500' href='" . $company_data["company_url"] ."'><span>" . $company_data["company_name"] ."</span></a>
+                <div class='company-street h6 font-weight-300'>" . $company_data["company_address"] ."</div>
+                <div class='company-zip-city mb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] ." </span><span class='company-city'>" . $company_data["company_city"] ."</span></div>
+                $company_www_markup
+            </div>
+            
+            <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left'>
+                    <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-3' title='Telefon kontaktowy' href='tel:" . $company_data["company_phone_1"] . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_data["company_phone_1"] . "</a>
+                    $second_phone_markup
+                    $fax_markup
+            </div>
+            
+            <div class='col-12 col-sm-1 p-xl-3'>
+                <a href='#' class='d-block align-self-start text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='' data-original-title='Dodaj do ulubionych'>
+                    <img width='28' height='28' class='d-inline-block mx-auto' src='" . $urls->images ."heart.svg' alt='heart-image'>
+                </a>
+                
+                $email_markup
+                
+            </div>
+            
+        </div>
     
+    ";
 
 }
 
 // Wyswietla element listy ofert pracy
-function show_job_list_item($job_data, $urls) {
+function render_job_list_item($job_data) {
+
+    if(count($job_data) === 0) return;
+    $urls = wire("urls");
 
     $company_logo = $job_data["job_company"]->company_logo;
     if (!isset($company_logo)) $company_logo_url = $urls->images . "upload/company-logo.png";
     else $company_logo_url = $company_logo->url;
 
-    echo "<div class='row bg-white rounded-lg shadow-sm p-4 mb-4 job-list-item'>
+    echo "
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 job-list-item'>
 
-        <div class='col-12 col-sm-2 p-xl-4'>
-            <img src='" . $company_logo_url . "' alt='image' class='company-logo d-block mx-auto img-fluid mt-xl-0'>
-        </div>
-        
-        <div class='col-12 col-sm-5 col-xl-6 pt-sm-1 text-center text-lg-left'>
-            <a class='job-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $job_data["job_url"] . "'><span>" . $job_data["job_name"] . "</span></a>
-            <div class='job-description font-weight-300 text-sm-left'>" . get_excerpt($job_data["job_description"], 135). "</div>
-        </div>
-        
-        <div class='mt-3 mt-sm-0 col-12 col-sm-4 col-xl-3 text-left'>
-        
-            <div class='no-gutters row'>
-                <div class='col-2 col-lg-2 col-sm-2 d-flex flex-column justify-content-center info-element-icon'>
-                    <img class='d-block h-50 mx-auto w-100' src='" . $urls->images . "pin.svg' alt='area'>
-                </div>
-                <div class='col-10 col-sm-10 d-flex flex-column justify-content-center'>
-                    <div class='info-element-contents p-2'>
-                        <span class='job-city pl-2 d-block font-weight-400'>" . $job_data["job_city"] . "</span>
+            <div class='col-12 col-sm-2 p-xl-4'>
+                <img src='" . $company_logo_url . "' alt='image' class='company-logo d-block mx-auto img-fluid mt-xl-0'>
+            </div>
+            
+            <div class='col-12 col-sm-5 col-xl-6 pt-sm-1 text-center text-lg-left'>
+                <a class='job-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $job_data["job_url"] . "'><span>" . $job_data["job_name"] . "</span></a>
+                <div class='job-description font-weight-300 text-sm-left'>" . get_excerpt($job_data["job_description"], 135). "</div>
+            </div>
+            
+            <div class='mt-3 mt-sm-0 col-12 col-sm-4 col-xl-3 text-left'>
+            
+                <div class='no-gutters row'>
+                    <div class='col-2 col-lg-2 col-sm-2 d-flex flex-column justify-content-center info-element-icon'>
+                        <img class='d-block h-50 mx-auto w-100' src='" . $urls->images . "pin.svg' alt='area'>
+                    </div>
+                    <div class='col-10 col-sm-10 d-flex flex-column justify-content-center'>
+                        <div class='info-element-contents p-2'>
+                            <span class='job-city pl-2 d-block font-weight-400'>" . $job_data["job_city"] . "</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class='no-gutters row'>
-                <div class='col-2 col-lg-2 col-sm-2 d-flex flex-column justify-content-center info-element-icon'>
-                    <img class='d-block h-50 mx-auto w-100' src='" . $urls->images . "clock.svg' alt='expire'>
-                </div>
-                <div class='col-10 col-sm-10 d-flex flex-column justify-content-center'>
-                    <div class='info-element-contents p-2'>
-                        <span class='job-expire pl-2 d-block font-weight-400'>" . $job_data["job_expire"] . "</span>
+                <div class='no-gutters row'>
+                    <div class='col-2 col-lg-2 col-sm-2 d-flex flex-column justify-content-center info-element-icon'>
+                        <img class='d-block h-50 mx-auto w-100' src='" . $urls->images . "clock.svg' alt='expire'>
+                    </div>
+                    <div class='col-10 col-sm-10 d-flex flex-column justify-content-center'>
+                        <div class='info-element-contents p-2'>
+                            <span class='job-expire pl-2 d-block font-weight-400'>" . $job_data["job_expire"] . "</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class='no-gutters row'>
-                <div class='col-2 col-lg-2 col-sm-2 d-flex flex-column justify-content-center info-element-icon'>
-                    <img class='d-block h-50 mx-auto w-100' src='" . $urls->images . "businessman.svg' alt='expire'>
-                </div>
-                <div class='col-10 col-sm-10 d-flex flex-column justify-content-center'>
-                    <div class='info-element-contents p-2'>
-                        <span class='job-type pl-2 d-block font-weight-400'>" . $job_data["job_type"] . "</span>
+                <div class='no-gutters row'>
+                    <div class='col-2 col-lg-2 col-sm-2 d-flex flex-column justify-content-center info-element-icon'>
+                        <img class='d-block h-50 mx-auto w-100' src='" . $urls->images . "businessman.svg' alt='expire'>
+                    </div>
+                    <div class='col-10 col-sm-10 d-flex flex-column justify-content-center'>
+                        <div class='info-element-contents p-2'>
+                            <span class='job-type pl-2 d-block font-weight-400'>" . $job_data["job_type"] . "</span>
+                        </div>
                     </div>
                 </div>
+            
+            
             </div>
-        
-        
-        </div>
-        <div class='col-12 col-sm-1 p-xl-3'>
-            <a href='#' class='text-dark tooltip-btn p-1 mr-n1' data-toggle='tooltip'
-               data-placement='right' title='Dodaj do ulubionych'>
-                <img class='d-block d-inline-block mx-auto' src='" . $urls->images . "heart.svg' alt='heart-image'>
-            </a>
-        
-        </div>
+            <div class='col-12 col-sm-1 p-xl-3'>
+                <a href='#' class='text-dark tooltip-btn p-1 mr-n1' data-toggle='tooltip'
+                   data-placement='right' title='Dodaj do ulubionych'>
+                    <img class='d-block d-inline-block mx-auto' src='" . $urls->images . "heart.svg' alt='heart-image'>
+                </a>
+            
+            </div>
         
         </div>";
 
 }
 
 // Wyswietla element listy produktow
-function show_product_list_item($product_data, $urls) {
+function render_product_list_item($product_data) {
+
+    if(count($product_data) === 0) return;
+    $urls = wire("urls");
 
     // Pierwszy obraz produktu
     $product_image_url = $product_data["product_images"]->first()->url;
 
-    echo "<div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-
-        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-            <img src='" . "$product_image_url" . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+    // Renderuj markup
+    echo "
+    
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+            </div>
+        
+            <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
+                <a class='product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left' href='" . $product_data["product_url"] . "'><span>" . $product_data["product_name"] . "</span></a>
+                <div class='product-description font-weight-300 text-sm-left'>
+                    <p>" . get_excerpt($product_data["product_description"], 120) . "</p>
+                </div>
+            </div>
+        
+            <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
+            </div>
+        
+            <div class='col-12 col-sm-1 mt-2 mt-sm-0 text-center text-sm-left'>
+                <a href='#' class='text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='' data-original-title='Dodaj do ulubionych'>
+                    <img class='list-heart mx-auto mx-sm-0 position-relative d-inline-block' src='" . $urls->images . "heart.svg' alt='heart-image'>
+                </a>
+            </div>
+        
         </div>
-        
-        <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
-            <a class='product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $product_data["product_url"] . "'><span>" . $product_data["product_name"] . "</span></a>
-            <div class='product-description font-weight-300 text-sm-left'>" . get_excerpt($product_data["product_description"], 120) . "</div>
-        </div>
-        
-        <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
-        
-            <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
-        
-        </div>
-        
-        <div class='col-12 col-sm-1 mt-2 mt-sm-0 text-center text-sm-left'>
-            <a href='#' class='text-dark tooltip-btn' data-toggle='tooltip'
-               data-placement='right' title='Dodaj do ulubionych'>
-                <img class='list-heart mx-auto mx-sm-0 position-relative d-inline-block' src='" . $urls->images . "heart.svg' alt='heart-image'>
-            </a>
-        
-        </div>
-        
-        </div>";
-
+    ";
 }
 
 // Wyswietla element listy uslug
-function show_service_list_item($service_data,  $urls) {
+function render_service_list_item($service_data) {
+
+    if(count($service_data) === 0) return;
 
     // Obraz uslugi
     $service_image_url = $service_data["service_image"]->url;
 
-    echo "<div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+    echo " 
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
 
-        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-            <img src='" . "$service_image_url" . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                <img src='" . "$service_image_url" . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+            </div>
+            
+            <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
+                <a class='product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $service_data["service_url"] . "'><span>" . $service_data["service_name"] . "</span></a>
+                <div class='product-description font-weight-300 text-sm-left'>" . get_excerpt($service_data["service_description"], 120) . "</div>
+            </div>
+            
+            <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $service_data["service_price"] . " PLN</span>
+            </div>
+            
         </div>
-        
-        <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
-            <a class='product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $service_data["service_url"] . "'><span>" . $service_data["service_name"] . "</span></a>
-            <div class='product-description font-weight-300 text-sm-left'>" . get_excerpt($service_data["service_description"], 120) . "</div>
-        </div>
-        
-        <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
-        
-            <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $service_data["service_price"] . " PLN</span>
-        
-        </div>
-        
-        
-        </div>";
+        ";
 }
 
 // Zwraca markup paginacji
@@ -471,9 +513,10 @@ function get_pagination($page_array) {
  * *************/
 
 // Pobiera podstawowe informacje o firmie
-function get_company_data($company_page, $sanitizer) {
+function sanitize_company_data($company_page) {
 
-    if (!isset($company_page) || !isset($sanitizer)) return array();
+    if (!isset($company_page)) return array();
+    $sanitizer = wire("sanitizer");
 
     // Dodaj logo url jezeli logo istnieje
     $company_logo = $company_page->company_logo;
@@ -487,8 +530,8 @@ function get_company_data($company_page, $sanitizer) {
         "company_name" => $sanitizer->text($company_page->company_name),
         "company_logo_url" => !empty($company_logo_url) ? $company_logo_url : "",
         "company_address" => $sanitizer->text($company_page->company_address),
+        "company_email" => $sanitizer->email($company_page->company_email),
         "company_zip" => $sanitizer->text($company_page->company_zip),
-        "company_city" => $sanitizer->text($company_page->company_city),
         "company_phone_1" => $sanitizer->text($company_page->company_phone_1),
         "company_phone_2" => $sanitizer->text($company_page->company_phone_2),
         "company_fax" => $sanitizer->text($company_page->company_fax),
@@ -507,9 +550,10 @@ function get_company_data($company_page, $sanitizer) {
 }
 
 // Pobiera informacje o ofercie pracy
-function get_job_data($job_page, $sanitizer) {
+function sanitize_job_data($job_page) {
 
-    if (!isset($job_page) || !isset($sanitizer)) return array();
+    if (!isset($job_page)) return array();
+    $sanitizer = wire("sanitizer");
 
     $current_job_company = $job_page->parent("template=company"); // Firma dla danej oferty pracy
 
@@ -533,9 +577,10 @@ function get_job_data($job_page, $sanitizer) {
 }
 
 // Pobiera informacje o produkcie
-function get_product_data($product_page, $sanitizer) {
+function sanitize_product_data($product_page) {
 
-    if (!isset($product_page) || !isset($sanitizer)) return array();
+    if (!isset($product_page)) return array();
+    $sanitizer = wire("sanitizer");
 
     $product_data = array(
         "product_url" => $product_page->url,
@@ -554,9 +599,10 @@ function get_product_data($product_page, $sanitizer) {
 }
 
 // Pobiera informacje o produkcie
-function get_service_data($service_page, $sanitizer) {
+function sanitize_service_data($service_page) {
 
-    if (!isset($service_page) || !isset($sanitizer)) return array();
+    if (!isset($service_page)) return array();
+    $sanitizer = wire("sanitizer");
 
     $service_data = array(
         "service_url" => $service_page->url,
@@ -570,7 +616,6 @@ function get_service_data($service_page, $sanitizer) {
     return $service_data;
 
 }
-
 
 /****************
  *   HELPERS
@@ -621,7 +666,12 @@ function get_sub_industries_query($sub_industries) {
 }
 
 // Zwraca query dla filtra
-function get_filter_query($input, $template_name, $sanitizer, $database, $db) {
+function get_filter_selector($input, $template_name) {
+
+    if (!isset($input) || !isset($template_name)) return;
+    $database = wire("database");
+    $db = wire("db");
+    $sanitizer = wire("sanitizer");
 
     $query = "template=$template_name, limit=10";
 
@@ -658,40 +708,42 @@ function get_filter_query($input, $template_name, $sanitizer, $database, $db) {
         }
     }
 
-// Przygotuj zapytanie
-    if (isset($industry) && !isset($sub_industry)) {
+        // Przygotuj zapytanie
+        if (isset($industry) && !isset($sub_industry)) {
 
-        $sub_industry = get_sub_industries(mb_strtoupper($industry, "utf-8"), $database, $db);
-        $industry = $sanitizer->selectorValue($industry);
-        $query = $query . ",industry=$industry";
+            $sub_industry = get_sub_industries(mb_strtoupper($industry, "utf-8"), $database, $db);
+            $industry = $sanitizer->selectorValue($industry);
+            $query = $query . ",industry=$industry";
 
-    }
-
-    if (!isset($industry) && isset($sub_industry)) {
-
-        if (is_string($sub_industry)) $sub_industry = explode(",", $sub_industry);
-        $sub_industry_count = count($sub_industry);
-
-        $counter = 1;
-        $industries_selector = "";
-
-        if ($sub_industry_count === 1) {
-            $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry[0]);
-            $query = $query . ",sub_industry=$sub_industry_name_sanitized";
         }
 
-        if ($sub_industry_count > 1) {
-            foreach ($sub_industry as $sub_industry_name) {
-                $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry_name);
-                if ($counter < $sub_industry_count) $industries_selector = $industries_selector . "$sub_industry_name_sanitized|";
-                if ($counter === $sub_industry_count) $industries_selector = $industries_selector . $sub_industry_name_sanitized;
-                $counter++;
+        if (!isset($industry) && isset($sub_industry)) {
+
+            if (is_string($sub_industry)) $sub_industry = explode(",", $sub_industry);
+            $sub_industry_count = count($sub_industry);
+
+            $industries_selector = "";
+
+            if ($sub_industry_count === 1) {
+                $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry[0]);
+                $query = $query . ",sub_industry=$sub_industry_name_sanitized";
             }
 
-            $query = $query . ",sub_industry=$industries_selector";
-        }
+            if ($sub_industry_count > 1) {
 
-    }
+                $counter = 1;
+
+                foreach ($sub_industry as $sub_industry_name) {
+                    $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry_name);
+                    if ($counter < $sub_industry_count) $industries_selector = $industries_selector . "$sub_industry_name_sanitized|";
+                    if ($counter === $sub_industry_count) $industries_selector = $industries_selector . $sub_industry_name_sanitized;
+                    $counter++;
+                }
+
+                $query = $query . ",sub_industry=$industries_selector";
+            }
+
+        }
 
     if (isset($province_name)) {
         $province_name = $sanitizer->selectorValue($province_name);

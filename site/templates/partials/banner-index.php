@@ -6,13 +6,14 @@ include_once "lib/functions.php";
 
         <div class="banner-slides-container owl-carousel" data-height="140px">
 
-            <!-- php find 100 random banners-->
-            <?php
-            $banners = $pages->find("template=banner, banner_location_index=1, banner_activated=1, sort=random")->getRandom(100);
-            foreach ($banners as $banner) {
-                $company = get_company_data($banner->parent("template=company"), $sanitizer);
-                if($banner->banner_type == "old") {
+                    <!-- php find 100 random banners-->
+                    <?php
+                        $banners = $pages->find("template=banner, banner_location_index=1, banner_activated=1, sort=random")->getRandom(100);
+                        foreach ($banners as $banner) {
+                            $company = sanitize_company_data($banner->parent("template=company"));
+                            if($banner->banner_type == "old") {
                     ?>
+
                     <!-- Slide item -->
                     <a target="_blank" href="http://<?php echo $banner->banner_target_url; ?>">
                         <div class="d-flex flex-column" data-height="140px">

@@ -16,7 +16,7 @@ $industry = urldecode($input->get("industry"));
 // Pobierz sub branze
 if (!empty($industry)) {
 
-    $sub_industries = get_sub_industries($industry, $database, $db); // Trzeba przekazac $database i $db (obiekty PW)
+    $sub_industries = get_sub_industries($industry); // Trzeba przekazac $database i $db (obiekty PW)
     $query = get_sub_industries_query($sub_industries);
 
     $response = array(
