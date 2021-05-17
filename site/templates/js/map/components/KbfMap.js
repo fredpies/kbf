@@ -577,9 +577,7 @@ KbfMap.polandTiles = L.tileLayer.provider('OpenStreetMap.Mapnik'); // Tile Map d
 
 KbfMap.layerStyle = {}; // Style warstwy wojewodztwa i powiatu
 KbfMap.markerSymbol = L.icon({
-    // Musi byc zmienione dla processwire
-    // iconUrl: 'assets/images/marker-icon.png',
-    iconUrl: `${url}/kbf2/site/templates/assets/images/marker-icon.png`,
+    iconUrl: `${apiEndpoint}/site/templates/assets/images/marker-icon.png`,
     iconSize:     [30, 40], // size of the icon
     iconAnchor:   [15, 40], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor

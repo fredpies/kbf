@@ -19,7 +19,6 @@ if ($input->company_id) {
         $company_data = sanitize_company_data($company);
         $lat = $company_data["lat"];
         $lon = $company_data["lon"];
-        $company_description_html = $company_data["company_description_html"];
 
     } else {
         $session->redirect($home_page_url);
@@ -41,10 +40,6 @@ if ($input->company_id) {
     <link rel="stylesheet" href="<?php echo $urls->css ?>leaflet.css">
 </head>
 <body>
-
-<!-- Preloader -->
-<?php //include_once "partials/_preloader.php"
-?>
 
 <!-- Navigation menu -->
 <?php include_once "partials/_menu.php" ?>
@@ -82,33 +77,37 @@ if ($input->company_id) {
             <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
                 <div class="card-body">
 
-                    <div class="row justify-content-center">
-                        <div class="kbf-error-message col-11 card text-white bg-danger px-0 mb-3 d-none">
-                            <div class="card-header font-weight-bold">W FORMULARZU WYSTĄPIŁY BŁĘDY</div>
-                            <div class="card-body">
-                                <p class="card-text">Sprawdź poprawność wypełnienia wszystkich pól i wyślij formularz ponownie.</p>
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div class="row justify-content-center">-->
+<!--                        <div class="kbf-main-error-message col-11 card text-white bg-danger px-0 mb-3 d-none">-->
+<!--                            <div class="card-header font-weight-bold">W FORMULARZU WYSTĄPIŁY BŁĘDY</div>-->
+<!--                            <div class="card-body">-->
+<!--                                <p class="card-text">Sprawdź poprawność wypełnienia wszystkich pól i wyślij formularz ponownie.</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <form novalidate role="form" name="send-message" class="pl-lg-5">
-                        <div class="row">
+                        <div class="row justify-content-center">
 
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-5 mb-2">
                                 <div class="input-group input-group-lg input-group-round mb-4">
                                     <label class="text-uppercase px-3">Imię i nazwisko</label>
                                     <div class="input-group-inner">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text input-group-icon"><i class="far fa-user"></i></span>
                                         </div>
+
                                         <input autocomplete="off" type="text" class="form-control form-control-lg"
-                                               name="name">
+                                               name="name"
+                                               required
+                                               data-msg-required="Pole z imieniem i nazwiskiem nie może być puste.">
+
                                         <div class="input-focus-bg"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="d-none d-lg-flex col-6">
+                            <div class="d-none d-lg-flex col-5">
                                 <p class="kbf-form-info align-self-center">
                                     Wpisz swoje imię i nazwisko. <br/>Wypełnienie pola jest wymagane.
                                 </p>
@@ -118,7 +117,7 @@ if ($input->company_id) {
                             </div>
 
 
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-5 mb-2">
                                 <div class="input-group input-group-lg input-group-round mb-4">
                                     <label class="text-uppercase px-3">Adres e-mail</label>
                                     <div class="input-group-inner">
@@ -126,15 +125,20 @@ if ($input->company_id) {
                                         <span class="input-group-text input-group-icon">
                                             <i class="far fa-envelope"></i></span>
                                         </div>
+
                                         <input type="text" autocomplete="off" class="form-control form-control-lg"
-                                               name="email">
+                                               name="email"
+                                               required data-inputmask-regex=".+@.+"
+                                               data-msg-required="Pole e-mail nie może byś puste."
+                                               data-msg-regex="Adres e-mail posiada niewłaściwy format."
+                                        >
                                         <div class="input-focus-bg"></div>
                                     </div>
                                 </div>
                             </div>
 
 
-                            <div class="d-none d-lg-flex col-6">
+                            <div class="d-none d-lg-flex col-5">
                                 <p class="kbf-form-info align-self-center mb-0">
                                     Wpisz swój adres e-mail. <br>Wypełnienie pola jest wymagane.
                                 </p>
@@ -144,15 +148,19 @@ if ($input->company_id) {
                                 pole "Adres e-mail".
                             </div>
 
-                            <div class="col-12 col-lg-6 mb-3">
+                            <div class="col-12 col-lg-5 mb-3">
                                 <div class="form-group">
                                     <label class="text-uppercase px-3">Treść wiadomości</label>
                                     <textarea autocomplete="off" class="form-control form-round form-control-lg"
-                                              rows="8" name="message"></textarea>
+                                              rows="8" name="message"
+                                              required
+                                              data-msg="Treść wiadomości nie może być pusta."
+
+                                    ></textarea>
                                 </div>
                             </div>
 
-                            <div class="d-none d-lg-flex col-6">
+                            <div class="d-none d-lg-flex col-5">
                                 <p class="kbf-form-info align-self-center mb-0">
                                     Wpisz treść wiadomości. <br>Wypełnienie pola jest wymagane.
                                 </p>
@@ -163,17 +171,14 @@ if ($input->company_id) {
                             </div>
 
                             <div class="col-12 text-center text-md-right align-self-center">
-                                <div class="row justify-content-center justify-content-xl-start">
-                                    <div class="col-12 col-md-6">
+                                <div class="row justify-content-center">
+                                    <div class="col-12 col-md-5">
                                         <button type="submit"
                                                 class=" btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij
                                             wiadomość
                                         </button>
                                     </div>
-
-                                    <div class="col-6 d-none d-xl-block"></div>
-
-                                    <div class="col-12 col-md-6">
+                                    <div class="col-12 col-md-5">
                                         <button type="button"
                                                 class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
                                             WRÓĆ

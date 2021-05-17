@@ -69,6 +69,13 @@ function render_company_info($company_data = array()) {
     // Strona z lista firm
     $company_list_page_url = $pages->get("template=companies")->url;
 
+    // Usun bledy w informacji o firmie
+    $filtered_company = filter_company_name($company_data);
+    $company_name = $filtered_company["company_name"];
+    $company_address = $filtered_company["company_address"];
+    $company_city = $filtered_company["company_city"];
+
+    // Renderuj markup
     echo "<div ";
 
     // Jezeli logo nie istnieje ustaw padding left
@@ -83,16 +90,16 @@ function render_company_info($company_data = array()) {
 
     echo "<div class=\"col-10 company-info pl-2\">";
     echo "<a class=\"company-name h5 d-block text-left mb-2 section-title-4 font-weight-700\" href=\"" . $company_data["company_url"] . "\">";
-    echo "<span>" . $company_data["company_name"] . "</span>";
+    echo "<span>" . $company_name . "</span>";
     echo "</a>";
 
     // Wyswietl regon jesli istnieje
     if (!empty($company_data["company_regon"])) echo "<div class=\"company-address mb-2 small\">REGON:" . $company_data["company_regon"] . "</div>";
 
-    echo "<div class=\"company-street\">" . $company_data["company_address"] ."</div>";
+    echo "<div class=\"company-street\">" . $company_address ."</div>";
     echo "<div class=\"company-zip-city mb-2\">";
     echo "<span class=\"company-zip\">" . $company_data["company_zip"] . " </span>";
-    echo "<span class=\"company-city\">" . $company_data["company_city"] . "</span>";
+    echo "<span class=\"company-city\">" . $company_city . "</span>";
     echo "</div>";
 
     // Tylko pierwszy telefon
@@ -284,10 +291,13 @@ function render_service_info($service_data, $device="desktop") {
 }
 
 // Wyswietla element listy firm
-function render_company_list_item($company_data, $message_url) {
+function render_company_list_item($company_data) {
 
-    if(count($company_data) === 0 || !isset($message_url)) return;
+    if(count($company_data) === 0) return;
+
     $urls = wire("urls");
+    $pages = wire("pages");
+    $message_url = $pages->get("template=message")->url . "?company_id=" . $company_data["company_id"];
 
     // Czy logo firmy istnieje
     if (!empty($company_data["company_logo_url"])) {
@@ -296,27 +306,39 @@ function render_company_list_item($company_data, $message_url) {
 
     // Czy www firmy istnieje
     if (!empty($company_data["company_www"])) {
-        $company_www_markup = "<div class='my-2 h6 font-weight-300'><a href='" . $company_data["company_www"] . "'>" . $company_data["company_www"] . "</a></div>";
+        $company_www_markup = "<div class='send-message-anchor my-2 h6 font-weight-300'><a href='" . $company_data["company_www"] . "'>" . $company_data["company_www"] . "</a></div>";
     } else $company_www_markup = "";
+
+    $company_phone_1 = filter_phone_fax_number($company_data["company_phone_1"]);
 
     // Czy drugi telefon firmy istnieje
     if (!empty($company_data["company_phone_2"])) {
-        $second_phone_markup = "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Telefon kontaktowy' href='tel:" . $company_data["company_phone_2"] . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_data["company_phone_2"] . "</a>";
+
+        $company_phone_2 = filter_phone_fax_number($company_data["company_phone_2"]);
+        $second_phone_markup = "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Telefon kontaktowy' href='tel:" . $company_phone_2 . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_phone_2 . "</a>";
     } else $second_phone_markup = "";
 
     // Czy fax firmy istnieje
     if (!empty($company_data["company_fax"])) {
-        $fax_markup =  "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Numer FAX' href='fax:" . $company_data["company_fax"] . "'><i class='fas fa-fax mr-2'></i>" . $company_data["company_fax"] . "</a>";
+
+        $company_fax = filter_phone_fax_number($company_data["company_fax"]);
+        $fax_markup =  "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Numer FAX' href='fax:" . $company_fax . "'><i class='fas fa-fax mr-2'></i>" . $company_fax . "</a>";
     } else $fax_markup = "";
 
     // Czy istnieje e-mail
     if (!empty($company_data["company_email"])) {
         $email_markup = "
-            <a href='" . $message_url ."' class='d-block align-self-start text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='Wyślij wiadomość'>
-                <img width='22' height='24' class='d-inline-block mx-auto' src='" . $urls->images ."email.svg' alt='email-image'>
+            <a href='" . $message_url ."' class='d-inline-block d-sm-block text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='left' title='Wyślij wiadomość' data-original-title='Wyślij wiadomość'>
+                <img width='20' height='22' class='d-inline-block mx-auto' src='" . $urls->images ."email.svg' alt='email-image'>
             </a>
         ";
     } else $email_markup = "";
+
+    // Usun bledy w informacji o firmie
+    $filtered_company = filter_company_name($company_data);
+    $company_name = $filtered_company["company_name"];
+    $company_address = $filtered_company["company_address"];
+    $company_city = $filtered_company["company_city"];
 
     // Renderuj markup
     echo "
@@ -328,28 +350,28 @@ function render_company_list_item($company_data, $message_url) {
             </div>
             
             <div class='col-12 col-sm-5 col-xl-6 text-center text-sm-left'>
-                <a class='company-name text-dark d-block mt-3 mb-2 font-weight-500' href='" . $company_data["company_url"] ."'><span>" . $company_data["company_name"] ."</span></a>
-                <div class='company-street h6 font-weight-300'>" . $company_data["company_address"] ."</div>
-                <div class='company-zip-city mb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] ." </span><span class='company-city'>" . $company_data["company_city"] ."</span></div>
+                <a class='company-name text-dark d-block mt-3 mb-2 font-weight-500' href='" . $company_data["company_url"] ."'><span>" . $company_name ."</span></a>
+                <div class='company-street h6 font-weight-300'>" . $company_address ."</div>
+                <div class='company-zip-city mb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] ." </span><span class='company-city'>" . $company_city ."</span></div>
                 $company_www_markup
             </div>
             
             <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left'>
-                    <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-3' title='Telefon kontaktowy' href='tel:" . $company_data["company_phone_1"] . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_data["company_phone_1"] . "</a>
+                    <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-3' title='Telefon kontaktowy' href='tel:" . $company_phone_1 . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_phone_1 . "</a>
                     $second_phone_markup
                     $fax_markup
             </div>
             
-            <div class='col-12 col-sm-1 p-xl-3'>
-                <a href='#' class='d-block align-self-start text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='' data-original-title='Dodaj do ulubionych'>
-                    <img width='28' height='28' class='d-inline-block mx-auto' src='" . $urls->images ."heart.svg' alt='heart-image'>
-                </a>
-                
-                $email_markup
+                <div class='d-flex justify-content-center d-sm-block justify-content-end col-12 col-sm-1 px-0 p-xl-3 mt-2 mt-sm-3 mt-xl-0'>
+                    <a href='#' class='d-inline-block d-sm-block text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='Dodaj do ulubionych' data-original-title='Dodaj do ulubionych'>
+                        <img width='25' height='25' class='d-inline-block mx-auto' src='" . $urls->images ."heart.svg' alt='heart-image'>
+                    </a>
+                    $email_markup
+                    
+                </div>
                 
             </div>
             
-        </div>
     
     ";
 
@@ -761,5 +783,51 @@ function get_filter_selector($input, $template_name) {
     }
 
     return $query;
+
+}
+
+// Konwertuje nazwe firmy, usuwa bledy w nazewnictwie
+function filter_company_name($company_data) {
+
+    if (!isset($company_data)) return array();
+
+    // Przygotuj nazwe firmy
+    $company_name = mb_strtolower($company_data["company_name"], "utf-8");
+    $company_name = mb_convert_case($company_name, MB_CASE_TITLE, "utf-8");
+    $company_name = preg_replace('/\sz\s/i', ' z ', $company_name);
+    $company_name = preg_replace('/\sw\s/i', ' w ', $company_name);
+    $company_name = preg_replace('/\si\s/i', ' i ', $company_name);
+    $company_name = preg_replace('/\s"/i', '', $company_name);
+    $company_name = preg_replace('/"\s|$/i', '', $company_name);
+    $company_name = preg_replace('/&amp;/i', '', $company_name);
+
+    // Popraw rodzaje spolek
+    $company_name = preg_replace('/\ss[p]*\s*\.?\s*z\so\s*\.?\s*o\.?/i', ' Sp. z o.o.', $company_name);
+    $company_name = preg_replace('/\ss[p]*\.?\s*j\.?/i', ' Sp. J.', $company_name);
+    $company_name = preg_replace('/\ss[p]*\.?\s*c\.?/i', ' Sp. C.', $company_name);
+
+    // Przygotuj adres
+    $company_address = mb_strtolower($company_data["company_address"], "utf-8");
+    $company_address = mb_convert_case($company_address, MB_CASE_TITLE, "utf-8");
+    $company_city = mb_strtolower($company_data["company_city"], "utf-8");
+    $company_city = mb_convert_case($company_city, MB_CASE_TITLE, "utf-8");
+
+    return array(
+        "company_name" => $company_name,
+        "company_address" => $company_address,
+        "company_city" => $company_city
+    );
+}
+
+// Usuwa zera na poczatku numeru telefonu i faksu
+function filter_phone_fax_number($number) {
+
+    $first_char =  substr($number, 0, 1);
+    if ($first_char === "0") {
+
+        if (substr($number, 1, 1) === "-") return substr($number, 2);
+        else return substr($number, 1);
+    }
+    else return $number;
 
 }

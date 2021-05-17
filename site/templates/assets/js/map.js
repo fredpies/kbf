@@ -944,8 +944,8 @@
 
   var config = {
     env: 'dev',
-    url: 'http://localhost',
-    apiEndpoint: 'http://localhost/kbf2'
+    url: 'https://webplanet.biz',
+    apiEndpoint: 'https://webplanet.biz/kbf'
   };
 
   function _arrayLikeToArray(arr, len) {
@@ -1145,7 +1145,6 @@
   function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
   function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-  var url = config.url;
   var apiEndpoint = config.apiEndpoint;
 
   var KbfMap = /*#__PURE__*/function (_EventTarget) {
@@ -1714,9 +1713,7 @@
   KbfMap.layerStyle = {}; // Style warstwy wojewodztwa i powiatu
 
   KbfMap.markerSymbol = L.icon({
-    // Musi byc zmienione dla processwire
-    // iconUrl: 'assets/images/marker-icon.png',
-    iconUrl: "".concat(url, "/kbf2/site/templates/assets/images/marker-icon.png"),
+    iconUrl: "".concat(apiEndpoint, "/site/templates/assets/images/marker-icon.png"),
     iconSize: [30, 40],
     // size of the icon
     iconAnchor: [15, 40],

@@ -496,8 +496,8 @@
 .kbf-error-message {
   color: red;
   padding-left: 1rem;
-  position: relative;
-  bottom: 1rem;
+  position: absolute;
+  bottom: -0.8rem;
 }
 
 /******************************/
@@ -525,7 +525,7 @@
   }
 
 
-  .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city {
+  .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city, .company-list-item .send-message-anchor {
     font-size: 0.8rem;
   }
 
@@ -547,7 +547,7 @@
     font-size: 0.95rem;
   }
 
-  .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city {
+  .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city, .company-list-item .send-message-anchor {
     font-size: 0.9rem;
   }
 

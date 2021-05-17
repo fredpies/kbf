@@ -985,11 +985,9 @@ $home_page_url = $pages->get(1)->url;
                             // Lista firm
                             foreach ($companies as $company) {
                                 $company_data = sanitize_company_data($company);
-                                $message_url = $pages->get("template=message")->url . "?company_id=" . $company_data["company_id"];
-                                render_company_list_item($company_data, $message_url);
+                                render_company_list_item($company_data);
                             }
                             ?>
-
 
                             <nav class="mt-3" aria-label="Companies navigation">
                                 <?php

@@ -48,13 +48,9 @@ class KbfForm {
 
     init() {
 
-        let instance = this; // Ustaw kontekst
-
         // Ustaw maski
         Array.from(this.formElement.elements).forEach(function (formElement) {
-            if (formElement.name in instance.formConfig) {
-                new Inputmask(instance.formConfig[formElement.name]).mask(formElement)
-            }
+            new Inputmask().mask(formElement)
         })
 
     }

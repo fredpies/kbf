@@ -27,6 +27,9 @@ else $jobs = array();
 
 $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png";
 
+// Wysylanie wiadomosci
+$message_url = $pages->get("template=message")->url . "?company_id=" . $sanitizer->int($page->company_id);
+
 ?>
 
 <!DOCTYPE html>
@@ -65,9 +68,14 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
                     <div id="kbf-minimap" data-lat="<?php if(isset($lat) && !empty($lat)) echo $lat; ?>" data-lon="<?php if(isset($lon) && !empty($lon)) echo $lon; ?>"></div>
                 </div>
                 <div class="col-12 col-md-1 text-center text-md-right mb-3">
-                    <a href="#" class="text-dark tooltip-btn p-1 mr-n1" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych">
+                    <a href="#" class="d-block text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych">
                         <img src="<?php echo $urls->images ?>heart.svg" alt="heart-image" class="d-inline-block">
                     </a>
+
+                    <a href="<?php echo $message_url ?>" class="d-block text-dark tooltip-btn mr-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Wyślij wiadomość">
+                        <img width="23" height="24" class="d-inline-block mx-auto" src="<?php echo $urls->images?>email.svg" alt="email-image">
+                    </a>
+
                 </div>
                 <div class="col-12">
 
@@ -167,17 +175,12 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
                                 echo "<div class=\"row\">";
 
                                 foreach ($products as $product) {
-
                                     $product_data = sanitize_product_data($product);
                                     render_product_info($product_data);
-
                                 }
-
                                 echo "</div>";
                             }
-
                             ?>
-
 
                         </div>
                         <div class="tab-pane fade" id="company-services-pane" role="tabpanel"
@@ -193,16 +196,12 @@ $job_excerpt_background_image = $urls->images . "upload/service-card-box-01.png"
                                 echo "<div class=\"row\">";
 
                                 foreach ($company_services as $company_service) {
-
                                     $service_data = sanitize_service_data($company_service);
                                     render_service_info($service_data);
-
                                 }
 
                                 echo "</div>";
                             }
-
-
                             ?>
 
                         </div>
