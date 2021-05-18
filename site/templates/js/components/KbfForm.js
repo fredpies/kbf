@@ -3,13 +3,14 @@ import Inputmask from "inputmask/lib/inputmask";
 
 class KbfForm {
 
-    constructor(formConfig) {
+    constructor(formConfig, lang) {
 
         let $ = window.$;
 
         this.formConfig = formConfig;
         this.formName = this.formConfig.formName;
         this.formElement = document.forms[this.formName];
+        this.lang = lang || 'pl';
 
         // Sprawdz czy formularz o podanej nazwie istnieje
         if (!this.formElement) throw errors.formNotFound(this.formName);
@@ -48,6 +49,17 @@ class KbfForm {
 
     init() {
 
+        let $ = window.$;
+
+        console.log($.validator.addMethod)
+
+        // Ustaw custom rules
+        $.validator.addMethod("kbfPhone", function(value, element) {
+            return this.optional( element ) || /[1-9][0-9]{2}-[0-9]{3}-[0-9]{3,}/.test( value );
+        });
+
+
+
         // Ustaw maski
         Array.from(this.formElement.elements).forEach(function (formElement) {
             new Inputmask().mask(formElement)
@@ -72,13 +84,6 @@ class KbfForm {
             instance.$formElement.validate({ ...instance.defaultValidatorConfig, ...instance.validatorConfig });
             instance.handleErrorMessage.call(instance);
         });
-
-        // Zarejestruj na kazdym polu sprawdzanie formularza
-        Array.from(this.formElement.elements).forEach(function (formElement) {
-            let $formElement = $(formElement);
-            $formElement.on('keyup', instance.handleErrorMessage.bind(instance));
-        })
-
     }
 
     // Ustawia error message jezeli istnieje

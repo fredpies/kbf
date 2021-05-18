@@ -493,11 +493,15 @@
 /*  5. Formularze             */
 /******************************/
 
-.kbf-error-message {
+label.error {
   color: red;
   padding-left: 1rem;
   position: absolute;
   bottom: -0.8rem;
+}
+
+input + label.error {
+  bottom: -2rem;
 }
 
 /******************************/

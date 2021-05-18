@@ -104,19 +104,19 @@ function render_company_info($company_data = array()) {
 
     // Tylko pierwszy telefon
     if (!empty($company_data["company_phone_1"]) && empty($company_data["company_phone_2"]))
-        echo "<a class=\"d-block text-dark text-nowrap\" href=\"tel:" . $company_data["company_phone_1"] . "+48601789633\">
-        <i class=\"fas fa-phone-alt mr-2\"></i>" . $company_data["company_phone_1"] . "</a>";
+        echo "<a class=\"d-block text-dark text-nowrap\" href=\"tel:" . filter_phone_fax_number($company_data["company_phone_1"]) . "\">
+        <i class=\"fas fa-phone-alt mr-2\"></i>" . filter_phone_fax_number($company_data["company_phone_1"]) . "</a>";
 
     // Obydwa telefony
     if (!empty($company_data["company_phone_1"]) && !empty($company_data["company_phone_2"]))
-        echo "<a class=\"d-block text-dark text-nowrap\" href=\"tel:" . $company_data["company_phone_1"] . "\">
-               <i class=\"fas fa-phone-alt mr-2\"></i>" . $company_data["company_phone_1"] .
+        echo "<a class=\"d-block text-dark text-nowrap\" href=\"tel:" . filter_phone_fax_number($company_data["company_phone_1"]) . "\">
+               <i class=\"fas fa-phone-alt mr-2\"></i>" . filter_phone_fax_number($company_data["company_phone_1"]) .
             "<a class=\"d-block text-dark text-nowrap\" href=\"tel:" . $company_data["company_phone_2"] . "\">
-                <i class=\"fas fa-phone-alt mr-2\"></i>" . $company_data["company_phone_2"] . "</a>";
+                <i class=\"fas fa-phone-alt mr-2\"></i>" . filter_phone_fax_number($company_data["company_phone_2"]) . "</a>";
 
     // Wyswietl fax jesli istnieje
     if (!empty($company_data["company_fax"]))
-        echo "<a class=\"d-block text-dark text-nowrap\" href=\"fax:" . $company_data["company_fax"] . "\"><i class=\"fas fa-fax mr-2\"></i>" . $company_data["company_fax"] . "</a>";
+        echo "<a class=\"d-block text-dark text-nowrap\" href=\"fax:" . filter_phone_fax_number($company_data["company_fax"]) . "\"><i class=\"fas fa-fax mr-2\"></i>" . filter_phone_fax_number($company_data["company_fax"]) . "</a>";
 
     // Wyswietl www jesli istnieje
     if (!empty($company_data["company_www"]))

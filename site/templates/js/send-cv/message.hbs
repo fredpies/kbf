@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{> head }}
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="assets/css/leaflet.css">
+</head>
+<body>
+
+<!-- Preloader -->
+{{> preloader }}
+
+<!-- Navigation menu -->
+{{> menu }}
+
+<!-- Content -->
+<div class="main-content py-0">
+    <div class="container">
+
+        <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">Wyślij wiadomość</h3>
+        
+        <div class="kbf-send-message mt-3 mt-md-5">
+            <div class="kbf-error-message card text-white bg-danger mb-3 d-none">
+                <div class="card-header font-weight-bold">W FORMULARZU WYSTĄPIŁY BŁĘDY</div>
+                <div class="card-body">
+                    <p class="card-text">Sprawdź poprawność wypełnienia wszystkich pól i wyślij formularz ponownie.</p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
+                <div class="card-body">
+                    <h6 class="text-center mb-3 mb-md-5">DO: WebPlanet Witryny i aplikacje internetowe</h6>
+
+                    <form novalidate role="form" name="send-message" class="pl-lg-5">
+                        <div class="row">
+
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group input-group-lg input-group-round mb-4">
+                                    <label class="text-uppercase px-3">Imię i nazwisko</label>
+                                    <div class="input-group-inner">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text input-group-icon"><i class="far fa-user"></i></span>
+                                        </div>
+                                        <input autocomplete="off" type="text" class="form-control form-control-lg" name="name">
+                                        <div class="input-focus-bg"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-none d-lg-flex col-6">
+                                <p class="kbf-form-info align-self-center">
+                                    Wpisz swoje imię i nazwisko. <br/>Wypełnienie pola jest wymagane.
+                                </p>
+                            </div>
+
+                            <div class="col-12 mb-4 text-carrot error d-none">W celu wysłania formularza należy wypełnić pole "Imię i nazwisko".</div>
+
+
+                            <div class="col-12 col-lg-6">
+                                <div class="input-group input-group-lg input-group-round mb-4">
+                                    <label class="text-uppercase px-3">Adres e-mail</label>
+                                    <div class="input-group-inner">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text input-group-icon">
+                                            <i class="far fa-envelope"></i></span>
+                                        </div>
+                                        <input type="text"  autocomplete="off" class="form-control form-control-lg" name="email">
+                                        <div class="input-focus-bg"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="d-none d-lg-flex col-6">
+                                <p class="kbf-form-info align-self-center mb-0">
+                                    Wpisz swój adres e-mail. <br>Wypełnienie pola jest wymagane.
+                                </p>
+                            </div>
+
+                            <div class="col-12 mb-4 text-carrot error d-none">W celu wysłania formularza należy wypełnić pole "Adres e-mail".</div>
+
+                            <div class="col-12 col-lg-6">
+                                <div class="form-group">
+                                    <label class="text-uppercase px-3">Treść wiadomości</label>
+                                    <textarea autocomplete="off"  class="form-control form-round form-control-lg" rows="8" name="message"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="d-none d-lg-flex col-6">
+                                <p class="kbf-form-info align-self-center mb-0">
+                                    Wpisz treść wiadomości. <br>Wypełnienie pola jest wymagane.
+                                </p>
+                            </div>
+
+                            <div class="col-12 mb-4 text-carrot error d-none">W celu wysłania formularza należy wypełnić treść wiadomości.</div>
+
+                            <div class="col-12 col-lg-6 text-center text-md-right align-self-center">
+                                <button type="submit" class="btn btn-round shadow-none btn-primary">Wyślij wiadomość</button>
+                                <button type="button" class="btn btn-round btn-secondary shadow-none ml-3">WRÓĆ</button>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+
+                <hr class="mb-3 mb-md-0">
+
+                <!-- Company details -->
+                <div class="row p-md-5 px-4">
+                    <div class="col-12 col-md-6 px-0">
+                        <div class="row no-gutters">
+                            <div class="col-2 text-center">
+                                <img class="d-inline-block img-fluid" alt="image" src="assets/images/upload/company-logo.png">
+                            </div>
+                            <div class="col-10 company-info pl-2">
+                                <h5 class="font-weight-700 mb-2 section-title-4 text-left">WebPlanet Witryny i aplikacje internetowe</h5>
+                                <div class="company-street">Jagiellońska 115A</div>
+                                <div class="company-zip-city">
+                                    <span class="company-zip">85-027</span>
+                                    <span class="company-city">Bydgoszcz</span>
+                                </div>
+                                <a class="text-dark text-nowrap" href="tel:+48601789633"><i class="fas fa-phone-alt mr-2"></i>+48601789633</a>
+                                <div class="company-industries">
+                                    <a href="#"><span class="company-industry badge badge-pill badge-primary mb-1 mt-3">Oprogramowanie</span></a>
+                                    <a href="#"><span class="company-industry badge badge-pill badge-warning mb-1 mt-1">Usługi komputerowe i informatyczne</span></a>
+                                    <a href="#"><span class="company-industry badge badge-pill badge-success mb-1 mt-1">Projektowanie stron www</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 my-3 my-md-0">
+                        <!-- Minimap -->
+                        <div id="kbf-minimap" data-lat="53.1227812" data-lon="18.0327309282219"></div>
+                    </div>
+                    <div class="col-12 col-md-2 text-center text-md-left mb-3">
+                        <a href="#" class="d-sm-block text-primary text-nowrap">Szczegóły</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+{{> footer }}
+<!-- Go to top -->
+{{> go-to-top }}
+
+{{> scripts }}
+
+<!-- Form validation -->
+{{> form-validation-script }}
+
+<!-- Leaflet js -->
+<script src="assets/js/vendor/leaflet.js"></script>
+
+<!-- Leaflet Providers js -->
+<script src="assets/js/vendor/leaflet-providers.js"></script>
+
+<!-- Main script -->
+<script src="assets/js/message.js"></script>
+<script>
+    $(function () {
+        // Ustaw tooltips
+        $('.tooltip-btn').tooltip()
+        $('.tooltip-btn-light').tooltip({
+            template: '<div class="tooltip tooltip-light" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+        })
+    })
+</script>
+</body>
+</html>

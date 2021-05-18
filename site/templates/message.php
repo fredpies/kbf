@@ -71,6 +71,8 @@ if ($input->company_id) {
         </div>
 
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-lg-0 py-4 section-title-3 text-center text-uppercase">Wyślij wiadomość</h3>
+        <h6 class="font-weight-400 text-center mt-3 mb-4">Podaj swoje dane i wpisz treść wiadomości.</h6>
+
 
         <div class="kbf-send-message mt-3 mt-md-5">
 
@@ -119,15 +121,16 @@ if ($input->company_id) {
 
                                         <input type="text" autocomplete="off" class="form-control form-control-lg"
                                                name="email"
-                                               required data-inputmask-regex=".+@.+"
+                                               required
+                                               data-inputmask-regex=".+@.+"
+                                               data-rule-email="true"
                                                data-msg-required="Pole e-mail nie może byś puste."
-                                               data-msg-regex="Adres e-mail posiada niewłaściwy format."
+                                               data-msg-email="Adres e-mail posiada niewłaściwy format."
                                         >
                                         <div class="input-focus-bg"></div>
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="d-none d-lg-flex col-5">
                                 <p class="kbf-form-info align-self-center mb-0">
