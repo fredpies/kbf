@@ -349,7 +349,7 @@ class KbfMap extends EventTarget {
             this.currentAreasLayer = L.geoJSON(window.areasGeoJSON, {
                 style: function () {
                     return {
-                        weight: 0.6,
+                        weight: 0.8,
                         fillOpacity: 0.1,
                         color: '#7a838c',
                         fillColor: '#478aee'
@@ -484,7 +484,7 @@ class KbfMap extends EventTarget {
 
                 style: function () {
                     return {
-                        weight: 0.6,
+                        weight: 0.85,
                         fillOpacity: 0.1,
                         color: '#7a838c',
                         fillColor: '#478aee'
@@ -519,8 +519,6 @@ class KbfMap extends EventTarget {
         this.map.scrollWheelZoom.enable(); // Wlacz scroll zoom
         this.map.dragging.enable(); // Wlacz dragging
 
-        // TODO: Pokaz markery firm
-
     }
 
     removeCompanyMarkers() {
@@ -549,7 +547,7 @@ class KbfMap extends EventTarget {
                 markerMarkup = `<h6 class="mb-3">${markerData.company_name}</h6><p>${markerData.company_address}</p><p>${markerData.company_zip} ${markerData.company_city}</p>
                 
                 <p>${markerData.company_phone_1.length > 0 ? 'tel. ' + markerData.company_phone_1 : ''} ${markerData.company_phone_2.length > 0 ? ' , ' + markerData.company_phone_2 : ''}</p>
-                <div style="text-align: center"><a href="${KbfMap.markersAPIEndpoint}${markerData.url}">Zobacz szczegóły</a></div>`;
+                <div style="text-align: center"><a href="https://webplanet.biz${markerData.url}">Zobacz szczegóły</a></div>`;
                 markerLayer.bindPopup(markerMarkup);
                 instance.markers.push(markerLayer);
 
@@ -577,7 +575,7 @@ KbfMap.polandTiles = L.tileLayer.provider('OpenStreetMap.Mapnik'); // Tile Map d
 
 KbfMap.layerStyle = {}; // Style warstwy wojewodztwa i powiatu
 KbfMap.markerSymbol = L.icon({
-    iconUrl: `${apiEndpoint}/site/templates/assets/images/marker-icon.png`,
+    iconUrl: `${url}/kbf/site/templates/assets/images/marker-icon.png`,
     iconSize:     [30, 40], // size of the icon
     iconAnchor:   [15, 40], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor

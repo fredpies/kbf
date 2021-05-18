@@ -802,6 +802,7 @@ function filter_company_name($company_data) {
     $company_name = preg_replace('/&amp;/i', '', $company_name);
 
     // Popraw rodzaje spolek
+    $company_name = preg_replace('/z\so\.?\s?o\.?/i', ' z o.o.', $company_name);
     $company_name = preg_replace('/\ss[p]*\s*\.?\s*z\so\s*\.?\s*o\.?/i', ' Sp. z o.o.', $company_name);
     $company_name = preg_replace('/\ss[p]*\.?\s*j\.?/i', ' Sp. J.', $company_name);
     $company_name = preg_replace('/\ss[p]*\.?\s*c\.?/i', ' Sp. C.', $company_name);
@@ -821,6 +822,8 @@ function filter_company_name($company_data) {
 
 // Usuwa zera na poczatku numeru telefonu i faksu
 function filter_phone_fax_number($number) {
+
+    if (!isset($number)) return "";
 
     $first_char =  substr($number, 0, 1);
     if ($first_char === "0") {

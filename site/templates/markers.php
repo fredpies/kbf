@@ -3,6 +3,7 @@
 namespace ProcessWire;
 
 include_once("./lib/Rest.php");
+include_once("./lib/functions.php");
 
 // Wartosci domyslne
 $statuscode = 200;
@@ -55,15 +56,15 @@ if (!empty($provinceName) && !empty($areaName)) {
                     $result["company_address"] = $sanitizer->text($company->company_address);
                     $result["company_zip"] = $sanitizer->text($company->company_zip);
                     $result["company_city"] = $sanitizer->text($company->company_city);
-                    $result["company_phone_1"] = $sanitizer->text($company->company_phone_1);
-                    $result["company_phone_2"] = $sanitizer->text($company->company_phone_2);
+                    $result["company_phone_1"] = filter_phone_fax_number($sanitizer->text($company->company_phone_1));
+                    $result["company_phone_2"] = filter_phone_fax_number($sanitizer->text($company->company_phone_2));
 
                     $result["industry"] = $sanitizer->text($company->industry);
                     $result["sub-industry"] = $sanitizer->text($company->sub_industry);
 
                     $result["lat"] = $sanitizer->text($company->lat);
                     $result["lon"] = $sanitizer->text($company->lon);
-                    $result["url"] = $company->url; // Url strony firmy
+                    $result["url"] = $company->url;
 
                     array_push($response, $result);
                 }

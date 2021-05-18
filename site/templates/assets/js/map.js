@@ -1145,6 +1145,7 @@
   function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
   function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  var url = config.url;
   var apiEndpoint = config.apiEndpoint;
 
   var KbfMap = /*#__PURE__*/function (_EventTarget) {
@@ -1502,7 +1503,7 @@
           this.currentAreasLayer = L.geoJSON(window.areasGeoJSON, {
             style: function style() {
               return {
-                weight: 0.6,
+                weight: 0.8,
                 fillOpacity: 0.1,
                 color: '#7a838c',
                 fillColor: '#478aee'
@@ -1626,7 +1627,7 @@
             },
             style: function style() {
               return {
-                weight: 0.6,
+                weight: 0.85,
                 fillOpacity: 0.1,
                 color: '#7a838c',
                 fillColor: '#478aee'
@@ -1657,7 +1658,6 @@
         this.map.scrollWheelZoom.enable(); // Wlacz scroll zoom
 
         this.map.dragging.enable(); // Wlacz dragging
-        // TODO: Pokaz markery firm
       }
     }, {
       key: "removeCompanyMarkers",
@@ -1682,7 +1682,7 @@
             var markerLayer = new L.marker([markerData.lat, markerData.lon], {
               icon: KbfMap.markerSymbol
             });
-            markerMarkup = "<h6 class=\"mb-3\">".concat(markerData.company_name, "</h6><p>").concat(markerData.company_address, "</p><p>").concat(markerData.company_zip, " ").concat(markerData.company_city, "</p>\n                \n                <p>").concat(markerData.company_phone_1.length > 0 ? 'tel. ' + markerData.company_phone_1 : '', " ").concat(markerData.company_phone_2.length > 0 ? ' , ' + markerData.company_phone_2 : '', "</p>\n                <div style=\"text-align: center\"><a href=\"").concat(KbfMap.markersAPIEndpoint).concat(markerData.url, "\">Zobacz szczeg\xF3\u0142y</a></div>");
+            markerMarkup = "<h6 class=\"mb-3\">".concat(markerData.company_name, "</h6><p>").concat(markerData.company_address, "</p><p>").concat(markerData.company_zip, " ").concat(markerData.company_city, "</p>\n                \n                <p>").concat(markerData.company_phone_1.length > 0 ? 'tel. ' + markerData.company_phone_1 : '', " ").concat(markerData.company_phone_2.length > 0 ? ' , ' + markerData.company_phone_2 : '', "</p>\n                <div style=\"text-align: center\"><a href=\"https://webplanet.biz").concat(markerData.url, "\">Zobacz szczeg\xF3\u0142y</a></div>");
             markerLayer.bindPopup(markerMarkup);
             instance.markers.push(markerLayer);
           });
@@ -1713,7 +1713,7 @@
   KbfMap.layerStyle = {}; // Style warstwy wojewodztwa i powiatu
 
   KbfMap.markerSymbol = L.icon({
-    iconUrl: "".concat(apiEndpoint, "/site/templates/assets/images/marker-icon.png"),
+    iconUrl: "".concat(url, "/kbf/site/templates/assets/images/marker-icon.png"),
     iconSize: [30, 40],
     // size of the icon
     iconAnchor: [15, 40],

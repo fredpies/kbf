@@ -77,15 +77,6 @@ if ($input->company_id) {
             <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
                 <div class="card-body">
 
-<!--                    <div class="row justify-content-center">-->
-<!--                        <div class="kbf-main-error-message col-11 card text-white bg-danger px-0 mb-3 d-none">-->
-<!--                            <div class="card-header font-weight-bold">W FORMULARZU WYSTĄPIŁY BŁĘDY</div>-->
-<!--                            <div class="card-body">-->
-<!--                                <p class="card-text">Sprawdź poprawność wypełnienia wszystkich pól i wyślij formularz ponownie.</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
                     <form novalidate role="form" name="send-message" class="pl-lg-5">
                         <div class="row justify-content-center">
 
