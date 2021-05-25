@@ -6,17 +6,17 @@ include_once "lib/functions.php";
 $home_page_url = $pages->get(1)->url;
 
 if (isset($input->company_id)) {
-    $company_data = $sanitizer->selectorValue($input->company_id);
+    $company_id = $sanitizer->selectorValue($input->company_id);
 }
-//else $session->redirect($home_page_url);
+else $session->redirect($home_page_url);
 
 if (isset($input->job_id)) {
     $job_id = $sanitizer->selectorValue($input->job_id);
 }
-//else $session->redirect($home_page_url);
+else $session->redirect($home_page_url);
 
 // Przygotuj dane
-$company_data = sanitize_company_data($pages->get("template=company,company_id=$company_data"));
+$company_data = sanitize_company_data($pages->get("template=company,company_id=$company_id"));
 $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
 
 ?>

@@ -531,6 +531,64 @@ function get_pagination($page_array) {
 }
 
 /****************
+ *   FORMULARZE
+ * *************/
+
+function render_form_field($field, $regex="", $type = "auto") {
+
+    $sanitizer = wire("sanitizer");
+
+    // Slownik dla pol PW
+    $fieldTypes = array(
+        "FieldtypeText" => "text"
+    );
+
+    // Czy pole jest wymagane ?
+    $required = $field->required ? "required" : "";
+    $msg_required = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
+
+    // Czy zastosowano maske wprowadzania ?
+    $inputmask = $field->placeholder ? ' data-inputmask-regex="' . $field->placeholder . '"' : "";
+
+    // Renderuj pole formularza
+    echo '
+                <!-- Pole formularza -->
+                <div class="col-12 col-lg-5 mb-2">
+                    <div class="input-group input-group-lg input-group-round mb-4">
+                        <label class="text-uppercase px-3">' . $field->label . '</label>
+                        <div class="input-group-inner">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-group-icon"><i class="fa ' . $field->icon . '"></i></span>
+                            </div>
+
+                            <input autocomplete="off" type="' . $fieldTypes[(String)$field->type] . '" class="form-control form-control-lg"
+                                   name="' . $field->name . '"
+                                   ' . $required . $msg_required . $inputmask . '>
+
+                            <div class="input-focus-bg"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Koniec pola formularza-->
+
+                <!-- Opis pola dla lg i wiekszych -->
+                <div class="d-none d-lg-flex col-5 col-xl-4">
+                    <p class="kbf-form-info align-self-center">' . $field->description . '</p>
+                </div>
+                <!-- Koniec opisu pola dla lg i wiekszych -->
+
+                <!-- Tekst bledu-->
+                <div class="col-12 mb-4 text-carrot error d-none">' . $field->notes . '</div>
+                <!-- Koniec tekstu dla bledu -->
+    
+    ';
+
+}
+
+
+
+/****************
  *   DANE KBF
  * *************/
 
@@ -581,6 +639,7 @@ function sanitize_job_data($job_page) {
 
     $job_data = array(
         "job_url" => $job_page->url,
+        "job_id" => $job_page->id,
         "job_name" => $sanitizer->text($job_page->job_name),
         "job_expire" => $sanitizer->text($job_page->job_expire),
         "job_city" => $sanitizer->text($job_page->job_city),

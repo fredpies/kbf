@@ -617,7 +617,40 @@ input + label.error {
 }
 
 /******************************/
-/* 8. Narzędzia               */
+/* WYSIWYG                    */
+/******************************/
+
+.ql-editor {
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 1.6875rem !important;
+  /*height: calc(1.5em + 1rem + 4px) !important;*/
+  height: 10rem !important;
+  min-height: 3.375rem !important;
+  padding: 0.85rem 1.375rem !important;
+  line-height: 1.5 !important;
+}
+
+.ql-container {
+  font-size: .875rem !important;
+  font-family: Montserrat, sans-serif !important;
+  color: #717171 !important;
+  height: auto !important;
+
+}
+
+.ql-expanded, .ql-picker {
+  transform: translateY(-2px) !important;
+}
+
+.ql-picker-label {
+  border: 0 !important;
+}
+
+
+
+
+/******************************/
+/* Narzędzia                  */
 /******************************/
 
 .mw-15 {
@@ -625,7 +658,7 @@ input + label.error {
 }
 
 /******************************/
-/* 9. Inne                    */
+/* Inne                       */
 /******************************/
 
 /* Like button */
@@ -850,7 +883,7 @@ input + label.error {
 }
 
 /******************************/
-/* 10. Fix                    */
+/* Fix                        */
 /******************************/
 
 /* Scrollbar */

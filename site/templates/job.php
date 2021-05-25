@@ -13,6 +13,9 @@ $company_keywords = $company_data["company_keywords"]; // Potrzebne do SEO
 // Inne oferty pracy firmy
 $other_job_offers = $job_data["siblings"];
 
+// Wysylanie cv
+$send_cv_page_url = $pages->get("template=send-cv")->url;
+
 ?>
 
 <!DOCTYPE html>
@@ -32,13 +35,20 @@ $other_job_offers = $job_data["siblings"];
 
 <!-- Content -->
 <div class="main-content py-0 mt-4">
+
     <div class="container">
+
+        <!-- Title -->
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">OFERTA PRACY</h3>
         <div class="row">
+
+            <!-- Company info -->
             <div class="col-12 col-md-6 col-xl-7 px-0">
                 <?php render_company_info($company_data);?>
             </div>
+            <!-- End company info -->
 
+            <!-- Right offer info-->
             <div class="col-md-6 col-xl-5">
                 <div class="job-description mt-md-0 my-4">
                     <div class="job-info">
@@ -84,16 +94,21 @@ $other_job_offers = $job_data["siblings"];
                     </div>
                 </div>
             </div>
+            <!-- End of right offer info-->
+
+            <!-- Left dark panel-->
             <div class="col-12 col-xl-4 mb-4">
                 <div class="bg-image bg-viridian-100 border-0 card shadow text-white" data-img-src="<?php echo $urls->images ?>upload/service-card-box-01.png" style="height: 100%;">
                     <div class="card-body company-job-description company-job-description-full position-relative">
-                        <p class="card-text">Poszukujemy osoby na stanowisko: <h5 class="d-block font-weight-600 my-3 text-warning"><?php echo $job_data["job_name"] ?></h5>
+                        <div class="card-text">Poszukujemy osoby na stanowisko: <h5 class="d-block font-weight-600 my-3 text-warning"><?php echo $job_data["job_name"] ?></h5>
                         <?php echo $job_data["job_description"] ?>
-                        </p>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- End of left dark panel-->
 
+            <!-- Job details-->
             <div class="col-12 col-xl-8">
                 <div class="job-details mb-xl-4 row">
                     <div class="col-md-4 mb-4 mb-xl-0">
@@ -159,17 +174,34 @@ $other_job_offers = $job_data["siblings"];
                     </div>
                 </div>
             </div>
+            <!-- End of job details-->
+
+            <!-- Send cv-->
             <div class="col-12 col-lg-4 mx-auto">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-xl-6">
-                        <button type="submit" class="btn btn-primary btn-round  mb-4 mx-2 mx-lg-0 w-100">WYŚLIJ CV</button>
-                    </div>
-                    <div class="col-12 col-xl-6">
-                        <button type="button" class="btn btn-round btn-secondary  mb-4 mx-2 mx-lg-0 w-100 kbf-back-button">Powrót</button>
-                    </div>
-                </div>
+
+                    <form method="get" action="<?= $send_cv_page_url ?>">
+
+                        <div class="row justify-content-center" >
+                            <div class="col-12 col-xl-6">
+                                    <button type="submit" class="btn btn-primary btn-round  mb-4 mx-2 mx-lg-0 w-100">Wyślij cv</button>
+                                </div>
+                                <div class="col-12 col-xl-6">
+                                    <button type="button" class="btn btn-round btn-secondary  mb-4 mx-2 mx-lg-0 w-100 kbf-back-button">Powrót</button>
+                                </div>
+
+                                <input name="company_id" value="<?= $company_data["company_id"] ?>" type="hidden">
+                                <input name="job_id" value="<?= $job_data["job_id"] ?>" type="hidden">
+
+                        </div>
+
+                    </form>
+
             </div>
-        </div>
+            <!-- End of send cv-->
+
+
+            </div>
+        <!-- End of title -->
 
         <!-- More jobs -->
         <?php
@@ -208,7 +240,6 @@ $other_job_offers = $job_data["siblings"];
 
         ?>
 
-    </div>
 </div>
 
 

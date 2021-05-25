@@ -51,8 +51,6 @@ class KbfForm {
 
         let $ = window.$;
 
-        console.log($.validator.addMethod)
-
         // Ustaw custom rules
         $.validator.addMethod("kbfPhone", function(value, element) {
             return this.optional( element ) || /[1-9][0-9]{2}-[0-9]{3}-[0-9]{3,}/.test( value );
