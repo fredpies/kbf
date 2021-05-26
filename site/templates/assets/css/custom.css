@@ -663,6 +663,22 @@ input + label.error {
   }
 }
 
+.kbf-logo-uploader {
+  height: 8rem;
+  cursor: pointer;
+}
+
+.kbf-logo-uploader:hover .input-focus-bg {
+  border-color: #2196f3;
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
+}
+
+.kbf-logo-uploader-label {
+  display: inline-block;
+  margin-bottom: .5rem;
+  font-size: .75rem;
+}
+
 
 
 

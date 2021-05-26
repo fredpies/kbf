@@ -41,8 +41,6 @@ class App {
 
         if (this.$wysiwyg.data('value')) this.setInitialValue(this.$wysiwyg.data('value')); // Ustaw wartosc poczatkowa dla edytora
 
-
-
     }
 
     addListeners() {

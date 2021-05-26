@@ -24,32 +24,46 @@ class FormRenderer
         $this->fields[$fieldset][] = $field;
     }
 
-    private function renderFormField($field, $device="desktop") {
+    public function addMarkup($markup, $fieldset = "main") {
+        if (!isset($markup)) return;
+        $this->fields[$fieldset][] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
+    }
 
-        $sanitizer = wire("sanitizer");
-
-        // Slownik dla pol PW
-        $fieldTypes = array(
-            "FieldtypeText" => "text"
-        );
-
-        // Czy pole jest wymagane ?
-        $required = $field->required ? "required" : "";
-        $msg_required = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
-
-        // Czy zastosowano maske wprowadzania ?
-        $inputmask = $field->placeholder ? ' data-inputmask-regex="' . $field->placeholder . '"' : "";
-
-        // Czy nalezy wyswietlic wartosc dla pola ?
-        $value = $this->operation === "update" ? 'value="' . $this->currentPage->get($field->name) . '"' : "";
+    // Renderuje pole formularza
+    private function renderFormField($field) {
 
         $markup = "";
-        // Renderuj w zaleznosci od typu pola
+        $urls = wire("urls");
+        $sanitizer = wire("sanitizer");
 
-        switch ($field->type) {
+        if (is_string($field)) {
+            $markup = $field;
+        }
 
-            case 'FieldtypeText':
-                $markup = '
+        if ($field instanceof Field) {
+
+
+            // Slownik dla pol PW
+            $fieldTypes = array(
+                "FieldtypeText" => "text",
+                "FieldtypeImage" => "file"
+            );
+
+            // Czy pole jest wymagane ?
+            $required = $field->required ? "required" : "";
+            $msg_required = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
+
+            // Czy zastosowano maske wprowadzania ?
+            $inputmask = $field->placeholder ? ' data-inputmask-regex="' . $field->placeholder . '"' : "";
+
+            // Czy nalezy wyswietlic wartosc dla pola ?
+            $value = $this->operation === "update" ? 'value="' . $this->currentPage->get($field->name) . '"' : "";
+
+            // Renderuj w zaleznosci od typu pola
+            switch ($field->type) {
+
+                case 'FieldtypeText':
+                    $markup = '
                 <!-- Pole formularza -->
                 <div class="col-12 col-lg-5 mb-2">
                     <div class="input-group input-group-lg input-group-round mb-4">
@@ -76,10 +90,10 @@ class FormRenderer
                 </div>
                 <!-- Koniec opisu pola dla lg i wiekszych -->
             ';;
-                break;
+                    break;
 
-            case 'FieldtypeTextarea':
-                $markup = '
+                case 'FieldtypeTextarea':
+                    $markup = '
     
             <div data-value="" class="wysiwyg col-12 col-lg-10 col-xl-9 mb-5">
                 <label class="text-uppercase px-3">' . $field->label . '</label>
@@ -89,16 +103,53 @@ class FormRenderer
             </div>
     
             ';
-                break;
+                    break;
 
-        };
+                case 'FieldtypeImage':
+
+                    $logoImage = $urls->images . 'logo-placeholder.jpg';
+
+                    $markup = '
+                    
+                    <div class="col-12 col-lg-5 mb-2">
+                    <div class="kbf-logo-uploader-label text-uppercase px-3">' . $field->label . '</div>
+                    <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="' . $field->name . '">
+                      
+                         <input id="' . $field->name . '" type="' . $fieldTypes[(String)$field->type] . '" class="d-none form-control form-control-lg"
+                                       name="' . $field->name . '"
+                                       ' . $required . $value . '>
+                                       
+                        <div class="d-flex no-gutters input-focus-bg justify-content-center">
+                            <img alt="logo-placeholder" src="' . $logoImage . '" class="col-3 my-2 kbf-logo-uploader-image">
+                        </div>
+                            
+                    </label>
+                    
+                   
+                    
+                    
+                    
+                    </div>
+                
+                <!-- Opis pola dla lg i wiekszych -->
+                <div class="d-none d-lg-flex col-5 col-xl-4">
+                    <p class="kbf-form-info align-self-center">' . $field->description . '</p>
+                </div>
+                <!-- Koniec opisu pola dla lg i wiekszych -->
+                
+            ';
+                    break;
+
+            };
+
+        }
 
         return $markup;
 
     }
 
     // Renderuje formularz
-    public function render($device="desktop") {
+    public function render() {
 
         $formMarkup = '
         
@@ -124,18 +175,14 @@ class FormRenderer
         $fieldsMarkup = '';
 
         // Renderuj dla urzadzen stacjonarnych
-        if ($device === "desktop") {
 
             // Sprawdz ile wystepuje grup pol
             // Jezeli wystepuje wiecej niz jedna grupa pol utworz zakladki
                 // Utworz mape pole - grupa pol
                 // Renderuj pola dla kazdej grupy pol
 
-
-
-            foreach ($this->fields["main"] as $field) {
-                $fieldsMarkup .= $this->renderFormField($field);
-            }
+        foreach ($this->fields["main"] as $field) {
+            $fieldsMarkup .= $this->renderFormField($field);
         }
 
         // Ustaw nazwe przycisku submit

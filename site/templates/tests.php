@@ -12,16 +12,17 @@ $field = $company->getField("company_address");
 $field2 = $company->getField("company_zip");
 $field3 = $company->getField("company_city");
 $field4 = $company->getField("company_description_html");
-$field5 = $company->getField("address_data");
+$field5 = $company->getField("company_logo");
 
-$formRenderer->operation = "update";
+$formRenderer->operation = "add";
 $formRenderer->action = "/";
 
+$formRenderer->addField($field5);
 $formRenderer->addField($field);
 $formRenderer->addField($field2);
 $formRenderer->addField($field3);
 $formRenderer->addField($field4);
-$formRenderer->addField($field5);
+
 
 $formMarkup = $formRenderer->render();
 
