@@ -30,6 +30,8 @@ class KbfForm {
         // Domyslna konfiguracja walidatora
         this.defaultValidatorConfig = {
 
+            ignore: [],
+
             // Umiejscowienie komunikatu o bledzie
             errorPlacement: function ($label, $element) {
                 $label.addClass('kbf-error-message');
@@ -55,7 +57,6 @@ class KbfForm {
         $.validator.addMethod("kbfPhone", function(value, element) {
             return this.optional( element ) || /[1-9][0-9]{2}-[0-9]{3}-[0-9]{3,}/.test( value );
         });
-
 
 
         // Ustaw maski

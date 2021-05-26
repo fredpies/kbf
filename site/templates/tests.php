@@ -2,21 +2,31 @@
 
 include_once "partials/_init.php";
 include_once "lib/functions.php";
+include_once "lib/FormRenderer.class.php";
 
 $company = $pages->get("template=company");
 
+$formRenderer = new FormRenderer("generated", $company);
 
 $field = $company->getField("company_address");
 $field2 = $company->getField("company_zip");
 $field3 = $company->getField("company_city");
+$field4 = $company->getField("company_description_html");
+$field5 = $company->getField("address_data");
 
-// Pobierz definicje pola
-$fields = $company->fields;
+$formRenderer->operation = "update";
+$formRenderer->action = "/";
+
+$formRenderer->addField($field);
+$formRenderer->addField($field2);
+$formRenderer->addField($field3);
+$formRenderer->addField($field4);
+$formRenderer->addField($field5);
+
+$formMarkup = $formRenderer->render();
 
 
-$fieldTypes = array(
-        "FieldtypeText" => "text"
-);
+
 
 
 
@@ -40,51 +50,7 @@ $fieldTypes = array(
 <div class="main-content py-0">
 
     <div class="container">
-
-        <form novalidate role="form" name="form-name" class="pl-lg-5">
-
-
-            <!-- Pola formularza-->
-            <div class="row justify-content-center">
-
-                <?php render_form_field($field); ?>
-                <?php render_form_field($field2); ?>
-                <?php render_form_field($field3); ?>
-
-                <!-- WYSIWYG -->
-                <div class="wysiwyg col-12 col-lg-10 col-xl-9 mb-5">
-                        <label class="text-uppercase px-3">WYSIWYG</label>
-                        <div class="editor"></div>
-                        <input type="hidden" name="WYSIWYG" value="">
-                </div>
-
-                <!-- Koniec WYSIWYG -->
-
-                <div class="col-12 text-center text-md-right align-self-center">
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-5">
-                            <button type="submit"
-                                    class=" btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij
-                                wiadomość
-                            </button>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <button type="button"
-                                    class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
-                                WRÓĆ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-            <!-- Koniec pol formularza-->
-
-
-        </form>
-
-
+                <?php echo $formMarkup ?>
     </div>
 
 </div>

@@ -628,6 +628,12 @@ input + label.error {
   min-height: 3.375rem !important;
   padding: 0.85rem 1.375rem !important;
   line-height: 1.5 !important;
+  transition: all .2s ease-in-out;
+}
+
+.ql-editor.focus {
+  border: 2px solid #2196f3 !important;
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%) !important;
 }
 
 .ql-container {
@@ -644,6 +650,17 @@ input + label.error {
 
 .ql-picker-label {
   border: 0 !important;
+}
+
+
+/******************************/
+/* Formularze                 */
+/******************************/
+
+@media (min-width: 960px) {
+  .form-buttons button {
+    width: 48%;
+  }
 }
 
 

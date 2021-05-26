@@ -2,7 +2,7 @@
 
 namespace ProcessWire;
 
-include_once("./lib/Rest.php");
+include_once("./lib/Rest.class.php");
 include_once("./lib/functions.php");
 
 // Wartosci domyslne
