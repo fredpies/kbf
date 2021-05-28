@@ -3,6 +3,7 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 include_once "lib/FormRenderer.class.php";
+include_once "lib/TabsRenderer.class.php";
 
 $company = $pages->get("template=company");
 
@@ -23,15 +24,13 @@ $formRenderer->addField($field2);
 $formRenderer->addField($field3);
 $formRenderer->addField($field4);
 
-
 $formMarkup = $formRenderer->render();
 
+$tabsRenderer = new TabsRenderer("generated-tabs");
+$tabsRenderer->addMarkup($formMarkup, "tab 1");
+$tabsRenderer->addMarkup("Tab 2", "tab 2");
 
-
-
-
-
-
+$tabsMarkup = $tabsRenderer->render();
 
 ?>
 
@@ -51,8 +50,9 @@ $formMarkup = $formRenderer->render();
 <div class="main-content py-0">
 
     <div class="container">
-                <?php echo $formMarkup ?>
+        <?= $tabsMarkup ?>
     </div>
+
 
 </div>
 

@@ -227,6 +227,9 @@ $message_url = $pages->get("template=message")->url . "?company_id=" . $sanitize
 
                         </div>
                     </div>
+
+
+
                 </div>
             </div>
         </div>

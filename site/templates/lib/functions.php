@@ -512,6 +512,16 @@ function render_service_list_item($service_data) {
         ";
 }
 
+// Zamienia placeholdera w markupe
+function replacePlaceholders($placeholderMap, $markup) {
+
+    if (!$placeholderMap) throw new WireException("replacePlaceholders: Placeholder map has not been provided.");
+
+    foreach ($placeholderMap as $placeholder => $value) $markup = str_replace($placeholder, $value, $markup);
+    return $markup;
+
+}
+
 // Zwraca markup paginacji
 function get_pagination($page_array) {
 

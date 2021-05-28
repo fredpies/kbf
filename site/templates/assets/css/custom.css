@@ -664,8 +664,38 @@ input + label.error {
 }
 
 .kbf-logo-uploader {
-  height: 8rem;
+  width: 100%;
+  margin: 0 auto;
+  height: 9rem;
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .kbf-logo-uploader {
+    width: 60%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kbf-logo-uploader {
+    width: 100%;
+    height: 8rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .kbf-logo-uploader {
+    width: 100%;
+    height: 10rem;
+  }
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.show {
+  display: block;
 }
 
 .kbf-logo-uploader:hover .input-focus-bg {

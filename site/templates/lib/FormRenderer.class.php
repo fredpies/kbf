@@ -1,14 +1,102 @@
 <?php namespace ProcessWire;
 
+include_once "functions.php";
+
 class FormRenderer
 {
 
     public $fields = array(); // Pola dodawane do formularza
-    public $action; // Akcja formularza
+    public $action = ""; // Akcja formularza
     public $operation = "add"; // Rodzaj operacji wykonywanej przez formularz
+
+
+    // Markups
+    public static $formMarkup = '
+        <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
+
+            <!-- Pola formularza-->
+            <div class="row justify-content-center">
+
+               {fieldsMarkup}
+
+                <div class="form-buttons row justify-content-between col-12 col-lg-10 col-xl-9 mt-5">
+                    <button type="submit" class="btn btn-block btn-round shadow-none btn-primary">{submitText}</button>
+                    <button type="button" class="kbf-back-button mt-0 btn btn-block btn-round shadow-none btn-secondary">Wróć</button>
+                </div>
+
+            </div>
+            <!-- Koniec pol formularza-->
+
+        </form>
+    ';
+
+    public static $FieldtypeTextMarkup = '
+    
+        <div class="col-12 col-lg-5 mb-2">
+                    <div class="input-group input-group-lg input-group-round mb-4">
+                        <label class="text-uppercase px-3">{label}</label>
+                        <div class="input-group-inner">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
+                            </div>
+
+                            <input autocomplete="off" type="{type}" class="form-control form-control-lg"
+                                   name="{name}" {required} {msgRequired} {inputmask} {value}>
+
+                            <div class="input-focus-bg"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-none d-lg-flex col-5 col-xl-4">
+                    <p class="kbf-form-info align-self-center">{description}</p>
+                </div>
+    ';
+
+    public static $FieldtypeTextareaMarkup = '
+
+        <div data-value="" class="wysiwyg col-12 col-lg-10 col-xl-9 mb-5">
+                <label class="text-uppercase px-3">{label}</label>
+                <div class="editor"></div>
+                <input {required} {msgRequired} type="hidden" name="{name}"  value="">
+    
+            </div>
+    ';
+
+    public static $FieldtypeImageMarkup = '
+    
+        <div class="col-12 col-lg-5 mb-2">
+                    <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
+                    <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
+                      
+                         <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
+                                       name="{name}" {required} {value}>
+                                       
+                        <div class="d-flex no-gutters input-focus-bg justify-content-center">
+                            <img alt="logo-placeholder" src="{logoImage}" class="col-4 my-2 kbf-logo-uploader-image">
+                        </div>
+                            
+                    </label>
+                 
+                    </div>
+                
+                <!-- Opis pola dla lg i wiekszych -->
+                <div class="d-none d-lg-flex col-5 col-xl-4">
+                    <p class="kbf-form-info align-self-center">{description}</p>
+                </div>
+                <!-- Koniec opisu pola dla lg i wiekszych -->
+  
+    ';
+
 
     private $name; // Nazwa formularza, atrybut "name"
     private $currentPage; // Przetwarzana strona
+
+    private $fieldTypes = array(
+        "FieldtypeText" => "text",
+        "FieldtypeImage" => "file"
+    );
 
     public function __construct($name, $page)
     {
@@ -19,12 +107,12 @@ class FormRenderer
     }
 
     // Dodaje pole do formularza
-    public function addField($field, $fieldset = "main") {
+    public function addField($field) {
         if (!isset($field)) return;
-        $this->fields[$fieldset][] = $field;
+        $this->fields[] = $field;
     }
 
-    public function addMarkup($markup, $fieldset = "main") {
+    public function addMarkup($markup) {
         if (!isset($markup)) return;
         $this->fields[$fieldset][] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
     }
@@ -42,16 +130,9 @@ class FormRenderer
 
         if ($field instanceof Field) {
 
-
-            // Slownik dla pol PW
-            $fieldTypes = array(
-                "FieldtypeText" => "text",
-                "FieldtypeImage" => "file"
-            );
-
             // Czy pole jest wymagane ?
             $required = $field->required ? "required" : "";
-            $msg_required = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
+            $msgRequired = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
 
             // Czy zastosowano maske wprowadzania ?
             $inputmask = $field->placeholder ? ' data-inputmask-regex="' . $field->placeholder . '"' : "";
@@ -59,85 +140,41 @@ class FormRenderer
             // Czy nalezy wyswietlic wartosc dla pola ?
             $value = $this->operation === "update" ? 'value="' . $this->currentPage->get($field->name) . '"' : "";
 
+            // Typ pola
+            $type = "";
+            if (isset($this->fieldTypes[(String)$field->type])) $type = $this->fieldTypes[(String)$field->type];
+
+            // Mapa placeholders
+            $placeholdersMap = array(
+
+                "{label}" => $field->label,
+                "{icon}" => $field->icon,
+                "{type}" => $type,
+                "{name}" => $field->name,
+                "{description}" => $field->description,
+                "{required}" => $required,
+                "{msgRequired}" => $msgRequired,
+                "{inputmask}" => $inputmask,
+                "{value}" => $value
+
+            );
+
             // Renderuj w zaleznosci od typu pola
             switch ($field->type) {
 
                 case 'FieldtypeText':
-                    $markup = '
-                <!-- Pole formularza -->
-                <div class="col-12 col-lg-5 mb-2">
-                    <div class="input-group input-group-lg input-group-round mb-4">
-                        <label class="text-uppercase px-3">' . $field->label . '</label>
-                        <div class="input-group-inner">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text input-group-icon"><i class="fa ' . $field->icon . '"></i></span>
-                            </div>
-
-                            <input autocomplete="off" type="' . $fieldTypes[(String)$field->type] . '" class="form-control form-control-lg"
-                                   name="' . $field->name . '"
-                                   ' . $required . $msg_required . $inputmask . $value . '>
-
-                            <div class="input-focus-bg"></div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- Koniec pola formularza-->
-
-                <!-- Opis pola dla lg i wiekszych -->
-                <div class="d-none d-lg-flex col-5 col-xl-4">
-                    <p class="kbf-form-info align-self-center">' . $field->description . '</p>
-                </div>
-                <!-- Koniec opisu pola dla lg i wiekszych -->
-            ';;
+                    $markup = replacePlaceholders($placeholdersMap, self::$FieldtypeTextMarkup);
                     break;
 
                 case 'FieldtypeTextarea':
-                    $markup = '
-    
-            <div data-value="" class="wysiwyg col-12 col-lg-10 col-xl-9 mb-5">
-                <label class="text-uppercase px-3">' . $field->label . '</label>
-                <div class="editor"></div>
-                <input ' . $required . $msg_required . ' type="hidden" name="' . $field->name . '"  value="">
-    
-            </div>
-    
-            ';
+
+                    $markup = replacePlaceholders($placeholdersMap, self::$FieldtypeTextareaMarkup);
                     break;
 
                 case 'FieldtypeImage':
 
-                    $logoImage = $urls->images . 'logo-placeholder.jpg';
-
-                    $markup = '
-                    
-                    <div class="col-12 col-lg-5 mb-2">
-                    <div class="kbf-logo-uploader-label text-uppercase px-3">' . $field->label . '</div>
-                    <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="' . $field->name . '">
-                      
-                         <input id="' . $field->name . '" type="' . $fieldTypes[(String)$field->type] . '" class="d-none form-control form-control-lg"
-                                       name="' . $field->name . '"
-                                       ' . $required . $value . '>
-                                       
-                        <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                            <img alt="logo-placeholder" src="' . $logoImage . '" class="col-3 my-2 kbf-logo-uploader-image">
-                        </div>
-                            
-                    </label>
-                    
-                   
-                    
-                    
-                    
-                    </div>
-                
-                <!-- Opis pola dla lg i wiekszych -->
-                <div class="d-none d-lg-flex col-5 col-xl-4">
-                    <p class="kbf-form-info align-self-center">' . $field->description . '</p>
-                </div>
-                <!-- Koniec opisu pola dla lg i wiekszych -->
-                
-            ';
+                    $placeholdersMap["{logoImage}"] = $urls->images . 'logo-placeholder.jpg';
+                    $markup = replacePlaceholders($placeholdersMap, self::$FieldtypeImageMarkup);
                     break;
 
             };
@@ -148,52 +185,33 @@ class FormRenderer
 
     }
 
-    // Renderuje formularz
+    // Renderuje wszystkie pola
     public function render() {
-
-        $formMarkup = '
-        
-            <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
-
-            <!-- Pola formularza-->
-            <div class="row justify-content-center">
-
-               {fieldsMarkup}
-
-                <div class="form-buttons row justify-content-between col-12 col-lg-10 col-xl-9 mb-5">
-                    <button type="submit" class="btn btn-block btn-round shadow-none btn-primary">{submitText}</button>
-                    <button type="button" class="kbf-back-button mt-0 btn btn-block btn-round shadow-none btn-secondary">Wróć</button>
-                </div>
-
-            </div>
-            <!-- Koniec pol formularza-->
-
-        </form>
-        
-        ';
 
         $fieldsMarkup = '';
 
-        // Renderuj dla urzadzen stacjonarnych
+        $allFields = array(); // Wszystkie pola niezaleznie od fieldset
+        $tabs = array_keys($this->fields);
 
-            // Sprawdz ile wystepuje grup pol
-            // Jezeli wystepuje wiecej niz jedna grupa pol utworz zakladki
-                // Utworz mape pole - grupa pol
-                // Renderuj pola dla kazdej grupy pol
-
-        foreach ($this->fields["main"] as $field) {
-            $fieldsMarkup .= $this->renderFormField($field);
+        foreach ($this->fields as $_field) {
+            $fieldsMarkup .= $this->renderFormField($_field);
         }
 
         // Ustaw nazwe przycisku submit
         $submitText = $this->operation === 'add' ? "Dodaj" : "Aktualizuj";
 
-        $formMarkup = str_replace("{name}", $this->name, $formMarkup);
-        $formMarkup = str_replace("{fieldsMarkup}", $fieldsMarkup, $formMarkup);
-        $formMarkup = str_replace("{submitText}", $submitText, $formMarkup);
-        $formMarkup = str_replace("{action}", $this->action, $formMarkup);
+        // Zamien placeholders
+        $formMarkup = replacePlaceholders(array(
 
-        return $formMarkup;
+            "{action}" => $this->action,
+            "{name}" => $this->name,
+            "{submitText}" => $submitText,
+            "{fieldsMarkup}" => $fieldsMarkup
+
+        ), self::$formMarkup);
+
+        return  $formMarkup;
+
     }
 
 }
