@@ -19993,13 +19993,12 @@
           formName: 'generated'
         }, 'pl'); // Inicjuj formularz
 
-        new KbfBackButton('.kbf-back-button');
-        $(window).on('contextmenu', function (e) {
-          e.preventDefault();
-        });
+        new KbfBackButton('.kbf-back-button'); // $(window).on('contextmenu', function (e) {
+        //     e.preventDefault();
+        // })
+
         this.editor = new Quill('.editor', options);
         this.$contents = $('.ql-editor');
-        if (this.$wysiwyg.data('value')) this.setInitialValue(this.$wysiwyg.data('value')); // Ustaw wartosc poczatkowa dla edytora
       }
     }, {
       key: "addListeners",

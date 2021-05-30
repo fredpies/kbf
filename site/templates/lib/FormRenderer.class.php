@@ -1,6 +1,7 @@
 <?php namespace ProcessWire;
 
 include_once "functions.php";
+include_once "FormFields.php";
 
 class FormRenderer
 {
@@ -9,12 +10,10 @@ class FormRenderer
     public $action = ""; // Akcja formularza
     public $operation = "add"; // Rodzaj operacji wykonywanej przez formularz
 
-
-    // Markups
+    // Markup
     public static $formMarkup = '
         <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
 
-            <!-- Pola formularza-->
             <div class="row justify-content-center">
 
                {fieldsMarkup}
@@ -25,74 +24,15 @@ class FormRenderer
                 </div>
 
             </div>
-            <!-- Koniec pol formularza-->
 
         </form>
     ';
 
-    public static $FieldtypeTextMarkup = '
-    
-        <div class="col-12 col-lg-5 mb-2">
-                    <div class="input-group input-group-lg input-group-round mb-4">
-                        <label class="text-uppercase px-3">{label}</label>
-                        <div class="input-group-inner">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
-                            </div>
-
-                            <input autocomplete="off" type="{type}" class="form-control form-control-lg"
-                                   name="{name}" {required} {msgRequired} {inputmask} {value}>
-
-                            <div class="input-focus-bg"></div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-none d-lg-flex col-5 col-xl-4">
-                    <p class="kbf-form-info align-self-center">{description}</p>
-                </div>
-    ';
-
-    public static $FieldtypeTextareaMarkup = '
-
-        <div data-value="" class="wysiwyg col-12 col-lg-10 col-xl-9 mb-5">
-                <label class="text-uppercase px-3">{label}</label>
-                <div class="editor"></div>
-                <input {required} {msgRequired} type="hidden" name="{name}"  value="">
-    
-            </div>
-    ';
-
-    public static $FieldtypeImageMarkup = '
-    
-        <div class="col-12 col-lg-5 mb-2">
-                    <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
-                    <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
-                      
-                         <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
-                                       name="{name}" {required} {value}>
-                                       
-                        <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                            <img alt="logo-placeholder" src="{logoImage}" class="col-4 my-2 kbf-logo-uploader-image">
-                        </div>
-                            
-                    </label>
-                 
-                    </div>
-                
-                <!-- Opis pola dla lg i wiekszych -->
-                <div class="d-none d-lg-flex col-5 col-xl-4">
-                    <p class="kbf-form-info align-self-center">{description}</p>
-                </div>
-                <!-- Koniec opisu pola dla lg i wiekszych -->
-  
-    ';
-
-
+    // Wlasnosci formularza
     private $name; // Nazwa formularza, atrybut "name"
     private $currentPage; // Przetwarzana strona
 
+    // Pole PW => pole HTML
     private $fieldTypes = array(
         "FieldtypeText" => "text",
         "FieldtypeImage" => "file"
@@ -112,9 +52,10 @@ class FormRenderer
         $this->fields[] = $field;
     }
 
+    // Dodaje markup do formularza
     public function addMarkup($markup) {
         if (!isset($markup)) return;
-        $this->fields[$fieldset][] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
+        $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
     }
 
     // Renderuje pole formularza
@@ -124,10 +65,12 @@ class FormRenderer
         $urls = wire("urls");
         $sanitizer = wire("sanitizer");
 
+        // Jezeli dodano markup
         if (is_string($field)) {
             $markup = $field;
         }
 
+        // Jezeli dodano pole PW
         if ($field instanceof Field) {
 
             // Czy pole jest wymagane ?
@@ -159,22 +102,30 @@ class FormRenderer
 
             );
 
-            // Renderuj w zaleznosci od typu pola
+            // Renderuj w zaleznosci od typu pola PW
             switch ($field->type) {
 
                 case 'FieldtypeText':
-                    $markup = replacePlaceholders($placeholdersMap, self::$FieldtypeTextMarkup);
+
+                    $formFieldText = new FormFieldText();
+                    $formFieldText->placeholderMap = $placeholdersMap;
+                    $markup = $formFieldText->render();
                     break;
 
                 case 'FieldtypeTextarea':
 
-                    $markup = replacePlaceholders($placeholdersMap, self::$FieldtypeTextareaMarkup);
+                    $formFieldText = new FormFieldTextArea();
+                    if ($this->operation === "update") $placeholdersMap["{value}"] = $this->currentPage->get($field->name);
+                    $formFieldText->placeholderMap = $placeholdersMap;
+                    $markup = $formFieldText->render();
                     break;
 
                 case 'FieldtypeImage':
 
                     $placeholdersMap["{logoImage}"] = $urls->images . 'logo-placeholder.jpg';
-                    $markup = replacePlaceholders($placeholdersMap, self::$FieldtypeImageMarkup);
+                    $formFieldText = new FormFieldImage();
+                    $formFieldText->placeholderMap = $placeholdersMap;
+                    $markup = $formFieldText->render();
                     break;
 
             };
@@ -189,9 +140,6 @@ class FormRenderer
     public function render() {
 
         $fieldsMarkup = '';
-
-        $allFields = array(); // Wszystkie pola niezaleznie od fieldset
-        $tabs = array_keys($this->fields);
 
         foreach ($this->fields as $_field) {
             $fieldsMarkup .= $this->renderFormField($_field);

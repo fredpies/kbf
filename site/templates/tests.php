@@ -15,7 +15,7 @@ $field3 = $company->getField("company_city");
 $field4 = $company->getField("company_description_html");
 $field5 = $company->getField("company_logo");
 
-$formRenderer->operation = "add";
+$formRenderer->operation = "update";
 $formRenderer->action = "/";
 
 $formRenderer->addField($field5);
