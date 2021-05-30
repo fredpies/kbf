@@ -65,7 +65,7 @@ class FormFieldHidden extends FormField
 
     public static $markup = '
 
-        <input  autocomplete="off" 
+        <input   
                 type="hidden"
                 name="{name}" 
                 value="{value}">

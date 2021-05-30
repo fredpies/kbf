@@ -7,10 +7,13 @@ include_once "lib/FormFields.php";
 
 $company = $pages->get("template=company");
 $company_description_html = $company->getField("company_description_html");
+$lat = $company->getField("lat");
+
 $formRenderer = new FormRenderer("example-form", $company);
 $formRenderer->operation = "update";
 
 $formRenderer->addField($company_description_html);
+$formRenderer->addField($lat);
 
 $hidden = new FormFieldHidden();
 $hidden->value = "test";

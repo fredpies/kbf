@@ -3,6 +3,7 @@
 include_once "functions.php";
 include_once "FormFields.php";
 
+
 class FormRenderer
 {
 
@@ -10,7 +11,12 @@ class FormRenderer
     public $action = ""; // Akcja formularza
     public $operation = "add"; // Rodzaj operacji wykonywanej przez formularz
 
-    // Markup
+    // Config
+    public $noTag = false;
+    public $noFooter = false;
+    public $onlyFields = false;
+
+    // Markups
     public static $formMarkup = '
         <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
 
@@ -26,6 +32,39 @@ class FormRenderer
             </div>
 
         </form>
+    ';
+
+    public static $formMarkupNoTag = '
+        <div class="row justify-content-center">
+
+           {fieldsMarkup}
+
+            <div class="form-buttons row justify-content-between col-12 col-lg-10 col-xl-9 mt-5">
+                <button type="submit" class="btn btn-block btn-round shadow-none btn-primary">{submitText}</button>
+                <button type="button" class="kbf-back-button mt-0 btn btn-block btn-round shadow-none btn-secondary">Wróć</button>
+            </div>
+
+        </div>
+    ';
+
+    public static $formMarkupNoFooter = '
+        <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
+
+            <div class="row justify-content-center">
+
+               {fieldsMarkup}
+
+            </div>
+
+        </form>
+    ';
+
+    public static $formMarkupOnlyFields = '
+        <div class="row justify-content-center">
+
+           {fieldsMarkup}
+
+        </div>
     ';
 
     // Wlasnosci formularza
@@ -44,6 +83,24 @@ class FormRenderer
         $this->name = $name;
         $this->currentPage = $page;
 
+    }
+
+    public function __set($property, $value) {
+
+        if ($property === "noTag") {
+            $this->noFooter = false;
+            $this->onlyFields = false;
+        }
+
+        if ($property === "noFooter") {
+            $this->noTag = false;
+            $this->onlyFields = false;
+        }
+
+        if ($property === "onlyFields") {
+            $this->noTag = false;
+            $this->noFooter = false;
+        }
     }
 
     // Dodaje pole do formularza
@@ -103,33 +160,46 @@ class FormRenderer
 
             );
 
-            // Renderuj w zaleznosci od typu pola PW
-            switch ($field->type) {
+            // Ukryj pole jezeli jest systemowe
+            if ($field->hasFlag(Field::flagSystem)) {
+                $formFieldHidden = new FormFieldHidden();
+                $formFieldHidden->name = $field->name;
+                $formFieldHidden->value = $this->currentPage->get($field->name);
+                $markup = $formFieldHidden->render();
 
-                case 'FieldtypeText':
+            } else {
+                // Renderuj w zaleznosci od typu pola PW
+                switch ($field->type) {
 
-                    $formFieldText = new FormFieldText();
-                    $formFieldText->placeholderMap = $placeholdersMap;
-                    $markup = $formFieldText->render();
-                    break;
+                    case 'FieldtypeText':
 
-                case 'FieldtypeTextarea':
 
-                    $formFieldText = new FormFieldTextArea();
-                    $formFieldText->placeholderMap = $placeholdersMap;
-                    if ($this->operation === "update") $formFieldText->value = $this->currentPage->get($field->name);
-                    $markup = $formFieldText->render();
-                    break;
 
-                case 'FieldtypeImage':
+                        $formFieldText = new FormFieldText();
+                        $formFieldText->placeholderMap = $placeholdersMap;
+                        $markup = $formFieldText->render();
+                        break;
 
-                    $placeholdersMap["{logoImage}"] = $urls->images . 'logo-placeholder.jpg';
-                    $formFieldText = new FormFieldImage();
-                    $formFieldText->placeholderMap = $placeholdersMap;
-                    $markup = $formFieldText->render();
-                    break;
+                    case 'FieldtypeTextarea':
 
-            };
+                        $formFieldText = new FormFieldTextArea();
+                        $formFieldText->placeholderMap = $placeholdersMap;
+                        if ($this->operation === "update") $formFieldText->value = $this->currentPage->get($field->name);
+                        $markup = $formFieldText->render();
+                        break;
+
+                    case 'FieldtypeImage':
+
+                        $placeholdersMap["{logoImage}"] = $urls->images . 'logo-placeholder.jpg';
+                        $formFieldText = new FormFieldImage();
+                        $formFieldText->placeholderMap = $placeholdersMap;
+                        $markup = $formFieldText->render();
+                        break;
+
+                };
+            }
+
+
         }
 
         return $markup;
@@ -137,9 +207,15 @@ class FormRenderer
     }
 
     // Renderuje wszystkie pola
-    public function render() {
+    public function render($noFormTag = false) {
 
-        $fieldsMarkup = '';
+        $fieldsMarkup = "";
+        $template = self::$formMarkup;
+
+        // Ustaw rodzaj markup'u w zaleznosci od konfiguracji
+        if ($this->noTag) $template = self::$formMarkupNoTag;
+        if ($this->noFooter) $template = self::$formMarkupNoFooter;
+        if ($this->onlyFields) $template = self::$formMarkupOnlyFields;
 
         foreach ($this->fields as $_field) {
             $fieldsMarkup .= $this->renderFormField($_field);
@@ -156,9 +232,10 @@ class FormRenderer
             "{submitText}" => $submitText,
             "{fieldsMarkup}" => $fieldsMarkup
 
-        ), self::$formMarkup);
+        ), $template);
 
         return  $formMarkup;
 
     }
+
 }
