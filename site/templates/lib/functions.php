@@ -15,7 +15,7 @@ function get_industries() {
     // Przygotuj zapytanie
     $sql = "SELECT distinct industry from industries";
 
-    $industries_result = $db->query($sql); // Wykonaj zapytanie sql
+    $industries_result = $db->query($sql);
 
     if ($industries_result->num_rows > 0) {
         while ($row = $industries_result->fetch_array()) {
@@ -35,19 +35,19 @@ function get_sub_industries($industry) {
     $database = wire("database");
     $db = wire("db");
 
-    $sub_industries = array(); // Sub brnaze
+    $sub_industries = array(); // Sub branze
     if (!isset($industry)) return $sub_industries;
 
     // Przygotuj zapytanie
     $industry = $database->quote($industry);
     $sql = "SELECT distinct sub_industry from industries where industry = $industry";
 
-    $sub_industries_result = $db->query($sql); // Wykonaj zapytanie sql
+    $sub_industries_result = $db->query($sql);
 
     if ($sub_industries_result->num_rows > 0) {
         while ($row = $sub_industries_result->fetch_array()) {
 
-            $sub_industry = mb_strtoupper($row["sub_industry"], "utf-8"); // Konieczne mb_ ..., dane pobierane z bazy trzeba okreslic kodownaie !
+            $sub_industry = mb_strtoupper($row["sub_industry"], "utf-8");
             array_push($sub_industries, $sub_industry);
         }
     } else return array();

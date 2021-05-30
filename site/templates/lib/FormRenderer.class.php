@@ -30,7 +30,7 @@ class FormRenderer
 
     // Wlasnosci formularza
     private $name; // Nazwa formularza, atrybut "name"
-    private $currentPage; // Przetwarzana strona
+    private $currentPage;
 
     // Pole PW => pole HTML
     private $fieldTypes = array(
@@ -53,9 +53,10 @@ class FormRenderer
     }
 
     // Dodaje markup do formularza
-    public function addMarkup($markup) {
+    public function addMarkup($markup, $noColumn = false) {
         if (!isset($markup)) return;
-        $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
+        if ($noColumn) $this->fields[] = $markup;
+        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
     }
 
     // Renderuje pole formularza
@@ -115,8 +116,8 @@ class FormRenderer
                 case 'FieldtypeTextarea':
 
                     $formFieldText = new FormFieldTextArea();
-                    if ($this->operation === "update") $placeholdersMap["{value}"] = $this->currentPage->get($field->name);
                     $formFieldText->placeholderMap = $placeholdersMap;
+                    if ($this->operation === "update") $formFieldText->value = $this->currentPage->get($field->name);
                     $markup = $formFieldText->render();
                     break;
 
@@ -129,7 +130,6 @@ class FormRenderer
                     break;
 
             };
-
         }
 
         return $markup;
@@ -161,5 +161,4 @@ class FormRenderer
         return  $formMarkup;
 
     }
-
 }

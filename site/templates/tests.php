@@ -3,34 +3,22 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 include_once "lib/FormRenderer.class.php";
-include_once "lib/TabsRenderer.class.php";
+include_once "lib/FormFields.php";
 
 $company = $pages->get("template=company");
-
-$formRenderer = new FormRenderer("generated", $company);
-
-$field = $company->getField("company_address");
-$field2 = $company->getField("company_zip");
-$field3 = $company->getField("company_city");
-$field4 = $company->getField("company_description_html");
-$field5 = $company->getField("company_logo");
-
+$company_description_html = $company->getField("company_description_html");
+$formRenderer = new FormRenderer("example-form", $company);
 $formRenderer->operation = "update";
-$formRenderer->action = "/";
 
-$formRenderer->addField($field5);
-$formRenderer->addField($field);
-$formRenderer->addField($field2);
-$formRenderer->addField($field3);
-$formRenderer->addField($field4);
+$formRenderer->addField($company_description_html);
+
+$hidden = new FormFieldHidden();
+$hidden->value = "test";
+$hidden->name = "hidden";
+
+$formRenderer->addMarkup($hidden->render(), true);
 
 $formMarkup = $formRenderer->render();
-
-$tabsRenderer = new TabsRenderer("generated-tabs");
-$tabsRenderer->addMarkup($formMarkup, "tab 1");
-$tabsRenderer->addMarkup("Tab 2", "tab 2");
-
-$tabsMarkup = $tabsRenderer->render();
 
 ?>
 
@@ -50,7 +38,9 @@ $tabsMarkup = $tabsRenderer->render();
 <div class="main-content py-0">
 
     <div class="container">
-        <?= $tabsMarkup ?>
+
+        <?= $formMarkup ?>
+
     </div>
 
 

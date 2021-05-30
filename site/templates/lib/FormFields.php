@@ -5,12 +5,25 @@ include_once "functions.php";
 class FormField
 {
 
+
     public $placeholderMap = array();
+
     public function renderMarkup($markup)
     {
         if (count($this->placeholderMap)) return replacePlaceholders($this->placeholderMap, $markup);
         return "";
     }
+
+    public function __set($property, $value)
+    {
+        $this->placeholderMap["{" . $property . "}"] = $value;
+    }
+
+    public function __get($property)
+    {
+        return $this->placeholderMap["{" . $property . "}"];
+    }
+
 }
 
 class FormFieldText extends FormField
@@ -38,6 +51,25 @@ class FormFieldText extends FormField
                 <div class="d-none d-lg-flex col-5 col-xl-4">
                     <p class="kbf-form-info align-self-center">{description}</p>
                 </div>
+    ';
+
+    public function render()
+    {
+        return parent::renderMarkup(self::$markup);
+    }
+
+}
+
+class FormFieldHidden extends FormField
+{
+
+    public static $markup = '
+
+        <input  autocomplete="off" 
+                type="hidden"
+                name="{name}" 
+                value="{value}">
+
     ';
 
     public function render()
