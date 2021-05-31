@@ -5,8 +5,20 @@ include_once "functions.php";
 class FormField
 {
 
+    public $placeholderMap = array(
 
-    public $placeholderMap = array();
+        "{type}" => "",
+        "{required}" => "",
+        "{msgRequired}" => "",
+        "{inputmask}" => "",
+        "{value}" => ""
+
+    );
+
+    public function __construct($className = "address-autocomplete")
+    {
+        $this->placeholderMap["{class}"] = $className;
+    }
 
     public function renderMarkup($markup)
     {
@@ -29,6 +41,11 @@ class FormField
 class FormFieldText extends FormField
 {
 
+    public function __construct($className = "address-autocomplete")
+    {
+        parent::__construct($className);
+    }
+
     public static $markup = '
     
         <div class="col-12 col-lg-5 mb-2">
@@ -39,8 +56,8 @@ class FormFieldText extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="form-control form-control-lg"
-                                   name="{name}" {required} {msgRequired} {inputmask} {value}>
+                            <input autocomplete="off" type="{type}" class="{class} form-control form-control-lg text-uppercase"
+                                   name="{name}" {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
 
@@ -60,6 +77,46 @@ class FormFieldText extends FormField
 
 }
 
+class FormFieldAddressAutocomplete extends FormField
+{
+
+    public function __construct($className = "")
+    {
+        parent::__construct("address-autocomplete");
+    }
+
+    public static $markup = '
+    
+        <div class="col-12 col-lg-5 mb-2">
+                    <div class="input-group input-group-lg input-group-round mb-4">
+                        <label class="text-uppercase px-3">{label}</label>
+                        <div class="input-group-inner">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
+                            </div>
+
+                            <input autocomplete="off" type="{type}" class="{class} form-control form-control-lg text-uppercase"
+                                   name="{name}" {required} {msgRequired} data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
+                            
+                            <div class="input-focus-bg"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-none d-lg-flex col-5 col-xl-4">
+                    <p class="kbf-form-info align-self-center">{description}</p>
+                </div>
+    ';
+
+    public function render()
+    {
+        return parent::renderMarkup(self::$markup);
+    }
+
+}
+
+
 class FormFieldHidden extends FormField
 {
 
@@ -71,6 +128,11 @@ class FormFieldHidden extends FormField
                 value="{value}">
 
     ';
+
+    public function __construct($className = "")
+    {
+        parent::__construct($className);
+    }
 
     public function render()
     {
@@ -91,6 +153,11 @@ class FormFieldTextArea extends FormField
     
             </div>
     ';
+
+    public function __construct($className = "")
+    {
+        parent::__construct($className);
+    }
 
     public function render()
     {
@@ -124,6 +191,11 @@ class FormFieldImage extends FormField
                 </div>
   
     ';
+
+    public function __construct($className = "")
+    {
+        parent::__construct($className);
+    }
 
     public function render()
     {

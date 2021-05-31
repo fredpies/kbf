@@ -173,8 +173,6 @@ class FormRenderer
 
                     case 'FieldtypeText':
 
-
-
                         $formFieldText = new FormFieldText();
                         $formFieldText->placeholderMap = $placeholdersMap;
                         $markup = $formFieldText->render();

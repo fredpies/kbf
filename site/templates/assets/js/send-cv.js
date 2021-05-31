@@ -4511,6 +4511,7 @@
       this.validatorConfig = formConfig.validator; // Domyslna konfiguracja walidatora
 
       this.defaultValidatorConfig = {
+        ignore: [],
         // Umiejscowienie komunikatu o bledzie
         errorPlacement: function errorPlacement($label, $element) {
           $label.addClass('kbf-error-message');
@@ -4528,8 +4529,7 @@
     _createClass(KbfForm, [{
       key: "init",
       value: function init() {
-        var $ = window.$;
-        console.log($.validator.addMethod); // Ustaw custom rules
+        var $ = window.$; // Ustaw custom rules
 
         $.validator.addMethod("kbfPhone", function (value, element) {
           return this.optional(element) || /[1-9][0-9]{2}-[0-9]{3}-[0-9]{3,}/.test(value);

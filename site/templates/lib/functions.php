@@ -679,6 +679,19 @@ function get_lat_lon($street, $city, $zip = "")
     return array($lat, $lon);
 }
 
+// Pobiera liste adresow
+function get_addresses($query)
+{
+
+    $base_url = "https://nominatim.openstreetmap.org/search.php?addressdetails=1&&limit=50&format=jsonv2&email=pawel.kwiecien@webplanet.biz&";
+    $request_url = $base_url . "street=" . urlencode($query);
+
+    $json = file_get_contents($request_url);
+    $json_decoded = json_decode($json, true);
+
+    return $json_decoded;
+}
+
 // Zwraca query string na podstawie tablicy sub branz
 function get_sub_industries_query($sub_industries) {
 

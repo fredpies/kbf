@@ -1,3 +1,5 @@
+import KbfAddressAutocomplete from "../../components/KbfAddressAutocomplete";
+
 class App {
 
     constructor() {
@@ -9,9 +11,15 @@ class App {
 
     init() {
 
+        this.autocomplete = new KbfAddressAutocomplete('.address-autocomplete');
+
     }
 
     addListeners() {
+
+        this.autocomplete.on('address-change', function (e) {
+            console.log(e.detail);
+        })
 
     }
 

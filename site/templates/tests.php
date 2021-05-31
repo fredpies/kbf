@@ -2,26 +2,14 @@
 
 include_once "partials/_init.php";
 include_once "lib/functions.php";
-include_once "lib/FormRenderer.class.php";
 include_once "lib/FormFields.php";
 
-$company = $pages->get("template=company");
-$company_description_html = $company->getField("company_description_html");
-$lat = $company->getField("lat");
-
-$formRenderer = new FormRenderer("example-form", $company);
-$formRenderer->operation = "update";
-
-$formRenderer->addField($company_description_html);
-$formRenderer->addField($lat);
-
-$hidden = new FormFieldHidden();
-$hidden->value = "test";
-$hidden->name = "hidden";
-
-$formRenderer->addMarkup($hidden->render(), true);
-
-$formMarkup = $formRenderer->render();
+$textField = new FormFieldAddressAutocomplete();
+$textField->name = "autocomplete";
+$textField->label = "Address autocomplete";
+$textField->icon = "fa-map-marker";
+$textField->description = "Address autocomplete";
+$textFieldMarkup = $textField->render();
 
 ?>
 
@@ -32,7 +20,6 @@ $formMarkup = $formRenderer->render();
     <?php include_once "partials/_head.php" ?>
     <link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.bubble.css">
 
-
 </head>
 
 <body>
@@ -42,7 +29,10 @@ $formMarkup = $formRenderer->render();
 
     <div class="container">
 
-        <?= $formMarkup ?>
+        <div class="row justify-content-center">
+                <?= $textFieldMarkup ?>
+        </div>
+
 
     </div>
 
@@ -57,7 +47,7 @@ $formMarkup = $formRenderer->render();
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
 
 <!-- Main script -->
-<script src="<?php echo $urls->js ?>tests.js"></script>
+<script src="<?= $urls->js ?>tests.js"></script>
 
 </body>
 

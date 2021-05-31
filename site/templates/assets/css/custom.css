@@ -657,6 +657,8 @@ input + label.error {
 /* Formularze                 */
 /******************************/
 
+/*.bootstrap-autocomplete .dropdown-item.active, .dropdown-item:active*/
+
 @media (min-width: 960px) {
   .form-buttons button {
     width: 48%;
@@ -709,6 +711,17 @@ input + label.error {
   font-size: .75rem;
 }
 
+/******************************/
+/* Autocomplete               */
+/******************************/
+
+.bootstrap-autocomplete .dropdown-item.active, .dropdown-item:active {
+  /*color: white !important;*/
+  background-color: #f8f9fa !important;
+}
+.bootstrap-autocomplete .dropdown-item.active:hover, .dropdown-item:active:hover {
+  cursor: pointer;
+}
 
 /******************************/
 /* Narzędzia                  */
