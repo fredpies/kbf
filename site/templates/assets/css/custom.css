@@ -652,6 +652,100 @@ input + label.error {
   border: 0 !important;
 }
 
+/******************************/
+/* Stepper                    */
+/******************************/
+
+.steps {
+  max-width: 600px;
+}
+
+.steps .bullet {
+  display: inline-block;
+  position: relative;
+  border: 1px solid lightgrey;
+  margin-top: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  line-height: 1.9rem;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: lightgrey;
+}
+
+.steps .bullet:after, .steps .bullet:before  {
+  position: absolute;
+  content: '';
+  width: 100px;
+  left: 3rem;
+  top: 0.8rem;
+
+}
+
+.steps .bullet:after {
+  background-color: lightgrey;
+  height: 1px;
+}
+
+.steps .bullet:before {
+  background-color: #4db6ac;
+  height: 2px;
+  transition: 0.3s transform;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+
+.steps .step:last-child .bullet:after, .steps .step:last-child .bullet:before {
+  display: none;
+}
+
+.steps .step .step-name {
+  color: lightgrey;
+}
+
+.steps .step.done .step-name, .steps .step.active .step-name {
+  color: black;
+  font-weight: 600;
+
+}
+
+.steps .step .bullet {
+  transition: 0.5s background;
+}
+
+.steps .step.active .bullet {
+  color: white;
+  border: 1px solid #4db6ac;
+  background-color: #4db6ac;
+}
+
+.steps .step .bullet span:nth-child(2) {
+  display: none;
+}
+
+.steps .step.done .bullet span:first-child {
+  display: none;
+  color: lightgrey;
+  font-weight: 600;
+}
+
+.steps .step.done .bullet span:nth-child(2) {
+  display: inline;
+}
+
+.steps .step.done .bullet {
+  background-color: #4db6ac;
+  border: 1px solid #4db6ac;
+  color: white;
+}
+
+.steps .step.done .bullet:before {
+  transform: scaleX(1);
+}
+
+
 
 /******************************/
 /* Formularze                 */

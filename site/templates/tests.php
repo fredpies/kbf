@@ -2,14 +2,6 @@
 
 include_once "partials/_init.php";
 include_once "lib/functions.php";
-include_once "lib/FormFields.php";
-
-$textField = new FormFieldAddressAutocomplete();
-$textField->name = "autocomplete";
-$textField->label = "Address autocomplete";
-$textField->icon = "fa-map-marker";
-$textField->description = "Address autocomplete";
-$textFieldMarkup = $textField->render();
 
 ?>
 
@@ -29,9 +21,44 @@ $textFieldMarkup = $textField->render();
 
     <div class="container">
 
-        <div class="row justify-content-center">
-                <?= $textFieldMarkup ?>
+        <div class="steps d-flex justify-content-between w-100 text-center mx-auto mt-3">
+
+            <div class="step active">
+                <div class="step-name">Step Name 1</div>
+                <div class="bullet">
+                    <span>1</span>
+                    <span class="fa fa-check"></span>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-name">Step Name 2</div>
+                <div class="bullet">
+                    <span>2</span>
+                    <span class="fa fa-check"></span>
+                </div>
+            </div>
+
+
+            <div class="step">
+                <div class="step-name">Step Name 3</div>
+                <div class="bullet">
+                    <span>3</span>
+                    <span class="fa fa-check"></span>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-name">Step Name 4</div>
+                <div class="bullet">
+                    <span>4</span>
+                    <span class="fa fa-check"></span>
+                </div>
+            </div>
+
         </div>
+
+
 
 
     </div>
@@ -47,7 +74,8 @@ $textFieldMarkup = $textField->render();
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
 
 <!-- Main script -->
-<script src="<?= $urls->js ?>tests.js"></script>
+
+<!--<script src="--><!--tests.js"></script>-->
 
 </body>
 
