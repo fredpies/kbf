@@ -657,7 +657,11 @@ input + label.error {
 /******************************/
 
 .steps {
-  max-width: 600px;
+  justify-content: center;
+}
+
+.step {
+  width: 150px;
 }
 
 .steps .bullet {
@@ -677,7 +681,7 @@ input + label.error {
 .steps .bullet:after, .steps .bullet:before  {
   position: absolute;
   content: '';
-  width: 100px;
+  width: 280%;
   left: 3rem;
   top: 0.8rem;
 

@@ -6,6 +6,7 @@ class TabsRenderer
 {
 
     private $tabs = array();
+    private $className = "";
 
     // Markups
     public static $tabsContainer = '{contents}';
