@@ -691,7 +691,7 @@ input + label.error {
 .steps .bullet:before {
   background-color: #4db6ac;
   height: 2px;
-  transition: 0.3s transform;
+  transition: 1s transform;
   transform-origin: left;
   transform: scaleX(0);
 }
@@ -712,7 +712,7 @@ input + label.error {
 }
 
 .steps .step .bullet {
-  transition: 0.5s background;
+  transition: 1s background;
 }
 
 .steps .step.active .bullet {
@@ -744,6 +744,54 @@ input + label.error {
 .steps .step.done .bullet:before {
   transform: scaleX(1);
 }
+
+.page-wrapper {
+  width: calc(4 * 100vw);
+  transition: 1s transform;
+  overflow: hidden;
+}
+
+.page-wrapper .page {
+  overflow: hidden;
+  width: 100vw;
+}
+
+.kbf-stepper form {
+  overflow: hidden;
+}
+
+.kbf-stepper form .page-info-msg {
+  position: absolute;
+  text-align: center;
+  top: 1rem;
+}
+
+.kbf-stepper form .page-info-msg-contents {
+  max-width: 400px;
+}
+
+.button-prev i, .button-next i {
+  line-height: 0.9;
+  font-size: 1.4rem;
+}
+
+.button-prev, .button-next, .button-register {
+  max-width: 355px;
+}
+
+.button-prev i {
+  left: 1rem;
+}
+
+.button-next i {
+  right: 1rem;
+}
+
+.button-register {
+  display: none;
+}
+
+
 
 
 
