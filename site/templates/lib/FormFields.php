@@ -41,14 +41,14 @@ class FormField
 class FormFieldText extends FormField
 {
 
-    public function __construct($className = "address-autocomplete")
+    public function __construct($className = "")
     {
         parent::__construct($className);
     }
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-2">
+        <div class="col-12 col-lg-5 mb-4">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -87,7 +87,7 @@ class FormFieldAddressAutocomplete extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-2">
+        <div class="col-12 col-lg-5 mb-4">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -171,7 +171,7 @@ class FormFieldImage extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-2">
+        <div class="col-12 col-lg-5 mb-4">
                     <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
                     <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                       

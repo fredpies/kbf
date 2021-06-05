@@ -752,12 +752,37 @@ input + label.error {
 .page-wrapper {
   width: calc(4 * 100vw);
   transition: 1s transform;
-  overflow: hidden;
 }
 
 .page-wrapper .page {
-  overflow: hidden;
+  padding: 0 !important;
+  max-height: 50vh;
+  overflow-y: hidden;
   width: 100vw;
+}
+
+@media (min-width: 1280px) {
+  .page-wrapper .page {
+    padding: 0 8rem !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .page-wrapper .page {
+    padding: 0 12rem !important;
+  }
+}
+
+@media (min-width: 1680px) {
+  .page-wrapper .page {
+    padding: 0 18rem !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .page-wrapper .page {
+    padding: 0 20rem !important;
+  }
 }
 
 .kbf-stepper form {
@@ -803,7 +828,11 @@ input + label.error {
 /* Formularze                 */
 /******************************/
 
-/*.bootstrap-autocomplete .dropdown-item.active, .dropdown-item:active*/
+
+.input-group {
+  max-width: 650px !important;
+  margin: 0 auto;
+}
 
 @media (min-width: 960px) {
   .form-buttons button {

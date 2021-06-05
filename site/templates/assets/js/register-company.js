@@ -75,10 +75,10 @@
         var $this = $(buttonElement);
         var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
 
+        $this.attr('disabled', 'disabled');
         $this.css('width', buttonGeometry.width + 'px');
         $this.css('height', buttonGeometry.height + 'px');
-        $this.css('padding', 0); // $this.css('padding-bottom', 0);
-
+        $this.css('padding', 0);
         $this.html(KbfPreloaderButton.preloaderMarkup);
       } // Zatrzymuje preloader
 
@@ -86,6 +86,7 @@
       key: "stopPreloader",
       value: function stopPreloader() {
         this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
+        this.$preloaderButton.removeAttr('disabled');
       }
     }, {
       key: "addListeners",
@@ -121,8 +122,7 @@
 
         this.lastPageIdx = this.$kbfStepper.find('.page').length - 1; // Ostatni index
 
-        this.currentWidth = this.$kbfStepper.find('.page').eq(0).width(); // AKtualna szerokosc wrappera
-        // Elementy $
+        this.currentWidth = window.innerWidth; // Elementy $
 
         this.$infoMessages = this.$kbfStepper.find('.page-info-msg'); // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
 
@@ -158,7 +158,6 @@
 
         if (this.validateCurrentPage()) {
           // Zmienia strone tylko w przypadku jej poprawnosci
-          console.log('nextPage');
           if (this.currentPageIdx === this.lastPageIdx) return;
           this.$steps.eq(this.currentPageIdx).addClass('done');
           this.$steps.eq(this.currentPageIdx).removeClass('active');
@@ -174,8 +173,6 @@
 
           this.$steps.eq(this.currentPageIdx).addClass('active');
           this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
-
-          console.log('curr', this.currentPageIdx);
         }
       } // Zmienia na poprzednia strone
 
@@ -186,7 +183,6 @@
 
         if (this.validateCurrentPage()) {
           // Zmienia strone tylko w przypadku jej poprawnosci
-          console.log('prevPage');
           if (this.currentPageIdx === 0) return;
           this.$steps.eq(this.currentPageIdx).removeClass('active');
           this.currentPageIdx--;
@@ -205,8 +201,6 @@
           }
 
           this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
-
-          console.log('curr', this.currentPageIdx);
         }
       }
     }, {

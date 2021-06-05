@@ -5,12 +5,12 @@ include_once "functions.php";
 class StepperRenderer
 {
 
-
     public $stepperName = 'Stepper';
     public $action = '';
     public $actionName = 'Dodaj';
 
     private $steps = array();
+    private $fields = "";
     private $className = "";
 
     // Markups
@@ -31,14 +31,11 @@ class StepperRenderer
 
             {messages}
             
-            <div class="container overflow-hidden">
-                <div class="page-wrapper d-flex py-5">
+            <div class="page-wrapper d-flex px-0 mt-4 py-5">
 
-                    {pages}
-                                        
-                </div>
+                {pages}
+                                    
             </div>
-
 
             <div class="container d-none d-md-block">
                 <div class="col-12 text-center text-md-right align-self-center">
@@ -102,9 +99,10 @@ class StepperRenderer
         </div>
     ';
 
-    public static $messageMarkup = '<div class="w-100 page-info-msg fade {isShown}" style="font-size: 0.75rem;"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{message}</span></div>';
+    public static $messageMarkup = '<div class="w-100 page-info-msg fade {isShown}" style="font-size: 0.875rem;"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{message}</span></div>';
 
-    public static $pageMarkup = '<div class="page">{page}</div>';
+    public static $pageMarkup = '<div class="page d-flex justify-content-center"><div class="col-12 mb-2 d-flex justify-content-center align-content-start">{page}</div></div>';
+
 
     public function __construct($className)
     {
@@ -113,15 +111,12 @@ class StepperRenderer
 
     }
 
-
-
     // Rejestruje krok
-    public function registerStep($stepName, $message, $markup = '') {
-
+    public function registerStep($stepName, $message, $markup="") {
         $this->steps[] = array(
             "stepName" => $stepName,
             "message" => $message,
-            "page" => $markup
+            "markup" => $markup
         );
     }
 
@@ -165,8 +160,9 @@ class StepperRenderer
 
             ), self::$messageMarkup);
 
+
             $pages .= replacePlaceholders(array(
-                "{page}" => $stepData["page"]
+                "{page}" => $stepData["markup"]
             ), self::$pageMarkup);
 
             $counter++;
@@ -174,7 +170,6 @@ class StepperRenderer
         }
 
         $stepsHeader = replacePlaceholders(array( "{steps}" => $steps ), self::$stepsMarkup);
-
 
         return replacePlaceholders(array(
             "{className}" => $this->className,

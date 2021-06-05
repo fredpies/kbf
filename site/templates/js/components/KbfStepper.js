@@ -20,7 +20,7 @@ class KbfStepper {
 
         this.currentPageIdx = 0; // Biezacy index strony
         this.lastPageIdx = (this.$kbfStepper.find('.page')).length - 1; // Ostatni index
-        this.currentWidth = this.$kbfStepper.find('.page').eq(0).width(); // AKtualna szerokosc wrappera
+        this.currentWidth = window.innerWidth;
 
         // Elementy $
         this.$infoMessages = this.$kbfStepper.find('.page-info-msg');
@@ -62,8 +62,6 @@ class KbfStepper {
 
         if (this.validateCurrentPage()) { // Zmienia strone tylko w przypadku jej poprawnosci
 
-            console.log('nextPage');
-
             if (this.currentPageIdx === this.lastPageIdx) return;
 
             this.$steps.eq(this.currentPageIdx).addClass('done');
@@ -83,7 +81,6 @@ class KbfStepper {
             this.$steps.eq(this.currentPageIdx).addClass('active');
             this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
 
-            console.log('curr', this.currentPageIdx)
         }
     }
 
@@ -94,12 +91,10 @@ class KbfStepper {
 
         if (this.validateCurrentPage()) { // Zmienia strone tylko w przypadku jej poprawnosci
 
-            console.log('prevPage');
 
             if (this.currentPageIdx === 0) return
 
             this.$steps.eq(this.currentPageIdx).removeClass('active');
-
             this.currentPageIdx--;
 
             this.$steps.eq(this.currentPageIdx).removeClass('done');
@@ -119,8 +114,6 @@ class KbfStepper {
             }
 
             this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
-
-            console.log('curr', this.currentPageIdx)
 
         }
     }

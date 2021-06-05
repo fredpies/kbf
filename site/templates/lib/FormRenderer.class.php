@@ -20,7 +20,7 @@ class FormRenderer
     public static $formMarkup = '
         <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center w-100 align-content-start">
 
                {fieldsMarkup}
 
@@ -35,7 +35,7 @@ class FormRenderer
     ';
 
     public static $formMarkupNoTag = '
-        <div class="row justify-content-center">
+        <div class="row justify-content-center w-100 align-content-start">
 
            {fieldsMarkup}
 
@@ -50,7 +50,7 @@ class FormRenderer
     public static $formMarkupNoFooter = '
         <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center w-100 align-content-start">
 
                {fieldsMarkup}
 
@@ -60,7 +60,7 @@ class FormRenderer
     ';
 
     public static $formMarkupOnlyFields = '
-        <div class="row justify-content-center">
+        <div class="row justify-content-center w-100 align-content-start">
 
            {fieldsMarkup}
 
