@@ -11,13 +11,14 @@ class FormField
         "{required}" => "",
         "{msgRequired}" => "",
         "{inputmask}" => "",
-        "{value}" => ""
+        "{value}" => "",
+        "{className}" => ""
 
     );
 
-    public function __construct($className = "address-autocomplete")
+    public function __construct($className)
     {
-        $this->placeholderMap["{class}"] = $className;
+        if (!empty($className)) $this->placeholderMap["{className}"] = $className;
     }
 
     public function renderMarkup($markup)
@@ -56,7 +57,7 @@ class FormFieldText extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="{class} form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="{type}" class="{className} form-control form-control-lg text-uppercase"
                                    name="{name}" {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
@@ -72,7 +73,7 @@ class FormFieldText extends FormField
 
     public function render()
     {
-        return parent::renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$markup);
     }
 
 }
@@ -95,7 +96,7 @@ class FormFieldAddressAutocomplete extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="{class} form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
                                    name="{name}" {required} {msgRequired} data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
                             
                             <div class="input-focus-bg"></div>
@@ -111,7 +112,7 @@ class FormFieldAddressAutocomplete extends FormField
 
     public function render()
     {
-        return parent::renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$markup);
     }
 
 }
@@ -136,7 +137,7 @@ class FormFieldHidden extends FormField
 
     public function render()
     {
-        return parent::renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$markup);
     }
 
 }
@@ -161,7 +162,7 @@ class FormFieldTextArea extends FormField
 
     public function render()
     {
-        return parent::renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$markup);
     }
 
 }
@@ -171,7 +172,7 @@ class FormFieldImage extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-4">
+        <div class="col-12 col-md-6 col-lg-5 mb-4">
                     <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
                     <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                       
@@ -186,7 +187,7 @@ class FormFieldImage extends FormField
                  
                     </div>
                 
-                <div class="d-none d-lg-flex col-5 col-xl-4">
+                <div class="d-none d-md-flex col-5 col-xl-4">
                     <p class="kbf-form-info align-self-center">{description}</p>
                 </div>
   
@@ -199,7 +200,7 @@ class FormFieldImage extends FormField
 
     public function render()
     {
-        return parent::renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$markup);
     }
 
 }

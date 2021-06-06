@@ -124,7 +124,9 @@
 
         this.currentWidth = window.innerWidth; // Elementy $
 
-        this.$infoMessages = this.$kbfStepper.find('.page-info-msg'); // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
+        this.$infoMessages = this.$kbfStepper.find('.top-message');
+        this.$infoMessages.hide().eq(0).addClass('d-flex'); // Pokaz tylko pierwszy message
+        // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
 
         if (window.innerWidth >= 768) {
           this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
@@ -140,7 +142,9 @@
 
         this.$pageWrapper = this.$kbfStepper.find('.page-wrapper'); // Przesuwany wrapper
 
-        this.$steps = this.$kbfStepper.find('.step'); // Kroki w naglowku
+        this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Kroki
+
+        this.$stepsBottom = this.$kbfStepper.find('.page-wrapper').next('.steps').find('.step'); // Kroki
       }
     }, {
       key: "addListeners",
@@ -159,8 +163,10 @@
         if (this.validateCurrentPage()) {
           // Zmienia strone tylko w przypadku jej poprawnosci
           if (this.currentPageIdx === this.lastPageIdx) return;
-          this.$steps.eq(this.currentPageIdx).addClass('done');
-          this.$steps.eq(this.currentPageIdx).removeClass('active');
+          this.$stepsTop.eq(this.currentPageIdx).addClass('done');
+          this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
+          this.$stepsBottom.eq(this.currentPageIdx).addClass('done');
+          this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
           this.currentPageIdx++;
           this.$pageWrapper.css('transform', "translateX(-".concat(this.currentPageIdx * this.currentWidth, "px)"));
           if (this.currentPageIdx > 0) this.$prevButton.find('button').removeAttr('disabled');
@@ -171,8 +177,9 @@
             this.$registerButton.find('button').addClass('show');
           }
 
-          this.$steps.eq(this.currentPageIdx).addClass('active');
-          this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
+          this.$stepsTop.eq(this.currentPageIdx).addClass('active');
+          this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
+          this.setMessages();
         }
       } // Zmienia na poprzednia strone
 
@@ -184,10 +191,13 @@
         if (this.validateCurrentPage()) {
           // Zmienia strone tylko w przypadku jej poprawnosci
           if (this.currentPageIdx === 0) return;
-          this.$steps.eq(this.currentPageIdx).removeClass('active');
+          this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
+          this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
           this.currentPageIdx--;
-          this.$steps.eq(this.currentPageIdx).removeClass('done');
-          this.$steps.eq(this.currentPageIdx).addClass('active');
+          this.$stepsTop.eq(this.currentPageIdx).removeClass('done');
+          this.$stepsTop.eq(this.currentPageIdx).addClass('active');
+          this.$stepsBottom.eq(this.currentPageIdx).removeClass('done');
+          this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
           this.$pageWrapper.css('transform', "translateX(-".concat(this.currentPageIdx * this.currentWidth, "px)"));
 
           if (this.currentPageIdx < this.lastPageIdx) {
@@ -200,8 +210,15 @@
             this.$prevButton.find('button').attr('disabled', 'disabled');
           }
 
-          this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
+          this.setMessages();
         }
+      } // Ustawia komunikaty dla stron
+
+    }, {
+      key: "setMessages",
+      value: function setMessages() {
+        this.$infoMessages.eq(this.currentPageIdx).addClass('d-flex').show();
+        this.$infoMessages.eq(this.currentPageIdx).siblings('.top-message').removeClass('d-flex').hide();
       }
     }, {
       key: "adjustStepper",

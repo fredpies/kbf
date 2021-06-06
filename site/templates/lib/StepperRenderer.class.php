@@ -12,6 +12,7 @@ class StepperRenderer
     private $steps = array();
     private $fields = "";
     private $className = "";
+    private $isHidden = false;
 
     // Markups
 
@@ -27,17 +28,19 @@ class StepperRenderer
         
         </div>
 
-        <form action="{action}" class="position-relative">
+        <form action="{action}" class="{isHidden} position-relative">
 
             {messages}
             
-            <div class="page-wrapper d-flex px-0 mt-4 py-5">
+            <div class="page-wrapper d-flex px-0 mt-4 pb-1">
 
                 {pages}
                                     
             </div>
+            
+            {stepsHeader}
 
-            <div class="container d-none d-md-block">
+            <div class="container d-none d-md-block my-4">
                 <div class="col-12 text-center text-md-right align-self-center">
                     <div class="row justify-content-center">
                         <div class="col-md-5 button-desktop button-prev">
@@ -60,9 +63,9 @@ class StepperRenderer
             </div>
 
             <!--  Mobile version -->
-            <div class="container px-0 d-md-none">
+            <div class="container px-0 d-md-none mb-4">
                 <div class="col-12 text-center text-md-right align-self-center">
-                    <div class="row justify-content-around">
+                    <div class="row px-3 justify-content-around">
                         <div class="col-5 pl-0 pr-1 button-prev">
                             <button type="button" disabled="disabled" class="fade show btn btn-round btn-block shadow-none btn-primary position-relative mr-lg-4"><i
                                         class="icon-left d-inline-block position-absolute fa fa-angle-left"></i> Wróć
@@ -87,7 +90,7 @@ class StepperRenderer
     ';
 
 
-    public static $stepsMarkup = '<div class="steps d-none d-md-flex w-100 text-center mx-auto mt-3">{steps}</div>';
+    public static $stepsMarkup = '<div class="steps d-none d-md-flex w-100 text-center mx-auto mt-5">{steps}</div>';
 
     public static $stepMarkup = '
         <div class="step {isActive}">
@@ -99,10 +102,9 @@ class StepperRenderer
         </div>
     ';
 
-    public static $messageMarkup = '<div class="w-100 page-info-msg fade {isShown}" style="font-size: 0.875rem;"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{message}</span></div>';
+    public static $messageMarkup = '<div class="top-message px-3 w-100 mx-0 justify-content-center"><div class="col-12 px-4 col-lg-10 col-xl-9 mt-4"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{message}</span></div></div>';
 
     public static $pageMarkup = '<div class="page d-flex justify-content-center"><div class="col-12 mb-2 d-flex justify-content-center align-content-start">{page}</div></div>';
-
 
     public function __construct($className)
     {
@@ -110,6 +112,18 @@ class StepperRenderer
         $this->className = $className;
 
     }
+
+    public function __get($property) {
+        return $this[$property];
+    }
+
+    public function __set($property, $value) {
+
+        if ($property === "isHidden") {
+            $this->isHidden = $value;
+        }
+    }
+
 
     // Rejestruje krok
     public function registerStep($stepName, $message, $markup="") {
@@ -171,8 +185,12 @@ class StepperRenderer
 
         $stepsHeader = replacePlaceholders(array( "{steps}" => $steps ), self::$stepsMarkup);
 
+        $isHiddenClass = "";
+        if ($this->isHidden) $isHiddenClass = "d-none";
+
         return replacePlaceholders(array(
             "{className}" => $this->className,
+            "{isHidden}" => $isHiddenClass,
             "{stepsHeader}" => $stepsHeader,
             "{stepperName}" => $this->stepperName,
             "{messages}" => $messages,

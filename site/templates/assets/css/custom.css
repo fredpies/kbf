@@ -661,6 +661,7 @@ input + label.error {
 }
 
 .step {
+  position: relative;
   width: 150px;
 }
 
@@ -706,7 +707,10 @@ input + label.error {
 }
 
 .steps .step .step-name {
+  position: absolute;
+  width: 100%;
   color: lightgrey;
+  bottom: 2.5rem;
 }
 
 .steps .step.done .step-name, .steps .step.active .step-name {
@@ -756,31 +760,42 @@ input + label.error {
 
 .page-wrapper .page {
   padding: 0 !important;
-  max-height: 50vh;
   overflow-y: hidden;
   width: 100vw;
 }
 
+@media (min-width: 768px) {
+  .top-message {
+    padding: 0 2.5rem !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .top-message {
+    padding: 0 !important;
+  }
+}
+
 @media (min-width: 1280px) {
-  .page-wrapper .page {
+  .page-wrapper .page, .top-message {
     padding: 0 8rem !important;
   }
 }
 
 @media (min-width: 1440px) {
-  .page-wrapper .page {
+  .page-wrapper .page, .top-message {
     padding: 0 12rem !important;
   }
 }
 
 @media (min-width: 1680px) {
-  .page-wrapper .page {
+  .page-wrapper .page, .top-message {
     padding: 0 18rem !important;
   }
 }
 
 @media (min-width: 1920px) {
-  .page-wrapper .page {
+  .page-wrapper .page, .top-message {
     padding: 0 20rem !important;
   }
 }
@@ -789,14 +804,8 @@ input + label.error {
   overflow: hidden;
 }
 
-.kbf-stepper form .page-info-msg {
-  position: absolute;
-  text-align: center;
+.kbf-stepper form .top-message {
   top: 1rem;
-}
-
-.kbf-stepper form .page-info-msg-contents {
-  max-width: 400px;
 }
 
 .button-prev i, .button-next i {
@@ -847,11 +856,6 @@ input + label.error {
   cursor: pointer;
 }
 
-@media (min-width: 768px) {
-  .kbf-logo-uploader {
-    width: 60%;
-  }
-}
 
 @media (min-width: 1024px) {
   .kbf-logo-uploader {
