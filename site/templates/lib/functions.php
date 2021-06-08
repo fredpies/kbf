@@ -517,7 +517,10 @@ function replacePlaceholders($placeholderMap, $markup) {
 
     if (!$placeholderMap) throw new WireException("replacePlaceholders: Placeholder map has not been provided.");
 
-    foreach ($placeholderMap as $placeholder => $value) $markup = str_replace($placeholder, $value, $markup);
+
+    foreach ($placeholderMap as $placeholder => $value) {
+        $markup = str_replace($placeholder, $value, $markup);
+    }
     return $markup;
 
 }

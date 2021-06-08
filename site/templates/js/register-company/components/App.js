@@ -1,4 +1,7 @@
 import KbfStepper from "../../components/KbfStepper";
+import KbfIndustrySwitcher from "../../components/KbfIndustrySwitcher";
+import KbfWysiwyg from "../../components/KbfWysiwyg";
+import PerfectScrollbar from 'perfect-scrollbar';
 
 class App {
 
@@ -12,6 +15,9 @@ class App {
     init() {
 
         new KbfStepper('.kbf-stepper');
+        new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", false);
+        new KbfWysiwyg('.wysiwyg')
+
 
     }
 

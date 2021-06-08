@@ -754,54 +754,16 @@ input + label.error {
 }
 
 .page-wrapper {
-  width: calc(4 * 100vw);
   transition: 1s transform;
 }
 
 .page-wrapper .page {
-  padding: 0 !important;
-  overflow-y: hidden;
-  width: 100vw;
+  padding: 0;
 }
 
-@media (min-width: 768px) {
-  .top-message {
-    padding: 0 2.5rem !important;
-  }
-}
+.kbf-stepper form  {
+  max-height: 1000px;
 
-@media (min-width: 900px) {
-  .top-message {
-    padding: 0 !important;
-  }
-}
-
-@media (min-width: 1280px) {
-  .page-wrapper .page, .top-message {
-    padding: 0 8rem !important;
-  }
-}
-
-@media (min-width: 1440px) {
-  .page-wrapper .page, .top-message {
-    padding: 0 12rem !important;
-  }
-}
-
-@media (min-width: 1680px) {
-  .page-wrapper .page, .top-message {
-    padding: 0 18rem !important;
-  }
-}
-
-@media (min-width: 1920px) {
-  .page-wrapper .page, .top-message {
-    padding: 0 20rem !important;
-  }
-}
-
-.kbf-stepper form {
-  overflow: hidden;
 }
 
 .kbf-stepper form .top-message {
@@ -830,12 +792,52 @@ input + label.error {
 }
 
 
+@media (min-width: 768px) {
+  .page .form-info-message {
+
+    padding-left: 3rem;
+
+  }
+}
+
+@media (min-width: 1024px) {
+  .page .form-info-message {
+
+    padding-left: 1rem;
+
+  }
+}
+
+@media (min-width: 1300px) {
+  .page .form-info-message {
+
+    padding-left: 2rem;
+
+  }
+}
+
+@media (min-width: 1680px) {
+  .page-wrapper .page  {
+
+    padding: 0 10rem;
+
+  }
+}
+
+@media (min-width: 1920px) {
+  .page-wrapper .page  {
+
+    padding: 0 16rem;
+
+  }
+}
 
 
 
 /******************************/
 /* Formularze                 */
 /******************************/
+
 
 
 .input-group {

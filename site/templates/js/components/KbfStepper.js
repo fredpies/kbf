@@ -19,8 +19,9 @@ class KbfStepper {
     init() {
 
         this.currentPageIdx = 0; // Biezacy index strony
-        this.lastPageIdx = (this.$kbfStepper.find('.page')).length - 1; // Ostatni index
-        this.currentWidth = window.innerWidth;
+        this.$pages = this.$kbfStepper.find('.page');
+        this.lastPageIdx = this.$pages.length - 1; // Ostatni index
+        this.contentWidth = window.innerWidth;
 
         // Elementy $
         this.$infoMessages = this.$kbfStepper.find('.top-message');
@@ -44,6 +45,9 @@ class KbfStepper {
         this.$pageWrapper = this.$kbfStepper.find('.page-wrapper'); // Przesuwany wrapper
         this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Kroki
         this.$stepsBottom = this.$kbfStepper.find('.page-wrapper').next('.steps').find('.step'); // Kroki
+
+        this.$pageWrapper.css('width', this.contentWidth * (this.lastPageIdx + 1));
+        this.$pages.css('width', this.contentWidth);
 
 
     }
@@ -75,7 +79,8 @@ class KbfStepper {
             this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
 
             this.currentPageIdx++;
-            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.currentWidth}px)`);
+
+            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px`);
 
             if (this.currentPageIdx > 0) this.$prevButton.find('button').removeAttr('disabled');
 
@@ -115,7 +120,7 @@ class KbfStepper {
             this.$stepsBottom.eq(this.currentPageIdx).removeClass('done');
             this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
 
-            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.currentWidth}px)`);
+            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px)`);
 
             if (this.currentPageIdx < this.lastPageIdx) {
                 this.$registerButton.hide();
@@ -141,9 +146,9 @@ class KbfStepper {
     }
 
     adjustStepper() {
-        this.currentWidth = this.$kbfStepper.find('.page').eq(0).width();
-        this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.currentWidth}px)`);
-
+        this.contentWidth = window.innerWidth;
+        this.$pages.css('width', this.contentWidth);
+        this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px)`);
     }
 
     // Sprawdza poprawnosc formularza na danej stronie

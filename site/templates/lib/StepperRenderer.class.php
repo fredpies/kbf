@@ -10,7 +10,6 @@ class StepperRenderer
     public $actionName = 'Dodaj';
 
     private $steps = array();
-    private $fields = "";
     private $className = "";
     private $isHidden = false;
 
@@ -24,7 +23,7 @@ class StepperRenderer
 
             {stepsHeader}
             
-            <h3 class="font-weight-800 mb-0 pt-lg-5 py-lg-0 py-4 section-title-3 text-center text-uppercase">{stepperName}</h3>
+            <h3 class="font-weight-800 mb-2 section-title-3 text-center text-uppercase">{stepperName}</h3>
         
         </div>
 
@@ -81,16 +80,11 @@ class StepperRenderer
                     </div>
             </div>
 
-
         </form>
-
-    </div>
-    
-    
-    ';
+    </div>';
 
 
-    public static $stepsMarkup = '<div class="steps d-none d-md-flex w-100 text-center mx-auto mt-5">{steps}</div>';
+    public static $stepsMarkup = '<div class="steps d-none d-md-flex w-100 text-center mx-auto my-5">{steps}</div>';
 
     public static $stepMarkup = '
         <div class="step {isActive}">
@@ -102,9 +96,9 @@ class StepperRenderer
         </div>
     ';
 
-    public static $messageMarkup = '<div class="top-message px-3 w-100 mx-0 justify-content-center"><div class="col-12 px-4 col-lg-10 col-xl-9 mt-4"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{message}</span></div></div>';
+    public static $messageMarkup = '<div class="top-message justify-content-center w-100 mx-0"><div class="text-center col-12 col-md-10 my-4"><h6 class="d-inline-block font-weight-400 page-info-msg-contents">{message}</h6></div></div>';
 
-    public static $pageMarkup = '<div class="page d-flex justify-content-center"><div class="col-12 mb-2 d-flex justify-content-center align-content-start">{page}</div></div>';
+    public static $pageMarkup = '<div class="page d-flex justify-content-center"><div class="col-12 mb-2 d-flex justify-content-center">{page}</div></div>';
 
     public function __construct($className)
     {

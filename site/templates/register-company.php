@@ -6,6 +6,8 @@ include_once "lib/FormRenderer.class.php";
 include_once "lib/StepperRenderer.class.php";
 include_once "lib/FormFields.php";
 
+$urls = wire("urls");
+
 $templates = wire("templates");
 $company_template = $templates->get("company");
 $company_fields = $company_template->fields;
@@ -39,52 +41,38 @@ $company_city_field->required = "required";
 $company_city_field->icon = "fa-map-marker";
 
 // Branze
-$company_industries_field_markup = '<div class="row">
-                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-5 mb-4">
-                        <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
-                        <button class="btn btn-round btn-primary px-3 mx-3 mx-md-4 mx-lg-0 mb-3 mb-md-0 dropdown-toggle w-full"
-                                type="button"
-                                id="industries-button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                        </button>
-                    </div>
+$company_industries_field = new FormFieldIndustries();
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-5 mb-4">
-                        <label class="text-uppercase px-3">Sub-branża</label>
-                        <button class="btn btn-round btn-primary px-3 mx-3 mb-2 dropdown-toggle w-full"
-                                type="button"
-                                id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                        </button>
-                    </div>
-
-                </div>';
+// Opis firmy
+$company_description_field = new FormFieldTextArea();
+$company_description_field->label = "Opis firmy";
+$company_description_field->name = "company_description";
+$company_description_field->required = "required";
+$company_description_field->msgRequired = "nie";
 
 // Krok "Dane firmy"
 
 $form_step_1 = new FormRenderer("register-company", $company_fields);
 $form_step_1->onlyFields = true;
 $form_step_1->addField($company_fields->get("company_regon"));
-$form_step_1->addMarkup('<div class="d-flex w-100 justify-content-center"><div class="col-11 col-lg-10 col-xl-9 my-4"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>Sprawdź poprawność pobranych danych i wybierz następny krok.<br>W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.</span></div></div>', true);
+$form_step_1->addMarkup('<div class="form-info-message col-12 col-lg-7 col-xl-5 my-4"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>Sprawdź poprawność pobranych danych i wybierz następny krok.<br>W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.</span></div><div class="d-none d-lg-block col-lg-3 col-xl-4"></div>', true);
 $form_step_1->addMarkup($company_name_field->render(), true);
 $form_step_1->addMarkup($addres_autoComplete->render(), true);
 $form_step_1->addMarkup($company_city_field->render(), true);
 
-// Informacje podstawowe
+// Krok "Informacje podstawowe"
+
 $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
 $form_step_2->addField($company_fields->get("company_logo"));
-$form_step_2->addMarkup($company_industries_field_markup, false);
+$form_step_2->addMarkup($company_industries_field->render());
+$form_step_2->addMarkup($company_description_field->render());
 
-//$form_step_1->addField($company_fields->get("company_address"));
-//$form_step_1->addField($company_fields->get("company_city"));
-//$form_step_1->addField($company_fields->get("company_zip"));
 
+// Rejestruj kroki
 $stepper->registerStep("Dane firmy", "Podaj numer regon w celu pobrania informacji o swojej firmie.", $form_step_1->render());
-$stepper->registerStep("Informacje podstawowe", "Podaj podstawowe informacje o swojej firmie.", $form_step_2->render());
-
-
-
+$stepper->registerStep("Informacje podstawowe", "Podaj podstawowe informacje o swojej firmie. Podane informacje umożliwią łatwe odnalezienie firmy w rejestrze KBF.", $form_step_2->render());
+$stepper->registerStep("Dane kontaktowe", "Podaj dane kontaktowe firmy. Podanie informacji kontaktowych ułatwi kontakt z potencjalnymi klientami.", "");
 
 
 $stepperMarkup = $stepper->render();
@@ -96,6 +84,12 @@ $stepperMarkup = $stepper->render();
 <head>
 
     <?php include_once "partials/_head.php" ?>
+
+    <!-- Perfect scrollbar-->
+    <link rel="stylesheet" href="<?php echo $urls->css ?>perfect-scrollbar.css">
+
+    <!-- Wysiwyg -->
+    <link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.bubble.css">
 
 </head>
 <body>
@@ -111,6 +105,7 @@ $stepperMarkup = $stepper->render();
 
     <?= $stepperMarkup ?>
 
+
 </div>
 
 
@@ -122,6 +117,7 @@ $stepperMarkup = $stepper->render();
 
 <!-- Scripts -->
 <?php include_once "partials/_scripts.php" ?>
+
 
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>register-company.js"></script>

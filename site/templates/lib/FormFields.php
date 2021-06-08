@@ -29,12 +29,12 @@ class FormField
 
     public function __set($property, $value)
     {
-        $this->placeholderMap["{" . $property . "}"] = $value;
+        $this->placeholderMap['{' . $property . '}'] = $value;
     }
 
     public function __get($property)
     {
-        return $this->placeholderMap["{" . $property . "}"];
+        return $this->placeholderMap['{' . $property . '}'];
     }
 
 }
@@ -147,12 +147,11 @@ class FormFieldTextArea extends FormField
 
     public static $markup = '
 
-        <div class="wysiwyg col-12 col-lg-10 col-xl-9 mb-5">
-                <label class="text-uppercase px-3">{label}</label>
-                <div class="editor">{value}</div>
-                <input {required} {msgRequired} type="hidden" name="{name}">
-    
-            </div>
+        <label class="text-uppercase pl-3 pl-sm-4">{label}</label>
+        <div class="wysiwyg col-12 mb-5 px-3">
+            <div class="editor">{value}</div>
+        </div>
+        <input {required} data-msg-required="{msgRequired}" type="hidden" name="{name}" value="{value}">
     ';
 
     public function __construct($className = "")
@@ -172,7 +171,11 @@ class FormFieldImage extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-md-6 col-lg-5 mb-4">
+    
+        <div class="col-12 col-lg-10 col-xl-9">
+    
+    
+        <div class="col-12 col-md-6 mb-4 px-4">
                     <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
                     <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                       
@@ -180,17 +183,60 @@ class FormFieldImage extends FormField
                                        name="{name}" {required} {value}>
                                        
                         <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                            <img alt="logo-placeholder" src="{logoImage}" class="col-4 my-2 kbf-logo-uploader-image">
+                            <img alt="logo-placeholder" src="{logoImage}" class="col-5 my-2 kbf-logo-uploader-image">
                         </div>
                             
                     </label>
                  
                     </div>
                 
-                <div class="d-none d-md-flex col-5 col-xl-4">
+                <div class="d-none d-md-flex col-md-6 col-xl-4">
                     <p class="kbf-form-info align-self-center">{description}</p>
                 </div>
+
+</div>
+
   
+    ';
+
+    public function __construct($className = "")
+    {
+        parent::__construct($className);
+    }
+
+    public function render()
+    {
+        return $this->renderMarkup(self::$markup);
+    }
+
+}
+
+
+class FormFieldIndustries extends FormField
+{
+
+    public static $markup = '
+
+            <div class="d-flex flex-wrap">
+                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4">
+                        <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
+                        <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
+                                type="button"
+                                id="industries-button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                        </button>
+                    </div>
+
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6">
+                        <label class="text-uppercase px-3">Sub-branża</label>
+                        <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
+                                type="button"
+                                id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                        </button>
+                    </div>
+            </div>
+        
     ';
 
     public function __construct($className = "")
