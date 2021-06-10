@@ -59,8 +59,6 @@ class KbfStepper {
         this.$nextButton.on('click', this.nextPage.bind(this));
         this.$registerButton.on('click', this.submitRegister.bind(this));
 
-        $(window).on('resize', this.adjustStepper.bind(this)); // Dostosuj polozenie przesuwanego wrappera podczas rotacji urzadzenia
-
     }
 
     // Zmienia na nastepna strone
@@ -145,11 +143,6 @@ class KbfStepper {
         this.$infoMessages.eq(this.currentPageIdx).siblings('.top-message').removeClass('d-flex').hide();
     }
 
-    adjustStepper() {
-        this.contentWidth = window.innerWidth;
-        this.$pages.css('width', this.contentWidth);
-        this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px)`);
-    }
 
     // Sprawdza poprawnosc formularza na danej stronie
     validateCurrentPage() {

@@ -20,7 +20,7 @@ class FormRenderer
     public static $formMarkup = '
         <form class="{isHidden}" novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
 
-            <div class="row justify-content-center w-100 align-content-start">
+            <div class="row justify-content-center  w-100">
 
                {fieldsMarkup}
 
@@ -35,7 +35,7 @@ class FormRenderer
     ';
 
     public static $formMarkupNoTag = '
-        <div class="{isHidden} row justify-content-center w-100 align-content-start">
+        <div class="{isHidden} row justify-content-center w-100">
 
            {fieldsMarkup}
 
@@ -50,7 +50,7 @@ class FormRenderer
     public static $formMarkupNoFooter = '
         <form novalidate action="{action}" role="form" name="{name}" class="{isHidden} pl-lg-5">
 
-            <div class="row justify-content-center w-100 align-content-start">
+            <div class="row justify-content-center  w-100">
 
                {fieldsMarkup}
 
@@ -60,7 +60,7 @@ class FormRenderer
     ';
 
     public static $formMarkupOnlyFields = '
-        <div class="{isHidden} row justify-content-center w-100 align-content-start">
+        <div class="{isHidden} row justify-content-center w-100">
 
            {fieldsMarkup}
 
@@ -123,7 +123,7 @@ class FormRenderer
     public function addMarkup($markup, $noColumn = false) {
         if (!isset($markup)) return;
         if ($noColumn) $this->fields[] = $markup;
-        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
+        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-3'>$markup</div>";
     }
 
     // Renderuje pole formularza

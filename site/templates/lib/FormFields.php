@@ -49,7 +49,7 @@ class FormFieldText extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-4">
+        <div class="col-12 col-lg-5 mb-3">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -66,8 +66,8 @@ class FormFieldText extends FormField
                     </div>
                 </div>
 
-                <div class="d-none d-lg-flex col-5 col-xl-4">
-                    <p class="kbf-form-info align-self-center">{description}</p>
+                <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+                    <p class="kbf-form-info">{description}</p>
                 </div>
     ';
 
@@ -88,7 +88,7 @@ class FormFieldAddressAutocomplete extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-4">
+        <div class="col-12 col-lg-5 mb-3">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -97,7 +97,7 @@ class FormFieldAddressAutocomplete extends FormField
                             </div>
 
                             <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
-                                   name="{name}" {required} {msgRequired} data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
+                                   name="{name}" {required} data-msg-required="{msgRequired}" data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
                             
                             <div class="input-focus-bg"></div>
 
@@ -105,8 +105,8 @@ class FormFieldAddressAutocomplete extends FormField
                     </div>
                 </div>
 
-                <div class="d-none d-lg-flex col-5 col-xl-4">
-                    <p class="kbf-form-info align-self-center">{description}</p>
+                <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+                    <p class="kbf-form-info">{description}</p>
                 </div>
     ';
 
@@ -147,8 +147,8 @@ class FormFieldTextArea extends FormField
 
     public static $markup = '
 
-        <label class="text-uppercase pl-3 pl-sm-4">{label}</label>
-        <div class="wysiwyg col-12 mb-5 px-3">
+        <label style="padding-left: 1rem;" class="text-uppercase">{label}</label>
+        <div class="wysiwyg col-12 mb-3 px-0">
             <div class="editor">{value}</div>
         </div>
         <input {required} data-msg-required="{msgRequired}" type="hidden" name="{name}" value="{value}">
@@ -166,16 +166,39 @@ class FormFieldTextArea extends FormField
 
 }
 
+class FormFieldKeywords extends FormField
+{
+
+    public static $markup = '
+
+        <label style="padding-left: 1rem;" class="text-uppercase mt-3">Słowa kluczowe</label>
+        <div class="col-12 mb-3 px-0">
+            <textarea class="kbf-keywords form-control form-control-lg" {required} data-msg-required="Wpisanie słów kluczowych dla firmy jest wymagane." name="company_keywords" value="{value}"></textarea>
+        </div>
+    ';
+
+    public function __construct($className = "")
+    {
+        parent::__construct($className);
+    }
+
+    public function render()
+    {
+        return $this->renderMarkup(self::$markup);
+    }
+
+}
+
+
 class FormFieldImage extends FormField
 {
 
     public static $markup = '
     
     
-        <div class="col-12 col-lg-10 col-xl-9">
-    
-    
-        <div class="col-12 col-md-6 mb-4 px-4">
+        <div class="row col-12 col-lg-10 col-xl-9 px-0">
+   
+        <div class="col-12 col-lg-5 mb-3">
                     <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
                     <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                       
@@ -190,8 +213,8 @@ class FormFieldImage extends FormField
                  
                     </div>
                 
-                <div class="d-none d-md-flex col-md-6 col-xl-4">
-                    <p class="kbf-form-info align-self-center">{description}</p>
+                <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+                    <p class="kbf-form-info">{description}</p>
                 </div>
 
 </div>
@@ -218,7 +241,7 @@ class FormFieldIndustries extends FormField
     public static $markup = '
 
             <div class="d-flex flex-wrap">
-                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4">
+                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
                         <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button"
@@ -227,7 +250,7 @@ class FormFieldIndustries extends FormField
                         </button>
                     </div>
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6">
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6 pl-3 pr-0">
                         <label class="text-uppercase px-3">Sub-branża</label>
                         <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button"

@@ -620,18 +620,17 @@ input + label.error {
 /* WYSIWYG                    */
 /******************************/
 
-.ql-editor {
+.ql-editor, .kbf-keywords {
   border: 2px solid #e0e0e0 !important;
   border-radius: 1.6875rem !important;
-  /*height: calc(1.5em + 1rem + 4px) !important;*/
-  height: 10rem !important;
+  height: 12rem !important;
   min-height: 3.375rem !important;
   padding: 0.85rem 1.375rem !important;
   line-height: 1.5 !important;
   transition: all .2s ease-in-out;
 }
 
-.ql-editor.focus {
+.ql-editor.focus, .kbf-keywords:focus {
   border: 2px solid #2196f3 !important;
   box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%) !important;
 }
@@ -761,10 +760,6 @@ input + label.error {
   padding: 0;
 }
 
-.kbf-stepper form  {
-  max-height: 1000px;
-
-}
 
 .kbf-stepper form .top-message {
   top: 1rem;
@@ -792,29 +787,29 @@ input + label.error {
 }
 
 
-@media (min-width: 768px) {
-  .page .form-info-message {
+/*@media (min-width: 768px) {*/
+/*  .page .form-info-message {*/
 
-    padding-left: 3rem;
+/*    padding-left: 3rem;*/
 
-  }
-}
+/*  }*/
+/*}*/
 
-@media (min-width: 1024px) {
-  .page .form-info-message {
+/*@media (min-width: 1024px) {*/
+/*  .page .form-info-message {*/
 
-    padding-left: 1rem;
+/*    padding-left: 1rem;*/
 
-  }
-}
+/*  }*/
+/*}*/
 
-@media (min-width: 1300px) {
-  .page .form-info-message {
+/*@media (min-width: 1300px) {*/
+/*  .page .form-info-message {*/
 
-    padding-left: 2rem;
+/*    padding-left: 2rem;*/
 
-  }
-}
+/*  }*/
+/*}*/
 
 @media (min-width: 1680px) {
   .page-wrapper .page  {
@@ -837,8 +832,6 @@ input + label.error {
 /******************************/
 /* Formularze                 */
 /******************************/
-
-
 
 .input-group {
   max-width: 650px !important;
@@ -897,7 +890,6 @@ input + label.error {
 /******************************/
 
 .bootstrap-autocomplete .dropdown-item.active, .dropdown-item:active {
-  /*color: white !important;*/
   background-color: #f8f9fa !important;
 }
 .bootstrap-autocomplete .dropdown-item.active:hover, .dropdown-item:active:hover {
@@ -915,6 +907,12 @@ input + label.error {
 /******************************/
 /* Inne                       */
 /******************************/
+
+/* O sklowach kluczowych */
+
+a.about-keywords {
+  text-decoration: underline !important;
+}
 
 /* Like button */
 #kbf-like-button {

@@ -61,6 +61,7 @@ function get_sub_industries($industry) {
  * *************/
 
 // Wyswietla informacje o firmie
+// TODO: Wymaga refaktoryzacji
 function render_company_info($company_data = array()) {
 
     if (count($company_data) === 0) return;
@@ -135,6 +136,57 @@ function render_company_info($company_data = array()) {
 
 }
 
+// Wyswietla podsumowanie firmy
+function render_company_summary() {
+
+    return '<div class="container"><div class="row mt-3">
+                    
+                    <div class="col-12 col-md-7 px-0">
+                    
+                    <div style="padding-left: 15px;" class="row no-gutters">
+                    
+                        <div class="col-10 company-info pl-2">
+                        
+                            <span class="company-name h5 d-block text-left mb-2 section-title-4 font-weight-700">{company_name}</span>
+                            
+                            <div class="company-address mb-2 small">REGON:{company_regon}}</div>
+                            <div class="company-street">{company_address}</div>
+                        
+                            <div class="company-zip-city mb-2">
+                                <span class="company-zip">{company_zip}</span>
+                                <span class="company-city">{company_city}</span>
+                            </div>
+                        
+                            <span class="d-block text-dark text-nowrap"><i class="fas fa-phone-alt mr-2"></i>{company_phone_1}</span>
+                            <span class="d-block text-dark text-nowrap"><i class="fas fa-phone-alt mr-2"></i>{company_phone_2}</span>
+                            <span class="d-block text-dark text-nowrap"><i class="fas fa-fax mr-2"></i>{company_fax}</span>
+                            <span class="d-block text-dark text-nowrap"><i class="fas fa-globe mr-2"></i>{company_www}</span>
+                        
+                            <div class="company-industries">
+                                <span class="badge badge-pill badge-primary mb-1 mt-3">{company_industry}</span>
+                                <span class="badge badge-pill badge-warning mb-1 mt-1">{company_sub_industry}</span>
+                            </div>
+                        
+                        </div>
+                        
+                    </div>
+                    
+                    
+                    </div>
+    
+                    <!-- Minimap -->
+                    <div class="col-12 col-md-4 my-3 my-md-0 no-gutters">
+                        <div id="kbf-minimap" data-lat="{lat}" data-lon="{lon}"></div>
+                    </div>
+                   
+                    <div class="col-12">
+                        <div class="company-description my-2 my-md-4">{company_description_html}</div>
+                    </div>
+
+                </div>
+        </div>';
+
+}
 // Wyswietla panel ze skrocona informacja o ofercie pracy
 function render_job_info($job_data = array(), $device = "desktop") {
 
@@ -540,6 +592,17 @@ function get_pagination($page_array) {
         'numPageLinks' => 5,
         'arrayToCSV' => false
     ));
+
+}
+
+// Info tekst dla formularzy
+function render_info_message($msg) {
+
+    $template = '<div class="col-12 col-lg-10 col-xl-9 mb-3"><div class="form-info-message col-12 col-lg-8 align-self-start mb-5">
+                    <span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span>
+                </div></div>';
+
+    return replacePlaceholders(array("{msg}" => $msg), $template);
 
 }
 

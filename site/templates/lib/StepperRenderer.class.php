@@ -98,7 +98,7 @@ class StepperRenderer
 
     public static $messageMarkup = '<div class="top-message justify-content-center w-100 mx-0"><div class="text-center col-12 col-md-10 my-4"><h6 class="d-inline-block font-weight-400 page-info-msg-contents">{message}</h6></div></div>';
 
-    public static $pageMarkup = '<div class="page d-flex justify-content-center"><div class="col-12 mb-2 d-flex justify-content-center">{page}</div></div>';
+    public static $pageMarkup = '<div class="page"><div class="col-12 mb-2">{page}</div></div>';
 
     public function __construct($className)
     {
@@ -137,8 +137,6 @@ class StepperRenderer
         $steps = '';
         $messages = '';
         $pages = '';
-        $isShown = '';
-        $isActive = '';
         $counter = 1;
 
         foreach ($this->steps as $stepData) {
