@@ -8,10 +8,12 @@ class StepperRenderer
     public $stepperName = 'Stepper';
     public $action = '';
     public $actionName = 'Dodaj';
+    public $formName = "";
 
     private $steps = array();
     private $className = "";
     private $isHidden = false;
+
 
     // Markups
 
@@ -27,7 +29,7 @@ class StepperRenderer
         
         </div>
 
-        <form action="{action}" class="{isHidden} position-relative">
+        <form action="{action}" name="{formName}" class="{isHidden} position-relative">
 
             {messages}
             
@@ -187,7 +189,8 @@ class StepperRenderer
             "{stepperName}" => $this->stepperName,
             "{messages}" => $messages,
             "{pages}" => $pages,
-            "{actionName}" => $this->actionName
+            "{actionName}" => $this->actionName,
+            "{formName}" => $this->formName
 
         ), self::$stepperMarkup);
 

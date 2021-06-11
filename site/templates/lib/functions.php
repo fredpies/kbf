@@ -158,8 +158,6 @@ function render_company_summary() {
                             </div>
                         
                             <span class="d-block text-dark text-nowrap"><i class="fas fa-phone-alt mr-2"></i>{company_phone_1}</span>
-                            <span class="d-block text-dark text-nowrap"><i class="fas fa-phone-alt mr-2"></i>{company_phone_2}</span>
-                            <span class="d-block text-dark text-nowrap"><i class="fas fa-fax mr-2"></i>{company_fax}</span>
                             <span class="d-block text-dark text-nowrap"><i class="fas fa-globe mr-2"></i>{company_www}</span>
                         
                             <div class="company-industries">
@@ -179,7 +177,7 @@ function render_company_summary() {
                         <div id="kbf-minimap" data-lat="{lat}" data-lon="{lon}"></div>
                     </div>
                    
-                    <div class="col-12">
+                    <div class="col-12 mt-5 mb-4">
                         <div class="company-description my-2 my-md-4">{company_description_html}</div>
                     </div>
 
@@ -598,9 +596,14 @@ function get_pagination($page_array) {
 // Info tekst dla formularzy
 function render_info_message($msg) {
 
-    $template = '<div class="col-12 col-lg-10 col-xl-9 mb-3"><div class="form-info-message col-12 col-lg-8 align-self-start mb-5">
-                    <span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span>
-                </div></div>';
+    $template = '<div class="container row justify-content-center">
+
+                    <div class="col-12 col-lg-10 col-xl-9 mb-3 pl-0">
+    
+                        <div class="form-info-message col-12 col-lg-8 align-self-start mb-5 pl-0"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span></div>
+                    
+                    </div>
+                </div>';
 
     return replacePlaceholders(array("{msg}" => $msg), $template);
 

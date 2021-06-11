@@ -1,5 +1,6 @@
 import errors from "../modules/Errors";
 import KbfPreloaderButton from "./KbfPreloaderButton";
+import Inputmask from "inputmask/lib/inputmask";
 
 class KbfStepper {
 
@@ -26,6 +27,7 @@ class KbfStepper {
         // Elementy $
         this.$infoMessages = this.$kbfStepper.find('.top-message');
         this.$infoMessages.hide().eq(0).addClass('d-flex'); // Pokaz tylko pierwszy message
+        this.$errorMessageElement = $('.kbf-error-message'); // Komunikaty bledow
 
         // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
 
@@ -49,6 +51,35 @@ class KbfStepper {
         this.$pageWrapper.css('width', this.contentWidth * (this.lastPageIdx + 1));
         this.$pages.css('width', this.contentWidth);
 
+        // Maski wprowadzania
+        this.$formInputs = $('.form-control');
+        this.$formInputs.each(function () {
+            console.log(this.name);
+            if (this.name === 'company_regon') new Inputmask({ placeholder: ''}).mask(this);
+            else new Inputmask().mask(this);
+        })
+
+        // Sprawdz czy walidator istnieje
+        if (!$.fn.validate) throw errors.noValidator();
+
+        // Walidacja
+        this.$formElement = $('form');
+        this.$formElement.validate({
+
+            formName: 'register-company',
+            ignore: [],
+
+            // Umiejscowienie komunikatu o bledzie
+            errorPlacement: function ($label, $element) {
+                $label.addClass('kbf-error-message');
+
+                let $column = $element.closest('[class*="col"]');
+
+                if ($column.length > 0) {
+                    $column.append($label);
+                } else $label.insertAfter($element);
+            }
+        });
 
     }
 
@@ -146,6 +177,17 @@ class KbfStepper {
 
     // Sprawdza poprawnosc formularza na danej stronie
     validateCurrentPage() {
+
+        let $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control');
+
+        let formIsValid = this.$formElement.valid();
+
+        // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+        if (this.$errorMessageElement.length > 0) {
+            if(formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
+            if(!formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
+        }
+
 
         return true;
     }

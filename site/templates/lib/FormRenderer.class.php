@@ -143,10 +143,10 @@ class FormRenderer
 
             // Czy pole jest wymagane ?
             $required = $field->required ? "required" : "";
-            $msgRequired = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
+            $msgRequired = $required ? $sanitizer->string($field->notes) . '"' : "";
 
             // Czy zastosowano maske wprowadzania ?
-            $inputmask = $field->placeholder ? ' data-inputmask-regex="' . $field->placeholder . '"' : "";
+            $inputmask = $field->placeholder ? $field->placeholder  : "";
 
             // Czy nalezy wyswietlic wartosc dla pola ?
             $value = $this->operation === "update" ? 'value="' . $this->templateFields->get($field->name) . '"' : "";

@@ -9,6 +9,7 @@ class FormField
 
         "{type}" => "",
         "{required}" => "",
+        "{disabled}" => "",
         "{msgRequired}" => "",
         "{inputmask}" => "",
         "{value}" => "",
@@ -16,14 +17,28 @@ class FormField
 
     );
 
-    public function __construct($className)
+    public function __construct($disabled = false, $className = "")
     {
         if (!empty($className)) $this->placeholderMap["{className}"] = $className;
+        if ($disabled) $this->placeholderMap["{disabled}"] = "disabled";
     }
 
     public function renderMarkup($markup)
     {
-        if (count($this->placeholderMap)) return replacePlaceholders($this->placeholderMap, $markup);
+
+        if (count($this->placeholderMap)) {
+
+            if (!empty($this->placeholderMap["{msgRequired}"])) {
+                $this->placeholderMap["{msgRequired}"] = 'data-msg-required="' . $this->placeholderMap["{msgRequired}"] . '"';
+            }
+
+            if (!empty($this->placeholderMap["{inputmask}"])) {
+                $this->placeholderMap["{inputmask}"] = 'data-inputmask-regex="' . $this->placeholderMap["{inputmask}"] . '"';
+            }
+
+            return replacePlaceholders($this->placeholderMap, $markup);
+        }
+
         return "";
     }
 
@@ -42,14 +57,14 @@ class FormField
 class FormFieldText extends FormField
 {
 
-    public function __construct($className = "")
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($className);
+        parent::__construct($disabled, $className);
     }
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-3">
+        <div class="col-12 col-lg-5 mb-3 {className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -58,7 +73,7 @@ class FormFieldText extends FormField
                             </div>
 
                             <input autocomplete="off" type="{type}" class="{className} form-control form-control-lg text-uppercase"
-                                   name="{name}" {required} {msgRequired} {inputmask} value="{value}">
+                                   name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
 
@@ -66,7 +81,7 @@ class FormFieldText extends FormField
                     </div>
                 </div>
 
-                <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+                <div class="d-none d-lg-flex col-5 col-lg-4 align-self-center">
                     <p class="kbf-form-info">{description}</p>
                 </div>
     ';
@@ -81,14 +96,13 @@ class FormFieldText extends FormField
 class FormFieldAddressAutocomplete extends FormField
 {
 
-    public function __construct($className = "")
+    public function __construct($disabled = false)
     {
-        parent::__construct("address-autocomplete");
+        parent::__construct($disabled, "address-autocomplete");
     }
 
     public static $markup = '
-    
-        <div class="col-12 col-lg-5 mb-3">
+        <div class="col-12 col-lg-5 mb-3 {className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -97,17 +111,17 @@ class FormFieldAddressAutocomplete extends FormField
                             </div>
 
                             <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
-                                   name="{name}" {required} data-msg-required="{msgRequired}" data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
+                                   name="{name}" {disabled} {required} {msgRequired} data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
                             
                             <div class="input-focus-bg"></div>
 
                         </div>
                     </div>
-                </div>
+        </div>
 
-                <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
-                    <p class="kbf-form-info">{description}</p>
-                </div>
+        <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+            <p class="kbf-form-info">{description}</p>
+        </div>
     ';
 
     public function render()
@@ -116,7 +130,6 @@ class FormFieldAddressAutocomplete extends FormField
     }
 
 }
-
 
 class FormFieldHidden extends FormField
 {
@@ -130,9 +143,9 @@ class FormFieldHidden extends FormField
 
     ';
 
-    public function __construct($className = "")
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($className);
+        parent::__construct($disabled, $className);
     }
 
     public function render()
@@ -147,16 +160,20 @@ class FormFieldTextArea extends FormField
 
     public static $markup = '
 
+     <div class="{className}">
+     
         <label style="padding-left: 1rem;" class="text-uppercase">{label}</label>
         <div class="wysiwyg col-12 mb-3 px-0">
             <div class="editor">{value}</div>
         </div>
-        <input {required} data-msg-required="{msgRequired}" type="hidden" name="{name}" value="{value}">
+        <input {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
+        
+    </div>
     ';
 
-    public function __construct($className = "")
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($className);
+        parent::__construct($disabled, $className);
     }
 
     public function render()
@@ -171,15 +188,17 @@ class FormFieldKeywords extends FormField
 
     public static $markup = '
 
-        <label style="padding-left: 1rem;" class="text-uppercase mt-3">Słowa kluczowe</label>
-        <div class="col-12 mb-3 px-0">
-            <textarea class="kbf-keywords form-control form-control-lg" {required} data-msg-required="Wpisanie słów kluczowych dla firmy jest wymagane." name="company_keywords" value="{value}"></textarea>
+        <div class="{className}">
+            <label style="padding-left: 1rem;" class="text-uppercase mt-3">Słowa kluczowe</label>
+            <div class="col-12 mb-3 px-0">
+                <textarea class="kbf-keywords form-control form-control-lg" {disabled} {required} {disabled} data-msg-required="Wpisanie słów kluczowych dla firmy jest wymagane." name="company_keywords" value="{value}"></textarea>
+            </div>
         </div>
     ';
 
-    public function __construct($className = "")
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($className);
+        parent::__construct($disabled, $className);
     }
 
     public function render()
@@ -188,7 +207,6 @@ class FormFieldKeywords extends FormField
     }
 
 }
-
 
 class FormFieldImage extends FormField
 {
@@ -196,35 +214,35 @@ class FormFieldImage extends FormField
     public static $markup = '
     
     
-        <div class="row col-12 col-lg-10 col-xl-9 px-0">
+        <div class="row col-12 col-lg-10 col-xl-9 px-0 {className}">
    
-        <div class="col-12 col-lg-5 mb-3">
-                    <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
-                    <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
-                      
-                         <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
-                                       name="{name}" {required} {value}>
-                                       
-                        <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                            <img alt="logo-placeholder" src="{logoImage}" class="col-5 my-2 kbf-logo-uploader-image">
-                        </div>
-                            
-                    </label>
-                 
-                    </div>
-                
-                <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
-                    <p class="kbf-form-info">{description}</p>
-                </div>
+            <div class="col-12 col-lg-5 mb-3">
+                        <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
+                        <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
+                          
+                            <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
+                                           name="{name}" {required} {msgRequired} {disabled} {value}>
+                                           
+                            <div class="d-flex no-gutters input-focus-bg justify-content-center">
+                                <img alt="logo-placeholder" src="{logoImage}" class="col-5 my-2 kbf-logo-uploader-image">
+                            </div>
+                                
+                        </label>
+                     
+            </div>
+                    
+            <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+                <p class="kbf-form-info">{description}</p>
+            </div>
 
-</div>
+        </div>
 
   
     ';
 
-    public function __construct($className = "")
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($className);
+        parent::__construct($disabled, $className);
     }
 
     public function render()
@@ -234,17 +252,16 @@ class FormFieldImage extends FormField
 
 }
 
-
 class FormFieldIndustries extends FormField
 {
 
     public static $markup = '
 
-            <div class="d-flex flex-wrap">
+            <div class="d-flex flex-wrap {className}">
                     <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
                         <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
-                                type="button"
+                                type="button" {disabled}
                                 id="industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                         </button>
@@ -253,7 +270,7 @@ class FormFieldIndustries extends FormField
                     <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6 pl-3 pr-0">
                         <label class="text-uppercase px-3">Sub-branża</label>
                         <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
-                                type="button"
+                                type="button" {disabled}
                                 id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                         </button>
@@ -262,10 +279,54 @@ class FormFieldIndustries extends FormField
         
     ';
 
-    public function __construct($className = "")
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($className);
+        parent::__construct($disabled, $className);
     }
+
+    public function render()
+    {
+        return $this->renderMarkup(self::$markup);
+    }
+
+}
+
+class FormFieldRegonSearch extends FormField
+{
+
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public static $markup = '
+    
+        <div class="col-12 col-lg-5 mb-3 {className}">
+        
+                    <div class="input-group input-group-lg input-group-round mb-4">
+                        <label class="text-uppercase px-3">{label}</label>
+                        
+                        <div class="input-group-inner">
+                          
+                            <input name="company_regon" type="text" style="font-size: 0.83rem" class="form-control form-control-lg" {disabled} {required} data-rule-minlength="7" data-msg-minlength="Numer REGON musi posiadać minimum 7 cyfr." {msgRequired} {inputmask} value="{value}">
+                            
+                            <div class="input-group-append">
+                                <button class="kbf-search-button btn btn-round btn-primary shadow-none mb-0" type="submit">Pobierz dane</button>
+                            </div>
+                            
+                            <div class="input-focus-bg"></div>
+                            
+                            
+                        </div>
+                        
+                    </div>
+        </div>
+
+        <div class="d-none d-lg-flex col-5 col-lg-4 align-self-center">
+            <p class="kbf-form-info">{description}</p>
+        </div>
+                
+    ';
 
     public function render()
     {

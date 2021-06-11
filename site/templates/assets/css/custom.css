@@ -623,7 +623,7 @@ input + label.error {
 .ql-editor, .kbf-keywords {
   border: 2px solid #e0e0e0 !important;
   border-radius: 1.6875rem !important;
-  height: 12rem !important;
+  height: 16rem !important;
   min-height: 3.375rem !important;
   padding: 0.85rem 1.375rem !important;
   line-height: 1.5 !important;
@@ -785,31 +785,6 @@ input + label.error {
 .button-register {
   display: none;
 }
-
-
-/*@media (min-width: 768px) {*/
-/*  .page .form-info-message {*/
-
-/*    padding-left: 3rem;*/
-
-/*  }*/
-/*}*/
-
-/*@media (min-width: 1024px) {*/
-/*  .page .form-info-message {*/
-
-/*    padding-left: 1rem;*/
-
-/*  }*/
-/*}*/
-
-/*@media (min-width: 1300px) {*/
-/*  .page .form-info-message {*/
-
-/*    padding-left: 2rem;*/
-
-/*  }*/
-/*}*/
 
 @media (min-width: 1680px) {
   .page-wrapper .page  {
