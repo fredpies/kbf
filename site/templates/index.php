@@ -58,7 +58,7 @@ include_once "lib/functions.php";
                                             <button class="btn btn-lg btn-round btn-primary px-3 mx-0 mb-0 dropdown-toggle w-full" type="button" id="areas-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                         </div>
                                     </div>
-                                            <button type="submit" class="kbf-search w-100 btn btn-round btn-lg btn-warning mt-5">Znajdź firmę</button>
+                                    <button type="submit" class="kbf-search w-100 btn btn-round btn-lg btn-warning mt-5">Znajdź firmę</button>
                                 </form>
 
 
