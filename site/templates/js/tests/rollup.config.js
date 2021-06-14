@@ -12,7 +12,9 @@ import config from '../config/config';
 let env = config.env; // aktualne srodowisko
 
 let plugins = [
-    resolve(),
+    resolve({
+        preferBuiltins: true
+    }),
     commonjs(),
     json(),
     babel(babelrc({
@@ -26,10 +28,10 @@ if (env === 'dev') plugins = [ sourcemaps(), ...plugins];
 if (env === 'prod' ) plugins = [ terser(), ...plugins];
 
 export default {
-    input: 'entry.js',
+    input: 'regon-test-src.js',
     output: {
-        file: '../../assets/js/tests.js',
-        format: 'iife',
+        file: './regon-test.js',
+        format: 'es',
         sourcemap: env === 'dev',
     },
     plugins

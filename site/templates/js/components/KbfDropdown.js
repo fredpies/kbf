@@ -39,7 +39,7 @@ class KbfDropdown extends EventTarget {
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
 
         // Wstaw ukryte pole formularza
-        this.$dropdowns.append($('<input type="hidden">'));
+        this.$dropdowns.append($('<input class="form-control" type="hidden">'));
         this.$hiddenInputs = this.$dropdowns.find('input[type="hidden"]');
 
         // Ustaw opcje
@@ -112,7 +112,6 @@ class KbfDropdown extends EventTarget {
 
         // Gdy klikniemy na dropdown item
         this.$dropdownItems.on('click', function (e) {
-
 
             e.preventDefault()
 

@@ -1,9 +1,10 @@
 import errors from "../modules/Errors";
 
-class KbfPreloaderButton {
+class KbfPreloaderButton extends EventTarget {
 
     constructor(selector) {
 
+        super();
         let $ = window.$;
         this.$preloaderButton = $(selector);
 
@@ -16,6 +17,11 @@ class KbfPreloaderButton {
     }
 
     init() {
+
+        // Aliasy
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.emit = this.dispatchEvent;
 
         this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
 
@@ -47,7 +53,8 @@ class KbfPreloaderButton {
 
         let instance = this;
         this.$preloaderButton.on('click', function () {
-            instance.startPreloader(this)
+            instance.startPreloader(this);
+            instance.emit(new CustomEvent('click'));
         });
     }
 }
