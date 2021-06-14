@@ -2,18 +2,38 @@
 
 include_once "partials/_init.php";
 include_once "lib/functions.php";
+include_once "lib/FormRenderer.class.php";
 include_once "lib/StepperRenderer.class.php";
+include_once "lib/FormFields.php";
 
 // Inicjuj stepper
 $stepper = new StepperRenderer('kbf-stepper');
 $stepper->stepperName = 'Rejestracja firmy';
 $stepper->actionName = 'Zarejestruj';
 
+
+// Pola formularza
+$textField1 = new FormFieldText();
+$textField2 = new FormFieldText();
+
+$textField1->label = "Text Field 1";
+$textField1->description = "Description 1";
+
+$textField2->label = "Text Field 2";
+$textField2->description = "Description 2";
+
+$form = new FormRenderer("form", $page);
+$form->onlyFields = true;
+
+$form->addField($textField1->render());
+$form->addField($textField2->render());
+
 // Zarejestruj kroki
-$stepper->registerStep('Step 1', 'Message 1', 'Page 1');
-$stepper->registerStep('Step 2', 'Message 2', 'Page 2');
-$stepper->registerStep('Step 3', 'Message 3', 'Page 3');
-$stepper->registerStep('Step 4', 'Message 4', 'Page 4');
+$stepper->registerStep('Step 1', 'Message 1', $form->render());
+$stepper->registerStep('Step 2', 'Message 2');
+$stepper->registerStep('Step 3', 'Message 3');
+$stepper->registerStep('Step 4', 'Message 4');
+
 
 ?>
 

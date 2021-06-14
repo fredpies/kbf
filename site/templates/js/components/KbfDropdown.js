@@ -3,7 +3,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 
 class KbfDropdown extends EventTarget {
 
-    constructor(selector, opts) {
+    constructor(selector, opts, scrollBlock = true) {
 
         super();
 
@@ -15,6 +15,8 @@ class KbfDropdown extends EventTarget {
 
         this.selector = selector;
         this.opts = opts;
+
+        this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
 
         this.init(); // Inicjalizuj
         this.addListeners(); // Dodaj event listenery
@@ -71,16 +73,42 @@ class KbfDropdown extends EventTarget {
             window.removeEventListener(wheelEvent, preventDefault, { passive: false });
             window.removeEventListener('touchmove', preventDefault, { passive: false });
         }
-        // Blokowanie scrollingu body kiedy dropdown jest widoczny
+
+        if (this.scrollBlock) {
+            // Blokowanie scrollingu body kiedy dropdown jest widoczny
+            this.$dropdowns.on('shown.bs.dropdown', function (e) {
+                e.stopPropagation();
+                disableScroll();
+
+            });
+
+            this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+                e.stopPropagation();
+                enableScroll();
+            });
+        }
+
+        // Fix dla przyciskow steppera
         this.$dropdowns.on('shown.bs.dropdown', function (e) {
+
             e.stopPropagation();
-            disableScroll();
+            let $steps = $('.step');
+            let $buttons = $('.button-prev, .button-next, .button-register');
+            if ($steps.length) $steps.css('z-index', -1);
+            if ($buttons.length) $buttons.css('z-index', -1);
 
         });
+
         this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+
             e.stopPropagation();
-            enableScroll();
+            let $steps = $('.step');
+            let $buttons = $('.button-prev, .button-next, .button-register');
+            if ($steps.length) $steps.css('z-index', '');
+            if ($buttons.length) $buttons.css('z-index', '');
+
         });
+
 
         // Gdy klikniemy na dropdown item
         this.$dropdownItems.on('click', function (e) {
@@ -301,7 +329,6 @@ class KbfDropdown extends EventTarget {
 
         }
 
-
         this.$dropdownButtons.text(this.displayed); // Wyswietl nowa wartosc na przycisku
         this.updateHiddenInput(); // Aktualizuj ukryty input
 
@@ -337,9 +364,6 @@ class KbfDropdown extends EventTarget {
 
         let instance = this;
 
-        this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
-        this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]');
-
         if (this.scrollbar) this.scrollbar.destroy();
 
         // Inicjuj scrollbar
@@ -347,13 +371,18 @@ class KbfDropdown extends EventTarget {
             minScrollbarLength: 20
         });
 
+        this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
+        this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]');
+
         // Wylacz pan mapy gdy kursor znajduje sie na scrollbar i mapa istnieje
         this.$psRail.on('mouseenter', function () {
             if (window.map) window.map.dragging.disable();
 
         });
 
-        this.$dropdownMenu.on('mouseenter', function () {
+        this.$dropdownMenu.on('mouseenter', function (e) {
+
+            e.stopPropagation();
 
             instance.scrollbar.update();
 

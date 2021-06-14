@@ -1,5 +1,6 @@
 import errors from "../modules/Errors";
 import KbfPreloaderButton from "./KbfPreloaderButton";
+import Inputmask from "inputmask/lib/inputmask";
 
 class KbfStepper {
 
@@ -19,11 +20,14 @@ class KbfStepper {
     init() {
 
         this.currentPageIdx = 0; // Biezacy index strony
-        this.lastPageIdx = (this.$kbfStepper.find('.page')).length - 1; // Ostatni index
-        this.currentWidth = this.$kbfStepper.find('.page').eq(0).width(); // AKtualna szerokosc wrappera
+        this.$pages = this.$kbfStepper.find('.page');
+        this.lastPageIdx = this.$pages.length - 1; // Ostatni index
+        this.contentWidth = window.innerWidth;
 
         // Elementy $
-        this.$infoMessages = this.$kbfStepper.find('.page-info-msg');
+        this.$infoMessages = this.$kbfStepper.find('.top-message');
+        this.$infoMessages.hide().eq(0).addClass('d-flex'); // Pokaz tylko pierwszy message
+        this.$errorMessageElement = $('.kbf-error-message'); // Komunikaty bledow
 
         // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
 
@@ -41,17 +45,50 @@ class KbfStepper {
         }
 
         this.$pageWrapper = this.$kbfStepper.find('.page-wrapper'); // Przesuwany wrapper
-        this.$steps = this.$kbfStepper.find('.step'); // Kroki w naglowku
+        this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Kroki
+        this.$stepsBottom = this.$kbfStepper.find('.page-wrapper').next('.steps').find('.step'); // Kroki
+
+        this.$pageWrapper.css('width', this.contentWidth * (this.lastPageIdx + 1));
+        this.$pages.css('width', this.contentWidth);
+
+        // Maski wprowadzania
+        this.$formInputs = $('.form-control');
+        this.$formInputs.each(function () {
+            console.log(this.name);
+            if (this.name === 'company_regon') new Inputmask({ placeholder: ''}).mask(this);
+            else new Inputmask().mask(this);
+        })
+
+        // Sprawdz czy walidator istnieje
+        if (!$.fn.validate) throw errors.noValidator();
+
+        // Walidacja
+        this.$formElement = $('form');
+        this.$formElement.validate({
+
+            formName: 'register-company',
+            ignore: [],
+
+            // Umiejscowienie komunikatu o bledzie
+            errorPlacement: function ($label, $element) {
+                $label.addClass('kbf-error-message');
+
+                let $column = $element.closest('[class*="col"]');
+
+                if ($column.length > 0) {
+                    $column.append($label);
+                } else $label.insertAfter($element);
+            }
+        });
 
     }
+
 
     addListeners() {
 
         this.$prevButton.on('click', this.prevPage.bind(this));
         this.$nextButton.on('click', this.nextPage.bind(this));
         this.$registerButton.on('click', this.submitRegister.bind(this));
-
-        $(window).on('resize', this.adjustStepper.bind(this)); // Dostosuj polozenie przesuwanego wrappera podczas rotacji urzadzenia
 
     }
 
@@ -62,15 +99,17 @@ class KbfStepper {
 
         if (this.validateCurrentPage()) { // Zmienia strone tylko w przypadku jej poprawnosci
 
-            console.log('nextPage');
-
             if (this.currentPageIdx === this.lastPageIdx) return;
 
-            this.$steps.eq(this.currentPageIdx).addClass('done');
-            this.$steps.eq(this.currentPageIdx).removeClass('active');
+            this.$stepsTop.eq(this.currentPageIdx).addClass('done');
+            this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
+
+            this.$stepsBottom.eq(this.currentPageIdx).addClass('done');
+            this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
 
             this.currentPageIdx++;
-            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.currentWidth}px)`);
+
+            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px`);
 
             if (this.currentPageIdx > 0) this.$prevButton.find('button').removeAttr('disabled');
 
@@ -80,10 +119,12 @@ class KbfStepper {
                 this.$registerButton.find('button').addClass('show');
             }
 
-            this.$steps.eq(this.currentPageIdx).addClass('active');
-            this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
+            this.$stepsTop.eq(this.currentPageIdx).addClass('active');
+            this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
 
-            console.log('curr', this.currentPageIdx)
+            this.setMessages();
+
+
         }
     }
 
@@ -94,18 +135,21 @@ class KbfStepper {
 
         if (this.validateCurrentPage()) { // Zmienia strone tylko w przypadku jej poprawnosci
 
-            console.log('prevPage');
 
             if (this.currentPageIdx === 0) return
 
-            this.$steps.eq(this.currentPageIdx).removeClass('active');
+            this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
+            this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
 
             this.currentPageIdx--;
 
-            this.$steps.eq(this.currentPageIdx).removeClass('done');
-            this.$steps.eq(this.currentPageIdx).addClass('active');
+            this.$stepsTop.eq(this.currentPageIdx).removeClass('done');
+            this.$stepsTop.eq(this.currentPageIdx).addClass('active');
 
-            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.currentWidth}px)`);
+            this.$stepsBottom.eq(this.currentPageIdx).removeClass('done');
+            this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
+
+            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px)`);
 
             if (this.currentPageIdx < this.lastPageIdx) {
                 this.$registerButton.hide();
@@ -118,21 +162,32 @@ class KbfStepper {
                 this.$prevButton.find('button').attr('disabled', 'disabled');
             }
 
-            this.$infoMessages.eq(this.currentPageIdx).addClass('show').siblings().removeClass('show'); // Ustaw komunikat
+            this.setMessages();
 
-            console.log('curr', this.currentPageIdx)
 
         }
     }
 
-    adjustStepper() {
-        this.currentWidth = this.$kbfStepper.find('.page').eq(0).width();
-        this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.currentWidth}px)`);
-
+    // Ustawia komunikaty dla stron
+    setMessages() {
+        this.$infoMessages.eq(this.currentPageIdx).addClass('d-flex').show();
+        this.$infoMessages.eq(this.currentPageIdx).siblings('.top-message').removeClass('d-flex').hide();
     }
+
 
     // Sprawdza poprawnosc formularza na danej stronie
     validateCurrentPage() {
+
+        let $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control');
+
+        let formIsValid = this.$formElement.valid();
+
+        // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+        if (this.$errorMessageElement.length > 0) {
+            if(formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
+            if(!formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
+        }
+
 
         return true;
     }

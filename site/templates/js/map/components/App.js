@@ -1,7 +1,7 @@
 import KbfMap from "./KbfMap";
 import KbfMapPanel from './KbfMapPanel'
 import KbfMapPanelIndustrySwitcher from "./KbfMapPanelIndustrySwitcher";
-import {getCompanyMarkersData, getSubIndustries} from "../../functions/library";
+import {getCompanyMarkersData} from "../../functions/library";
 
 // Dane o wojewodztwach i powiatach
 import provincesGeoJSON from '../provinces.json'

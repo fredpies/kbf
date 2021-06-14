@@ -18,9 +18,9 @@ class FormRenderer
 
     // Markups
     public static $formMarkup = '
-        <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
+        <form class="{isHidden}" novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center  w-100">
 
                {fieldsMarkup}
 
@@ -35,7 +35,7 @@ class FormRenderer
     ';
 
     public static $formMarkupNoTag = '
-        <div class="row justify-content-center">
+        <div class="{isHidden} row justify-content-center w-100">
 
            {fieldsMarkup}
 
@@ -48,9 +48,9 @@ class FormRenderer
     ';
 
     public static $formMarkupNoFooter = '
-        <form novalidate action="{action}" role="form" name="{name}" class="pl-lg-5">
+        <form novalidate action="{action}" role="form" name="{name}" class="{isHidden} pl-lg-5">
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center  w-100">
 
                {fieldsMarkup}
 
@@ -60,7 +60,7 @@ class FormRenderer
     ';
 
     public static $formMarkupOnlyFields = '
-        <div class="row justify-content-center">
+        <div class="{isHidden} row justify-content-center w-100">
 
            {fieldsMarkup}
 
@@ -69,7 +69,8 @@ class FormRenderer
 
     // Wlasnosci formularza
     private $name; // Nazwa formularza, atrybut "name"
-    private $currentPage;
+    private $templateFields;
+    private $isHidden = false; // Czy renderowac ukryty formularz
 
     // Pole PW => pole HTML
     private $fieldTypes = array(
@@ -77,12 +78,16 @@ class FormRenderer
         "FieldtypeImage" => "file"
     );
 
-    public function __construct($name, $page)
+    public function __construct($name, $templateFields)
     {
 
         $this->name = $name;
-        $this->currentPage = $page;
+        $this->templateFields = $templateFields;
 
+    }
+
+    public function __get($property) {
+        return $this[$property];
     }
 
     public function __set($property, $value) {
@@ -101,6 +106,11 @@ class FormRenderer
             $this->noTag = false;
             $this->noFooter = false;
         }
+
+        if ($property === "isHidden") {
+            $this->isHidden = $value;
+        }
+
     }
 
     // Dodaje pole do formularza
@@ -113,7 +123,7 @@ class FormRenderer
     public function addMarkup($markup, $noColumn = false) {
         if (!isset($markup)) return;
         if ($noColumn) $this->fields[] = $markup;
-        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-5'>$markup</div>";
+        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-3'>$markup</div>";
     }
 
     // Renderuje pole formularza
@@ -133,13 +143,13 @@ class FormRenderer
 
             // Czy pole jest wymagane ?
             $required = $field->required ? "required" : "";
-            $msgRequired = $required ? ' data-msg-required="' . $sanitizer->string($field->notes) . '"' : "";
+            $msgRequired = $required ? $sanitizer->string($field->notes) . '"' : "";
 
             // Czy zastosowano maske wprowadzania ?
-            $inputmask = $field->placeholder ? ' data-inputmask-regex="' . $field->placeholder . '"' : "";
+            $inputmask = $field->placeholder ? $field->placeholder  : "";
 
             // Czy nalezy wyswietlic wartosc dla pola ?
-            $value = $this->operation === "update" ? 'value="' . $this->currentPage->get($field->name) . '"' : "";
+            $value = $this->operation === "update" ? 'value="' . $this->templateFields->get($field->name) . '"' : "";
 
             // Typ pola
             $type = "";
@@ -156,7 +166,8 @@ class FormRenderer
                 "{required}" => $required,
                 "{msgRequired}" => $msgRequired,
                 "{inputmask}" => $inputmask,
-                "{value}" => $value
+                "{value}" => $value,
+                "{className}" => ""
 
             );
 
@@ -164,7 +175,7 @@ class FormRenderer
             if ($field->hasFlag(Field::flagSystem)) {
                 $formFieldHidden = new FormFieldHidden();
                 $formFieldHidden->name = $field->name;
-                $formFieldHidden->value = $this->currentPage->get($field->name);
+                $formFieldHidden->value = $this->templateFields->get($field->name);
                 $markup = $formFieldHidden->render();
 
             } else {
@@ -182,16 +193,16 @@ class FormRenderer
 
                         $formFieldText = new FormFieldTextArea();
                         $formFieldText->placeholderMap = $placeholdersMap;
-                        if ($this->operation === "update") $formFieldText->value = $this->currentPage->get($field->name);
+                        if ($this->operation === "update") $formFieldText->value = $this->templateFields->get($field->name);
                         $markup = $formFieldText->render();
                         break;
 
                     case 'FieldtypeImage':
 
                         $placeholdersMap["{logoImage}"] = $urls->images . 'logo-placeholder.jpg';
-                        $formFieldText = new FormFieldImage();
-                        $formFieldText->placeholderMap = $placeholdersMap;
-                        $markup = $formFieldText->render();
+                        $formFieldImage = new FormFieldImage();
+                        $formFieldImage->placeholderMap = $placeholdersMap;
+                        $markup = $formFieldImage->render();
                         break;
 
                 };
@@ -222,13 +233,17 @@ class FormRenderer
         // Ustaw nazwe przycisku submit
         $submitText = $this->operation === 'add' ? "Dodaj" : "Aktualizuj";
 
+        $isHiddenClass = "";
+        if ($this->isHidden) $isHiddenClass = "d-none";
+
         // Zamien placeholders
         $formMarkup = replacePlaceholders(array(
 
             "{action}" => $this->action,
             "{name}" => $this->name,
             "{submitText}" => $submitText,
-            "{fieldsMarkup}" => $fieldsMarkup
+            "{fieldsMarkup}" => $fieldsMarkup,
+            "{isHidden}" => $isHiddenClass
 
         ), $template);
 

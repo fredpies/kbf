@@ -4,7 +4,7 @@ import errors from "../modules/Errors";
 
 class KbfAreaSwitcher extends EventTarget {
 
-    constructor(provincesId, areasId) {
+    constructor(provincesId, areasId, scrollBlock = true) {
 
         // Sprawdz czy podano argumenty
         if (!provincesId) throw errors.argumentNotFound(provincesId);
@@ -14,6 +14,8 @@ class KbfAreaSwitcher extends EventTarget {
 
         this.provincesId = provincesId;
         this.areasId = areasId;
+
+        this.scrollBlock = scrollBlock; // Czy blokowac scroll
 
         this.areasDictionary = {}; // Slownik wojewodztwo - powiaty
         this.provinces = []; // Nazwy wojewodztw
@@ -86,10 +88,10 @@ class KbfAreaSwitcher extends EventTarget {
         this.provinces = getProvinceNames(this.areasDictionary);
 
         // Inicjalizuj dropdown wojewodztw
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie', ...this.provinces]);
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie', ...this.provinces], this.scrollBlock);
 
         // Inicjalizuj dropdown powiatow
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie', ...this.areas]);
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie', ...this.areas], this.scrollBlock);
 
         // Element dropdown powiatow
         this.$areasDropdown = $('#' + this.areasId).find('button');

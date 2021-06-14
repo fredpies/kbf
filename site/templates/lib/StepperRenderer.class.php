@@ -5,13 +5,15 @@ include_once "functions.php";
 class StepperRenderer
 {
 
-
     public $stepperName = 'Stepper';
     public $action = '';
     public $actionName = 'Dodaj';
+    public $formName = "";
 
     private $steps = array();
     private $className = "";
+    private $isHidden = false;
+
 
     // Markups
 
@@ -23,24 +25,23 @@ class StepperRenderer
 
             {stepsHeader}
             
-            <h3 class="font-weight-800 mb-0 pt-lg-5 py-lg-0 py-4 section-title-3 text-center text-uppercase">{stepperName}</h3>
+            <h3 class="font-weight-800 mb-2 section-title-3 text-center text-uppercase">{stepperName}</h3>
         
         </div>
 
-        <form action="{action}" class="position-relative">
+        <form action="{action}" name="{formName}" class="{isHidden} position-relative">
 
             {messages}
             
-            <div class="container overflow-hidden">
-                <div class="page-wrapper d-flex py-5">
+            <div class="page-wrapper d-flex px-0 mt-4 pb-1">
 
-                    {pages}
-                                        
-                </div>
+                {pages}
+                                    
             </div>
+            
+            {stepsHeader}
 
-
-            <div class="container d-none d-md-block">
+            <div class="container d-none d-md-block my-4">
                 <div class="col-12 text-center text-md-right align-self-center">
                     <div class="row justify-content-center">
                         <div class="col-md-5 button-desktop button-prev">
@@ -63,9 +64,9 @@ class StepperRenderer
             </div>
 
             <!--  Mobile version -->
-            <div class="container px-0 d-md-none">
+            <div class="container px-0 d-md-none mb-4">
                 <div class="col-12 text-center text-md-right align-self-center">
-                    <div class="row justify-content-around">
+                    <div class="row px-3 justify-content-around">
                         <div class="col-5 pl-0 pr-1 button-prev">
                             <button type="button" disabled="disabled" class="fade show btn btn-round btn-block shadow-none btn-primary position-relative mr-lg-4"><i
                                         class="icon-left d-inline-block position-absolute fa fa-angle-left"></i> Wróć
@@ -81,16 +82,11 @@ class StepperRenderer
                     </div>
             </div>
 
-
         </form>
-
-    </div>
-    
-    
-    ';
+    </div>';
 
 
-    public static $stepsMarkup = '<div class="steps d-none d-md-flex w-100 text-center mx-auto mt-3">{steps}</div>';
+    public static $stepsMarkup = '<div class="steps d-none d-md-flex w-100 text-center mx-auto my-5">{steps}</div>';
 
     public static $stepMarkup = '
         <div class="step {isActive}">
@@ -102,9 +98,9 @@ class StepperRenderer
         </div>
     ';
 
-    public static $messageMarkup = '<div class="w-100 page-info-msg fade {isShown}" style="font-size: 0.75rem;"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{message}</span></div>';
+    public static $messageMarkup = '<div class="top-message justify-content-center w-100 mx-0"><div class="text-center col-12 col-md-10 my-4"><h6 class="d-inline-block font-weight-400 page-info-msg-contents">{message}</h6></div></div>';
 
-    public static $pageMarkup = '<div class="page">{page}</div>';
+    public static $pageMarkup = '<div class="page"><div class="col-12 mb-2">{page}</div></div>';
 
     public function __construct($className)
     {
@@ -113,15 +109,24 @@ class StepperRenderer
 
     }
 
+    public function __get($property) {
+        return $this[$property];
+    }
+
+    public function __set($property, $value) {
+
+        if ($property === "isHidden") {
+            $this->isHidden = $value;
+        }
+    }
 
 
     // Rejestruje krok
-    public function registerStep($stepName, $message, $markup = '') {
-
+    public function registerStep($stepName, $message, $markup="") {
         $this->steps[] = array(
             "stepName" => $stepName,
             "message" => $message,
-            "page" => $markup
+            "markup" => $markup
         );
     }
 
@@ -134,8 +139,6 @@ class StepperRenderer
         $steps = '';
         $messages = '';
         $pages = '';
-        $isShown = '';
-        $isActive = '';
         $counter = 1;
 
         foreach ($this->steps as $stepData) {
@@ -165,8 +168,9 @@ class StepperRenderer
 
             ), self::$messageMarkup);
 
+
             $pages .= replacePlaceholders(array(
-                "{page}" => $stepData["page"]
+                "{page}" => $stepData["markup"]
             ), self::$pageMarkup);
 
             $counter++;
@@ -175,14 +179,18 @@ class StepperRenderer
 
         $stepsHeader = replacePlaceholders(array( "{steps}" => $steps ), self::$stepsMarkup);
 
+        $isHiddenClass = "";
+        if ($this->isHidden) $isHiddenClass = "d-none";
 
         return replacePlaceholders(array(
             "{className}" => $this->className,
+            "{isHidden}" => $isHiddenClass,
             "{stepsHeader}" => $stepsHeader,
             "{stepperName}" => $this->stepperName,
             "{messages}" => $messages,
             "{pages}" => $pages,
-            "{actionName}" => $this->actionName
+            "{actionName}" => $this->actionName,
+            "{formName}" => $this->formName
 
         ), self::$stepperMarkup);
 

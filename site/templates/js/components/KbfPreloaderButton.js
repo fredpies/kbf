@@ -29,10 +29,10 @@ class KbfPreloaderButton {
 
         let buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
 
+        $this.attr('disabled', 'disabled');
         $this.css('width', buttonGeometry.width + 'px');
         $this.css('height', buttonGeometry.height + 'px');
         $this.css('padding', 0);
-        // $this.css('padding-bottom', 0);
         $this.html(KbfPreloaderButton.preloaderMarkup);
 
     }
@@ -40,6 +40,7 @@ class KbfPreloaderButton {
     // Zatrzymuje preloader
     stopPreloader() {
         this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
+        this.$preloaderButton.removeAttr('disabled');
     }
 
     addListeners() {

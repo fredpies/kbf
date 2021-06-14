@@ -1,4 +1,6 @@
 import KbfStepper from "../../components/KbfStepper";
+import KbfIndustrySwitcher from "../../components/KbfIndustrySwitcher";
+import KbfWysiwyg from "../../components/KbfWysiwyg";
 
 class App {
 
@@ -12,6 +14,10 @@ class App {
     init() {
 
         new KbfStepper('.kbf-stepper');
+        new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", false);
+        new KbfWysiwyg('.wysiwyg');
+
+
 
     }
 

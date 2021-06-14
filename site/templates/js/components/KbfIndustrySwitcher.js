@@ -4,13 +4,16 @@ import errors from "../modules/Errors";
 
 class KbfIndustrySwitcher extends EventTarget {
 
-    constructor(industriesId, subIndustriesId) {
+    constructor(industriesId, subIndustriesId, firstOption = 'Wszystkie', scrollBlock = true) {
 
         // Sprawdz czy podano argumenty
         if (!industriesId) throw errors.argumentNotFound(industriesId);
         if (!subIndustriesId) throw errors.argumentNotFound(subIndustriesId);
 
         super();
+
+        this.firstOption = firstOption; // Pierwsza opcja
+        this.scrollBlock = scrollBlock; // Czy blokowac scroll
 
         // Aliasy
         this.on = this.addEventListener;
@@ -24,8 +27,8 @@ class KbfIndustrySwitcher extends EventTarget {
 
         this.industries = []; // Lista branz
         this.subIndustries = []; // Aktualna lista sub branz
-        this.currentIndustry = 'Wszystkie'; // Aktualnie wybrana branza
-        this.currentSubIndustry = 'Wszystkie'; // Aktualnie wybrana sub branza
+        this.currentIndustry = this.firstOption; // Aktualnie wybrana branza
+        this.currentSubIndustry = this.firstOption; // Aktualnie wybrana sub branza
 
         // Inicjalizuj
         this.init().then(function () {
@@ -45,18 +48,18 @@ class KbfIndustrySwitcher extends EventTarget {
 
             instance.currentIndustry = e.detail;
 
-            if (instance.currentIndustry !== 'Wszystkie') {
+            if (instance.currentIndustry !== instance.firstOption) {
 
                 let subIndustriesResult = await getSubIndustries(instance.currentIndustry);
                 instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
 
-                opts = { Wszystkie: 'Wszystkie', ...getIndustriesOptions(instance.subIndustries) };
+                opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(instance.subIndustries) };
                 instance.subIndustriesDropdown.updateOptions(opts);
-                instance.currentSubIndustry = 'Wszystkie';
+                instance.currentSubIndustry = instance.firstOption;
             }
 
-            if (instance.currentIndustry === 'Wszystkie') {
-                instance.subIndustriesDropdown.updateOptions(['Wszystkie']);
+            if (instance.currentIndustry === instance.firstOption) {
+                instance.subIndustriesDropdown.updateOptions([instance.firstOption]);
             }
 
             instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
@@ -80,11 +83,11 @@ class KbfIndustrySwitcher extends EventTarget {
         this.industries = await getIndustries();
 
         // Przygotuj opcje dropdown branz jako obiekt opts
-        let opts = { Wszystkie: 'Wszystkie', ...getIndustriesOptions(this.industries) };
+        let opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(this.industries) };
 
         // Inicjuj dropdowny
-        this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts); // Inicjalizuj dropdown z nazwami branz
-        this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, ['Wszystkie']); // Inicjalizuj dropdown dla sub branz
+        this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
+        this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
 
         // Ustaw responsywnosc dropdown'ow
         $(window).off('resize', instance.resetDropdowns);
@@ -102,10 +105,10 @@ class KbfIndustrySwitcher extends EventTarget {
 
     // Resetuje dropdown'y
     resetDropdowns() {
-        this.industriesDropdown.setActive('Wszystkie');
+        this.industriesDropdown.setActive(this.firstOption);
         this.subIndustries = [];
-        this.subIndustriesDropdown.updateOptions(['Wszystkie', ...this.subIndustries])
-        this.subIndustriesDropdown.setActive('Wszystkie');
+        this.subIndustriesDropdown.updateOptions([this.firstOption, ...this.subIndustries])
+        this.subIndustriesDropdown.setActive(this.firstOption);
 
     }
 

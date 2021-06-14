@@ -620,18 +620,17 @@ input + label.error {
 /* WYSIWYG                    */
 /******************************/
 
-.ql-editor {
+.ql-editor, .kbf-keywords {
   border: 2px solid #e0e0e0 !important;
   border-radius: 1.6875rem !important;
-  /*height: calc(1.5em + 1rem + 4px) !important;*/
-  height: 10rem !important;
+  height: 16rem !important;
   min-height: 3.375rem !important;
   padding: 0.85rem 1.375rem !important;
   line-height: 1.5 !important;
   transition: all .2s ease-in-out;
 }
 
-.ql-editor.focus {
+.ql-editor.focus, .kbf-keywords:focus {
   border: 2px solid #2196f3 !important;
   box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%) !important;
 }
@@ -661,6 +660,7 @@ input + label.error {
 }
 
 .step {
+  position: relative;
   width: 150px;
 }
 
@@ -706,7 +706,10 @@ input + label.error {
 }
 
 .steps .step .step-name {
+  position: absolute;
+  width: 100%;
   color: lightgrey;
+  bottom: 2.5rem;
 }
 
 .steps .step.done .step-name, .steps .step.active .step-name {
@@ -750,28 +753,16 @@ input + label.error {
 }
 
 .page-wrapper {
-  width: calc(4 * 100vw);
   transition: 1s transform;
-  overflow: hidden;
 }
 
 .page-wrapper .page {
-  overflow: hidden;
-  width: 100vw;
+  padding: 0;
 }
 
-.kbf-stepper form {
-  overflow: hidden;
-}
 
-.kbf-stepper form .page-info-msg {
-  position: absolute;
-  text-align: center;
+.kbf-stepper form .top-message {
   top: 1rem;
-}
-
-.kbf-stepper form .page-info-msg-contents {
-  max-width: 400px;
 }
 
 .button-prev i, .button-next i {
@@ -795,7 +786,21 @@ input + label.error {
   display: none;
 }
 
+@media (min-width: 1680px) {
+  .page-wrapper .page  {
 
+    padding: 0 10rem;
+
+  }
+}
+
+@media (min-width: 1920px) {
+  .page-wrapper .page  {
+
+    padding: 0 16rem;
+
+  }
+}
 
 
 
@@ -803,7 +808,10 @@ input + label.error {
 /* Formularze                 */
 /******************************/
 
-/*.bootstrap-autocomplete .dropdown-item.active, .dropdown-item:active*/
+.input-group {
+  max-width: 650px !important;
+  margin: 0 auto;
+}
 
 @media (min-width: 960px) {
   .form-buttons button {
@@ -818,11 +826,6 @@ input + label.error {
   cursor: pointer;
 }
 
-@media (min-width: 768px) {
-  .kbf-logo-uploader {
-    width: 60%;
-  }
-}
 
 @media (min-width: 1024px) {
   .kbf-logo-uploader {
@@ -862,7 +865,6 @@ input + label.error {
 /******************************/
 
 .bootstrap-autocomplete .dropdown-item.active, .dropdown-item:active {
-  /*color: white !important;*/
   background-color: #f8f9fa !important;
 }
 .bootstrap-autocomplete .dropdown-item.active:hover, .dropdown-item:active:hover {
@@ -880,6 +882,12 @@ input + label.error {
 /******************************/
 /* Inne                       */
 /******************************/
+
+/* O sklowach kluczowych */
+
+a.about-keywords {
+  text-decoration: underline !important;
+}
 
 /* Like button */
 #kbf-like-button {
