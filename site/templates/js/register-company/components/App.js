@@ -13,11 +13,7 @@ class App {
 
     init() {
 
-        new KbfStepper('.kbf-stepper');
-        new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", false);
-        new KbfWysiwyg('.wysiwyg');
-
-
+        this.stepper = new KbfStepper('.kbf-stepper');
 
     }
 

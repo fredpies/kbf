@@ -1,5 +1,14 @@
 <?php namespace ProcessWire;
 
+require_once __DIR__ . "../../../../vendor/autoload.php";
+
+use DateTimeImmutable;
+use GusApi\Exception\InvalidUserKeyException;
+use GusApi\Exception\NotFoundException;
+use GusApi\GusApi;
+use GusApi\ReportTypes;
+use GusApi\BulkReportTypes;
+
 /****************
  *  BAZA DANYCH
  * *************/
@@ -596,13 +605,10 @@ function get_pagination($page_array) {
 // Info tekst dla formularzy
 function render_info_message($msg) {
 
-    $template = '<div class="container row justify-content-center">
-
-                    <div class="col-12 col-lg-10 col-xl-9 mb-3 pl-0">
+    $template = '<div class="col-12 col-lg-10 col-xl-9 mb-3 pl-0">
     
-                        <div class="form-info-message col-12 col-lg-8 align-self-start mb-5 pl-0"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span></div>
+                        <div class="form-info-message col-12 col-lg-7 align-self-start mb-5 pl-4"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span></div>
                     
-                    </div>
                 </div>';
 
     return replacePlaceholders(array("{msg}" => $msg), $template);
@@ -925,5 +931,69 @@ function filter_phone_fax_number($number) {
         else return substr($number, 1);
     }
     else return $number;
+
+}
+
+// Pobiera dane z rejestru regon
+function get_data_by_regon($regon) {
+
+    if(empty($regon)) return false;
+
+    // Sprawdz czy zarejestrowano firme o podanym numerze REGON
+    $pages = wire('pages');
+    $sanitizer = wire('sanitizer');
+
+    $company = $pages->get("company_regon=" . $sanitizer->selectorValue($regon));
+    if ($company->id) {
+        return array(
+            "error" => "Regon exists",
+            "id" => $company->id
+        );
+    }
+
+    $gus = new GusApi('abcde12345abcde12345', 'dev');
+
+    $company_name = "";
+
+    try {
+
+        $gus->login();
+
+        $gusReports = $gus->getByRegon($regon);
+
+        foreach ($gusReports as $gusReport) {
+
+            $company_name = $gusReport->getName();
+            $company_address = str_replace("ul. ", "", $gusReport->getStreet()) ." ". $gusReport->getPropertyNumber();
+            $company_address = str_replace("_", "", $company_address);
+            $company_nip = $gusReport->getNip();
+            $company_zip = $gusReport->getZipCode();
+            $company_city = $gusReport->getPostCity();
+
+            $company_name = mb_strtoupper($company_name, "UTF-8");
+            $company_address = mb_strtoupper($company_address, "UTF-8");
+            $company_city = mb_strtoupper($company_city, "UTF-8");
+
+        }
+
+        $latLon = get_lat_lon($company_address, $company_zip);
+
+        return array(
+            "company_name" => $company_name,
+            "company_address" => $company_address,
+            "company_nip" => $company_nip,
+            "company_zip" => $company_zip,
+            "company_city" => $company_city,
+            "lat" => $latLon[0],
+            "lon" => $latLon[1]
+        );
+
+    } catch (InvalidUserKeyException $e) {
+        return array("error" => "Bad user key");
+    } catch (NotFoundException $e) {
+        return array("error" => "No data found");
+    }
+
+
 
 }

@@ -27,3 +27,5 @@ site/templates/js/node_modules
 site/templates/js/package-lock.json
 
 
+
+/vendor/

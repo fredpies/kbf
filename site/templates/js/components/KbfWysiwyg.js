@@ -49,17 +49,28 @@ class KbfWysiwyg extends EventTarget {
     // Inicjalizuje
     init() {
 
+        // Aliasy
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.emit = this.dispatchEvent;
+
         this.editor = new Quill(this.selector, this.options);
         this.$contents = $('.ql-editor');
-        this.$wysiwygInput = $('.editor').next('input[type="hidden"]');
+        this.$wysiwygInput = $('.wysiwyg').next('input[type="hidden"]');
 
     }
 
     //Ustawia wartosc pola input
     setInputValue(html) {
 
+        let instance = this;
+
         if (html === '<p><br></p>' || html.length === 0) this.$wysiwygInput.attr('value', '');
         else this.$wysiwygInput.attr('value', html);
+
+        // Emituj wartosc w polu edytora
+        this.emit(new CustomEvent('change', { detail: instance.$wysiwygInput[0].value }));
+
     }
 
     // Ustawia wartosc poczatkowa dla edytora

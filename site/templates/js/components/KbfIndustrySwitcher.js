@@ -4,7 +4,7 @@ import errors from "../modules/Errors";
 
 class KbfIndustrySwitcher extends EventTarget {
 
-    constructor(industriesId, subIndustriesId, firstOption = 'Wszystkie', scrollBlock = true) {
+    constructor(industriesId, subIndustriesId, firstOption = 'Wszystkie', ellipsis = true,  scrollBlock = true) {
 
         // Sprawdz czy podano argumenty
         if (!industriesId) throw errors.argumentNotFound(industriesId);
@@ -14,6 +14,7 @@ class KbfIndustrySwitcher extends EventTarget {
 
         this.firstOption = firstOption; // Pierwsza opcja
         this.scrollBlock = scrollBlock; // Czy blokowac scroll
+        this.ellipsis = ellipsis; // Czy stosowac skroty
 
         // Aliasy
         this.on = this.addEventListener;
@@ -53,7 +54,7 @@ class KbfIndustrySwitcher extends EventTarget {
                 let subIndustriesResult = await getSubIndustries(instance.currentIndustry);
                 instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
 
-                opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(instance.subIndustries) };
+                opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(instance.subIndustries, instance.ellipsis) };
                 instance.subIndustriesDropdown.updateOptions(opts);
                 instance.currentSubIndustry = instance.firstOption;
             }
@@ -83,7 +84,7 @@ class KbfIndustrySwitcher extends EventTarget {
         this.industries = await getIndustries();
 
         // Przygotuj opcje dropdown branz jako obiekt opts
-        let opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(this.industries) };
+        let opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(this.industries, this.ellipsis) };
 
         // Inicjuj dropdowny
         this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz

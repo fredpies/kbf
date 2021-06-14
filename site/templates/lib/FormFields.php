@@ -20,7 +20,10 @@ class FormField
     public function __construct($disabled = false, $className = "")
     {
         if (!empty($className)) $this->placeholderMap["{className}"] = $className;
-        if ($disabled) $this->placeholderMap["{disabled}"] = "disabled";
+        if ($disabled) {
+            $this->placeholderMap["{disabled}"] = "disabled";
+            $this->placeholderMap["{inputmask}"] = "";
+        }
     }
 
     public function renderMarkup($markup)
@@ -44,7 +47,10 @@ class FormField
 
     public function __set($property, $value)
     {
-        $this->placeholderMap['{' . $property . '}'] = $value;
+
+        if ($value === true && $property === 'required') $this->placeholderMap['{' . $property . '}'] = 'required';
+        else if ($value === true && $property === 'disabled') $this->placeholderMap['{' . $property . '}'] = 'disabled';
+        else $this->placeholderMap['{' . $property . '}'] = $value;
     }
 
     public function __get($property)
@@ -64,7 +70,7 @@ class FormFieldText extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-3 {className}">
+        <div class="col-12 col-lg-6 mb-3 {className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -102,7 +108,7 @@ class FormFieldAddressAutocomplete extends FormField
     }
 
     public static $markup = '
-        <div class="col-12 col-lg-5 mb-3 {className}">
+        <div class="col-12 col-lg-6 mb-3 {className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -166,7 +172,7 @@ class FormFieldTextArea extends FormField
         <div class="wysiwyg col-12 mb-3 px-0">
             <div class="editor">{value}</div>
         </div>
-        <input {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
+        <input class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
         
     </div>
     ';
@@ -191,7 +197,7 @@ class FormFieldKeywords extends FormField
         <div class="{className}">
             <label style="padding-left: 1rem;" class="text-uppercase mt-3">Słowa kluczowe</label>
             <div class="col-12 mb-3 px-0">
-                <textarea class="kbf-keywords form-control form-control-lg" {disabled} {required} {disabled} data-msg-required="Wpisanie słów kluczowych dla firmy jest wymagane." name="company_keywords" value="{value}"></textarea>
+                <input class="kbf-keywords form-control form-control-lg" name="company_keywords" value="{value}"></input>
             </div>
         </div>
     ';
@@ -301,14 +307,14 @@ class FormFieldRegonSearch extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-5 mb-3 {className}">
+        <div class="col-12 col-lg-6 mb-3 {className}">
         
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         
                         <div class="input-group-inner">
                           
-                            <input name="company_regon" type="text" style="font-size: 0.83rem" class="form-control form-control-lg" {disabled} {required} data-rule-minlength="7" data-msg-minlength="Numer REGON musi posiadać minimum 7 cyfr." {msgRequired} {inputmask} value="{value}">
+                            <input autocomplete="off" name="company_regon" type="text" style="font-size: 0.83rem" class="form-control form-control-lg" {disabled} {required} data-rule-minlength="7" data-msg-minlength="Numer REGON musi posiadać minimum 7 cyfr." {msgRequired} {inputmask} value="{value}">
                             
                             <div class="input-group-append">
                                 <button class="kbf-search-button btn btn-round btn-primary shadow-none mb-0" type="submit">Pobierz dane</button>
