@@ -186,10 +186,9 @@ include_once "lib/functions.php";
                                         <div class="divider-1 divider-light-1 m-0"></div>
                                         <div class="card-body">
                                            <h6 class="text-white text-center">4432 PLN</h6>
-                                            <button type="button" class="w-100 btn btn-round btn-warning mt-3 mb-0">WYPŁATA</button>
+                                           <button type="button" class="w-100 btn btn-round btn-warning mt-3 mb-0">WYPŁATA</button>
                                         </div>
                                     </div>
-
                                 </div>
 
                             </div>
