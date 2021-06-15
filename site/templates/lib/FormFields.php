@@ -70,8 +70,8 @@ class FormFieldText extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-6 mb-3 {className}">
-                    <div class="input-group input-group-lg input-group-round mb-4">
+        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
+                <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
                             <div class="input-group-prepend">
@@ -85,11 +85,11 @@ class FormFieldText extends FormField
 
                         </div>
                     </div>
-                </div>
+        </div>
 
-                <div class="d-none d-lg-flex col-5 col-lg-4 align-self-center">
+        <div class="d-none d-lg-flex col-5 col-lg-4 col-xl-3 align-self-center">
                     <p class="kbf-form-info">{description}</p>
-                </div>
+        </div>
     ';
 
     public function render()
@@ -108,7 +108,7 @@ class FormFieldAddressAutocomplete extends FormField
     }
 
     public static $markup = '
-        <div class="col-12 col-lg-6 mb-3 {className}">
+        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -125,7 +125,7 @@ class FormFieldAddressAutocomplete extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+        <div class="d-none d-lg-flex col-5 col-xl-3 align-self-center">
             <p class="kbf-form-info">{description}</p>
         </div>
     ';
@@ -263,19 +263,19 @@ class FormFieldIndustries extends FormField
 
     public static $markup = '
 
-            <div class="d-flex flex-wrap {className}">
-                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4 px-0">
+            <div class="d-flex justify-content-center flex-wrap {className}">
+                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-5 col-lg-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
-                        <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
+                        <button class="btn btn-round btn-primary px-md-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
                                 id="industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                         </button>
                     </div>
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6 pl-3 pr-0">
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-5  col-lg-6  pl-0 pl-md-3 pr-0">
                         <label class="text-uppercase px-3">Sub-branża</label>
-                        <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
+                        <button class="btn btn-round btn-primary mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
                                 id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -307,7 +307,7 @@ class FormFieldRegonSearch extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-6 mb-3 {className}">
+        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
         
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
@@ -328,7 +328,7 @@ class FormFieldRegonSearch extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-lg-4 align-self-center">
+        <div class="d-none d-lg-flex col-5 col-lg-4 col-xl-3 align-self-center">
             <p class="kbf-form-info">{description}</p>
         </div>
                 

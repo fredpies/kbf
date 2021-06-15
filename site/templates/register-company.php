@@ -95,13 +95,15 @@ $form_step_1 = new FormRenderer("register-company", $company_fields);
 $form_step_1->onlyFields = true;
 $form_step_1->addMarkup($company_regonSearch_field->render(), true);
 $form_step_1->addMarkup(render_info_message('Po pobraniu danych o firmie z rejestru REGON zostaną wypełnione odpowiednie pola formularza.'), true);
-$form_step_1->addMarkup('<div class="w-100 pb-5"></div>', true);
+$form_step_1->addMarkup('<div class="header-shadow-wrapper position-static"></div>', true);
+$form_step_1->addMarkup('<div class="w-100 pb-4"></div>', true);
 $form_step_1->addMarkup($company_name_field->render(), true);
 $form_step_1->addMarkup($company_nip_field->render(), true);
 $form_step_1->addMarkup($company_address_field->render(), true);
 $form_step_1->addMarkup($company_zip_field->render(), true);
 $form_step_1->addMarkup($company_city_field->render(), true);
-$form_step_1->addMarkup(render_info_message('Sprawdź poprawność pobranych danych i wybierz następny krok.<br>W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.'), true);
+$form_step_1->addMarkup(render_info_message('Sprawdź poprawność pobranych danych i wybierz następny krok. W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.'), true);
+$form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane będziesz mógł zmodyfikować również w panelu zarządzania.' ), true);
 
 
 // Krok "Informacje podstawowe"
@@ -112,7 +114,7 @@ $form_step_2->addField($company_fields->get("company_logo"));
 $form_step_2->addMarkup($company_industries_field->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
 $form_step_2->addMarkup($company_description_field->render());
-$form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.<br><br>Zaznaczenie wpisanego tekstu wyświetla menu formatowania. Możesz użyć różnych stylów formatowania tekstu w celu przedstawienia informacji o firmie.'), true);
+$form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'), true);
 
 // Krok "Dane kontaktowe"
 $form_step_3 = new FormRenderer("register-company", $company_fields);
@@ -168,16 +170,14 @@ $stepperMarkup = $stepper->render();
 <?php include_once "partials/_menu.php" ?>
 
 <!-- Content -->
-<div class="main-content pt-4 mt-4">
+<div class="main-content pt-4 pb-0 mt-4">
 
     <?= $stepperMarkup ?>
 
 </div>
 
-<!-- Go to top -->
-<?php include_once "partials/_go-to-top.php" ?>
-
 <!-- Footer -->
+
 <?php include_once "partials/_footer.php" ?>
 
 <!-- Scripts -->
@@ -191,18 +191,6 @@ $stepperMarkup = $stepper->render();
 
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>register-company.js"></script>
-<script>
 
-    $(function () {
-
-        // Ustaw tooltips
-        $('.tooltip-btn').tooltip()
-        $('.tooltip-btn-light').tooltip({
-            template: '<div class="tooltip tooltip-light" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
-        })
-
-    })
-
-</script>
 </body>
 </html>

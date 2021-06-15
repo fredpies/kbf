@@ -495,10 +495,34 @@
 
 label.error {
   color: red;
-  padding-left: 1rem;
   position: absolute;
+  width: 100%;
   bottom: -0.8rem;
+  max-width: 650px;
 }
+
+label.error#company_description-error {
+  bottom: -1.7rem;
+}
+
+label.error-stepper {
+  position: relative;
+  bottom: 0;
+}
+
+@media (max-width: 900px) {
+  label.error {
+    padding-left: 2rem;
+  }
+}
+
+
+@media (max-width: 480px) {
+  label.error {
+    padding-left: 0;
+  }
+}
+
 
 input + label.error {
   bottom: -2rem;
@@ -506,6 +530,10 @@ input + label.error {
 
 input[name*="sub-industry"] + label.error {
   bottom: -0.5rem;
+}
+
+.stepper-footer-mobile {
+  background-color: #000000;
 }
 
 /******************************/
@@ -623,6 +651,15 @@ input[name*="sub-industry"] + label.error {
 /******************************/
 /* WYSIWYG                    */
 /******************************/
+
+@media (max-width: 900px) {
+  .kbf-keywords, .wysiwyg {
+    max-width: 650px;
+    margin: 0 auto !important;
+  }
+
+}
+
 
 .ql-editor, .kbf-keywords  {
   border: 2px solid #e0e0e0 !important;
@@ -821,6 +858,10 @@ input[name*="sub-industry"] + label.error {
   margin: 0 auto;
 }
 
+.form-info-message {
+  max-width: 650px !important;
+}
+
 @media (min-width: 960px) {
   .form-buttons button {
     width: 48%;
@@ -830,7 +871,7 @@ input[name*="sub-industry"] + label.error {
 .kbf-logo-uploader {
   width: 100%;
   margin: 0 auto;
-  height: 9rem;
+  min-height: 160px;
   cursor: pointer;
 }
 
@@ -867,6 +908,7 @@ input[name*="sub-industry"] + label.error {
   margin-bottom: .5rem;
   font-size: .75rem;
 }
+
 
 /******************************/
 /* Autocomplete               */
@@ -1156,4 +1198,11 @@ textarea {
 /* Treansition na przyciskach */
 .btn {
   transition: background-color .2s ease-in-out, border-color .2s ease-in-out, box-shadow .2s ease-in-out !important;
+}
+
+
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding-bottom: 120px !important;
+  }
 }

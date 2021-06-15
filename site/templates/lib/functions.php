@@ -603,15 +603,20 @@ function get_pagination($page_array) {
 }
 
 // Info tekst dla formularzy
-function render_info_message($msg) {
+function render_info_message($msg, $classList="col-12 col-lg-6 col-xl-5 mb-3 ") {
 
-    $template = '<div class="col-12 col-lg-10 col-xl-9 mb-3 pl-0">
-    
-                        <div class="form-info-message col-12 col-lg-7 align-self-start mb-5 pl-4"><span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span></div>
-                    
-                </div>';
+    $template = '<div class="{classList}">
+                <div class="form-info-message mx-auto">
+                    <span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span>
+                </div>
+                
+                </div>
+                
+                <div class="d-none d-lg-flex col-lg-4 col-xl-3 align-self-center"></div>
+                
+                ';
 
-    return replacePlaceholders(array("{msg}" => $msg), $template);
+    return replacePlaceholders(array("{msg}" => $msg, "{classList}" => $classList), $template);
 
 }
 
