@@ -13,7 +13,8 @@ class FormField
         "{msgRequired}" => "",
         "{inputmask}" => "",
         "{value}" => "",
-        "{className}" => ""
+        "{className}" => "",
+        "{description}" => ""
 
     );
 
@@ -39,6 +40,10 @@ class FormField
                 $this->placeholderMap["{inputmask}"] = 'data-inputmask-regex="' . $this->placeholderMap["{inputmask}"] . '"';
             }
 
+            if (empty($this->placeholderMap["{className}"])) {
+                $this->placeholderMap["{className}"] = 'col-12 col-lg-6 col-xl-5 mb-3';
+            }
+
             return replacePlaceholders($this->placeholderMap, $markup);
         }
 
@@ -48,8 +53,8 @@ class FormField
     public function __set($property, $value)
     {
 
-        if ($value === true && $property === 'required') $this->placeholderMap['{' . $property . '}'] = 'required';
-        else if ($value === true && $property === 'disabled') $this->placeholderMap['{' . $property . '}'] = 'disabled';
+        if ($value === true && $property === 'required') $this->placeholderMap['{required}'] = 'required';
+        else if ($value === true && $property === 'disabled') $this->placeholderMap['{disabled}'] = 'disabled';
         else $this->placeholderMap['{' . $property . '}'] = $value;
     }
 
@@ -70,26 +75,26 @@ class FormFieldText extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-6 mb-3 {className}">
-                    <div class="input-group input-group-lg input-group-round mb-4">
+        <div class="{className}">
+                <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
                             <div class="input-group-prepend">
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="{className} form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
                                    name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
 
                         </div>
                     </div>
-                </div>
+        </div>
 
-                <div class="d-none d-lg-flex col-5 col-lg-4 align-self-center">
+        <div class="d-none d-lg-flex col-5 col-lg-4 col-xl-3 align-self-center">
                     <p class="kbf-form-info">{description}</p>
-                </div>
+        </div>
     ';
 
     public function render()
@@ -108,7 +113,7 @@ class FormFieldAddressAutocomplete extends FormField
     }
 
     public static $markup = '
-        <div class="col-12 col-lg-6 mb-3 {className}">
+        <div class="{className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -125,7 +130,7 @@ class FormFieldAddressAutocomplete extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
+        <div class="d-none d-lg-flex col-5 col-xl-3 align-self-center">
             <p class="kbf-form-info">{description}</p>
         </div>
     ';
@@ -166,15 +171,16 @@ class FormFieldTextArea extends FormField
 
     public static $markup = '
 
-     <div class="{className}">
      
-        <label style="padding-left: 1rem;" class="text-uppercase">{label}</label>
+        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0">
+                <label class="text-uppercase px-3 mt-3">{label}</label>
+        </div>
+     
         <div class="wysiwyg col-12 mb-3 px-0">
             <div class="editor">{value}</div>
         </div>
         <input class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
         
-    </div>
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -193,13 +199,14 @@ class FormFieldKeywords extends FormField
 {
 
     public static $markup = '
-
-        <div class="{className}">
-            <label style="padding-left: 1rem;" class="text-uppercase mt-3">Słowa kluczowe</label>
+        
+            <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0">
+                <label class="text-uppercase px-3 mt-3">Słowa kluczowe</label>
+            </div>
+            
             <div class="col-12 mb-3 px-0">
                 <input class="kbf-keywords form-control form-control-lg" name="company_keywords" value="{value}"></input>
             </div>
-        </div>
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -220,17 +227,19 @@ class FormFieldImage extends FormField
     public static $markup = '
     
     
-        <div class="row col-12 col-lg-10 col-xl-9 px-0 {className}">
+        <div class="row col-12 col-lg-10 col-xl-8 px-0 {className}">
    
             <div class="col-12 col-lg-5 mb-3">
-                        <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
+                        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+                            <label class="text-uppercase px-3 mt-3">{label}</label>
+                        </div>
                         <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                           
                             <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
                                            name="{name}" {required} {msgRequired} {disabled} {value}>
                                            
                             <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                                <img alt="logo-placeholder" src="{logoImage}" class="col-5 my-2 kbf-logo-uploader-image">
+                                <img alt="logo-placeholder" src="{logoImage}" class=" col-5 col-sm-3 col-lg-5 my-2 kbf-logo-uploader-image">
                             </div>
                                 
                         </label>
@@ -263,19 +272,19 @@ class FormFieldIndustries extends FormField
 
     public static $markup = '
 
-            <div class="d-flex flex-wrap {className}">
-                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4 px-0">
+            <div class="d-flex justify-content-center flex-wrap">
+                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-5 col-lg-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
-                        <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
+                        <button class="btn btn-round btn-primary px-md-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
                                 id="industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                         </button>
                     </div>
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6 pl-3 pr-0">
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-5  col-lg-6  pl-0 pl-md-3 pr-0">
                         <label class="text-uppercase px-3">Sub-branża</label>
-                        <button class="btn btn-round btn-primary px-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
+                        <button class="btn btn-round btn-primary mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
                                 id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -307,7 +316,7 @@ class FormFieldRegonSearch extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-6 mb-3 {className}">
+        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
         
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
@@ -328,7 +337,7 @@ class FormFieldRegonSearch extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-lg-4 align-self-center">
+        <div class="d-none d-lg-flex col-5 col-lg-4 col-xl-3 align-self-center">
             <p class="kbf-form-info">{description}</p>
         </div>
                 

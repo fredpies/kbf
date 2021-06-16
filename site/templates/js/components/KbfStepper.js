@@ -1,5 +1,6 @@
 import errors from "../modules/Errors";
 import config from "../config/config";
+import { replacePlaceholders } from "../functions/library";
 import KbfPreloaderButton from "./KbfPreloaderButton";
 import Inputmask from "inputmask/lib/inputmask";
 import KbfIndustrySwitcher from "./KbfIndustrySwitcher";
@@ -28,13 +29,20 @@ class KbfStepper {
 
         this.currentPageIdx = 0; // Biezacy index strony
         this.$pages = this.$kbfStepper.find('.page');
+        this.$pages.eq(0).removeClass('d-none');
         this.lastPageIdx = this.$pages.length - 1; // Ostatni index
-        this.contentWidth = window.innerWidth;
 
         // Elementy $
         this.$infoMessages = this.$kbfStepper.find('.top-message');
         this.$infoMessages.hide().eq(0).addClass('d-flex'); // Pokaz tylko pierwszy message
         this.$errorMessageElement = $('.kbf-error-message'); // Komunikaty bledow
+        this.$errorStepper = $('.error-stepper'); // Dolny komunikat o bledzie
+        this.companyInfo = $('.company-info')[0];
+        this.companyDescription = $('.company-description')[0];
+        this.companyInfoContents = this.companyInfo.innerHTML; // Placeholder z informacjami o firmie
+        this.companyDescriptionContents = this.companyDescription.innerHTML; // Placeholder z informacjami o firmie
+        this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
+
         this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button');
 
         // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
@@ -51,12 +59,8 @@ class KbfStepper {
             this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
         }
 
-        this.$pageWrapper = this.$kbfStepper.find('.page-wrapper'); // Przesuwany wrapper
-        this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Kroki
-        this.$stepsBottom = this.$kbfStepper.find('.page-wrapper').next('.steps').find('.step'); // Kroki
-
-        this.$pageWrapper.css('width', this.contentWidth * (this.lastPageIdx + 1));
-        this.$pages.css('width', this.contentWidth);
+        this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Krok u gory
+        this.$stepsBottom = this.$kbfStepper.find('form > .steps > .step'); // Kroki na dole
 
         // Przycisk wyszukiwania po numerze REGON
         this.$searchByREGONButton = $('.kbf-search-button');
@@ -108,30 +112,29 @@ class KbfStepper {
 
         // Walidacja
         this.$formElement = $('form');
-        this.$formElement.validate({
+        this.validator = this.$formElement.validate({
 
             formName: 'register-company',
             ignore: [],
-            onfocusout: false,
 
-            rules: {
-
-                // Ustaw reguly dla branz
-                industry: {
-                    required: true,
-                    industries: true
-                },
-                "sub-industry": {
-                    required: true,
-                    industries: true
-                },
-                "company_regon": {
-                    required: true,
-                    "regon-not-exists": true,
-                    "regon-not-found": true
-                }
-
-            },
+            // rules: {
+            //
+            //     // Ustaw reguly dla branz
+            //     industry: {
+            //         required: true,
+            //         industries: true
+            //     },
+            //     "sub-industry": {
+            //         required: true,
+            //         industries: true
+            //     },
+            //     "company_regon": {
+            //         required: true,
+            //         "regon-not-exists": true,
+            //         "regon-not-found": true
+            //     }
+            //
+            // },
 
             // Umiejscowienie komunikatu o bledzie
             errorPlacement: function ($label, $element) {
@@ -146,7 +149,8 @@ class KbfStepper {
         });
 
         // Wybor branz
-        this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", false, false);
+
+        this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", window.innerWidth <= 768, false);
         this.industrySwitcher.on('industries-changed', this.validateCurrentPage.bind(this));
 
         // Wysiwyg
@@ -186,11 +190,16 @@ class KbfStepper {
             let $companyAddressField = $('[name="company_address"]');
             let $companyZipField = $('[name="company_zip"]');
             let $companyCityField = $('[name="company_city"]');
+            let $latField = $('[name="lat"]');
+            let $lonField = $('[name="lon"]');
+
             $companyNameField.val('');
             $companyNipField.val('');
             $companyAddressField.val('');
             $companyZipField.val('');
             $companyCityField.val('');
+            $latField.val('');
+            $lonField.val('');
 
             instance.regonFound = true;
             instance.regonNotExists = true;
@@ -211,6 +220,8 @@ class KbfStepper {
                 $companyAddressField.val(data["company_address"]);
                 $companyZipField.val(data["company_zip"]);
                 $companyCityField.val(data["company_city"]);
+                $latField.val(data["lat"]);
+                $lonField.val(data["lon"]);
             }
 
             instance.validateCurrentPage();
@@ -244,8 +255,6 @@ class KbfStepper {
 
             this.currentPageIdx++;
 
-            this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px`);
-
             if (this.currentPageIdx > 0) this.$prevButton.find('button').removeAttr('disabled');
 
             if (this.currentPageIdx === this.lastPageIdx) {
@@ -257,7 +266,9 @@ class KbfStepper {
             this.$stepsTop.eq(this.currentPageIdx).addClass('active');
             this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
 
+            this.goToPage(this.currentPageIdx);
             this.setMessages();
+            this.setSummary();
 
         }
     }
@@ -280,8 +291,6 @@ class KbfStepper {
         this.$stepsBottom.eq(this.currentPageIdx).removeClass('done');
         this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
 
-        this.$pageWrapper.css('transform', `translateX(-${this.currentPageIdx * this.contentWidth}px)`);
-
         if (this.currentPageIdx < this.lastPageIdx) {
             this.$registerButton.hide();
             this.$registerButton.find('button').removeClass('show');
@@ -293,8 +302,53 @@ class KbfStepper {
             this.$prevButton.find('button').attr('disabled', 'disabled');
         }
 
+        this.goToPage(this.currentPageIdx);
         this.setMessages();
-        this.validateCurrentPage();
+        this.setSummary();
+
+    }
+
+    goToPage(pageIdx) {
+        this.$pages.addClass('d-none');
+        this.$pages.eq(pageIdx).removeClass('d-none');
+
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+    }
+
+    // Przygotowuje podsumowanie wpisu
+    setSummary() {
+
+        let industry = $('[name="industry"]').val();
+        let subIndustry = $('[name="sub-industry"]');
+
+        let lat = $('[name="lat"]').val();
+        let lon = $('[name="lon"]').val();
+
+        // Ukryj minimape jezeli nie pobrano wspolrzednych
+        if (this.currentPageIdx === this.lastPageIdx) {
+            if (lat.length === 0 || lon.length === 0) {
+                this.$kbfMiniMapContainer.hide();
+            }
+        }
+
+        this.companyInfo.innerHTML = replacePlaceholders({
+            '{company_name}': $('[name="company_name"]').val() || '{company_name}',
+            '{company_address}': $('[name="company_address"]').val() || '{company_address}',
+            '{company_regon}': $('[name="company_regon"]').val() || '{company_regon}',
+            '{company_zip}': $('[name="company_zip"]').val() || '{company_zip}',
+            '{company_city}': $('[name="company_city"]').val() || '{company_city}',
+            '{company_phone_1}': $('[name="company_phone_1"]').val() || '{company_phone_1}',
+            '{company_www}': $('[name="company_www"]').val() || '{company_www}',
+            '{company_industry}': industry !== 'Wybierz' ? industry : '{company_industry}' || '{company_industry}',
+            '{company_sub_industry}': subIndustry.val() !== 'Wybierz' ? subIndustry : '{company_sub_industry}',
+
+        }, this.companyInfoContents);
+        
+        this.companyDescription.innerHTML = replacePlaceholders({
+            '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}',
+        }, this.companyDescriptionContents)
 
     }
 
@@ -302,21 +356,26 @@ class KbfStepper {
     setMessages() {
         this.$infoMessages.eq(this.currentPageIdx).addClass('d-flex').show();
         this.$infoMessages.eq(this.currentPageIdx).siblings('.top-message').removeClass('d-flex').hide();
+        $('.error-stepper').addClass('d-none');
     }
-
 
     // Sprawdza poprawnosc formularza na danej stronie
     validateCurrentPage() {
 
+        if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none')
+
         let $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
 
-        let fieldsAreValid = $currentPageInputs.valid();
+        let fieldsAreValid = true;
+        if ($currentPageInputs.length) fieldsAreValid = $currentPageInputs.valid();
 
         // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
         if (this.$errorMessageElement.length > 0) {
             if(formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
             if(!formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
         }
+
+        if (!fieldsAreValid) this.$errorStepper.removeClass('d-none');
 
         return fieldsAreValid;
     }
