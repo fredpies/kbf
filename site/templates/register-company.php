@@ -124,7 +124,14 @@ $form_step_3->addField($company_fields->get("company_phone_1"));
 $form_step_3->addField($company_fields->get("company_whatsup"));
 $form_step_3->addField($company_fields->get("company_www"));
 $form_step_3->addMarkup($company_keywords_field->render());
-$form_step_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora aby wpisywać kolejne.<br><a class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>'), true);
+$form_step_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora aby wpisywać kolejne.<br><a data-toggle="modal" data-target="#keywords" class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>'), true);
+
+// Modal
+$modal_contents = '<img class="img-fluid" src="' . $urls->images . 'keywords.png">';
+$modal_contents .= render_info_message('Przykład poprawnie wpisanych słów kluczowych', 'col-12');
+$modal = render_modal("keywords", 'Słowa kluczowe', $modal_contents);
+
+$form_step_3->addMarkup($modal, true);
 
 // Alert
 $alert = new Alert('mt-5');

@@ -607,7 +607,7 @@ function get_pagination($page_array) {
 function render_info_message($msg, $classList="col-12 col-lg-6 col-xl-5 mb-3 ") {
 
     $template = '<div class="{classList}">
-                <div class="form-info-message mx-auto">
+                <div class="form-info-message">
                     <span class="d-inline-block page-info-msg-contents"><i class="fas fa-info text-primary mr-2"></i>{msg}</span>
                 </div>
                 
