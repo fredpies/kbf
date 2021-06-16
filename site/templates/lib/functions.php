@@ -670,6 +670,185 @@ function render_modal($id = "modal", $title="Modal", $contents = "", $size="md")
 
 }
 
+/******************
+ *   PANEL FIRMY
+ * ***************/
+
+function render_dashboard_advertiser_list_item($register_date, $first_name, $last_name) {
+
+    $template = '
+    
+    <div class="row bg-white rounded-lg shadow-sm mb-3 mb-md-2 dashboard-advertiser-list-item">
+
+        <div class="text-center text-md-left col-12 col-sm-5 col-xl-4 p-xl-4">
+           {advertiser_register_date}
+        </div>
+
+        <div class="col-12 col-sm-4 col-lg-5 col-xl-7 pt-sm-1 p-xl-4 text-center text-lg-left">
+            <div class="text-dark d-block mt-3 mt-sm-0 font-weight-500 text-sm-left" href="/kbf2/firmy/odra-3-spolka-z-o.o/oferty-pracy/magazynier-sprzedawca/">
+                <span>{advertiser_first_name} {advertiser_last_name}</span>
+            </div>
+        </div>
+
+        <div class="text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0">
+            <a href="#" class="p-1 mr-n1" title="edytuj">Edytuj</a>
+            <a href="#" class="p-1 mr-n1" title="usun">Usuń</a>
+        </div>
+
+    </div>';
+
+
+    return replacePlaceholders(array(
+        "{advertiser_register_date}" => $register_date,
+        "{advertiser_first_name}" => $first_name,
+        "{advertiser_last_name}" => $last_name
+    ), $template);
+
+}
+
+function render_dashboard_job_list_item($job_name, $job_type, $job_expire) {
+
+    $template = '
+    
+    <div class="row p-4 p-sm-0 pb-sm-1 bg-white rounded-lg shadow-sm mb-3 mb-md-2 dashboard-advertiser-list-item">
+
+        <div class="text-center text-md-left font-weight-700 col-12 col-sm-4 col-lg-5 col-xl-4 pt-sm-1 p-xl-4">
+           {job_name}
+        </div>
+
+        <div class="col-12 col-sm-3 col-lg-2 col-xl-3 pt-sm-1 p-xl-4 text-center text-lg-left">
+            <div class="text-dark d-block mt-3 mt-sm-0  text-sm-left">
+                <span>{job_type}</span>
+            </div>
+        </div>
+        
+        <div class="col-12 col-sm-3 col-lg-3 col-xl-3 pt-sm-1 p-xl-4 text-center text-lg-left">
+            <div class="text-dark d-block mt-3 mt-sm-0 text-sm-left">
+                <span class="d-sm-none">Data ważności : &nbsp;</span>
+                <span>{job_expire}</span>
+            </div>
+        </div>
+
+        <div class="text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0">
+            <a href="#" class="p-1 mr-n1" title="edytuj">Edytuj</a>
+            <a href="#" class="p-1 mr-n1" title="usun">Usuń</a>
+        </div>
+
+    </div>';
+
+
+    return replacePlaceholders(array(
+        "{job_name}" => $job_name,
+        "{job_type}" => $job_type,
+        "{job_expire}" => $job_expire
+    ), $template);
+
+}
+
+function render_dashboard_product_list_item($product_data) {
+
+    if(count($product_data) === 0) return;
+    $urls = wire("urls");
+
+    // Pierwszy obraz produktu
+    $product_image_url = $product_data["product_images"]->first()->url;
+
+    // Renderuj markup
+    echo "
+    
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+            </div>
+        
+            <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>" . $product_data["product_name"] . "</span></p>
+            </div>
+        
+            <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
+            </div>
+        
+            <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                 <a href=''#' class='mr-n1' title='usun'>Usuń z listy</a>
+            </div>
+        
+        </div>
+    ";
+
+}
+
+function render_dashboard_product_sold_list_item($product_data) {
+
+    if(count($product_data) === 0) return;
+    $urls = wire("urls");
+
+    // Pierwszy obraz produktu
+    $product_image_url = $product_data["product_images"]->first()->url;
+
+    // Renderuj markup
+    echo "
+    
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+            </div>
+        
+            <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>" . $product_data["product_name"] . "</span></p>
+                <p class='text-center text-sm-left'>Sprzedane: 23</p>
+            </div>
+        
+            <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
+            </div>
+        
+            <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                 <a href=''#' class='mr-n1' title='usun'>Usuń z listy</a>
+            </div>
+        
+        </div>
+    ";
+
+}
+
+function render_dashboard_product_inventory_list_item($product_data) {
+
+    if(count($product_data) === 0) return;
+    $urls = wire("urls");
+
+    // Pierwszy obraz produktu
+    $product_image_url = $product_data["product_images"]->first()->url;
+
+    // Renderuj markup
+    echo "
+    
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+            </div>
+        
+            <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>" . $product_data["product_name"] . "</span></p>
+                <p class='text-center text-sm-left'>Dostępne: 42</p>
+            </div>
+        
+            <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
+            </div>
+        
+            <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                 <a href=''#' class='mr-n1' title='usun'>Usuń</a><br>
+                 <a href=''#' class='mr-n1' title='edytuj'>Edytuj</a>
+            </div>
+        
+        </div>
+    ";
+
+}
+
+
+
 /****************
  *   DANE KBF
  * *************/

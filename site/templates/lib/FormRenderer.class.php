@@ -60,7 +60,7 @@ class FormRenderer
     ';
 
     public static $formMarkupOnlyFields = '
-        <div class="{isHidden} row justify-content-center w-100">
+        <div class="{isHidden} row justify-content-center mx-auto w-100">
 
            {fieldsMarkup}
 

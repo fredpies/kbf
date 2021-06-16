@@ -13,7 +13,8 @@ class FormField
         "{msgRequired}" => "",
         "{inputmask}" => "",
         "{value}" => "",
-        "{className}" => ""
+        "{className}" => "",
+        "{description}" => ""
 
     );
 
@@ -39,6 +40,10 @@ class FormField
                 $this->placeholderMap["{inputmask}"] = 'data-inputmask-regex="' . $this->placeholderMap["{inputmask}"] . '"';
             }
 
+            if (empty($this->placeholderMap["{className}"])) {
+                $this->placeholderMap["{className}"] = 'col-12 col-lg-6 col-xl-5 mb-3';
+            }
+
             return replacePlaceholders($this->placeholderMap, $markup);
         }
 
@@ -48,8 +53,8 @@ class FormField
     public function __set($property, $value)
     {
 
-        if ($value === true && $property === 'required') $this->placeholderMap['{' . $property . '}'] = 'required';
-        else if ($value === true && $property === 'disabled') $this->placeholderMap['{' . $property . '}'] = 'disabled';
+        if ($value === true && $property === 'required') $this->placeholderMap['{required}'] = 'required';
+        else if ($value === true && $property === 'disabled') $this->placeholderMap['{disabled}'] = 'disabled';
         else $this->placeholderMap['{' . $property . '}'] = $value;
     }
 
@@ -70,7 +75,7 @@ class FormFieldText extends FormField
 
     public static $markup = '
     
-        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
+        <div class="{className}">
                 <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -78,7 +83,7 @@ class FormFieldText extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="{className} form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
                                    name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
@@ -108,7 +113,7 @@ class FormFieldAddressAutocomplete extends FormField
     }
 
     public static $markup = '
-        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
+        <div class="{className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
                         <div class="input-group-inner">
@@ -167,7 +172,7 @@ class FormFieldTextArea extends FormField
     public static $markup = '
 
      
-        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0">
                 <label class="text-uppercase px-3 mt-3">{label}</label>
         </div>
      
@@ -195,7 +200,7 @@ class FormFieldKeywords extends FormField
 
     public static $markup = '
         
-            <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+            <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0">
                 <label class="text-uppercase px-3 mt-3">Słowa kluczowe</label>
             </div>
             
@@ -267,7 +272,7 @@ class FormFieldIndustries extends FormField
 
     public static $markup = '
 
-            <div class="d-flex justify-content-center flex-wrap {className}">
+            <div class="d-flex justify-content-center flex-wrap">
                     <div data-name="industry" id="industries" class="dropdown col-12 col-md-5 col-lg-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
                         <button class="btn btn-round btn-primary px-md-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
