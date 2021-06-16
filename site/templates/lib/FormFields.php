@@ -166,15 +166,16 @@ class FormFieldTextArea extends FormField
 
     public static $markup = '
 
-     <div class="{className}">
      
-        <label style="padding-left: 1rem;" class="text-uppercase">{label}</label>
+        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+                <label class="text-uppercase px-3 mt-3">{label}</label>
+        </div>
+     
         <div class="wysiwyg col-12 mb-3 px-0">
             <div class="editor">{value}</div>
         </div>
         <input class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
         
-    </div>
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -193,13 +194,14 @@ class FormFieldKeywords extends FormField
 {
 
     public static $markup = '
-
-        <div class="{className}">
-            <label style="padding-left: 1rem;" class="text-uppercase mt-3">Słowa kluczowe</label>
+        
+            <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+                <label class="text-uppercase px-3 mt-3">Słowa kluczowe</label>
+            </div>
+            
             <div class="col-12 mb-3 px-0">
                 <input class="kbf-keywords form-control form-control-lg" name="company_keywords" value="{value}"></input>
             </div>
-        </div>
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -220,17 +222,19 @@ class FormFieldImage extends FormField
     public static $markup = '
     
     
-        <div class="row col-12 col-lg-10 col-xl-9 px-0 {className}">
+        <div class="row col-12 col-lg-10 col-xl-8 px-0 {className}">
    
             <div class="col-12 col-lg-5 mb-3">
-                        <div class="kbf-logo-uploader-label text-uppercase px-3">{label}</div>
+                        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+                            <label class="text-uppercase px-3 mt-3">{label}</label>
+                        </div>
                         <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                           
                             <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
                                            name="{name}" {required} {msgRequired} {disabled} {value}>
                                            
                             <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                                <img alt="logo-placeholder" src="{logoImage}" class="col-5 my-2 kbf-logo-uploader-image">
+                                <img alt="logo-placeholder" src="{logoImage}" class=" col-5 col-sm-3 col-lg-5 my-2 kbf-logo-uploader-image">
                             </div>
                                 
                         </label>

@@ -115,3 +115,14 @@ export async function getCompanyMarkersData(requestData) {
     });
 
 }
+
+// Zamienia placeholders w stringu
+export function replacePlaceholders(placeholderMap, string) {
+
+    for (const [placeholder, value] of Object.entries(placeholderMap)) {
+        string = string.replace(placeholder, value);
+    }
+
+   return string;
+
+}

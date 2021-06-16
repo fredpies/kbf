@@ -158,7 +158,7 @@ function render_company_summary() {
                         
                             <span class="company-name h5 d-block text-left mb-2 section-title-4 font-weight-700">{company_name}</span>
                             
-                            <div class="company-address mb-2 small">REGON:{company_regon}}</div>
+                            <div class="company-address mb-2 small">REGON:{company_regon}</div>
                             <div class="company-street">{company_address}</div>
                         
                             <div class="company-zip-city mb-2">
@@ -194,6 +194,7 @@ function render_company_summary() {
         </div>';
 
 }
+
 // Wyswietla panel ze skrocona informacja o ofercie pracy
 function render_job_info($job_data = array(), $device = "desktop") {
 
@@ -617,6 +618,55 @@ function render_info_message($msg, $classList="col-12 col-lg-6 col-xl-5 mb-3 ") 
                 ';
 
     return replacePlaceholders(array("{msg}" => $msg, "{classList}" => $classList), $template);
+
+}
+
+// Modal
+function render_modal($id = "modal", $title="Modal", $contents = "", $size="md") {
+    $template = '
+    
+    <div class="modal fade" id="{id}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-{size} modal-dialog-centered" role="document">
+            <div class="modal-content rounded-xl">
+                <div class="modal-body p-0">
+    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+    
+                    <div class="row no-gutters">
+    
+                        <div class="col-lg-12">
+                            <div class="px-4 px-md-5 px-lg-4 px-xl-5 py-5">
+                                <div class="px-3 px-xl-5 py-4 py-xl-5">
+    
+                                    <div class="pb-1"></div>
+    
+                                    <h3 class="section-title-4 text-center font-weight-800 pb-3 mb-4">
+                                        {title}
+                                        <div class="title-divider-round"></div>
+                                    </h3>
+                                    
+                                    {contents}
+    
+    
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                </div>
+            </div>
+    </div>
+    </div>';
+
+    return replacePlaceholders(array(
+        "{id}" => $id,
+        "{title}" => $title,
+        "{contents}" => $contents,
+        "{size}" => $size,
+    ), $template);
 
 }
 

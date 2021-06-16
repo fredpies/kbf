@@ -73,6 +73,12 @@ $company_zip_field->description = "Kod pocztowy pobrany z rejestru";
 //$company_zip_field->required = true;
 $company_zip_field->icon = "fa-map-marker";
 
+// Lat Lon
+$lat_field = new FormFieldHidden();
+$lon_field = new FormFieldHidden();
+$lat_field->name = "lat";
+$lon_field->name = "lon";
+
 // Branze
 $company_industries_field = new FormFieldIndustries();
 
@@ -80,7 +86,7 @@ $company_industries_field = new FormFieldIndustries();
 $company_description_field = new FormFieldTextArea();
 $company_description_field->label = "Opis firmy";
 $company_description_field->name = "company_description";
-$company_description_field->required = true;
+//$company_description_field->required = true;
 $company_description_field->msgRequired = "Wypełnienie pola opis firmy jest wymagane.";
 
 // Slowa kluczowe
@@ -102,6 +108,9 @@ $form_step_1->addMarkup($company_nip_field->render(), true);
 $form_step_1->addMarkup($company_address_field->render(), true);
 $form_step_1->addMarkup($company_zip_field->render(), true);
 $form_step_1->addMarkup($company_city_field->render(), true);
+$form_step_1->addMarkup($lat_field->render(), true);
+$form_step_1->addMarkup($lon_field->render(), true);
+
 $form_step_1->addMarkup(render_info_message('Sprawdź poprawność pobranych danych i wybierz następny krok. W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.'), true);
 $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane będziesz mógł zmodyfikować również w panelu zarządzania.' ), true);
 
@@ -112,9 +121,9 @@ $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
 $form_step_2->addField($company_fields->get("company_logo"));
 $form_step_2->addMarkup($company_industries_field->render());
-$form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
+$form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'));
 $form_step_2->addMarkup($company_description_field->render());
-$form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'), true);
+$form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'));
 
 // Krok "Dane kontaktowe"
 $form_step_3 = new FormRenderer("register-company", $company_fields);
@@ -124,7 +133,12 @@ $form_step_3->addField($company_fields->get("company_phone_1"));
 $form_step_3->addField($company_fields->get("company_whatsup"));
 $form_step_3->addField($company_fields->get("company_www"));
 $form_step_3->addMarkup($company_keywords_field->render());
-$form_step_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora aby wpisywać kolejne.<br><a class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>'), true);
+$form_step_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora lub wybierz wolne pole aby wpisywać kolejne.<br><a data-toggle="modal" data-target="#keywordsModal" class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>'));
+
+$modal_contents = '<img class="img-fluid" src="' . $urls->images . "keywords.png". '" alt="keywords">';
+$modal_contents .= render_info_message("Poprawnie wpisane słowa kluczowe.");
+
+$form_step_3->addMarkup(render_modal("keywordsModal", "Słowa kluczowe", $modal_contents), true);
 
 // Alert
 $alert = new Alert('mt-5');
@@ -178,7 +192,10 @@ $stepperMarkup = $stepper->render();
 
 <!-- Footer -->
 
-<?php include_once "partials/_footer.php" ?>
+<div class="d-none d-md-block">
+    <?php include_once "partials/_footer.php" ?>
+</div>
+
 
 <!-- Scripts -->
 <?php include_once "partials/_scripts.php" ?>

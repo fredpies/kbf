@@ -839,6 +839,183 @@
     apiEndpoint: 'http://localhost:3000/kbf2/'
   };
 
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+
+    var _s, _e;
+
+    try {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  }
+
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+  }
+
+  var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
+
+  function capitalizeIndustry(industry) {
+    var _industry = industry.toLowerCase();
+
+    return _industry.trim().substr(0, 1).toUpperCase() + _industry.trim().substr(1);
+  } // Tworzy skrot
+
+  function getEllipsis(string, length) {
+    var ellipsis;
+    if (string.length - 4 >= length - 4) ellipsis = string.trim().substring(0, length - 5) + ' ...';
+    if (string.length - 4 < length - 4) ellipsis = string;
+    return ellipsis;
+  } // Przygotowuje opcje dla dropdown branz
+
+  function getIndustriesOptions(industries) {
+    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    // Utworz tablice branz
+    var capitalizedIndustries = [];
+    industries.forEach(function (industry) {
+      if (ellipsis) capitalizedIndustries.push(capitalizeIndustry(getEllipsis(industry, 34)));else capitalizedIndustries.push(capitalizeIndustry(industry));
+    }); // Utworz opcje
+
+    var opts = {};
+    var idx = 0;
+    capitalizedIndustries.forEach(function (capitalizedIndustry) {
+      opts[capitalizedIndustry] = industries[idx];
+      idx++;
+    });
+    return opts;
+  } // Pobiera nazwy branz z rest api
+
+  function getIndustries() {
+    return _getIndustries.apply(this, arguments);
+  } // Pobiera nazwy sub branz z rest api dla danej branzy
+
+  function _getIndustries() {
+    _getIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
+      var $;
+      return regenerator.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              $ = window.$;
+              _context.next = 3;
+              return $.get("".concat(apiEndpoint, "/api/industries/"));
+
+            case 3:
+              return _context.abrupt("return", _context.sent);
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+    return _getIndustries.apply(this, arguments);
+  }
+
+  function getSubIndustries(_x) {
+    return _getSubIndustries.apply(this, arguments);
+  } // Pobiera dane do markerow dla mapy
+
+  function _getSubIndustries() {
+    _getSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(industryName) {
+      var $;
+      return regenerator.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              $ = window.$;
+              _context2.next = 3;
+              return $.get("".concat(apiEndpoint, "/api/sub-industries/?industry=").concat(industryName));
+
+            case 3:
+              return _context2.abrupt("return", _context2.sent);
+
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+    return _getSubIndustries.apply(this, arguments);
+  }
+
+  function replacePlaceholders(placeholderMap, string) {
+    for (var _i = 0, _Object$entries = Object.entries(placeholderMap); _i < _Object$entries.length; _i++) {
+      var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+          placeholder = _Object$entries$_i[0],
+          value = _Object$entries$_i[1];
+
+      string = string.replace(placeholder, value);
+    }
+
+    return string;
+  }
+
   function _setPrototypeOf(o, p) {
     _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
@@ -5385,41 +5562,6 @@
 
   window$1.Inputmask = Inputmask$1;
 
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  }
-
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-  }
-
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-  }
-
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-  }
-
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -7076,94 +7218,6 @@
     return KbfDropdown;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-  var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
-
-  function capitalizeIndustry(industry) {
-    var _industry = industry.toLowerCase();
-
-    return _industry.trim().substr(0, 1).toUpperCase() + _industry.trim().substr(1);
-  } // Tworzy skrot
-
-  function getEllipsis(string, length) {
-    var ellipsis;
-    if (string.length - 4 >= length - 4) ellipsis = string.trim().substring(0, length - 5) + ' ...';
-    if (string.length - 4 < length - 4) ellipsis = string;
-    return ellipsis;
-  } // Przygotowuje opcje dla dropdown branz
-
-  function getIndustriesOptions(industries) {
-    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    // Utworz tablice branz
-    var capitalizedIndustries = [];
-    industries.forEach(function (industry) {
-      if (ellipsis) capitalizedIndustries.push(capitalizeIndustry(getEllipsis(industry, 34)));else capitalizedIndustries.push(capitalizeIndustry(industry));
-    }); // Utworz opcje
-
-    var opts = {};
-    var idx = 0;
-    capitalizedIndustries.forEach(function (capitalizedIndustry) {
-      opts[capitalizedIndustry] = industries[idx];
-      idx++;
-    });
-    return opts;
-  } // Pobiera nazwy branz z rest api
-
-  function getIndustries() {
-    return _getIndustries.apply(this, arguments);
-  } // Pobiera nazwy sub branz z rest api dla danej branzy
-
-  function _getIndustries() {
-    _getIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
-      var $;
-      return regenerator.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              $ = window.$;
-              _context.next = 3;
-              return $.get("".concat(apiEndpoint, "/api/industries/"));
-
-            case 3:
-              return _context.abrupt("return", _context.sent);
-
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-    return _getIndustries.apply(this, arguments);
-  }
-
-  function getSubIndustries(_x) {
-    return _getSubIndustries.apply(this, arguments);
-  } // Pobiera dane do markerow dla mapy
-
-  function _getSubIndustries() {
-    _getSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(industryName) {
-      var $;
-      return regenerator.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              $ = window.$;
-              _context2.next = 3;
-              return $.get("".concat(apiEndpoint, "/api/sub-industries/?industry=").concat(industryName));
-
-            case 3:
-              return _context2.abrupt("return", _context2.sent);
-
-            case 4:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-    return _getSubIndustries.apply(this, arguments);
-  }
-
   function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
   function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -7229,7 +7283,7 @@
         var instance = this;
         this.industriesDropdown.on('change', /*#__PURE__*/function () {
           var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(e) {
-            var opts, subIndustriesResult;
+            var subIndustriesResult;
             return regenerator.wrap(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
@@ -7237,7 +7291,7 @@
                     instance.currentIndustry = e.detail;
 
                     if (!(instance.currentIndustry !== instance.firstOption)) {
-                      _context.next = 9;
+                      _context.next = 7;
                       break;
                     }
 
@@ -7248,18 +7302,16 @@
                     subIndustriesResult = _context.sent;
                     instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
 
-                    opts = _objectSpread$1(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(instance.subIndustries, instance.ellipsis));
-                    instance.subIndustriesDropdown.updateOptions(opts);
-                    instance.currentSubIndustry = instance.firstOption;
+                    instance.updateEllipsis(); // Aktualizuj skroty
 
-                  case 9:
+                  case 7:
                     if (instance.currentIndustry === instance.firstOption) {
                       instance.subIndustriesDropdown.updateOptions([instance.firstOption]);
                     }
 
                     instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
 
-                  case 11:
+                  case 9:
                   case "end":
                     return _context.stop();
                 }
@@ -7319,7 +7371,15 @@
         }
 
         return init;
-      }() // Emituje aktualne ustawienie branz
+      }()
+    }, {
+      key: "updateEllipsis",
+      value: function updateEllipsis() {
+        var opts = _objectSpread$1(_defineProperty({}, this.firstOption, this.firstOption), getIndustriesOptions(this.subIndustries, this.ellipsis));
+
+        this.subIndustriesDropdown.updateOptions(opts);
+        this.currentSubIndustry = this.firstOption;
+      } // Emituje aktualne ustawienie branz
 
     }, {
       key: "emitCurrentIndustries",
@@ -7983,23 +8043,7 @@
           Delta.prototype.compose = function (other) {
             var thisIter = op.iterator(this.ops);
             var otherIter = op.iterator(other.ops);
-            var ops = [];
-            var firstOther = otherIter.peek();
-
-            if (firstOther != null && typeof firstOther.retain === 'number' && firstOther.attributes == null) {
-              var firstLeft = firstOther.retain;
-
-              while (thisIter.peekType() === 'insert' && thisIter.peekLength() <= firstLeft) {
-                firstLeft -= thisIter.peekLength();
-                ops.push(thisIter.next());
-              }
-
-              if (firstOther.retain - firstLeft > 0) {
-                otherIter.next(firstOther.retain - firstLeft);
-              }
-            }
-
-            var delta = new Delta(ops);
+            var delta = new Delta();
 
             while (thisIter.hasNext() || otherIter.hasNext()) {
               if (otherIter.peekType() === 'insert') {
@@ -8023,14 +8067,8 @@
 
                   var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === 'number');
                   if (attributes) newOp.attributes = attributes;
-                  delta.push(newOp); // Optimization if rest of other is just retain
-
-                  if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
-                    var rest = new Delta(thisIter.rest());
-                    return delta.concat(rest).chop();
-                  } // Other op should be delete, we could be an insert or retain
+                  delta.push(newOp); // Other op should be delete, we could be an insert or retain
                   // Insert + delete cancels out
-
                 } else if (typeof otherOp['delete'] === 'number' && typeof thisOp.retain === 'number') {
                   delta.push(otherOp);
                 }
@@ -8208,8 +8246,6 @@
 
           var hasOwn = Object.prototype.hasOwnProperty;
           var toStr = Object.prototype.toString;
-          var defineProperty = Object.defineProperty;
-          var gOPD = Object.getOwnPropertyDescriptor;
 
           var isArray = function isArray(arr) {
             if (typeof Array.isArray === 'function') {
@@ -8240,35 +8276,6 @@
             }
 
             return typeof key === 'undefined' || hasOwn.call(obj, key);
-          }; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
-
-
-          var setProperty = function setProperty(target, options) {
-            if (defineProperty && options.name === '__proto__') {
-              defineProperty(target, options.name, {
-                enumerable: true,
-                configurable: true,
-                value: options.newValue,
-                writable: true
-              });
-            } else {
-              target[options.name] = options.newValue;
-            }
-          }; // Return undefined instead of __proto__ if '__proto__' is not an own property
-
-
-          var getProperty = function getProperty(obj, name) {
-            if (name === '__proto__') {
-              if (!hasOwn.call(obj, name)) {
-                return void 0;
-              } else if (gOPD) {
-                // In early versions of node, obj['__proto__'] is buggy when obj has
-                // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
-                return gOPD(obj, name).value;
-              }
-            }
-
-            return obj[name];
           };
 
           module.exports = function extend() {
@@ -8295,8 +8302,8 @@
               if (options != null) {
                 // Extend the base object
                 for (name in options) {
-                  src = getProperty(target, name);
-                  copy = getProperty(options, name); // Prevent never-ending loop
+                  src = target[name];
+                  copy = options[name]; // Prevent never-ending loop
 
                   if (target !== copy) {
                     // Recurse if we're merging plain objects or arrays
@@ -8309,15 +8316,9 @@
                       } // Never move original objects, clone them
 
 
-                      setProperty(target, {
-                        name: name,
-                        newValue: extend(deep, clone, copy)
-                      }); // Don't bring in undefined values
+                      target[name] = extend(deep, clone, copy); // Don't bring in undefined values
                     } else if (typeof copy !== 'undefined') {
-                      setProperty(target, {
-                        name: name,
-                        newValue: copy
-                      });
+                      target[name] = copy;
                     }
                   }
                 }
@@ -9333,7 +9334,7 @@
           Quill.events = _emitter4.default.events;
           Quill.sources = _emitter4.default.sources; // eslint-disable-next-line no-undef
 
-          Quill.version = "1.3.7";
+          Quill.version = "1.3.6";
           Quill.imports = {
             'delta': _quillDelta2.default,
             'parchment': _parchment2.default,
@@ -12217,9 +12218,9 @@
             };
 
             LeafBlot.prototype.value = function () {
-              var _a;
-
               return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
+
+              var _a;
             };
 
             LeafBlot.scope = Registry.Scope.INLINE_BLOT;
@@ -12383,22 +12384,6 @@
             return 'retain';
           };
 
-          Iterator.prototype.rest = function () {
-            if (!this.hasNext()) {
-              return [];
-            } else if (this.offset === 0) {
-              return this.ops.slice(this.index);
-            } else {
-              var offset = this.offset;
-              var index = this.index;
-              var next = this.next();
-              var rest = this.ops.slice(this.index);
-              this.offset = offset;
-              this.index = index;
-              return [next].concat(rest);
-            }
-          };
-
           module.exports = lib;
           /***/
         },
@@ -12507,14 +12492,7 @@
                 } else if (clone.__isDate(parent)) {
                   child = new Date(parent.getTime());
                 } else if (useBuffer && Buffer.isBuffer(parent)) {
-                  if (Buffer.allocUnsafe) {
-                    // Node.js >= 4.5.0
-                    child = Buffer.allocUnsafe(parent.length);
-                  } else {
-                    // Older Node.js versions
-                    child = new Buffer(parent.length);
-                  }
-
+                  child = new Buffer(parent.length);
                   parent.copy(child);
                   return child;
                 } else if (_instanceof(parent, Error)) {
@@ -14491,7 +14469,6 @@
 
                 value = this.sanitize(value);
                 node.setAttribute('href', value);
-                node.setAttribute('rel', 'noopener noreferrer');
                 node.setAttribute('target', '_blank');
                 return node;
               }
@@ -20493,7 +20470,7 @@
             return SnowTooltip;
           }(_base.BaseTooltip);
 
-          SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
+          SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
           exports.default = SnowTheme;
           /***/
         },
@@ -22914,6 +22891,13 @@
 
         this.$errorStepper = $('.error-stepper'); // Dolny komunikat o bledzie
 
+        this.companyInfo = $('.company-info')[0];
+        this.companyDescription = $('.company-description')[0];
+        this.companyInfoContents = this.companyInfo.innerHTML; // Placeholder z informacjami o firmie
+
+        this.companyDescriptionContents = this.companyDescription.innerHTML; // Placeholder z informacjami o firmie
+
+        this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
         this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button'); // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
 
         if (window.innerWidth >= 768) {
@@ -22931,8 +22915,7 @@
         this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Krok u gory
 
         this.$stepsBottom = this.$kbfStepper.find('form > .steps > .step'); // Kroki na dole
-
-        console.log(this.$stepsBottom); // Przycisk wyszukiwania po numerze REGON
+        // Przycisk wyszukiwania po numerze REGON
 
         this.$searchByREGONButton = $('.kbf-search-button');
         this.$searchByREGONButton.attr('disabled', 'disabled');
@@ -22973,22 +22956,24 @@
         this.validator = this.$formElement.validate({
           formName: 'register-company',
           ignore: [],
-          rules: {
-            // Ustaw reguly dla branz
-            industry: {
-              required: true,
-              industries: true
-            },
-            "sub-industry": {
-              required: true,
-              industries: true
-            },
-            "company_regon": {
-              required: true,
-              "regon-not-exists": true,
-              "regon-not-found": true
-            }
-          },
+          // rules: {
+          //
+          //     // Ustaw reguly dla branz
+          //     industry: {
+          //         required: true,
+          //         industries: true
+          //     },
+          //     "sub-industry": {
+          //         required: true,
+          //         industries: true
+          //     },
+          //     "company_regon": {
+          //         required: true,
+          //         "regon-not-exists": true,
+          //         "regon-not-found": true
+          //     }
+          //
+          // },
           // Umiejscowienie komunikatu o bledzie
           errorPlacement: function errorPlacement($label, $element) {
             $label.addClass('kbf-error-message');
@@ -23000,7 +22985,7 @@
           }
         }); // Wybor branz
 
-        this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", false, false);
+        this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", window.innerWidth <= 768, false);
         this.industrySwitcher.on('industries-changed', this.validateCurrentPage.bind(this)); // Wysiwyg
 
         this.wysiwyg = new KbfWysiwyg('.wysiwyg');
@@ -23019,7 +23004,7 @@
         $regonField.on('input', this.regonFieldHandler($regonField).bind(this));
         $regonField.on('paste', this.regonFieldHandler($regonField).bind(this));
         this.searchByREGONButtonPreloader.on('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
-          var data, $companyNameField, $companyNipField, $companyAddressField, $companyZipField, $companyCityField, isError;
+          var data, $companyNameField, $companyNipField, $companyAddressField, $companyZipField, $companyCityField, $latField, $lonField, isError;
           return regenerator.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -23040,11 +23025,15 @@
                   $companyAddressField = $('[name="company_address"]');
                   $companyZipField = $('[name="company_zip"]');
                   $companyCityField = $('[name="company_city"]');
+                  $latField = $('[name="lat"]');
+                  $lonField = $('[name="lon"]');
                   $companyNameField.val('');
                   $companyNipField.val('');
                   $companyAddressField.val('');
                   $companyZipField.val('');
                   $companyCityField.val('');
+                  $latField.val('');
+                  $lonField.val('');
                   instance.regonFound = true;
                   instance.regonNotExists = true;
                   isError = data['error'] !== undefined;
@@ -23062,11 +23051,13 @@
                     $companyAddressField.val(data["company_address"]);
                     $companyZipField.val(data["company_zip"]);
                     $companyCityField.val(data["company_city"]);
+                    $latField.val(data["lat"]);
+                    $lonField.val(data["lon"]);
                   }
 
                   instance.validateCurrentPage();
 
-                case 22:
+                case 26:
                 case "end":
                   return _context.stop();
               }
@@ -23087,7 +23078,6 @@
       key: "nextPage",
       value: function nextPage(e) {
         e.stopPropagation();
-        this.validator.resetForm();
 
         if (this.validateCurrentPage()) {
           // Zmienia strone tylko w przypadku jej poprawnosci
@@ -23109,6 +23099,7 @@
           this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
           this.goToPage(this.currentPageIdx);
           this.setMessages();
+          this.setSummary();
         }
       } // Zmienia na poprzednia strone
 
@@ -23137,6 +23128,7 @@
 
         this.goToPage(this.currentPageIdx);
         this.setMessages();
+        this.setSummary();
       }
     }, {
       key: "goToPage",
@@ -23146,6 +23138,36 @@
         document.body.scrollTop = 0; // For Safari
 
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      } // Przygotowuje podsumowanie wpisu
+
+    }, {
+      key: "setSummary",
+      value: function setSummary() {
+        var industry = $('[name="industry"]').val();
+        var subIndustry = $('[name="sub-industry"]');
+        var lat = $('[name="lat"]').val();
+        var lon = $('[name="lon"]').val(); // Ukryj minimape jezeli nie pobrano wspolrzednych
+
+        if (this.currentPageIdx === this.lastPageIdx) {
+          if (lat.length === 0 || lon.length === 0) {
+            this.$kbfMiniMapContainer.hide();
+          }
+        }
+
+        this.companyInfo.innerHTML = replacePlaceholders({
+          '{company_name}': $('[name="company_name"]').val() || '{company_name}',
+          '{company_address}': $('[name="company_address"]').val() || '{company_address}',
+          '{company_regon}': $('[name="company_regon"]').val() || '{company_regon}',
+          '{company_zip}': $('[name="company_zip"]').val() || '{company_zip}',
+          '{company_city}': $('[name="company_city"]').val() || '{company_city}',
+          '{company_phone_1}': $('[name="company_phone_1"]').val() || '{company_phone_1}',
+          '{company_www}': $('[name="company_www"]').val() || '{company_www}',
+          '{company_industry}': industry !== 'Wybierz' ? industry : '{company_industry}' ,
+          '{company_sub_industry}': subIndustry.val() !== 'Wybierz' ? subIndustry : '{company_sub_industry}'
+        }, this.companyInfoContents);
+        this.companyDescription.innerHTML = replacePlaceholders({
+          '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}'
+        }, this.companyDescriptionContents);
       } // Ustawia komunikaty dla stron
 
     }, {
@@ -23161,7 +23183,8 @@
       value: function validateCurrentPage() {
         if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none');
         var $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
-        var fieldsAreValid = $currentPageInputs.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+        var fieldsAreValid = true;
+        if ($currentPageInputs.length) fieldsAreValid = $currentPageInputs.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
 
         if (this.$errorMessageElement.length > 0) {
           if (formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');

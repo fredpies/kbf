@@ -502,7 +502,7 @@ label.error {
 }
 
 label.error#company_description-error {
-  bottom: -1.7rem;
+  bottom: -1rem;
 }
 
 label.error-stepper {
@@ -532,9 +532,6 @@ input[name*="sub-industry"] + label.error {
   bottom: -0.5rem;
 }
 
-.stepper-footer-mobile {
-  background-color: #000000;
-}
 
 /******************************/
 /* 6. Listy                   */
@@ -664,11 +661,15 @@ input[name*="sub-industry"] + label.error {
 .ql-editor, .kbf-keywords  {
   border: 2px solid #e0e0e0 !important;
   border-radius: 1.6875rem !important;
-  height: 16rem !important;
-  min-height: 3.375rem !important;
+  min-height: 4.5rem !important;
+  height: auto;
   padding: 0.85rem 1.375rem !important;
   line-height: 1.5 !important;
   transition: all .2s ease-in-out;
+}
+
+.ql-editor {
+  height: 16rem !important;
 }
 
 .ql-editor.focus, .kbf-keywords.tagify.tagify--focus:focus {

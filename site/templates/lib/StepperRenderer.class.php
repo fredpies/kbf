@@ -37,7 +37,6 @@ class StepperRenderer
             
             {stepsHeader}
             
-
             <div class="container d-none d-md-block my-4">
                 <div class="col-12 text-center"><label id="company_regon-error" class="error-stepper d-none text-danger" for="company_regon" style="">Sprawdź poprawność wypełnienia odpowiednich pól.</label></div>
                 
@@ -68,16 +67,16 @@ class StepperRenderer
                 <div class="col-12 text-center text-md-right align-self-center">
                     <div class="row px-3 justify-content-around">
                         <div class="col-5 pl-0 pr-1 button-prev">
-                            <button type="button" disabled="disabled" class="fade show btn btn-round btn-block shadow-none btn-secondary position-relative mr-lg-4"><i
+                            <button type="button" disabled="disabled" class="fade show btn btn-round btn-block shadow-none btn-secondary position-relative my-3 mr-lg-4"><i
                                         class="icon-left d-inline-block position-absolute fa fa-angle-left"></i> Wróć
                             </button>
                         </div>
                         <div class="col-5 pl-1 pr-0 button-next">
-                            <button type="button" class="fade show btn btn-round btn-block shadow-none btn-secondary position-relative mr-lg-4">Dalej<i
+                            <button type="button" class="fade show btn btn-round btn-block shadow-none btn-secondary position-relative my-3 mr-lg-4">Dalej<i
                                         class="icon-right d-inline-block position-absolute fa fa-angle-right"></i></button>
                         </div>
                         <div class="col-5 pl-1 pr-0 button-register">
-                            <button type="button" class="fade btn btn-round btn-block shadow-none btn-success mr-lg-4">{actionName}</button>
+                            <button type="button" class="fade btn btn-round btn-block shadow-none btn-success my-3 mr-lg-4">{actionName}</button>
                         </div>
                     </div>
             </div>

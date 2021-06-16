@@ -45,18 +45,14 @@ class KbfIndustrySwitcher extends EventTarget {
 
         this.industriesDropdown.on('change', async function (e) {
 
-            let opts;
-
             instance.currentIndustry = e.detail;
 
             if (instance.currentIndustry !== instance.firstOption) {
 
                 let subIndustriesResult = await getSubIndustries(instance.currentIndustry);
                 instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
+                instance.updateEllipsis(); // Aktualizuj skroty
 
-                opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(instance.subIndustries, instance.ellipsis) };
-                instance.subIndustriesDropdown.updateOptions(opts);
-                instance.currentSubIndustry = instance.firstOption;
             }
 
             if (instance.currentIndustry === instance.firstOption) {
@@ -94,6 +90,12 @@ class KbfIndustrySwitcher extends EventTarget {
         $(window).off('resize', instance.resetDropdowns);
         $(window).on('resize', instance.resetDropdowns.bind(instance));
 
+    }
+
+    updateEllipsis() {
+        let opts = { [this.firstOption]: this.firstOption, ...getIndustriesOptions(this.subIndustries, this.ellipsis) };
+        this.subIndustriesDropdown.updateOptions(opts);
+        this.currentSubIndustry = this.firstOption;
     }
 
     // Emituje aktualne ustawienie branz

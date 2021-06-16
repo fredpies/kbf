@@ -123,7 +123,7 @@ class FormRenderer
     public function addMarkup($markup, $noColumn = false) {
         if (!isset($markup)) return;
         if ($noColumn) $this->fields[] = $markup;
-        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-9 mb-3'>$markup</div>";
+        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-8 mb-3'>$markup</div>";
     }
 
     // Renderuje pole formularza
