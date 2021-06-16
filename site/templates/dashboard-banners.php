@@ -50,8 +50,7 @@ include_once "lib/functions.php";
                     <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
                             <h5 class="font-weight-700 mb-2 section-title-4 text-left">Banery</h5>
-                            <p>Kliknij w pole grafiki aby zmienić lub wykupić baner reklamowy.</p>
-
+                            <p>Przeciągnij zapisany baner na pole wybranego banera reklamowego aby go zmienić lub wykupić.</p>
 
                             <div class="row">
 
@@ -111,7 +110,54 @@ include_once "lib/functions.php";
 
                             <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-first" role="tabpanel" aria-labelledby="nav-first-tab">
-                                    <p>zapisane</p>
+                                    <div class="row">
+
+                                        <div class="col-lg-6 col-xl-4 mb-4">
+                                            <div class="card h-100 mb-0 bg-light border-0 shadow">
+                                                <div class="card-body text-center">
+                                                    <a href="#">
+                                                        <img src="<?php echo $urls->images ?>image-placeholder.jpg" alt="company-logo" class="img-fluid border rounded" style="height: 100px;">
+                                                    </a>
+                                                    <h6 class="text-black-50 mt-3">Nazwa banera</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-xl-4 mb-4">
+                                            <div class="card h-100 mb-0 bg-light border-0 shadow">
+                                                <div class="card-body text-center">
+                                                    <a href="#">
+                                                        <img src="<?php echo $urls->images ?>image-placeholder.jpg" alt="company-logo" class="img-fluid border rounded" style="height: 100px;">
+                                                    </a>
+                                                    <h6 class="text-black-50 mt-3">Nazwa banera</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-xl-4 mb-4">
+                                            <div class="card h-100 mb-0 bg-light border-0 shadow">
+                                                <div class="card-body text-center">
+                                                    <a href="#">
+                                                        <img src="<?php echo $urls->images ?>image-placeholder.jpg" alt="company-logo" class="img-fluid border rounded" style="height: 100px;">
+                                                    </a>
+                                                    <h6 class="text-black-50 mt-3">Nazwa banera</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-xl-4 mb-4">
+                                            <div class="card h-100 mb-0 bg-light border-0 shadow">
+                                                <div class="card-body text-center">
+                                                    <a href="#">
+                                                        <img src="<?php echo $urls->images ?>image-placeholder.jpg" alt="company-logo" class="img-fluid border rounded" style="height: 100px;">
+                                                    </a>
+                                                    <h6 class="text-black-50 mt-3">Nazwa banera</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                                 <div class="tab-pane fade" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
