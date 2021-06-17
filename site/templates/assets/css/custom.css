@@ -654,9 +654,7 @@ input[name*="sub-industry"] + label.error {
     max-width: 650px;
     margin: 0 auto !important;
   }
-
 }
-
 
 .ql-editor, .kbf-keywords  {
   border: 2px solid #e0e0e0 !important;
@@ -856,7 +854,6 @@ input[name*="sub-industry"] + label.error {
 
 .input-group {
   max-width: 650px !important;
-  margin: 0 auto;
 }
 
 .form-info-message {
