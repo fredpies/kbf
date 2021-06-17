@@ -172,7 +172,7 @@ class FormFieldTextArea extends FormField
     public static $markup = '
 
      
-        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0">
+        <div class="col-12 mx-lg-0 mx-auto px-0">
                 <label class="text-uppercase px-3 mt-3">{label}</label>
         </div>
      
@@ -200,7 +200,7 @@ class FormFieldKeywords extends FormField
 
     public static $markup = '
         
-            <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0">
+            <div class="col-12 mx-lg-0 mx-auto px-0">
                 <label class="text-uppercase px-3 mt-3">Słowa kluczowe</label>
             </div>
             
@@ -226,20 +226,19 @@ class FormFieldImage extends FormField
 
     public static $markup = '
     
-    
         <div class="row col-12 col-lg-10 col-xl-8 px-0 {className}">
    
             <div class="col-12 col-lg-5 mb-3">
-                        <div style="max-width: 650px;" class="col-12 mx-lg-0 mx-auto px-0 {className}">
+                        <div class="col-12 mx-lg-0 mx-auto px-0 {className}">
                             <label class="text-uppercase px-3 mt-3">{label}</label>
                         </div>
                         <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                           
-                            <input id="{name}" type="{type}" class="d-none form-control form-control-lg"
+                            <input id="{name}" type="file" class="d-none form-control form-control-lg"
                                            name="{name}" {required} {msgRequired} {disabled} {value}>
                                            
                             <div class="d-flex no-gutters input-focus-bg justify-content-center">
-                                <img alt="logo-placeholder" src="{logoImage}" class=" col-5 col-sm-3 col-lg-5 my-2 kbf-logo-uploader-image">
+                                <img alt="logo-placeholder" src="{imagePlaceholder}" class=" col-5 col-sm-3 col-lg-5 my-2 kbf-logo-uploader-image">
                             </div>
                                 
                         </label>

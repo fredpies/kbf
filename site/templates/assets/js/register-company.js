@@ -1,28 +1,6 @@
 (function () {
   'use strict';
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
-  }
-
   function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
       var info = gen[key](arg);
@@ -57,6 +35,28 @@
         _next(undefined);
       });
     };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
   }
 
   function _typeof(obj) {
@@ -832,377 +832,6 @@
   errors.noGeoCoords = function () {
     return new Error("You must provide geo coordinates.");
   };
-
-  var config = {
-    env: 'dev',
-    url: 'http://localhost',
-    apiEndpoint: 'http://localhost/kbf'
-  };
-
-  function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-  }
-
-  function _iterableToArrayLimit(arr, i) {
-    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
-
-    if (_i == null) return;
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-
-    var _s, _e;
-
-    try {
-      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"] != null) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  }
-
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-
-  function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
-  }
-
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-  }
-
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-  }
-
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-  }
-
-  var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
-
-  function capitalizeIndustry(industry) {
-    var _industry = industry.toLowerCase();
-
-    return _industry.trim().substr(0, 1).toUpperCase() + _industry.trim().substr(1);
-  } // Tworzy skrot
-
-  function getEllipsis(string, length) {
-    var ellipsis;
-    if (string.length - 4 >= length - 4) ellipsis = string.trim().substring(0, length - 5) + ' ...';
-    if (string.length - 4 < length - 4) ellipsis = string;
-    return ellipsis;
-  } // Przygotowuje opcje dla dropdown branz
-
-  function getIndustriesOptions(industries) {
-    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    // Utworz tablice branz
-    var capitalizedIndustries = [];
-    industries.forEach(function (industry) {
-      if (ellipsis) capitalizedIndustries.push(capitalizeIndustry(getEllipsis(industry, 34)));else capitalizedIndustries.push(capitalizeIndustry(industry));
-    }); // Utworz opcje
-
-    var opts = {};
-    var idx = 0;
-    capitalizedIndustries.forEach(function (capitalizedIndustry) {
-      opts[capitalizedIndustry] = industries[idx];
-      idx++;
-    });
-    return opts;
-  } // Pobiera nazwy branz z rest api
-
-  function getIndustries() {
-    return _getIndustries.apply(this, arguments);
-  } // Pobiera nazwy sub branz z rest api dla danej branzy
-
-  function _getIndustries() {
-    _getIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
-      var $;
-      return regenerator.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              $ = window.$;
-              _context.next = 3;
-              return $.get("".concat(apiEndpoint, "/api/industries/"));
-
-            case 3:
-              return _context.abrupt("return", _context.sent);
-
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-    return _getIndustries.apply(this, arguments);
-  }
-
-  function getSubIndustries(_x) {
-    return _getSubIndustries.apply(this, arguments);
-  } // Pobiera dane do markerow dla mapy
-
-  function _getSubIndustries() {
-    _getSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(industryName) {
-      var $;
-      return regenerator.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              $ = window.$;
-              _context2.next = 3;
-              return $.get("".concat(apiEndpoint, "/api/sub-industries/?industry=").concat(industryName));
-
-            case 3:
-              return _context2.abrupt("return", _context2.sent);
-
-            case 4:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-    return _getSubIndustries.apply(this, arguments);
-  }
-
-  function replacePlaceholders(placeholderMap, string) {
-    for (var _i = 0, _Object$entries = Object.entries(placeholderMap); _i < _Object$entries.length; _i++) {
-      var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-          placeholder = _Object$entries$_i[0],
-          value = _Object$entries$_i[1];
-
-      string = string.replace(placeholder, value);
-    }
-
-    return string;
-  }
-
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-
-    return _setPrototypeOf(o, p);
-  }
-
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) _setPrototypeOf(subClass, superClass);
-  }
-
-  function _assertThisInitialized(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return self;
-  }
-
-  function _possibleConstructorReturn(self, call) {
-    if (call && (_typeof(call) === "object" || typeof call === "function")) {
-      return call;
-    }
-
-    return _assertThisInitialized(self);
-  }
-
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-
-  function _isNativeFunction(fn) {
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
-  }
-
-  function _isNativeReflectConstruct$4() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === "function") return true;
-
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct$4()) {
-      _construct = Reflect.construct;
-    } else {
-      _construct = function _construct(Parent, args, Class) {
-        var a = [null];
-        a.push.apply(a, args);
-        var Constructor = Function.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) _setPrototypeOf(instance, Class.prototype);
-        return instance;
-      };
-    }
-
-    return _construct.apply(null, arguments);
-  }
-
-  function _wrapNativeSuper(Class) {
-    var _cache = typeof Map === "function" ? new Map() : undefined;
-
-    _wrapNativeSuper = function _wrapNativeSuper(Class) {
-      if (Class === null || !_isNativeFunction(Class)) return Class;
-
-      if (typeof Class !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class)) return _cache.get(Class);
-
-        _cache.set(Class, Wrapper);
-      }
-
-      function Wrapper() {
-        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-      }
-
-      Wrapper.prototype = Object.create(Class.prototype, {
-        constructor: {
-          value: Wrapper,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      });
-      return _setPrototypeOf(Wrapper, Class);
-    };
-
-    return _wrapNativeSuper(Class);
-  }
-
-  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-  var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
-    _inherits(KbfPreloaderButton, _EventTarget);
-
-    var _super = _createSuper$3(KbfPreloaderButton);
-
-    function KbfPreloaderButton(selector) {
-      var _this;
-
-      _classCallCheck(this, KbfPreloaderButton);
-
-      _this = _super.call(this);
-      var $ = window.$;
-      _this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
-
-      if (!selector || _this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
-
-      _this.init();
-
-      _this.addListeners();
-
-      return _this;
-    }
-
-    _createClass(KbfPreloaderButton, [{
-      key: "init",
-      value: function init() {
-        // Aliasy
-        this.on = this.addEventListener;
-        this.off = this.removeEventListener;
-        this.emit = this.dispatchEvent;
-        this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
-      } // Startuje preloader
-
-    }, {
-      key: "startPreloader",
-      value: function startPreloader(buttonElement) {
-        var $ = window.$;
-        var $this = $(buttonElement);
-        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
-
-        $this.attr('disabled', 'disabled');
-        $this.css('width', buttonGeometry.width + 'px');
-        $this.css('height', buttonGeometry.height + 'px');
-        $this.css('padding', 0);
-        $this.html(KbfPreloaderButton.preloaderMarkup);
-      } // Zatrzymuje preloader
-
-    }, {
-      key: "stopPreloader",
-      value: function stopPreloader() {
-        this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
-        this.$preloaderButton.removeAttr('disabled');
-      }
-    }, {
-      key: "addListeners",
-      value: function addListeners() {
-        var instance = this;
-        this.$preloaderButton.on('click', function () {
-          instance.startPreloader(this);
-          instance.emit(new CustomEvent('click'));
-        });
-      }
-    }]);
-
-    return KbfPreloaderButton;
-  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
-
-  KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
   if (typeof Object.getPrototypeOf !== "function") {
     Object.getPrototypeOf = _typeof("test".__proto__) === "object" ? function (object) {
@@ -5562,6 +5191,348 @@
 
   window$1.Inputmask = Inputmask$1;
 
+  var KbfStepper = /*#__PURE__*/function () {
+    function KbfStepper(selector) {
+      _classCallCheck(this, KbfStepper);
+
+      var $ = window.$;
+      this.$kbfStepper = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
+
+      if (!selector || this.$kbfStepper.length === 0) throw errors.elementNotFound(selector);
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfStepper, [{
+      key: "init",
+      value: function init() {
+        this.currentPageIdx = 0; // Biezacy index strony
+
+        this.$pages = this.$kbfStepper.find('.page');
+        this.$pages.eq(0).removeClass('d-none');
+        this.lastPageIdx = this.$pages.length - 1; // Ostatni index
+        // Elementy $
+
+        this.$infoMessages = this.$kbfStepper.find('.top-message');
+        this.$infoMessages.hide().eq(0).addClass('d-flex'); // Pokaz tylko pierwszy message
+
+        this.$errorMessageElement = $('.kbf-error-message'); // Komunikaty bledow
+
+        this.$errorStepper = $('.error-stepper'); // Dolny komunikat o bledzie
+
+        this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Krok u gory
+
+        this.$stepsBottom = this.$kbfStepper.find('form > .steps > .step'); // Kroki na dole
+        // Maski wprowadzania
+
+        this.$formInputs = $('.form-control');
+        this.$formInputs.each(function () {
+          if (this.name === 'company_regon') new Inputmask$1({
+            placeholder: ''
+          }).mask(this);else new Inputmask$1().mask(this);
+        });
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {} // Zmienia na nastepna strone
+
+    }, {
+      key: "nextPage",
+      value: function nextPage(e) {
+        e.stopPropagation();
+
+        if (this.validateCurrentPage()) {
+          // Zmienia strone tylko w przypadku jej poprawnosci
+          if (this.currentPageIdx === this.lastPageIdx) return;
+          this.$stepsTop.eq(this.currentPageIdx).addClass('done');
+          this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
+          this.$stepsBottom.eq(this.currentPageIdx).addClass('done');
+          this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
+          this.currentPageIdx++;
+          this.$stepsTop.eq(this.currentPageIdx).addClass('active');
+          this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
+          this.goToPage(this.currentPageIdx);
+          this.setMessages();
+        }
+      } // Zmienia na poprzednia strone
+
+    }, {
+      key: "prevPage",
+      value: function prevPage(e) {
+        e.stopPropagation();
+        if (this.currentPageIdx === 0) return;
+        this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
+        this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
+        this.currentPageIdx--;
+        this.$stepsTop.eq(this.currentPageIdx).removeClass('done');
+        this.$stepsTop.eq(this.currentPageIdx).addClass('active');
+        this.$stepsBottom.eq(this.currentPageIdx).removeClass('done');
+        this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
+        this.goToPage(this.currentPageIdx);
+        this.setMessages();
+      }
+    }, {
+      key: "goToPage",
+      value: function goToPage(pageIdx) {
+        this.$pages.addClass('d-none');
+        this.$pages.eq(pageIdx).removeClass('d-none');
+        document.body.scrollTop = 0; // For Safari
+
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      } // Ustawia komunikaty dla stron
+
+    }, {
+      key: "setMessages",
+      value: function setMessages() {
+        this.$infoMessages.eq(this.currentPageIdx).addClass('d-flex').show();
+        this.$infoMessages.eq(this.currentPageIdx).siblings('.top-message').removeClass('d-flex').hide();
+        $('.error-stepper').addClass('d-none');
+      } // Sprawdza poprawnosc formularza na danej stronie
+
+    }, {
+      key: "validateCurrentPage",
+      value: function validateCurrentPage() {
+        if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none');
+        var $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        var fieldsAreValid = true;
+        if ($currentPageInputs.length) fieldsAreValid = $currentPageInputs.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+
+        if (this.$errorMessageElement.length > 0) {
+          if (fieldsAreValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
+          if (!fieldsAreValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
+        }
+
+        if (!fieldsAreValid) this.$errorStepper.removeClass('d-none');
+        return fieldsAreValid;
+      }
+    }]);
+
+    return KbfStepper;
+  }();
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return self;
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (call && (_typeof(call) === "object" || typeof call === "function")) {
+      return call;
+    }
+
+    return _assertThisInitialized(self);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+
+  function _isNativeReflectConstruct$5() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct$5()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null || !_isNativeFunction(Class)) return Class;
+
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+
+        _cache.set(Class, Wrapper);
+      }
+
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+
+    return _wrapNativeSuper(Class);
+  }
+
+  function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+  function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+  var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
+    _inherits(KbfPreloaderButton, _EventTarget);
+
+    var _super = _createSuper$4(KbfPreloaderButton);
+
+    function KbfPreloaderButton(selector) {
+      var _this;
+
+      _classCallCheck(this, KbfPreloaderButton);
+
+      _this = _super.call(this);
+      var $ = window.$;
+      _this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
+
+      if (!selector || _this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
+
+      _this.init();
+
+      _this.addListeners();
+
+      return _this;
+    }
+
+    _createClass(KbfPreloaderButton, [{
+      key: "init",
+      value: function init() {
+        // Aliasy
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.emit = this.dispatchEvent;
+        this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
+      } // Startuje preloader
+
+    }, {
+      key: "startPreloader",
+      value: function startPreloader(buttonElement) {
+        var $ = window.$;
+        var $this = $(buttonElement);
+        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
+
+        $this.attr('disabled', 'disabled');
+        $this.css('width', buttonGeometry.width + 'px');
+        $this.css('height', buttonGeometry.height + 'px');
+        $this.css('padding', 0);
+        $this.html(KbfPreloaderButton.preloaderMarkup);
+      } // Zatrzymuje preloader
+
+    }, {
+      key: "stopPreloader",
+      value: function stopPreloader() {
+        this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
+        this.$preloaderButton.removeAttr('disabled');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$preloaderButton.on('click', function () {
+          instance.startPreloader(this);
+          instance.emit(new CustomEvent('click'));
+        });
+      }
+    }]);
+
+    return KbfPreloaderButton;
+  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
+  KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  }
+
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+  }
+
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -6840,14 +6811,14 @@
     }).join(' ');
   };
 
-  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfDropdown, _EventTarget);
 
-    var _super = _createSuper$2(KbfDropdown);
+    var _super = _createSuper$3(KbfDropdown);
 
     function KbfDropdown(selector, opts) {
       var _this;
@@ -7218,18 +7189,166 @@
     return KbfDropdown;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+
+    var _s, _e;
+
+    try {
+      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+
+  var config = {
+    env: 'dev',
+    url: 'http://localhost:3000',
+    apiEndpoint: 'http://localhost:3000/kbf2'
+  };
+
+  var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
+
+  function capitalizeIndustry(industry) {
+    var _industry = industry.toLowerCase();
+
+    return _industry.trim().substr(0, 1).toUpperCase() + _industry.trim().substr(1);
+  } // Tworzy skrot
+
+  function getEllipsis(string, length) {
+    var ellipsis;
+    if (string.length - 4 >= length - 4) ellipsis = string.trim().substring(0, length - 5) + ' ...';
+    if (string.length - 4 < length - 4) ellipsis = string;
+    return ellipsis;
+  } // Przygotowuje opcje dla dropdown branz
+
+  function getIndustriesOptions(industries) {
+    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    // Utworz tablice branz
+    var capitalizedIndustries = [];
+    industries.forEach(function (industry) {
+      if (ellipsis) capitalizedIndustries.push(capitalizeIndustry(getEllipsis(industry, 34)));else capitalizedIndustries.push(capitalizeIndustry(industry));
+    }); // Utworz opcje
+
+    var opts = {};
+    var idx = 0;
+    capitalizedIndustries.forEach(function (capitalizedIndustry) {
+      opts[capitalizedIndustry] = industries[idx];
+      idx++;
+    });
+    return opts;
+  } // Pobiera nazwy branz z rest api
+
+  function getIndustries() {
+    return _getIndustries.apply(this, arguments);
+  } // Pobiera nazwy sub branz z rest api dla danej branzy
+
+  function _getIndustries() {
+    _getIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee() {
+      var $;
+      return regenerator.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              $ = window.$;
+              _context.next = 3;
+              return $.get("".concat(apiEndpoint, "/api/industries/"));
+
+            case 3:
+              return _context.abrupt("return", _context.sent);
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+    return _getIndustries.apply(this, arguments);
+  }
+
+  function getSubIndustries(_x) {
+    return _getSubIndustries.apply(this, arguments);
+  } // Pobiera dane do markerow dla mapy
+
+  function _getSubIndustries() {
+    _getSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(industryName) {
+      var $;
+      return regenerator.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              $ = window.$;
+              _context2.next = 3;
+              return $.get("".concat(apiEndpoint, "/api/sub-industries/?industry=").concat(industryName));
+
+            case 3:
+              return _context2.abrupt("return", _context2.sent);
+
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+    return _getSubIndustries.apply(this, arguments);
+  }
+
+  function replacePlaceholders(placeholderMap, string) {
+    for (var _i = 0, _Object$entries = Object.entries(placeholderMap); _i < _Object$entries.length; _i++) {
+      var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+          placeholder = _Object$entries$_i[0],
+          value = _Object$entries$_i[1];
+
+      string = string.replace(placeholder, value);
+    }
+
+    return string;
+  }
+
   function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
   function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfIndustrySwitcher = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfIndustrySwitcher, _EventTarget);
 
-    var _super = _createSuper$1(KbfIndustrySwitcher);
+    var _super = _createSuper$2(KbfIndustrySwitcher);
 
     function KbfIndustrySwitcher(industriesId, subIndustriesId) {
       var _this;
@@ -8043,23 +8162,7 @@
           Delta.prototype.compose = function (other) {
             var thisIter = op.iterator(this.ops);
             var otherIter = op.iterator(other.ops);
-            var ops = [];
-            var firstOther = otherIter.peek();
-
-            if (firstOther != null && typeof firstOther.retain === 'number' && firstOther.attributes == null) {
-              var firstLeft = firstOther.retain;
-
-              while (thisIter.peekType() === 'insert' && thisIter.peekLength() <= firstLeft) {
-                firstLeft -= thisIter.peekLength();
-                ops.push(thisIter.next());
-              }
-
-              if (firstOther.retain - firstLeft > 0) {
-                otherIter.next(firstOther.retain - firstLeft);
-              }
-            }
-
-            var delta = new Delta(ops);
+            var delta = new Delta();
 
             while (thisIter.hasNext() || otherIter.hasNext()) {
               if (otherIter.peekType() === 'insert') {
@@ -8083,14 +8186,8 @@
 
                   var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === 'number');
                   if (attributes) newOp.attributes = attributes;
-                  delta.push(newOp); // Optimization if rest of other is just retain
-
-                  if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
-                    var rest = new Delta(thisIter.rest());
-                    return delta.concat(rest).chop();
-                  } // Other op should be delete, we could be an insert or retain
+                  delta.push(newOp); // Other op should be delete, we could be an insert or retain
                   // Insert + delete cancels out
-
                 } else if (typeof otherOp['delete'] === 'number' && typeof thisOp.retain === 'number') {
                   delta.push(otherOp);
                 }
@@ -8268,8 +8365,6 @@
 
           var hasOwn = Object.prototype.hasOwnProperty;
           var toStr = Object.prototype.toString;
-          var defineProperty = Object.defineProperty;
-          var gOPD = Object.getOwnPropertyDescriptor;
 
           var isArray = function isArray(arr) {
             if (typeof Array.isArray === 'function') {
@@ -8300,35 +8395,6 @@
             }
 
             return typeof key === 'undefined' || hasOwn.call(obj, key);
-          }; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
-
-
-          var setProperty = function setProperty(target, options) {
-            if (defineProperty && options.name === '__proto__') {
-              defineProperty(target, options.name, {
-                enumerable: true,
-                configurable: true,
-                value: options.newValue,
-                writable: true
-              });
-            } else {
-              target[options.name] = options.newValue;
-            }
-          }; // Return undefined instead of __proto__ if '__proto__' is not an own property
-
-
-          var getProperty = function getProperty(obj, name) {
-            if (name === '__proto__') {
-              if (!hasOwn.call(obj, name)) {
-                return void 0;
-              } else if (gOPD) {
-                // In early versions of node, obj['__proto__'] is buggy when obj has
-                // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
-                return gOPD(obj, name).value;
-              }
-            }
-
-            return obj[name];
           };
 
           module.exports = function extend() {
@@ -8355,8 +8421,8 @@
               if (options != null) {
                 // Extend the base object
                 for (name in options) {
-                  src = getProperty(target, name);
-                  copy = getProperty(options, name); // Prevent never-ending loop
+                  src = target[name];
+                  copy = options[name]; // Prevent never-ending loop
 
                   if (target !== copy) {
                     // Recurse if we're merging plain objects or arrays
@@ -8369,15 +8435,9 @@
                       } // Never move original objects, clone them
 
 
-                      setProperty(target, {
-                        name: name,
-                        newValue: extend(deep, clone, copy)
-                      }); // Don't bring in undefined values
+                      target[name] = extend(deep, clone, copy); // Don't bring in undefined values
                     } else if (typeof copy !== 'undefined') {
-                      setProperty(target, {
-                        name: name,
-                        newValue: copy
-                      });
+                      target[name] = copy;
                     }
                   }
                 }
@@ -9393,7 +9453,7 @@
           Quill.events = _emitter4.default.events;
           Quill.sources = _emitter4.default.sources; // eslint-disable-next-line no-undef
 
-          Quill.version = "1.3.7";
+          Quill.version = "1.3.6";
           Quill.imports = {
             'delta': _quillDelta2.default,
             'parchment': _parchment2.default,
@@ -12277,9 +12337,9 @@
             };
 
             LeafBlot.prototype.value = function () {
-              var _a;
-
               return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
+
+              var _a;
             };
 
             LeafBlot.scope = Registry.Scope.INLINE_BLOT;
@@ -12443,22 +12503,6 @@
             return 'retain';
           };
 
-          Iterator.prototype.rest = function () {
-            if (!this.hasNext()) {
-              return [];
-            } else if (this.offset === 0) {
-              return this.ops.slice(this.index);
-            } else {
-              var offset = this.offset;
-              var index = this.index;
-              var next = this.next();
-              var rest = this.ops.slice(this.index);
-              this.offset = offset;
-              this.index = index;
-              return [next].concat(rest);
-            }
-          };
-
           module.exports = lib;
           /***/
         },
@@ -12567,14 +12611,7 @@
                 } else if (clone.__isDate(parent)) {
                   child = new Date(parent.getTime());
                 } else if (useBuffer && Buffer.isBuffer(parent)) {
-                  if (Buffer.allocUnsafe) {
-                    // Node.js >= 4.5.0
-                    child = Buffer.allocUnsafe(parent.length);
-                  } else {
-                    // Older Node.js versions
-                    child = new Buffer(parent.length);
-                  }
-
+                  child = new Buffer(parent.length);
                   parent.copy(child);
                   return child;
                 } else if (_instanceof(parent, Error)) {
@@ -14551,7 +14588,6 @@
 
                 value = this.sanitize(value);
                 node.setAttribute('href', value);
-                node.setAttribute('rel', 'noopener noreferrer');
                 node.setAttribute('target', '_blank');
                 return node;
               }
@@ -20553,7 +20589,7 @@
             return SnowTooltip;
           }(_base.BaseTooltip);
 
-          SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
+          SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
           exports.default = SnowTheme;
           /***/
         },
@@ -22847,14 +22883,14 @@
 
   function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfWysiwyg = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfWysiwyg, _EventTarget);
 
-    var _super = _createSuper(KbfWysiwyg);
+    var _super = _createSuper$1(KbfWysiwyg);
 
     function KbfWysiwyg(selector, options) {
       var _this;
@@ -22938,42 +22974,77 @@
     return KbfWysiwyg;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-  var KbfStepper = /*#__PURE__*/function () {
-    function KbfStepper(selector) {
-      _classCallCheck(this, KbfStepper);
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-      var $ = window.$;
-      this.$kbfStepper = $(selector);
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+  var KbfTagify = /*#__PURE__*/function (_EventTarget) {
+    _inherits(KbfTagify, _EventTarget);
+
+    var _super = _createSuper(KbfTagify);
+
+    function KbfTagify(selector) {
+      var _this;
+
+      _classCallCheck(this, KbfTagify);
+
+      _this = _super.call(this);
+      var $ = window.$; // Sprawdz czy podano argumenty
+
+      if (!selector) throw errors.argumentNotFound("Selector");
+      _this.$tagifyElement = $(selector);
+      if (_this.$tagifyElement.length === 0) throw errors.elementNotFound(selector);
+
+      _this.init();
+
+      _this.addListeners();
+
+      return _this;
+    }
+
+    _createClass(KbfTagify, [{
+      key: "init",
+      value: function init() {
+        var instance = this;
+        this.$tagifyElement.tagify().on('change', function (e, value) {
+          // Aktualizuj wartosc pola
+          if (value) {
+            var currentValue = JSON.parse(value);
+            currentValue = currentValue.map(function (nextValue) {
+              return nextValue.value;
+            });
+            instance.$tagifyElement.val(currentValue.join(','));
+          } else instance.$tagifyElement.val('');
+        });
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {}
+    }]);
+
+    return KbfTagify;
+  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
+  var App = /*#__PURE__*/function () {
+    function App() {
+      _classCallCheck(this, App);
+
       this.regonNotExists = true; // Czy REGON istnieje w bazie KBF
 
       this.regonFound = true; // Czy REGON istnieje w bazie KBF
 
-      this.regonErrorVisible = false; // Czy wiswietlony jest blad regon
-      // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
+      this.regonErrorVisible = false; // Czy wyswietlony jest blad regon
 
-      if (!selector || this.$kbfStepper.length === 0) throw errors.elementNotFound(selector);
       this.init();
       this.addListeners();
     }
 
-    _createClass(KbfStepper, [{
+    _createClass(App, [{
       key: "init",
       value: function init() {
         var instance = this;
-        this.currentPageIdx = 0; // Biezacy index strony
-
-        this.$pages = this.$kbfStepper.find('.page');
-        this.$pages.eq(0).removeClass('d-none');
-        this.lastPageIdx = this.$pages.length - 1; // Ostatni index
-        // Elementy $
-
-        this.$infoMessages = this.$kbfStepper.find('.top-message');
-        this.$infoMessages.hide().eq(0).addClass('d-flex'); // Pokaz tylko pierwszy message
-
-        this.$errorMessageElement = $('.kbf-error-message'); // Komunikaty bledow
-
-        this.$errorStepper = $('.error-stepper'); // Dolny komunikat o bledzie
-
+        this.stepper = new KbfStepper('.kbf-stepper');
+        this.$kbfStepper = this.stepper.$kbfStepper;
         this.companyInfo = $('.company-info')[0];
         this.companyDescription = $('.company-description')[0];
         this.companyInfoContents = this.companyInfo.innerHTML; // Placeholder z informacjami o firmie
@@ -22993,40 +23064,19 @@
           this.$nextButton = this.$kbfStepper.find('.button-next');
           this.$registerButton = this.$kbfStepper.find('.button-register');
           this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
-        }
+        } // Przycisk wyszukiwania po numerze REGON
 
-        this.$stepsTop = this.$kbfStepper.find('.container > .steps > .step'); // Krok u gory
-
-        this.$stepsBottom = this.$kbfStepper.find('form > .steps > .step'); // Kroki na dole
-        // Przycisk wyszukiwania po numerze REGON
 
         this.$searchByREGONButton = $('.kbf-search-button');
-        this.$searchByREGONButton.attr('disabled', 'disabled');
-        var $keywordsField = $('input.kbf-keywords'); //Tagify
+        this.$searchByREGONButton.attr('disabled', 'disabled'); //Tagify
 
-        $keywordsField.tagify().on('change', function (e, value) {
-          // Aktualizuj wartosc pola
-          if (value) {
-            var currentValue = JSON.parse(value);
-            currentValue = currentValue.map(function (nextValue) {
-              return nextValue.value;
-            });
-            $keywordsField.val(currentValue.join(','));
-          } else $keywordsField.val('');
-        }); // Maski wprowadzania
-
-        this.$formInputs = $('.form-control');
-        this.$formInputs.each(function () {
-          if (this.name === 'company_regon') new Inputmask$1({
-            placeholder: ''
-          }).mask(this);else new Inputmask$1().mask(this);
-        }); // Sprawdz czy walidator istnieje
+        new KbfTagify('input.kbf-keywords'); // Sprawdz czy walidator istnieje
 
         if (!$.fn.validate) throw errors.noValidator(); // Ustaw walidator dla branz
 
         $.validator.addMethod('industries', function (value, element) {
           return this.optional(element) || value !== 'Wybierz';
-        }, "Nazwa braży musi zostać wybrana."); // Ustaw walidator dla numeru REGON
+        }, "Nazwa branży musi zostać wybrana."); // Ustaw walidator dla numeru REGON
 
         $.validator.addMethod('regon-not-exists', function (value, element) {
           return this.optional(element) || instance.regonNotExists;
@@ -23035,28 +23085,26 @@
           return this.optional(element) || instance.regonFound;
         }, "Firma o podanym numerze REGON nie została odnaleziona."); // Walidacja
 
-        this.$formElement = $('form');
+        this.$formElement = $('form'); // TODO KbfForm ?
+
         this.validator = this.$formElement.validate({
           formName: 'register-company',
           ignore: [],
-          // rules: {
-          //
-          //     // Ustaw reguly dla branz
-          //     industry: {
-          //         required: true,
-          //         industries: true
-          //     },
-          //     "sub-industry": {
-          //         required: true,
-          //         industries: true
-          //     },
-          //     "company_regon": {
-          //         required: true,
-          //         "regon-not-exists": true,
-          //         "regon-not-found": true
-          //     }
-          //
-          // },
+          rules: {
+            // Ustaw reguly dla branz
+            industry: {
+              required: true,
+              industries: true
+            },
+            "sub-industry": {
+              required: true,
+              industries: true
+            },
+            "company_regon": {
+              "regon-not-exists": true,
+              "regon-not-found": true
+            }
+          },
           // Umiejscowienie komunikatu o bledzie
           errorPlacement: function errorPlacement($label, $element) {
             $label.addClass('kbf-error-message');
@@ -23069,10 +23117,10 @@
         }); // Wybor branz
 
         this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", window.innerWidth <= 768, false);
-        this.industrySwitcher.on('industries-changed', this.validateCurrentPage.bind(this)); // Wysiwyg
+        this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper)); // Wysiwyg
 
         this.wysiwyg = new KbfWysiwyg('.wysiwyg');
-        this.wysiwyg.on('change', this.validateCurrentPage.bind(this));
+        this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper));
       }
     }, {
       key: "addListeners",
@@ -23080,7 +23128,8 @@
         var instance = this;
         this.$prevButton.on('click', this.prevPage.bind(this));
         this.$nextButton.on('click', this.nextPage.bind(this));
-        this.$registerButton.on('click', this.submitRegister.bind(this)); // Pole REGON
+        this.$registerButton.on('click', this.submitRegister.bind(this)); // TODO
+        // Pole REGON
 
         var $regonField = $('[name="company_regon"]');
         $regonField.on('change', this.regonFieldHandler($regonField).bind(this));
@@ -23138,7 +23187,7 @@
                     $lonField.val(data["lon"]);
                   }
 
-                  instance.validateCurrentPage();
+                  instance.stepper.validateCurrentPage();
 
                 case 26:
                 case "end":
@@ -23147,80 +23196,37 @@
             }
           }, _callee);
         })));
-      } // Aktywuje przycisk wyszukiwania jezeli dlugosc REGON jest prawidlowa
-
-    }, {
-      key: "regonFieldHandler",
-      value: function regonFieldHandler($regonField) {
-        return function () {
-          if ($regonField.val().length >= 7) this.$searchByREGONButton.attr('disabled', false);else this.$searchByREGONButton.attr('disabled', 'disabled');
-        };
-      } // Zmienia na nastepna strone
-
+      }
     }, {
       key: "nextPage",
       value: function nextPage(e) {
-        e.stopPropagation();
+        this.stepper.nextPage(e);
+        if (this.stepper.currentPageIdx > 0) this.$prevButton.find('button').removeAttr('disabled');
 
-        if (this.validateCurrentPage()) {
-          // Zmienia strone tylko w przypadku jej poprawnosci
-          if (this.currentPageIdx === this.lastPageIdx) return;
-          this.$stepsTop.eq(this.currentPageIdx).addClass('done');
-          this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
-          this.$stepsBottom.eq(this.currentPageIdx).addClass('done');
-          this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
-          this.currentPageIdx++;
-          if (this.currentPageIdx > 0) this.$prevButton.find('button').removeAttr('disabled');
-
-          if (this.currentPageIdx === this.lastPageIdx) {
-            this.$nextButton.hide();
-            this.$registerButton.show();
-            this.$registerButton.find('button').addClass('show');
-          }
-
-          this.$stepsTop.eq(this.currentPageIdx).addClass('active');
-          this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
-          this.goToPage(this.currentPageIdx);
-          this.setMessages();
-          this.setSummary();
+        if (this.stepper.currentPageIdx === this.stepper.lastPageIdx) {
+          this.$nextButton.hide();
+          this.$registerButton.show();
+          this.$registerButton.find('button').addClass('show');
         }
-      } // Zmienia na poprzednia strone
 
+        this.setSummary();
+      }
     }, {
       key: "prevPage",
       value: function prevPage(e) {
-        e.stopPropagation();
-        if (this.currentPageIdx === 0) return;
-        this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
-        this.$stepsBottom.eq(this.currentPageIdx).removeClass('active');
-        this.currentPageIdx--;
-        this.$stepsTop.eq(this.currentPageIdx).removeClass('done');
-        this.$stepsTop.eq(this.currentPageIdx).addClass('active');
-        this.$stepsBottom.eq(this.currentPageIdx).removeClass('done');
-        this.$stepsBottom.eq(this.currentPageIdx).addClass('active');
+        this.stepper.prevPage(e);
 
-        if (this.currentPageIdx < this.lastPageIdx) {
+        if (this.stepper.currentPageIdx < this.stepper.lastPageIdx) {
           this.$registerButton.hide();
           this.$registerButton.find('button').removeClass('show');
           this.$nextButton.show();
         }
 
-        if (this.currentPageIdx === 0) {
+        if (this.stepper.currentPageIdx === 0) {
           this.$prevButton.find('button').attr('disabled', 'disabled');
         }
 
-        this.goToPage(this.currentPageIdx);
-        this.setMessages();
         this.setSummary();
-      }
-    }, {
-      key: "goToPage",
-      value: function goToPage(pageIdx) {
-        this.$pages.addClass('d-none');
-        this.$pages.eq(pageIdx).removeClass('d-none');
-        document.body.scrollTop = 0; // For Safari
-
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       } // Przygotowuje podsumowanie wpisu
 
     }, {
@@ -23231,8 +23237,8 @@
         var lat = $('[name="lat"]').val();
         var lon = $('[name="lon"]').val(); // Ukryj minimape jezeli nie pobrano wspolrzednych
 
-        if (this.currentPageIdx === this.lastPageIdx) {
-          if (lat.length === 0 || lon.length === 0) {
+        if (this.stepper.currentPageIdx === this.stepper.lastPageIdx) {
+          if (!lat || !lon) {
             this.$kbfMiniMapContainer.hide();
           }
         }
@@ -23244,38 +23250,21 @@
           '{company_zip}': $('[name="company_zip"]').val() || '{company_zip}',
           '{company_city}': $('[name="company_city"]').val() || '{company_city}',
           '{company_phone_1}': $('[name="company_phone_1"]').val() || '{company_phone_1}',
-          '{company_www}': $('[name="company_www"]').val() || '{company_www}',
+          '{company_www}': $('[name="company_www"]').val() || '',
           '{company_industry}': industry !== 'Wybierz' ? industry : '{company_industry}' ,
           '{company_sub_industry}': subIndustry.val() !== 'Wybierz' ? subIndustry : '{company_sub_industry}'
         }, this.companyInfoContents);
         this.companyDescription.innerHTML = replacePlaceholders({
           '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}'
         }, this.companyDescriptionContents);
-      } // Ustawia komunikaty dla stron
+      } // Aktywuje przycisk wyszukiwania jezeli dlugosc REGON jest prawidlowa
 
     }, {
-      key: "setMessages",
-      value: function setMessages() {
-        this.$infoMessages.eq(this.currentPageIdx).addClass('d-flex').show();
-        this.$infoMessages.eq(this.currentPageIdx).siblings('.top-message').removeClass('d-flex').hide();
-        $('.error-stepper').addClass('d-none');
-      } // Sprawdza poprawnosc formularza na danej stronie
-
-    }, {
-      key: "validateCurrentPage",
-      value: function validateCurrentPage() {
-        if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none');
-        var $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
-        var fieldsAreValid = true;
-        if ($currentPageInputs.length) fieldsAreValid = $currentPageInputs.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
-
-        if (this.$errorMessageElement.length > 0) {
-          if (formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
-          if (!formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
-        }
-
-        if (!fieldsAreValid) this.$errorStepper.removeClass('d-none');
-        return fieldsAreValid;
+      key: "regonFieldHandler",
+      value: function regonFieldHandler($regonField) {
+        return function () {
+          if ($regonField.val().length >= 7) this.$searchByREGONButton.attr('disabled', false);else this.$searchByREGONButton.attr('disabled', 'disabled');
+        };
       } // Potwierdza rejestracje
 
     }, {
@@ -23319,27 +23308,6 @@
 
         return getDataFromREGON;
       }()
-    }]);
-
-    return KbfStepper;
-  }();
-
-  var App = /*#__PURE__*/function () {
-    function App() {
-      _classCallCheck(this, App);
-
-      this.init();
-      this.addListeners();
-    }
-
-    _createClass(App, [{
-      key: "init",
-      value: function init() {
-        this.stepper = new KbfStepper('.kbf-stepper');
-      }
-    }, {
-      key: "addListeners",
-      value: function addListeners() {}
     }]);
 
     return App;

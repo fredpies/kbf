@@ -1,6 +1,7 @@
 <?php namespace ProcessWire;
 
 require_once __DIR__ . "../../../../vendor/autoload.php";
+include_once "FormFields.php";
 
 use DateTimeImmutable;
 use GusApi\Exception\InvalidUserKeyException;
@@ -848,7 +849,6 @@ function render_dashboard_product_inventory_list_item($product_data) {
 }
 
 
-
 /****************
  *   DANE KBF
  * *************/
@@ -1227,6 +1227,261 @@ function get_data_by_regon($regon) {
     } catch (NotFoundException $e) {
         return array("error" => "No data found");
     }
+
+
+
+}
+
+/****************
+ *  FORMULARZE
+ * *************/
+
+function getFormField($fieldName = "", $required = false, $disabled = false) {
+
+    if (empty($fieldName)) return;
+
+    switch ($fieldName) {
+
+        // FIRMA
+        case "company_name":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Nazwa firmy";
+            $field->name = "company_name";
+            $field->description = "Nazwa firmy pobrana z rejestru";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z numerem REGON nie może być puste.";
+            }
+
+            $field->icon = "fa-info";
+            return $field;
+        }
+
+        case "company_logo":
+        {
+            $field = new FormFieldImage();
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Obraz musi zostać dodany.";
+            }
+
+            return $field;
+        }
+
+        case "company_address":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Adres firmy";
+            $field->name = "company_address";
+            $field->description = "Adres firmy pobrany z rejestru";
+            $field->msgRequired = "Wypełnienie pola z nazwą miasta jest wymagane.";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z adresem firmy nie może być puste.";
+            }
+
+            $field->icon = "fa-map-marker";
+            return $field;
+        }
+
+        case "company_city":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Miasto";
+            $field->name = "company_city";
+            $field->description = "Miasto pobrane z rejestru";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z nazwą miasta nie może być puste.";
+            }
+
+            $field->icon = "fa-map-marker";
+            return $field;
+        }
+
+        case "company_zip":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Kod pocztowy";
+            $field->name = "company_zip";
+            $field->description = "Kod pocztowy pobrany z rejestru";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z kodem pocztowym nie może być puste.";
+            }
+
+            $field->icon = "fa-map-marker";
+            return $field;
+        }
+
+        case "company_regon_search":
+            {
+                $field = new FormFieldRegonSearch($disabled);
+                $field->label = "Numer REGON";
+                $field->name = "company_regon";
+                $field->description = "Wpisz numer REGON firmy w celu pobrania informacji o firmie z rejestru państwowego.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Pole z numerem REGON musi zostać wypełnione.";
+                }
+
+                $field->inputmask = "\d{7,9}";
+                $field->icon = "fa-info";
+                return $field;
+            }
+
+        case "company_regon":
+            {
+                $field = new FormFieldText($disabled);
+                $field->label = "Numer REGON";
+                $field->name = "company_regon";
+                $field->description = "Zarejestrowany numer REGON.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Pole z numerem REGON musi zostać wypełnione.";
+                }
+
+                $field->inputmask = "\d{7,9}";
+                $field->icon = "fa-info";
+                return $field;
+            }
+
+        case "company_phone_1":
+            {
+                $field = new FormFieldText($disabled);
+                $field->label = "Podstawowy numer telefonu";
+                $field->name = "company_phone_1";
+                $field->description = "Wpisz główny numer telefonu do firmy. Wypełnienie pola jest wymagane.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
+                }
+
+                $field->icon = "fa-phone";
+                return $field;
+            }
+
+        case "company_phone_2":
+            {
+                $field = new FormFieldText($disabled);
+                $field->label = "Drugi numer telefonu";
+                $field->name = "company_phone_2";
+                $field->description = "Wpisz dodatkowy numer telefonu do firmy.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
+                }
+
+                $field->icon = "fa-phone";
+                return $field;
+            }
+
+        case "company_fax":
+            {
+                $field = new FormFieldText($disabled);
+                $field->label = "Numer FAX";
+                $field->name = "company_fax";
+                $field->description = "Wpisz numer FAX do firmy.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
+                }
+
+                $field->icon = "fa-phone";
+                return $field;
+            }
+
+        case "company_email":
+            {
+                $field = new FormFieldText($disabled);
+                $field->label = "Adres e-mail";
+                $field->name = "company_email";
+                $field->description = "Wpisz główny adres e-mail do firmy. Wypełnienie pola jest wymagane.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Wypełnienie pola z adresem e-mail jest wymagane.";
+                }
+
+                $field->icon = "fa-envelope";
+                return $field;
+            }
+
+        case "company_www":
+            {
+                $field = new FormFieldText($disabled);
+                $field->label = "Adres witryny internetowej";
+                $field->name = "company_www";
+                $field->description = "Podaj adres firmowej witryny internetowej.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Wypełnienie pola z adresem witryny internetowej jest wymagane.";
+                }
+
+                $field->icon = "fa-info";
+                return $field;
+            }
+
+        case "company_nip":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Numer NIP";
+            $field->name = "company_nip";
+            $field->description = "Numer NIP pobrany z rejestru";
+            $field->inputmask = "\d{3}-\d{3}-\d{2}-\d{2}";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z numerem NIP nie może być puste.";
+            }
+
+            $field->icon = "fa-info";
+            return $field;
+        }
+
+        case "company_description":
+        {
+            $field = new FormFieldTextArea($disabled);
+            $field->label = "Opis firmy";
+            $field->name = "company_description";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola opis firmy jest wymagane.";
+            }
+
+            return $field;
+        }
+
+        case "company_keywords":
+        {
+            return new FormFieldKeywords();
+        }
+
+        case "industries":
+        {
+            return new FormFieldIndustries();
+        }
+
+
+
+
+
+    }
+
+
 
 
 

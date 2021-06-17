@@ -9,15 +9,24 @@ class TabsRenderer
     private $className = "";
 
     // Markups
+
+    public static $tabPhoneMarkup = '<h5 class="my-3 text-center">{tab}</h5>{tabContent}';
+
     public static $tabsContainer = '{contents}';
 
-    public static $tabsHeaderMarkup = '<div class="pb-4 mb-5">
-        <div class="d-none d-sm-block mt-sm-4">
-            <nav><div class="nav nav-tabs" id="nav-tab" role="tablist">
+    public static $tabsHeaderMarkup = '<div class="pb-4">
         
-                {tabsNames}
+        <div class="mt-sm-4">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            
+                    {tabsNames}
+            
+                </div>
+                
+            </nav>
         
-        </div></nav></div></div>';
+        </div>';
 
 
     public static $tabsNameMarkup = '
@@ -27,7 +36,7 @@ class TabsRenderer
                    aria-selected="{selected}">{tabNameUppercase}</a>
     ';
 
-    public static $tabsContentsMarkup = '<div class="tab-content" id="nav-tabContent">{tabContents}</div>';
+    public static $tabsContentsMarkup = '<div class="tab-content" id="nav-tabContent">{tabContents}</div></div>';
 
     public static $tabContentMarkup = '<div class="tab-pane fade {active} {show}" id="{tabName}" role="tabpanel" aria-labelledby={tabName}">{tabContent}</div>';
 
@@ -77,6 +86,27 @@ class TabsRenderer
 
     }
 
+    // Renderuje tresci dla telefonu
+    private function renderPhoneContents() {
+        $phoneContents = "";
+        $counter = 1;
+
+        foreach ($this->tabs as $tab => $markup) {
+
+            $phoneContents .= replacePlaceholders(array(
+
+                "{tab}" => $tab,
+                "{tabContent}" => $markup
+
+            ), self::$tabPhoneMarkup);
+
+            $counter++;
+
+        }
+
+        return $phoneContents;
+    }
+
     // Renderuje tresci zakladek
     private function renderTabsContents() {
 
@@ -104,20 +134,29 @@ class TabsRenderer
 
         }
 
+        $tabsContents = replacePlaceholders(array(
+
+            "{tabContents}" => $tabsContents,
+
+        ), self::$tabsContentsMarkup);
+
         return $tabsContents;
 
     }
 
     // Renderuje zakladki
-    public function render() {
+    public function render($phone = false) {
 
-        $contents = $this->renderTabsHeader();
-        $contents .= $this->renderTabsContents();
+        if ($phone) {
+            return $this->renderPhoneContents();
+        } else {
 
-        return replacePlaceholders(array(
-            "{contents}" => $contents
-        ), self::$tabsContainer);
+            $contents = $this->renderTabsHeader();
+            $contents .= $this->renderTabsContents();
 
+            return replacePlaceholders(array(
+                "{contents}" => $contents
+            ), self::$tabsContainer);
+        }
     }
-
 }

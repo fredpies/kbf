@@ -5,7 +5,6 @@ include_once "lib/functions.php";
 include_once "lib/FormRenderer.class.php";
 include_once "lib/StepperRenderer.class.php";
 include_once "lib/Alert.class.php";
-include_once "lib/FormFields.php";
 
 $urls = wire("urls");
 
@@ -19,111 +18,52 @@ $stepper->stepperName = "Rejestracja firmy";
 $stepper->actionName = "Zarejestruj";
 $stepper->formName = 'register-company';
 
-// Regon
-$company_regonSearch_field = new FormFieldRegonSearch();
-$company_regonSearch_field->label = "Numer REGON";
-$company_regonSearch_field->name = "company_regon";
-$company_regonSearch_field->description = "Wpisz numer REGON firmy w celu pobrania informacji o firmie z rejestru państwowego.";
-//$company_regonSearch_field->required = "required";
-$company_regonSearch_field->msgRequired = "Pole z numerem REGON nie może być puste.";
-$company_regonSearch_field->inputmask = "\d{7,9}";
-$company_regonSearch_field->icon = "fa-info";
-
-// Nazwa firmy
-$company_name_field = new FormFieldText(true);
-$company_name_field->label = "Nazwa firmy";
-$company_name_field->name = "company_name";
-//$company_name_field->className = "company_name";
-$company_name_field->description = "Nazwa firmy pobrana z rejestru";
-//$company_name_field->required = true;
-$company_name_field->msgRequired = "Wypełnienie pola z nazwą firmy jest wymagane";
-$company_name_field->icon = "fa-info";
-
-// Nip firmy
-$company_nip_field = new FormFieldText(true);
-$company_nip_field->label = "Numer NIP";
-$company_nip_field->name = "company_nip";
-//$company_nip_field->className = "company_nip";
-$company_nip_field->description = "Numer NIP pobrany z rejestru";
-$company_nip_field->icon = "fa-info";
-$company_nip_field->inputmask = "\d{3}-\d{3}-\d{2}-\d{2}";
-
-// Adres
-$company_address_field = new FormFieldText(true);
-$company_address_field->label = "Adres firmy";
-$company_address_field->name = "company_address";
-$company_address_field->description = "Adres firmy pobrany z rejestru";
-//$company_address_field->required = true;
-$company_address_field->icon = "fa-map-marker";
-$company_address_field->msgRequired = "Wypełnienie pola z nazwą miasta jest wymagane.";
-
-// Miasto
-$company_city_field = new FormFieldText(true);
-$company_city_field->label = "Miasto";
-$company_city_field->name = "company_city";
-$company_city_field->description = "Miasto pobrane z rejestru";
-//$company_city_field->required = true;
-$company_city_field->icon = "fa-map-marker";
-
-// Kod pocztowy
-$company_zip_field = new FormFieldText(true);
-$company_zip_field->label = "Kod pocztowy";
-$company_zip_field->name = "company_zip";
-$company_zip_field->description = "Kod pocztowy pobrany z rejestru";
-//$company_zip_field->required = true;
-$company_zip_field->icon = "fa-map-marker";
-
-// Branze
-$company_industries_field = new FormFieldIndustries();
-
-// Opis firmy
-$company_description_field = new FormFieldTextArea();
-$company_description_field->label = "Opis firmy";
-$company_description_field->name = "company_description";
-$company_description_field->required = true;
-$company_description_field->msgRequired = "Wypełnienie pola opis firmy jest wymagane.";
-
-// Slowa kluczowe
-$company_keywords_field = new FormFieldKeywords();
+// Logo
+$logoImage = $urls->images . "logo-placeholder.jpg";
+$company_logo_field = getFormField("company_logo");
+$company_logo_field->label = "Logo firmy";
+$company_logo_field->imagePlaceholder = $logoImage;
+$company_logo_field->name = "company_logo";
+$company_logo_field->msgRequired = "Logo firmy musi zostać dodane.";
+$company_logo_field->description = "Wybierz plik graficzny reprezentujący logo firmy.";
 
 // Podsumowanie
 $company_summary = render_company_summary();
 
 // Krok "Dane firmy"
-
 $form_step_1 = new FormRenderer("register-company", $company_fields);
 $form_step_1->onlyFields = true;
-$form_step_1->addMarkup($company_regonSearch_field->render(), true);
+
+$form_step_1->addMarkup(getFormField("company_regon_search", true)->render(), true);
 $form_step_1->addMarkup(render_info_message('Po pobraniu danych o firmie z rejestru REGON zostaną wypełnione odpowiednie pola formularza.'), true);
 $form_step_1->addMarkup('<div class="header-shadow-wrapper position-static"></div>', true);
 $form_step_1->addMarkup('<div class="w-100 pb-4"></div>', true);
-$form_step_1->addMarkup($company_name_field->render(), true);
-$form_step_1->addMarkup($company_nip_field->render(), true);
-$form_step_1->addMarkup($company_address_field->render(), true);
-$form_step_1->addMarkup($company_zip_field->render(), true);
-$form_step_1->addMarkup($company_city_field->render(), true);
+$form_step_1->addMarkup(getFormField("company_name", false, true)->render(), true);
+$form_step_1->addMarkup(getFormField("company_nip", false, true)->render(), true);
+$form_step_1->addMarkup(getFormField("company_address", false, true)->render(), true);
+$form_step_1->addMarkup(getFormField("company_zip", false, true)->render(), true);
+$form_step_1->addMarkup(getFormField("company_city", false, true)->render(), true);
 $form_step_1->addMarkup(render_info_message('Sprawdź poprawność pobranych danych i wybierz następny krok. W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.'), true);
 $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane będziesz mógł zmodyfikować również w panelu zarządzania.' ), true);
 
-
 // Krok "Informacje podstawowe"
-
 $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
-$form_step_2->addField($company_fields->get("company_logo"));
-$form_step_2->addMarkup($company_industries_field->render());
+
+$form_step_2->addMarkup($company_logo_field->render(), true);
+$form_step_2->addMarkup(getFormField("industries")->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
-$form_step_2->addMarkup($company_description_field->render());
+$form_step_2->addMarkup(getFormField("company_description", true)->render());
 $form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'), true);
 
 // Krok "Dane kontaktowe"
 $form_step_3 = new FormRenderer("register-company", $company_fields);
 $form_step_3->onlyFields = true;
-$form_step_3->addField($company_fields->get("company_email"));
-$form_step_3->addField($company_fields->get("company_phone_1"));
-$form_step_3->addField($company_fields->get("company_whatsup"));
-$form_step_3->addField($company_fields->get("company_www"));
-$form_step_3->addMarkup($company_keywords_field->render());
+
+$form_step_3->addMarkup(getFormField("company_email", true)->render(), true);
+$form_step_3->addMarkup(getFormField("company_phone_1", true)->render(), true);
+$form_step_3->addMarkup(getFormField("company_www")->render(), true);
+$form_step_3->addMarkup(getFormField("company_keywords")->render());
 $form_step_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora aby wpisywać kolejne.<br><a data-toggle="modal" data-target="#keywords" class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>'), true);
 
 // Modal
