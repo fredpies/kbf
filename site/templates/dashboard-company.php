@@ -39,12 +39,22 @@ $company_regon_field = new FormFieldText(true);
 $company_regon_field->label = "REGON";
 $company_regon_field->name = "company_regon";
 $company_regon_field->value = $sanitizer->text($company_page->get('company_regon'));
+$company_regon_field->inputmask = "\d{7,9}";
 $company_regon_field->className = "col-12";
 $company_regon_field->icon = "fa-info";
+
+// Telefon firmy
+$company_phone_field = new FormFieldText();
+$company_phone_field->label = "TELEFON";
+$company_phone_field->name = "company_phone_1";
+$company_phone_field->value = $sanitizer->text($company_page->get('company_phone_1'));
+$company_phone_field->className = "col-12";
+$company_phone_field->icon = "fa-phone";
 
 $form_1->addMarkup($company_name_field->render(), true);
 $form_1->addMarkup($company_nip_field->render(), true);
 $form_1->addMarkup($company_regon_field->render(), true);
+$form_1->addMarkup($company_phone_field->render(), true);
 $form_1->addMarkup(render_info_message('Uwaga: Zmiana podstawowych danych identyfikacyjnych wymaga kontaktu za administratorem.', 'col-11 mb-3'), true);
 
 // Formularz dla "Adres"

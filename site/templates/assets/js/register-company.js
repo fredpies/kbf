@@ -835,8 +835,8 @@
 
   var config = {
     env: 'dev',
-    url: 'http://localhost:3000',
-    apiEndpoint: 'http://localhost:3000/kbf2/'
+    url: 'http://localhost',
+    apiEndpoint: 'http://localhost/kbf'
   };
 
   function _arrayWithHoles(arr) {
