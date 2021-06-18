@@ -43,13 +43,13 @@ $company_regon_field->description = "";
 //  Podstawowy numer telefonu
 $company_phone_1_field = getFormField("company_phone_1", true);
 $company_phone_1_field->value = $sanitizer->text($company_page->get('company_phone_1'));
-$company_phone_1_field->className = "col-12";
+$company_phone_1_field->className = "col-12 mb-3";
 $company_phone_1_field->description = "";
 
 //  Drugi numer telefonu
 $company_phone_2_field = getFormField("company_phone_2");
 $company_phone_2_field->value = $sanitizer->text($company_page->get('company_phone_2'));
-$company_phone_2_field->className = "col-12";
+$company_phone_2_field->className = "col-12 mb-3";
 $company_phone_2_field->description = "";
 
 //  FAX
@@ -57,14 +57,6 @@ $company_fax_field = getFormField("company_fax");
 $company_fax_field->value = $sanitizer->text($company_page->get('company_fax'));
 $company_fax_field->className = "col-12";
 $company_fax_field->description = "";
-
-// Telefon firmy
-$company_phone_field = new FormFieldText();
-$company_phone_field->label = "TELEFON";
-$company_phone_field->name = "company_phone_1";
-$company_phone_field->value = $sanitizer->text($company_page->get('company_phone_1'));
-$company_phone_field->className = "col-12";
-$company_phone_field->icon = "fa-phone";
 
 $form_1->addMarkup($company_name_field->render(), true);
 $form_1->addMarkup($company_nip_field->render(), true);
@@ -80,9 +72,10 @@ $form_2 = new FormRenderer("update-company", $company_fields);
 $form_2->onlyFields = true;
 
 // Adres
-$company_address_field = getFormField("company_address");
+$company_address_field = getFormField("company_address", true);
 $company_address_field->value = $sanitizer->text($company_page->get('company_address'));
-$company_address_field->className = "col-12";
+$company_address_field->className = "col-12 mb-3";
+$company_address_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+\s\d{1,3}[a-zA-Z]?\s[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+";
 $company_address_field->description = "";
 
 // Miasto
@@ -98,7 +91,7 @@ $company_zip_field->className = "col-12";
 $company_zip_field->description = "";
 
 $form_2->addMarkup($company_address_field->render(), true);
-$form_2->addMarkup(render_info_message('Wpisz i wybierz adres z listy w celu wypełnienia poniższych pól.', 'col-12 mb-4'), true);
+$form_2->addMarkup(render_info_message('Wpisz adres, nazwę miasta i wybierz pozycję z listy podpowiedzi w celu wypełnienia poniższych pól.<br><br>Przykład poprawnie wpisanego adresu: "JAGIELLOŃSKA 115A BYDGOSZCZ"', 'col-12 mb-4'), true);
 $form_2->addMarkup($company_city_field->render(), true);
 $form_2->addMarkup($company_zip_field->render(), true);
 
@@ -106,9 +99,13 @@ $form_2->addMarkup($company_zip_field->render(), true);
 $form_3 = new FormRenderer("update-company", $company_fields);
 $form_3->onlyFields = true;
 
+// Opis firmy pole ukryte - hack
+$company_description_hidden = getFormField('hidden');
+$company_description_hidden->name = 'company_description_hidden';
+$company_description_hidden->value = $sanitizer->entitiesMarkdown($company_page->get('company_description_html'));
+
 // Opis firmy
 $company_description_field = getFormField("company_description");
-$company_description_field->value = $sanitizer->text($company_page->get('company_description'));
 $company_description_field->className = "col-12";
 $company_description_field->description = "";
 
@@ -118,8 +115,9 @@ $company_keywords_field->value = $sanitizer->text($company_page->get('company_ke
 $company_keywords_field->className = "col-12";
 $company_keywords_field->description = "";
 
+$form_3->addMarkup($company_description_hidden->render(), true);
 $form_3->addMarkup($company_description_field->render(), true);
-$form_3->addMarkup(render_info_message('Po zaznaczeniu wpisanego tekstu udostępnione jest menu formatotowania. W polu możesz użyć podstawowych opcji formatowania tekstu w celu opisania firmy.', "col-12 mb-4"), true);
+$form_3->addMarkup(render_info_message('Po zaznaczeniu wpisanego tekstu udostępnione jest menu formatotowania. W polu możesz użyć podstawowych opcji formatowania tekstu w celu opisania firmy.', "col-12 my-3"), true);
 $form_3->addMarkup($company_keywords_field->render(), true);
 
 // Modal
@@ -130,9 +128,9 @@ $modal = render_modal("keywords", 'Słowa kluczowe', $modal_contents);
 $form_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora aby wpisywać kolejne.<br><a data-toggle="modal" data-target="#keywords" class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>', 'col-12 mb-4'), true);
 $form_3->addMarkup($modal, true);
 
-$button_markup = '<div class="row justify-content-center mt-4">
+$button_markup = '<div class=" row justify-content-center mt-4">
                     <div class="col-12 col-sm-6">
-                        <button type="submit" class="btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                        <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
                     </div>
                   </div>';
 
@@ -209,7 +207,7 @@ $tabsPhone->addMarkup($form_3->render(), "Opis");
 
                             <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">Twoja firma</h3>
 
-                            <form class="mt-5" method="post" action="">
+                            <form name="dashboard-company-edit" class="mt-5" method="post" action="">
 
                                 <div class="d-none d-sm-block">
                                     <?= $tabs->render() ?>

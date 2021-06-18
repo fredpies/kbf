@@ -992,10 +992,11 @@ function get_lat_lon($street, $city, $zip = "")
 function get_addresses($query)
 {
 
-    $base_url = "https://nominatim.openstreetmap.org/search.php?addressdetails=1&&limit=50&format=jsonv2&email=pawel.kwiecien@webplanet.biz&";
-    $request_url = $base_url . "street=" . urlencode($query);
+
+    $request_url = "https://nominatim.openstreetmap.org/search?q=" . $query . "&addressdetails=1&format=json&polygon=0&email=pawel.kwiecien@webplanet.biz";
 
     $json = file_get_contents($request_url);
+
     $json_decoded = json_decode($json, true);
 
     return $json_decoded;
@@ -1273,7 +1274,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
         case "company_address":
         {
-            $field = new FormFieldText($disabled);
+            $field = new FormFieldAddressAutocomplete($disabled);
             $field->label = "Adres firmy";
             $field->name = "company_address";
             $field->description = "Adres firmy pobrany z rejestru";
@@ -1281,7 +1282,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
             if ($required) {
                 $field->required = true;
-                $field->msgRequired = "Pole z adresem firmy nie może być puste.";
+                $field->msgRequired = "Pole z adresem firmy musi zostać wypełnione.";
             }
 
             $field->icon = "fa-map-marker";
@@ -1395,7 +1396,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
                 if ($required) {
                     $field->required = true;
-                    $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
+                    $field->msgRequired = "Wypełnienie pola z numerem FAX jest wymagane.";
                 }
 
                 $field->icon = "fa-phone";
@@ -1475,8 +1476,10 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return new FormFieldIndustries();
         }
 
-
-
+        case "hidden":
+        {
+            return new FormFieldHidden();
+        }
 
 
     }

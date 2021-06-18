@@ -21,7 +21,7 @@ class KbfAddressAutocomplete extends EventTarget {
         this.config = {
 
             minLength: 6,
-            requestThrottling: 300,
+            requestThrottling: 250,
             noResultsText: this.lang === 'pl' ? 'Nie odneleziono adresu.' : '',
 
             // Ustawienia resolvera
@@ -38,19 +38,28 @@ class KbfAddressAutocomplete extends EventTarget {
                 instance.currentAddressInfo = {
                         lat: item.lat,
                         lon: item.lon,
-                        address: item.address.road + ' ' + item.address.house_number,
+                        address: item.address.road,
                         city: item.address.city,
                         zip: item.address.postcode,
                 };
 
                 instance.emitAddressChange();
 
-                // instance.emit(new CustomEvent('address-change', { detail: instance.currentAddressInfo }))
+                let houseNumber;
+                let city;
+
+                if (item.address.house_number) {
+                    houseNumber = item.address.house_number.toUpperCase();
+                } else houseNumber = '';
+
+                if (item.address.town) city = item.address.town;
+                if (item.address.city) city = item.address.city;
+
 
                 return {
                     id: item.place_id,
-                    text: item.address.road + ' ' + item.address.house_number,
-                    html: `${item.address.road.toUpperCase() + ' ' + item.address.house_number.toUpperCase()}, <b>${item.address.city.toUpperCase()}</b>`
+                    text: item.address.road + ' ' + houseNumber,
+                    html: `${item.address.road.toUpperCase() + ' ' + houseNumber}, <b>${city.toUpperCase()}</b>`
                 }
             },
 
@@ -60,7 +69,7 @@ class KbfAddressAutocomplete extends EventTarget {
                 searchPre: function (query) {
 
                     query = query.replace(new RegExp("_+"), '');
-                    let isQueryValid = new RegExp("[A-Za-zŃÓŻŹŁŚńóżźłś]+\\s+\\d+[a-zA-Z]?").test(query);
+                    let isQueryValid = new RegExp("[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+\\s\\d{1,3}[a-zA-Z]?\\s[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+").test(query);
                     if (isQueryValid ) return query;
                     else return false;
 
@@ -68,8 +77,9 @@ class KbfAddressAutocomplete extends EventTarget {
 
                 // Przygotuj wyniki
                 searchPost: function (results) {
-                    return results.filter(function (result) {
-                        return result.address.house_number !== undefined && result.address.city !== undefined
+
+                    return Object.values(results).filter(function (result) {
+                        return (result.address.city !== undefined || result.address.town !== undefined)
                     })
 
                 },
@@ -90,7 +100,6 @@ class KbfAddressAutocomplete extends EventTarget {
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
 
-        new Inputmask().mask(this.$addressAutocomplete[0]);
         this.$addressAutocomplete.autoComplete(this.config);
 
     }

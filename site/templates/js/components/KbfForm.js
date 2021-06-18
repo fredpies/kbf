@@ -16,7 +16,7 @@ class KbfForm {
         if (!this.formElement) throw errors.formNotFound(this.formName);
 
         this.$formElement = $(this.formElement);
-        this.$submitButton = this.$formElement.find('button[type="submit"]');
+        // this.$submitButton = this.$formElement.find('button[type="submit"]');
 
         // Error message
         this.$errorMessageElement = $('.kbf-error-message');
@@ -51,14 +51,6 @@ class KbfForm {
 
     init() {
 
-        let $ = window.$;
-
-        // Ustaw custom rules
-        $.validator.addMethod("kbfPhone", function(value, element) {
-            return this.optional( element ) || /[1-9][0-9]{2}-[0-9]{3}-[0-9]{3,}/.test( value );
-        });
-
-
         // Ustaw maski
         Array.from(this.formElement.elements).forEach(function (formElement) {
             new Inputmask().mask(formElement)
@@ -71,29 +63,34 @@ class KbfForm {
         let instance = this;
         let $ = window.$;
 
-        // Usun domyslne zachowanie formularza
-        this.$formElement.on('submit', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-        });
+        // // Usun domyslne zachowanie formularza
+        // this.$formElement.on('submit', function (e) {
+        //     e.stopPropagation();
+        //     e.preventDefault();
+        // });
+        //
+        // // Waliduj formularz
+        // this.$submitButton.on('click', function (e) {
+        //     e.stopPropagation();
+        //     instance.$formElement.validate({ ...instance.defaultValidatorConfig, ...instance.validatorConfig });
+        //     instance.handleErrorMessage.call(instance);
+        // });
+    }
 
-        // Waliduj formularz
-        this.$submitButton.on('click', function (e) {
-            e.stopPropagation();
-            instance.$formElement.validate({ ...instance.defaultValidatorConfig, ...instance.validatorConfig });
-            instance.handleErrorMessage.call(instance);
-        });
+    validate() {
+        this.$formElement.validate({ ...this.defaultValidatorConfig, ...this.validatorConfig });
+        this.handleErrorMessage();
     }
 
     // Ustawia error message jezeli istnieje
     handleErrorMessage() {
 
-        let formIsValid = this.$formElement.valid();
+        this.formIsValid = this.$formElement.valid();
 
         // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
         if (this.$errorMessageElement.length > 0) {
-            if(formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
-            if(!formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
+            if(this.formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
+            if(!this.formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
         }
     }
 

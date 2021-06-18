@@ -25,6 +25,7 @@ class FormField
             $this->placeholderMap["{disabled}"] = "disabled";
             $this->placeholderMap["{inputmask}"] = "";
         }
+
     }
 
     public function renderMarkup($markup)
@@ -122,7 +123,7 @@ class FormFieldAddressAutocomplete extends FormField
                             </div>
 
                             <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
-                                   name="{name}" {disabled} {required} {msgRequired} data-inputmask-regex="[A-Za-zŃÓŻŹŁŚńóżźłś\s-]+\d{1,}[a-zA-Z]{1,}" value="{value}">
+                                   name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
                             
                             <div class="input-focus-bg"></div>
 
