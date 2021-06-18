@@ -51,13 +51,13 @@ include_once "lib/functions.php";
 
                             <div class="row">
                                 <div class="col-12 col-md-7">
-                                    <h5 class="font-weight-700 mb-2 section-title-4 text-left">Mila Professional Sp. z o.o.</h5>
-                                    <div class="company-street">ul. Kościuszki 27</div>
+                                    <h5 class="font-weight-700 mb-2 section-title-4 text-left">Pracownia Fryzjerska Lilianna Baj</h5>
+                                    <div class="company-street">MŁYŃSKA 51</div>
                                     <div class="company-zip-city">
-                                        <span class="company-zip">85-027</span>
-                                        <span class="company-city">Bydgoszcz</span>
+                                        <span class="company-zip">88-100</span>
+                                        <span class="company-city">INOWROCŁAW</span>
                                     </div>
-                                    <a class="text-dark text-nowrap" href="tel:+48601789633"><i class="fas fa-phone-alt mr-2"></i>+48601789633</a>
+                                    <a class="text-dark text-nowrap" href="tel:602879723"><i class="fas fa-phone-alt mr-2"></i>602879723</a>
                                 </div>
 
                                 <div class="col-12 col-md-5 text-center text-md-right">
@@ -68,10 +68,8 @@ include_once "lib/functions.php";
 
                             <div class="row py-3">
                                 <div class="col-12">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                                    <a href="#" class="d-block text-primary text-nowrap text-right">Edytuj</a>
+                                    <p>Powstaliśmy w 2020 roku by profesjonalnie i niepowtarzalnie spełniać życzenia i marzenia klientów. Specjalizujemy się w lansowaniu fryzur lekkich i naturalnych zgodnie ze światowymi trendami mody. W naszej pracowni stawiamy na pielęgnację i regenerację włosów – to nasz atut. Zdrowe i błyszczące włosy to podstawowy warunek by fryzjer stworzył piękną, praktyczną i niepowtarzalną fryzurę. Nasz zespół na bieżąco podnosi swoje kwalifikacje poprzez liczne szkolenia. Serdecznie zapraszamy do naszej pracowni, w której panuje przyjazna i luźna atmosfera, a czas spędzony u nas uświetni dobra kawa.</p>
+                                    <a href="<?php echo $pages->get(1)->url ?>panel/dane-firmy" class="d-block text-primary text-nowrap text-right">Edytuj</a>
                                 </div>
                             </div>
 
