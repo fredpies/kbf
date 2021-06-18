@@ -85,13 +85,133 @@ $product_data = sanitize_product_data($product_page);
 
                                                 <div class="tab-pane fade show active" id="registered" role="tabpanel" aria-labelledby="nav-first-tab">
 
-                                                    <?= render_dashboard_product_inventory_list_item($product_data) ?>
+                                                    <!--
+                                                    <?= render_dashboard_product_inventory_list_item($product_data) ?> -->
+
+                                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                            <img src="<?php echo $urls->images ?>tmp/p1.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND CLEAR COLOR SYSTEM ODŻYWKA PIELĘGNUJĄCA KOLOR WŁOSÓW 250ML</span></p>
+                                                            <p class='text-center text-sm-left'>Dostępne: 120</p>
+                                                        </div>
+
+                                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>75 PLN</span>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
+                                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                            <img src="<?php echo $urls->images ?>tmp/p2.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM ROSSO - CZERWIEŃ | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
+                                                            <p class='text-center text-sm-left'>Dostępne: 21</p>
+                                                        </div>
+
+                                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
+                                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                            <img src="<?php echo $urls->images ?>tmp/p3.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM ARGENTO - SREBRO | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
+                                                            <p class='text-center text-sm-left'>Dostępne: 12</p>
+                                                        </div>
+
+                                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
+                                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                            <img src="<?php echo $urls->images ?>tmp/p4.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM SABBIA - PIASEK | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
+                                                            <p class='text-center text-sm-left'>Dostępne: 43</p>
+                                                        </div>
+
+                                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
+                                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                            <img src="<?php echo $urls->images ?>tmp/p5.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM VIOLET - FIOLET | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
+                                                            <p class='text-center text-sm-left'>Dostępne: 7</p>
+                                                        </div>
+
+                                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
+                                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
 
                                                 <div class="tab-pane fade" id="sold" role="tabpanel" aria-labelledby="nav-second-tab">
 
-                                                    <?= render_dashboard_product_sold_list_item($product_data) ?>
+                                                    <!--
+                                                    <?= render_dashboard_product_sold_list_item($product_data) ?> -->
+                                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                            <img src="<?php echo $urls->images ?>tmp/p1.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
+                                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND CLEAR COLOR SYSTEM ODŻYWKA PIELĘGNUJĄCA KOLOR WŁOSÓW 250ML</span></p>
+                                                            <p class='text-center text-sm-left'>Sprzedane: 2</p>
+                                                        </div>
+
+                                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>75 PLN</span>
+                                                        </div>
+
+                                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                            <a href="#" class='mr-n1' title='usun'>Usuń z listy</a>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
 
