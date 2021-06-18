@@ -12,12 +12,12 @@ include_once "partials/_init.php";
 
                 <div class="pb-2 mb-4">
                     <a href="<?php echo $pages->get(1)->url ?>panel">
-                        <img src="<?php echo $urls->images ?>upload/company-logo.png" alt="company-logo" class="img-fluid rounded-circle" style="height: 80px;">
+                        <img src="<?php echo $urls->images ?>tmp/baj-logo.png" alt="company-logo" class="img-fluid rounded-circle" style="height: 80px;">
                     </a>
                 </div>
 
-                <h5 class="font-weight-700 mb-0">Nazwa firmy</h5>
-                <small>firma@gmail.com</small>
+                <h5 class="font-weight-700 mb-0">Pracownia Fryzjerska Lilianna Baj</h5>
+                <small>liliannabaj@gmail.com</small>
                 <div class="mt-2">
                     <span class="badge badge-pill badge-success mb-4">Pielęgnacja i Uroda</span>
                 </div>
@@ -35,19 +35,19 @@ include_once "partials/_init.php";
                 <ul class="list-group list-group-flush py-0">
                     <a href="<?php echo $pages->get(1)->url ?>panel/banery" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Banery</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-secondary rounded-xl px-2 mb-1">21</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-secondary rounded-xl px-2 mb-1">0</small>
                     </a>
                     <a href="<?php echo $pages->get(1)->url ?>panel/produkty" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Produkty</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-indigo rounded-xl px-2 mb-1">21</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-indigo rounded-xl px-2 mb-1">5</small>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Usługi</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-rose rounded-xl px-2 mb-1">21</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-rose rounded-xl px-2 mb-1">6</small>
                     </a>
                     <a href="<?php echo $pages->get(1)->url ?>panel/oferty-pracy" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Oferty pracy</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-carrot rounded-xl px-2 mb-1">3</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-carrot rounded-xl px-2 mb-1">1</small>
                     </a>
                 </ul>
 
@@ -98,7 +98,7 @@ include_once "partials/_init.php";
                     </a>
                     <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Pozycjonerzy</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-purple rounded-xl px-2 mb-1">2</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-purple rounded-xl px-2 mb-1">0</small>
                     </a>
                 </ul>
 

@@ -88,11 +88,11 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>W ofercie</span>
-                                                <span class="font-weight-bold">48</span>
+                                                <span class="font-weight-bold">5</span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Sprzedane</span>
-                                                <span class="font-weight-bold">711</span>
+                                                <span class="font-weight-bold">2</span>
                                             </div>
                                         </div>
                                     </div>
@@ -109,7 +109,7 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>W ofercie</span>
-                                                <span class="font-weight-bold">7</span>
+                                                <span class="font-weight-bold">6</span>
                                             </div>
                                         </div>
                                     </div>
@@ -126,11 +126,11 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Aktywne</span>
-                                                <span class="font-weight-bold">4</span>
+                                                <span class="font-weight-bold">1</span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Otrzymane CV</span>
-                                                <span class="font-weight-bold">11</span>
+                                                <span class="font-weight-bold">6</span>
                                             </div>
                                         </div>
                                     </div>
@@ -147,11 +147,11 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Aktywne</span>
-                                                <span class="font-weight-bold">2</span>
+                                                <span class="font-weight-bold">0</span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Zapisane</span>
-                                                <span class="font-weight-bold">7</span>
+                                                <span class="font-weight-bold">0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -168,7 +168,7 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Zarejestrowani</span>
-                                                <span class="font-weight-bold">2</span>
+                                                <span class="font-weight-bold">0</span>
                                             </div>
                                         </div>
                                     </div>
@@ -184,7 +184,7 @@ include_once "lib/functions.php";
                                         </div>
                                         <div class="divider-1 divider-light-1 m-0"></div>
                                         <div class="card-body">
-                                           <h6 class="text-white text-center">4432 PLN</h6>
+                                           <h6 class="text-white text-center">150 PLN</h6>
                                            <button type="button" class="w-100 btn btn-round btn-warning mt-3 mb-0">WYPŁATA</button>
                                         </div>
                                     </div>
