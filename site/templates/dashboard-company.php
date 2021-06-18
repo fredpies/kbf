@@ -13,7 +13,7 @@ $sanitizer = wire('sanitizer');
 $page_title = $sanitizer->text($page->title);
 
 // TODO: Nalezy zmienic na fake firme
-$company_page = $pages->get(33807);
+$company_page = $pages->get(348487);
 $company_fields = $company_page->fields;
 
 //  Email
