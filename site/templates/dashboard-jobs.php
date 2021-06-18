@@ -88,13 +88,26 @@ $page_title = $sanitizer->text($page->title);
 
                                     <?=  render_dashboard_job_list_item("Fryzjer Stylista", "Pełen etat", "2021-12-01") ?>
 
-
-                                    <div class="row justify-content-center justify-content-lg-end">
-                                        <div class="col-6">
-                                            <nav class="mt-3" aria-label="Companies navigation">
-                                                <ul class="pagination pagination-round justify-content-center"><li class="page-item"></li><li class="page-item active"><a class="page-link" href="#">1<span class="sr-only">(current)</span></a></li><li class="page-item"><a class="page-link" href="/kbf2/firmy/page2?industry=BIURO+I+DOM">2</a></li><li class="page-item"><a class="page-link" href="/kbf2/firmy/page3?industry=BIURO+I+DOM">3</a></li><li class="page-item"><a class="page-link" href="/kbf2/firmy/page4?industry=BIURO+I+DOM">4</a></li><li class="page-item"><a class="page-link" href="/kbf2/firmy/page5?industry=BIURO+I+DOM">5</a></li><li class="page-item">…</li><li class="page-item"><a class="page-link" href="/kbf2/firmy/page413?industry=BIURO+I+DOM">413</a></li><li class="page-item"><a class="page-link" href="/kbf2/firmy/page2?industry=BIURO+I+DOM"><span aria-hidden="true">»</span><span class="sr-only">Następna</span></a></li></ul>                            </nav>
-                                        </div>
-                                    </div>
+                                    <br>
+                                    <nav aria-label="navigation">
+                                        <ul class="pagination pagination-round justify-content-center">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">«</span>
+                                                    <span class="sr-only">Poprzednia</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">»</span>
+                                                    <span class="sr-only">Następna</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
 
 
 

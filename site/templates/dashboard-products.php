@@ -188,6 +188,25 @@ $product_data = sanitize_product_data($product_page);
                                                         </div>
                                                     </div>
 
+                                                    <nav aria-label="Products navigation">
+                                                        <ul class="pagination pagination-round justify-content-center">
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Previous">
+                                                                    <span aria-hidden="true">«</span>
+                                                                    <span class="sr-only">Poprzednia</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
+                                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Next">
+                                                                    <span aria-hidden="true">»</span>
+                                                                    <span class="sr-only">Następna</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
                                                 </div>
 
                                                 <div class="tab-pane fade" id="sold" role="tabpanel" aria-labelledby="nav-second-tab">
@@ -212,6 +231,26 @@ $product_data = sanitize_product_data($product_page);
                                                             <a href="#" class='mr-n1' title='usun'>Usuń z listy</a>
                                                         </div>
                                                     </div>
+
+                                                    <nav aria-label="Products navigation">
+                                                        <ul class="pagination pagination-round justify-content-center">
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Previous">
+                                                                    <span aria-hidden="true">«</span>
+                                                                    <span class="sr-only">Poprzednia</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
+                                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Next">
+                                                                    <span aria-hidden="true">»</span>
+                                                                    <span class="sr-only">Następna</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
 
                                                 </div>
 
