@@ -7,6 +7,7 @@ import config from "../../config/config";
 import {replacePlaceholders} from "../../functions/library";
 import KbfTagify from "../../components/KbfTagify";
 
+
 class App {
 
     constructor() {
@@ -228,7 +229,7 @@ class App {
     setSummary() {
 
         let industry = $('[name="industry"]').val();
-        let subIndustry = $('[name="sub-industry"]');
+        let subIndustry = $('[name="sub-industry"]').val();
 
         let lat = $('[name="lat"]').val();
         let lon = $('[name="lon"]').val();
@@ -241,6 +242,7 @@ class App {
             }
         }
 
+
         this.companyInfo.innerHTML = replacePlaceholders({
             '{company_name}': $('[name="company_name"]').val() || '{company_name}',
             '{company_address}': $('[name="company_address"]').val() || '{company_address}',
@@ -249,10 +251,27 @@ class App {
             '{company_city}': $('[name="company_city"]').val() || '{company_city}',
             '{company_phone_1}': $('[name="company_phone_1"]').val() || '{company_phone_1}',
             '{company_www}': $('[name="company_www"]').val() || '',
+            '{company_email}': $('[name="company_email"]').val() || '{company_email}',
             '{company_industry}': industry !== 'Wybierz' ? industry : '{company_industry}' || '{company_industry}',
-            '{company_sub_industry}': subIndustry.val() !== 'Wybierz' ? subIndustry : '{company_sub_industry}',
+            '{company_sub_industry}': subIndustry !== 'Wybierz' ? subIndustry : '{company_sub_industry}',
 
         }, this.companyInfoContents);
+
+
+        // Usun logo WWW jezel nie podano w formularzu
+        if ( !$('[name="company_www"]').val()) {
+
+            let $companyWWW =  $('.company-www');
+            $companyWWW.removeClass('d-block');
+            $companyWWW.addClass('d-none')
+        }
+
+        else {
+            console.log('called2')
+            let $companyWWW =  $('.company-www');
+            $companyWWW.addClass('d-block');
+            $companyWWW.removeClass('d-none');
+        }
 
         this.companyDescription.innerHTML = replacePlaceholders({
             '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}',

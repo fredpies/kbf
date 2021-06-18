@@ -108,9 +108,9 @@ class FormFieldText extends FormField
 class FormFieldAddressAutocomplete extends FormField
 {
 
-    public function __construct($disabled = false)
+    public function __construct($disabled = false, $className = "")
     {
-        parent::__construct($disabled, "address-autocomplete");
+        parent::__construct($disabled, $className);
     }
 
     public static $markup = '
@@ -172,16 +172,18 @@ class FormFieldTextArea extends FormField
 
     public static $markup = '
 
-     
-        <div class="col-12 mx-lg-0 mx-auto px-0">
-                <label class="text-uppercase px-3 mt-3">{label}</label>
-        </div>
-     
-        <div class="wysiwyg col-12 mb-3 px-0">
-            <div class="editor">{value}</div>
-        </div>
-        <input class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
-        
+            <div class="{className}">
+               <div class="col-12 mx-lg-0 mx-auto px-0">
+                    <label class="text-uppercase px-3">{label}</label>
+                </div>
+                
+                <div class="wysiwyg col-12 mb-3 px-0">
+                    <div class="editor">{value}</div>
+                </div>
+                    <input class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
+            </div>
+
+
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -201,13 +203,15 @@ class FormFieldKeywords extends FormField
 
     public static $markup = '
         
+        <div class="{className}">
             <div class="col-12 mx-lg-0 mx-auto px-0">
-                <label class="text-uppercase px-3 mt-3">Słowa kluczowe</label>
+                <label class="text-uppercase px-3">Słowa kluczowe</label>
             </div>
             
             <div class="col-12 mb-3 px-0">
                 <input class="kbf-keywords form-control form-control-lg" name="company_keywords" value="{value}"></input>
             </div>
+        </div>
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -272,7 +276,7 @@ class FormFieldIndustries extends FormField
 
     public static $markup = '
 
-            <div class="d-flex justify-content-center flex-wrap">
+                <div class="row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3">
                     <div data-name="industry" id="industries" class="dropdown col-12 col-md-5 col-lg-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
                         <button class="btn btn-round btn-primary px-md-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
@@ -282,7 +286,7 @@ class FormFieldIndustries extends FormField
                         </button>
                     </div>
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-5  col-lg-6  pl-0 pl-md-3 pr-0">
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-5  col-lg-6 pl-0 pl-md-3 pr-0">
                         <label class="text-uppercase px-3">Sub-branża</label>
                         <button class="btn btn-round btn-primary mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
@@ -290,7 +294,7 @@ class FormFieldIndustries extends FormField
                                 aria-expanded="false">
                         </button>
                     </div>
-            </div>
+                </div>
         
     ';
 

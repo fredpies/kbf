@@ -5437,6 +5437,8 @@
     function KbfPreloaderButton(selector) {
       var _this;
 
+      var auto = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
       _classCallCheck(this, KbfPreloaderButton);
 
       _this = _super.call(this);
@@ -5444,6 +5446,7 @@
       _this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
 
       if (!selector || _this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
+      _this.auto = auto; // Czy automatycznie dodawac listener
 
       _this.init();
 
@@ -5460,20 +5463,32 @@
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
         this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
+      }
+    }, {
+      key: "triggerStart",
+      value: function triggerStart(buttonElement) {
+        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
+
+        var bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        this.$preloaderButton.trigger({
+          type: 'start-preloader',
+          buttonGeometry: buttonGeometry,
+          bgColor: bgColor
+        });
+        this.emit(new CustomEvent('click'));
       } // Startuje preloader
 
     }, {
       key: "startPreloader",
-      value: function startPreloader(buttonElement) {
+      value: function startPreloader(buttonElement, buttonGeometry, bgColor) {
         var $ = window.$;
-        var $this = $(buttonElement);
-        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
-
-        $this.attr('disabled', 'disabled');
-        $this.css('width', buttonGeometry.width + 'px');
-        $this.css('height', buttonGeometry.height + 'px');
-        $this.css('padding', 0);
-        $this.html(KbfPreloaderButton.preloaderMarkup);
+        var $buttonElement = $(buttonElement);
+        $buttonElement.attr('disabled', 'disabled');
+        $buttonElement.css('width', buttonGeometry.width + 'px');
+        $buttonElement.css('height', buttonGeometry.height + 'px');
+        $buttonElement.css('padding', 0);
+        $buttonElement.css('background-color', bgColor);
+        $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
       } // Zatrzymuje preloader
 
     }, {
@@ -5485,10 +5500,16 @@
     }, {
       key: "addListeners",
       value: function addListeners() {
-        var instance = this;
-        this.$preloaderButton.on('click', function () {
-          instance.startPreloader(this);
-          instance.emit(new CustomEvent('click'));
+        var instance = this; // Rejestruj handler warunkowo
+
+        if (this.auto) {
+          this.$preloaderButton.on('click', function () {
+            instance.triggerStart(this);
+          });
+        }
+
+        this.$preloaderButton.on('start-preloader', function (e) {
+          instance.startPreloader(this, e.buttonGeometry, e.bgColor);
         });
       }
     }]);
@@ -23316,7 +23337,7 @@
       key: "setSummary",
       value: function setSummary() {
         var industry = $('[name="industry"]').val();
-        var subIndustry = $('[name="sub-industry"]');
+        var subIndustry = $('[name="sub-industry"]').val();
         var lat = $('[name="lat"]').val();
         var lon = $('[name="lon"]').val(); // Ukryj minimape jezeli nie pobrano wspolrzednych
 
@@ -23334,9 +23355,25 @@
           '{company_city}': $('[name="company_city"]').val() || '{company_city}',
           '{company_phone_1}': $('[name="company_phone_1"]').val() || '{company_phone_1}',
           '{company_www}': $('[name="company_www"]').val() || '',
+          '{company_email}': $('[name="company_email"]').val() || '{company_email}',
           '{company_industry}': industry !== 'Wybierz' ? industry : '{company_industry}' ,
-          '{company_sub_industry}': subIndustry.val() !== 'Wybierz' ? subIndustry : '{company_sub_industry}'
-        }, this.companyInfoContents);
+          '{company_sub_industry}': subIndustry !== 'Wybierz' ? subIndustry : '{company_sub_industry}'
+        }, this.companyInfoContents); // Usun logo WWW jezel nie podano w formularzu
+
+        if (!$('[name="company_www"]').val()) {
+          var $companyWWW = $('.company-www');
+          $companyWWW.removeClass('d-block');
+          $companyWWW.addClass('d-none');
+        } else {
+          console.log('called2');
+
+          var _$companyWWW = $('.company-www');
+
+          _$companyWWW.addClass('d-block');
+
+          _$companyWWW.removeClass('d-none');
+        }
+
         this.companyDescription.innerHTML = replacePlaceholders({
           '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}'
         }, this.companyDescriptionContents);

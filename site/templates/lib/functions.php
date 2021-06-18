@@ -168,7 +168,8 @@ function render_company_summary() {
                             </div>
                         
                             <span class="d-block text-dark text-nowrap"><i class="fas fa-phone-alt mr-2"></i>{company_phone_1}</span>
-                            <span class="d-block text-dark text-nowrap"><i class="fas fa-globe mr-2"></i>{company_www}</span>
+                            <span class="company-www d-block text-dark text-nowrap"><i class="fas fa-globe mr-2"></i>{company_www}</span>
+                            <span class="d-block text-dark text-nowrap"><i class="fas fa-envelope mr-2"></i>{company_email}</span>
                         
                             <div class="company-industries">
                                 <span class="badge badge-pill badge-primary mb-1 mt-3">{company_industry}</span>
