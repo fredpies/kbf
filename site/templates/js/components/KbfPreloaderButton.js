@@ -2,7 +2,7 @@ import errors from "../modules/Errors";
 
 class KbfPreloaderButton extends EventTarget {
 
-    constructor(selector) {
+    constructor(selector, auto=true) {
 
         super();
         let $ = window.$;
@@ -10,6 +10,8 @@ class KbfPreloaderButton extends EventTarget {
 
         // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
         if (!selector || this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
+
+        this.auto = auto; // Czy automatycznie dodawac listener
 
         this.init();
         this.addListeners();
@@ -27,19 +29,33 @@ class KbfPreloaderButton extends EventTarget {
 
     }
 
-    // Startuje preloader
-    startPreloader(buttonElement) {
-
-        let $ = window.$;
-        let $this = $(buttonElement);
+    triggerStart(buttonElement) {
 
         let buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
+        let bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
 
-        $this.attr('disabled', 'disabled');
-        $this.css('width', buttonGeometry.width + 'px');
-        $this.css('height', buttonGeometry.height + 'px');
-        $this.css('padding', 0);
-        $this.html(KbfPreloaderButton.preloaderMarkup);
+        this.$preloaderButton.trigger({
+            type: 'start-preloader',
+            buttonGeometry,
+            bgColor
+        });
+
+        this.emit(new CustomEvent('click'));
+    }
+
+    // Startuje preloader
+    startPreloader(buttonElement, buttonGeometry, bgColor) {
+
+        let $ = window.$;
+
+        let $buttonElement = $(buttonElement);
+
+        $buttonElement.attr('disabled', 'disabled');
+        $buttonElement.css('width', buttonGeometry.width + 'px');
+        $buttonElement.css('height', buttonGeometry.height + 'px');
+        $buttonElement.css('padding', 0);
+        $buttonElement.css('background-color', bgColor);
+        $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
 
     }
 
@@ -52,10 +68,18 @@ class KbfPreloaderButton extends EventTarget {
     addListeners() {
 
         let instance = this;
-        this.$preloaderButton.on('click', function () {
-            instance.startPreloader(this);
-            instance.emit(new CustomEvent('click'));
-        });
+
+        // Rejestruj handler warunkowo
+        if (this.auto) {
+            this.$preloaderButton.on('click', function () {
+               instance.triggerStart(this);
+            });
+        }
+
+        this.$preloaderButton.on('start-preloader', function (e) {
+            instance.startPreloader(this, e.buttonGeometry, e.bgColor);
+        })
+
     }
 }
 

@@ -38,11 +38,11 @@ $form_step_1->addMarkup(getFormField("company_regon_search", true)->render(), tr
 $form_step_1->addMarkup(render_info_message('Po pobraniu danych o firmie z rejestru REGON zostaną wypełnione odpowiednie pola formularza.'), true);
 $form_step_1->addMarkup('<div class="header-shadow-wrapper position-static"></div>', true);
 $form_step_1->addMarkup('<div class="w-100 pb-4"></div>', true);
-$form_step_1->addMarkup(getFormField("company_name", false, true)->render(), true);
-$form_step_1->addMarkup(getFormField("company_nip", false, true)->render(), true);
-$form_step_1->addMarkup(getFormField("company_address", false, true)->render(), true);
-$form_step_1->addMarkup(getFormField("company_zip", false, true)->render(), true);
-$form_step_1->addMarkup(getFormField("company_city", false, true)->render(), true);
+$form_step_1->addMarkup(getFormField("company_name", false, true)->render());
+$form_step_1->addMarkup(getFormField("company_nip", false, true)->render());
+$form_step_1->addMarkup(getFormField("company_address", false, true)->render());
+$form_step_1->addMarkup(getFormField("company_zip", false, true)->render());
+$form_step_1->addMarkup(getFormField("company_city", false, true)->render());
 $form_step_1->addMarkup(render_info_message('Sprawdź poprawność pobranych danych i wybierz następny krok. W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.'), true);
 $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane będziesz mógł zmodyfikować również w panelu zarządzania.' ), true);
 
@@ -50,20 +50,32 @@ $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane
 $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
 
+$company_description_field = getFormField("company_description", true);
+$company_description_field->className = "row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3";
+
 $form_step_2->addMarkup($company_logo_field->render(), true);
 $form_step_2->addMarkup(getFormField("industries")->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
-$form_step_2->addMarkup(getFormField("company_description", true)->render());
+$form_step_2->addMarkup($company_description_field->render(), true);
 $form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'), true);
 
 // Krok "Dane kontaktowe"
 $form_step_3 = new FormRenderer("register-company", $company_fields);
 $form_step_3->onlyFields = true;
 
-$form_step_3->addMarkup(getFormField("company_email", true)->render(), true);
-$form_step_3->addMarkup(getFormField("company_phone_1", true)->render(), true);
+$company_keywords_field = getFormField("company_keywords");
+$company_keywords_field->className = "row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3 px-3";
+
+$company_email_field = getFormField("company_email", true);
+$company_email_field->inputmask = "[a-zA-ZńółźżęśćŃÓŁŹŻĘŚĆ.]+@[a-zA-ZńółźżęśćŃÓŁŹŻĘŚĆ.]+";
+
+$company_field_phone_1 = getFormField("company_phone_1", true);
+$company_field_phone_1->inputmask = "\d+";
+
+$form_step_3->addMarkup($company_email_field->render(), true);
+$form_step_3->addMarkup($company_field_phone_1->render(), true);
 $form_step_3->addMarkup(getFormField("company_www")->render(), true);
-$form_step_3->addMarkup(getFormField("company_keywords")->render());
+$form_step_3->addMarkup($company_keywords_field->render(), true);
 $form_step_3->addMarkup(render_info_message('Wpisz słowa kluczowe umożliwiające pozycjonowanie strony firmy przez wyszukiwarki internetowe, np. Google. Po wpisaniu słowa kluczowego użyj tabulatora aby wpisywać kolejne.<br><a data-toggle="modal" data-target="#keywords" class="about-keywords d-inline-block text-hover-primary mt-2">Zobacz poprawnie wpisane słowa kluczowe.</a>'), true);
 
 // Modal

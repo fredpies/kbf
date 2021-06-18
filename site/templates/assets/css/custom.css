@@ -651,7 +651,6 @@ input[name*="sub-industry"] + label.error {
 
 @media (max-width: 900px) {
   .kbf-keywords, .wysiwyg {
-    max-width: 650px;
     margin: 0 auto !important;
   }
 }
@@ -846,15 +845,9 @@ input[name*="sub-industry"] + label.error {
   }
 }
 
-
-
 /******************************/
 /* Formularze                 */
 /******************************/
-
-.input-group {
-  max-width: 650px !important;
-}
 
 .form-info-message {
   max-width: 650px !important;

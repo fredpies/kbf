@@ -72,12 +72,6 @@ class FormRenderer
     private $templateFields;
     private $isHidden = false; // Czy renderowac ukryty formularz
 
-//    // Pole PW => pole HTML
-//    private $fieldTypes = array(
-//        "FieldtypeText" => "text",
-//        "FieldtypeImage" => "file"
-//    );
-
     public function __construct($name, $templateFields)
     {
 
@@ -113,107 +107,13 @@ class FormRenderer
 
     }
 
-    // Dodaje pole do formularza
-//    public function addField($field) {
-//        if (!isset($field)) return;
-//        $this->fields[] = $field;
-//    }
 
     // Dodaje markup do formularza
     public function addMarkup($markup, $noColumn = false) {
         if (!isset($markup)) return;
         if ($noColumn) $this->fields[] = $markup;
-        else $this->fields[] = "<div class='col-12 col-lg-10 col-xl-8 mb-3'>$markup</div>";
+        else $this->fields[] = "<div class='d-flex justify-content-center w-100'>$markup</div>";
     }
-
-    // Renderuje pole formularza
-//    private function renderFormField($field) {
-//
-//        $markup = "";
-//        $urls = wire("urls");
-//        $sanitizer = wire("sanitizer");
-
-        // Jezeli dodano markup
-//        if (is_string($field)) {
-//            $markup = $field;
-//        }
-
-//        // Jezeli dodano pole PW
-//        if ($field instanceof Field) {
-//
-//            // Czy pole jest wymagane ?
-//            $required = $field->required ? "required" : "";
-//            $msgRequired = $required ? $sanitizer->string($field->notes) . '"' : "";
-//
-//            // Czy zastosowano maske wprowadzania ?
-//            $inputmask = $field->placeholder ? $field->placeholder  : "";
-//
-//            // Czy nalezy wyswietlic wartosc dla pola ?
-//            $value = $this->operation === "update" ? 'value="' . $this->templateFields->get($field->name) . '"' : "";
-//
-//            // Typ pola
-//            $type = "";
-//            if (isset($this->fieldTypes[(String)$field->type])) $type = $this->fieldTypes[(String)$field->type];
-//
-//            // Mapa placeholders
-//            $placeholdersMap = array(
-//
-//                "{label}" => $field->label,
-//                "{icon}" => $field->icon,
-//                "{type}" => $type,
-//                "{name}" => $field->name,
-//                "{description}" => $field->description,
-//                "{required}" => $required,
-//                "{msgRequired}" => $msgRequired,
-//                "{inputmask}" => $inputmask,
-//                "{value}" => $value,
-//                "{className}" => ""
-//
-//            );
-//
-//            // Ukryj pole jezeli jest systemowe
-//            if ($field->hasFlag(Field::flagSystem)) {
-//                $formFieldHidden = new FormFieldHidden();
-//                $formFieldHidden->name = $field->name;
-//                $formFieldHidden->value = $this->templateFields->get($field->name);
-//                $markup = $formFieldHidden->render();
-//
-//            } else {
-//                // Renderuj w zaleznosci od typu pola PW
-//                switch ($field->type) {
-//
-//                    case 'FieldtypeText':
-//
-//                        $formFieldText = new FormFieldText();
-//                        $formFieldText->placeholderMap = $placeholdersMap;
-//                        $markup = $formFieldText->render();
-//                        break;
-//
-//                    case 'FieldtypeTextarea':
-//
-//                        $formFieldText = new FormFieldTextArea();
-//                        $formFieldText->placeholderMap = $placeholdersMap;
-//                        if ($this->operation === "update") $formFieldText->value = $this->templateFields->get($field->name);
-//                        $markup = $formFieldText->render();
-//                        break;
-//
-//                    case 'FieldtypeImage':
-//
-//                        $placeholdersMap["{logoImage}"] = $urls->images . 'logo-placeholder.jpg';
-//                        $formFieldImage = new FormFieldImage();
-//                        $formFieldImage->placeholderMap = $placeholdersMap;
-//                        $markup = $formFieldImage->render();
-//                        break;
-//
-//                };
-//            }
-//
-//
-//        }
-
-//        return $markup;
-//
-//    }
 
     // Renderuje wszystkie pola
     public function render() {
