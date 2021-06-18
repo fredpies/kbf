@@ -26,7 +26,7 @@ $company_list_page_url = $pages->get("template=companies")->url;
                 <nav class="navik-menu menu-hover-reset menu-caret submenu-top-border submenu-scale">
                     <ul>
                         <li>
-                            <a href="#">Dodaj Firmę</a>
+                            <a href="<?php echo $pages->get(1)->url ?>rejestracja-firmy">Dodaj Firmę</a>
                         </li>
                         <li>
                             <a href="#">Firmy wg branży</a>
@@ -73,10 +73,12 @@ $company_list_page_url = $pages->get("template=companies")->url;
                             </ul>
                         </li>
                         <li class="ml-5 kbf-menu-item">
-                            <button type="button" class="btn btn-round btn-outline-dark">MOJE KBF</button>
+                            <form action="<?php echo $pages->get(1)->url ?>panel" method="get">
+                                <button type="submit" class="btn btn-round btn-outline-dark">MOJE KBF</button>
+                            </form>
                         </li>
                         <li class="kbf-menu-item-mobile">
-                            <a href="#">MOJE KBF</a>
+                            <a href="<?php echo $pages->get(1)->url ?>panel">MOJE KBF</a>
                         </li>
                     </ul>
                 </nav>
