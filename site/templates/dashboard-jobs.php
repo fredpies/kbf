@@ -86,8 +86,7 @@ $page_title = $sanitizer->text($page->title);
                                     </div>
 
 
-                                    <?=  render_dashboard_job_list_item("Monter", "Pełen etat", "2021-12-01") ?>
-                                    <?=  render_dashboard_job_list_item("Pracownik magazynu logistyki", "Kontrakt", "2021-09-20") ?>
+                                    <?=  render_dashboard_job_list_item("Fryzjer Stylista", "Pełen etat", "2021-12-01") ?>
 
 
                                     <div class="row justify-content-center justify-content-lg-end">
