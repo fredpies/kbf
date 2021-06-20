@@ -5,7 +5,6 @@ include_once "lib/functions.php";
 
 $page = wire('page');
 $sanitizer = wire('sanitizer');
-
 $page_title = $sanitizer->text($page->title);
 
 ?>
@@ -13,9 +12,7 @@ $page_title = $sanitizer->text($page->title);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <?php include_once "partials/_head.php" ?>
-
 </head>
 <body>
 
@@ -26,17 +23,7 @@ $page_title = $sanitizer->text($page->title);
 <?php include_once "partials/_menu.php" ?>
 
 <!-- Page title -->
-<div class="bg-light">
-    <div class="container">
-        <div class="row pt-5 pb-4">
-
-            <div class="col-12 col-lg-4 ">
-                <h5 class="font-weight-800 mb-0 text-center text-lg-left">MOJE KBF</h5>
-            </div>
-
-        </div>
-    </div>
-</div>
+<?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
 <div class="main-content bg-light pt-0">
@@ -54,17 +41,9 @@ $page_title = $sanitizer->text($page->title);
                     <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Panel</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
-                                </ol>
-                            </nav>
+                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
 
                             <div class="row px-3">
-
-                                <h5 class="dashboard-title section-title-3 w-100 text-center">Lista zarejestrowanych ofert pracy</h5>
-
                                 <div class="col-12">
 
                                     <div class="row mt-5 mb-3 d-none d-md-flex">
@@ -84,7 +63,6 @@ $page_title = $sanitizer->text($page->title);
                                         <div class="col-12 col-sm-2 col-lg-1"></div>
 
                                     </div>
-
 
                                     <?=  render_dashboard_job_list_item("Fryzjer Stylista", "Pełen etat", "2021-12-01") ?>
 
@@ -109,8 +87,6 @@ $page_title = $sanitizer->text($page->title);
                                         </ul>
                                     </nav>
 
-
-
                                     <form class="mt-5" method="get" action="">
 
                                         <div class="row justify-content-center">
@@ -124,8 +100,6 @@ $page_title = $sanitizer->text($page->title);
                                         </div>
 
                                     </form>
-
-
 
                                 </div>
 

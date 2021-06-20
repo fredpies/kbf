@@ -41,7 +41,7 @@ include_once "partials/_init.php";
                         <h6 class="font-weight-700">Produkty</h6>
                         <small class="text-white font-weight-600 text-uppercase bg-indigo rounded-xl px-2 mb-1">5</small>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
+                    <a href="<?php echo $pages->get(1)->url ?>panel/uslugi" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Usługi</h6>
                         <small class="text-white font-weight-600 text-uppercase bg-rose rounded-xl px-2 mb-1">6</small>
                     </a>
@@ -56,17 +56,17 @@ include_once "partials/_init.php";
                     <span>Ulubione</span>
                 </h6>
                 <ul class="list-group list-group-flush py-0">
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
+                    <a href="<?php echo $pages->get(1)->url ?>panel/ulubione-firmy" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <div class="d-flex align-items-center">
                             <span class="pl-3">Firmy</span>
                         </div>
-                        <small class="text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1">48</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1">1</small>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
+                    <a href="<?php echo $pages->get(1)->url ?>panel/ulubione-produkty" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <div class="d-flex align-items-center">
                             <span class="pl-3">Produkty</span>
                         </div>
-                        <small class="text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1">22</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1">2</small>
                     </a>
                 </ul>
 

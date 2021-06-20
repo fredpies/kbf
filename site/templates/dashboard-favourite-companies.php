@@ -118,7 +118,7 @@ $page_title = $sanitizer->text($page->title);
 <?php include_once "partials/_scripts.php" ?>
 
 <!-- Main script -->
-<script src="<?php echo $urls->js ?>dashboard-favourite-products.js"></script>
+<script src="<?php echo $urls->js ?>dashboard-favourite-companies.js"></script>
 <script>
 
     $(function () {
