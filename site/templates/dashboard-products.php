@@ -3,15 +3,25 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$pages = wire('pages');
 $page = wire('page');
+$urls = wire('urls');
 $sanitizer = wire('sanitizer');
 
 $page_title = $sanitizer->text($page->title);
 
-// TODO: Nalezy podlaczyc rzeczywiste produkty
-$pages = wire('pages');
-$product_page = $pages->get('template=product');
-$product_data = sanitize_product_data($product_page);
+// TODO: Nalezy zmienic na dane zalogowanego uzytkownika/firmy
+$company_page = $pages->get(348487);
+
+$products_group = $company_page->find("title=Produkty");
+if ($products_group->count()) $products = $products_group[0]->children();
+else $products = array();
+
+foreach ($products as $product) {
+    //echo $sanitizer->text($product->name)."<br/>";
+}
+
+$product_data = $products[0];
 
 ?>
 

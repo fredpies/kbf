@@ -3,9 +3,19 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$pages = wire('pages');
 $page = wire('page');
+$urls = wire('urls');
 $sanitizer = wire('sanitizer');
+
 $page_title = $sanitizer->text($page->title);
+
+// TODO: Nalezy zmienic na dane zalogowanego uzytkownika/firmy
+$company_page = $pages->get(348487);
+
+$services_group = $company_page->find("name=uslugi");
+if ($services_group->count()) $services = $services_group[0]->children();
+else $services = array();
 
 ?>
 
@@ -53,83 +63,37 @@ $page_title = $sanitizer->text($page->title);
                             <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-first" role="tabpanel" aria-labelledby="nav-first-tab">
 
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <a href="#">
-                                                <img src="<?php echo $urls->images ?>tmp/s1.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                            </a>
-                                        </div>
+                                    <?php
+                                        foreach ($services as $service) {
+                                    ?>
+                                        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+                                            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                                                <a href="#">
+                                                    <img src="<?php echo $service->service_image->url ?>" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                                </a>
+                                            </div>
 
-                                        <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
-                                            <a href="#">
-                                                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'><span>Modelowanie - włosy krótkie</span></p>
-                                            </a>
-                                        </div>
+                                            <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
+                                                <a href="#">
+                                                    <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'><span><?php echo $sanitizer->text($service->service_name); ?></span></p>
+                                                </a>
+                                            </div>
 
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>50 PLN</span>
-                                        </div>
+                                            <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
+                                                <span class='product-price badge badge-pill badge-danger d-inline-block'><?php echo $sanitizer->float($service->service_price); ?> PLN</span>
+                                            </div>
 
-                                        <div class='col-12 col-sm-3 col-xl-2 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Szczegóły</a>
-                                            <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Edytuj</a>
-                                            <a href="#" class="d-inline-block d-sm-block text-center text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Usuń">
-                                                <img width="25" height="25" class="d-inline-block" src="<?php echo $urls->images ?>trash.svg" alt="">
-                                            </a>
+                                            <div class='col-12 col-sm-3 col-xl-2 mt-2 mt-sm-0 text-center text-sm-left'>
+                                                <a href="<?php echo $service->url ?>" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Szczegóły</a>
+                                                <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Edytuj</a>
+                                                <a href="#" class="d-inline-block d-sm-block text-center text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Usuń">
+                                                    <img width="25" height="25" class="d-inline-block" src="<?php echo $urls->images ?>trash.svg" alt="">
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <a href="#">
-                                                <img src="<?php echo $urls->images ?>tmp/s2.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                            </a>
-                                        </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
-                                            <a href="#">
-                                                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'><span>Modelowanie - włosy średnie/półdługie</span></p>
-                                            </a>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>60 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 col-xl-2 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Szczegóły</a>
-                                            <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Edytuj</a>
-                                            <a href="#" class="d-inline-block d-sm-block text-center text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Usuń">
-                                                <img width="25" height="25" class="d-inline-block" src="<?php echo $urls->images ?>trash.svg" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <a href="#">
-                                                <img src="<?php echo $urls->images ?>tmp/s3.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                            </a>
-                                        </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
-                                            <a href="#">
-                                                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'><span>Modelowania - włosy długie</span></p>
-                                            </a>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>70 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 col-xl-2 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Szczegóły</a>
-                                            <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Edytuj</a>
-                                            <a href="#" class="d-inline-block d-sm-block text-center text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Usuń">
-                                                <img width="25" height="25" class="d-inline-block" src="<?php echo $urls->images ?>trash.svg" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <?php
+                                        }
+                                    ?>
 
                                     <div class="text-center mx-auto">
                                         <nav aria-label="navigation">
