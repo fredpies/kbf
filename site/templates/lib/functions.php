@@ -606,7 +606,7 @@ function get_pagination($page_array) {
 }
 
 // Info tekst dla formularzy
-function render_info_message($msg, $classList="col-12 col-lg-6 col-xl-5 mb-3 ") {
+function render_info_message($msg, $classList="col-12 mb-3 ") {
 
     $template = '<div class="{classList}">
                 <div class="form-info-message">
@@ -1249,7 +1249,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         {
             $field = new FormFieldText($disabled);
             $field->label = "Nazwa firmy";
-            $field->name = "company_name";
+            $field->name = $fieldName;
             $field->description = "Nazwa firmy pobrana z rejestru";
 
             if ($required) {
@@ -1264,6 +1264,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         case "company_logo":
         {
             $field = new FormFieldImage();
+            $field->name = $fieldName;
 
             if ($required) {
                 $field->required = true;
@@ -1275,9 +1276,9 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
         case "company_address":
         {
-            $field = new FormFieldAddressAutocomplete($disabled);
+            $field = new FormFieldAutocomplete($disabled);
             $field->label = "Adres firmy";
-            $field->name = "company_address";
+            $field->name = $fieldName;
             $field->description = "Adres firmy pobrany z rejestru";
             $field->msgRequired = "Wypełnienie pola z nazwą miasta jest wymagane.";
 
@@ -1294,7 +1295,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         {
             $field = new FormFieldText($disabled);
             $field->label = "Miasto";
-            $field->name = "company_city";
+            $field->name = $fieldName;
             $field->description = "Miasto pobrane z rejestru";
 
             if ($required) {
@@ -1310,7 +1311,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         {
             $field = new FormFieldText($disabled);
             $field->label = "Kod pocztowy";
-            $field->name = "company_zip";
+            $field->name = $fieldName;
             $field->description = "Kod pocztowy pobrany z rejestru";
 
             if ($required) {
@@ -1326,7 +1327,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldRegonSearch($disabled);
                 $field->label = "Numer REGON";
-                $field->name = "company_regon";
+                $field->name = $fieldName;
                 $field->description = "Wpisz numer REGON firmy w celu pobrania informacji o firmie z rejestru państwowego.";
 
                 if ($required) {
@@ -1343,7 +1344,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldText($disabled);
                 $field->label = "Numer REGON";
-                $field->name = "company_regon";
+                $field->name = $fieldName;
                 $field->description = "Zarejestrowany numer REGON.";
 
                 if ($required) {
@@ -1360,7 +1361,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldText($disabled);
                 $field->label = "Podstawowy numer telefonu";
-                $field->name = "company_phone_1";
+                $field->name = $fieldName;
                 $field->description = "Wpisz główny numer telefonu do firmy. Wypełnienie pola jest wymagane.";
 
                 if ($required) {
@@ -1376,7 +1377,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldText($disabled);
                 $field->label = "Drugi numer telefonu";
-                $field->name = "company_phone_2";
+                $field->name = $fieldName;
                 $field->description = "Wpisz dodatkowy numer telefonu do firmy.";
 
                 if ($required) {
@@ -1392,7 +1393,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldText($disabled);
                 $field->label = "Numer FAX";
-                $field->name = "company_fax";
+                $field->name = $fieldName;
                 $field->description = "Wpisz numer FAX do firmy.";
 
                 if ($required) {
@@ -1408,7 +1409,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldText($disabled);
                 $field->label = "Adres e-mail";
-                $field->name = "company_email";
+                $field->name = $fieldName;
                 $field->description = "Wpisz główny adres e-mail do firmy. Wypełnienie pola jest wymagane.";
 
                 if ($required) {
@@ -1424,7 +1425,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             {
                 $field = new FormFieldText($disabled);
                 $field->label = "Adres witryny internetowej";
-                $field->name = "company_www";
+                $field->name = $fieldName;
                 $field->description = "Podaj adres firmowej witryny internetowej.";
 
                 if ($required) {
@@ -1440,7 +1441,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         {
             $field = new FormFieldText($disabled);
             $field->label = "Numer NIP";
-            $field->name = "company_nip";
+            $field->name = $fieldName;
             $field->description = "Numer NIP pobrany z rejestru";
             $field->inputmask = "\d{3}-\d{3}-\d{2}-\d{2}";
 
@@ -1457,7 +1458,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         {
             $field = new FormFieldTextArea($disabled);
             $field->label = "Opis firmy";
-            $field->name = "company_description";
+            $field->name = 'company_description_html';
 
             if ($required) {
                 $field->required = true;
@@ -1478,7 +1479,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         {
             $field = new FormFieldText($disabled);
             $field->label = "Nazwa stanowiska";
-            $field->name = "job_name";
+            $field->name = $fieldName;
             $field->description = "Podaj nazwę proponowanego stanowiska pracy.";
 
             if ($required) {
@@ -1490,10 +1491,11 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return $field;
         }
 
-        case "job_expire" || "job_start_date":
+        case "job_start_date":
         {
             $field = new FormFieldDatepicker($disabled);
-            $field->label = "Data picker";
+            $field->name = $fieldName;
+            $field->label = "Data rozpoczęcia pracy";
 
             if ($required) {
                 $field->required = true;
@@ -1504,6 +1506,86 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         }
 
 
+        case "job_expire":
+        {
+            $field = new FormFieldDatepicker($disabled);
+            $field->name = $fieldName;
+            $field->label = "Data ważności oferty";
+
+            if ($required) {
+                $field->required = true;
+            }
+
+            $field->icon = "fa-calendar";
+            return $field;
+        }
+
+        case "job_type":
+        {
+
+            echo "job_type";
+            $field = new FormFieldDropdown($disabled);
+            $field->label = "Rodzaj umowy";
+            $field->name = $fieldName;
+            $field->description = "Wybierz rodzaj umowy z pracodawcą.";
+            $field->options = "Pełen etat, Pół etatu, 1/4 etatu, Umowa o dzieło, Umowa zlecenie, Kontrakt";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Oferta pracy wymaga wybrania rodzaju umowy.";
+            }
+
+            return $field;
+        }
+
+
+        case "job_city":
+        {
+            $field = new FormFieldAutocomplete($disabled);
+            $field->label = "Miasto";
+            $field->name = $fieldName;
+            $field->description = "Miasto w którym świadczona będzie praca.";
+            $field->msgRequired = "Wypełnienie pola z nazwą miasta jest wymagane.";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z nazwą miasta musi zostać wypełnione.";
+            }
+
+            $field->icon = "fa-map-marker";
+            return $field;
+        }
+
+        case "job_description":
+        {
+            $field = new FormFieldTextArea($disabled);
+            $field->label = "Opis oferty pracy";
+            $field->name = $fieldName;
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola opis oferty pracy jest wymagane.";
+            }
+
+            return $field;
+        }
+
+
+        case "province_name":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Nazwa województwa";
+            $field->name = $fieldName;
+            $field->description = "Podaj nazwę województwa.";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Nazwa województwa musi zostać wypełniona.";
+            }
+
+            $field->icon = "fa-map-marker";
+            return $field;
+        }
 
         case "industries":
         {

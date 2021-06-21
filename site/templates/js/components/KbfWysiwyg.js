@@ -12,6 +12,7 @@ class KbfWysiwyg extends EventTarget {
         if (!selector) throw errors.argumentNotFound("selector");
 
         this.selector = selector;
+        this.$container = $(selector);
 
         this.options = {
             modules: {

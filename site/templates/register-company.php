@@ -30,7 +30,7 @@ $company_logo_field->description = "Wybierz plik graficzny reprezentujący logo 
 // Podsumowanie
 $company_summary = render_company_summary();
 
-// Krok "Dane firmy"
+// Krok "Dane rejestrowe"
 $form_step_1 = new FormRenderer("register-company", $company_fields);
 $form_step_1->onlyFields = true;
 
@@ -51,7 +51,7 @@ $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
 
 $company_description_field = getFormField("company_description", true);
-$company_description_field->className = "row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3";
+$company_description_field->className = "row col-12 mb-3";
 
 // Opis firmy pole ukryte - hack
 $company_description_hidden = getFormField('hidden');
@@ -69,7 +69,7 @@ $form_step_3 = new FormRenderer("register-company", $company_fields);
 $form_step_3->onlyFields = true;
 
 $company_keywords_field = getFormField("company_keywords");
-$company_keywords_field->className = "row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3 px-3";
+$company_keywords_field->className = "row col-12 mb-3 px-3";
 
 $company_email_field = getFormField("company_email", true);
 $company_email_field->inputmask = "[a-zA-ZńółźżęśćŃÓŁŹŻĘŚĆ.]+@[a-zA-ZńółźżęśćŃÓŁŹŻĘŚĆ.]+";

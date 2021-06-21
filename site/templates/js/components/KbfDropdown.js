@@ -3,7 +3,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 
 class KbfDropdown extends EventTarget {
 
-    constructor(selector, opts, scrollBlock = true) {
+    constructor(selector, opts = [], scrollBlock = true) {
 
         super();
 
@@ -11,7 +11,6 @@ class KbfDropdown extends EventTarget {
 
         // Sprawdz poprawnosc argumentow
         if (selector === undefined) throw errors.argumentNotFound('selector');
-        if (opts === undefined) throw errors.argumentNotFound('opts');
 
         this.selector = selector;
         this.opts = opts;
@@ -34,6 +33,11 @@ class KbfDropdown extends EventTarget {
         this.emit = this.dispatchEvent;
 
         this.$dropdowns = $(this.selector);
+
+        // Ustaw opcje z atrybuty data-options
+        let dataOptions = this.$dropdowns.data('options');
+        if (dataOptions) this.opts = dataOptions.split(',');
+
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
 
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown

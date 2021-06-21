@@ -510,13 +510,6 @@ label.error-stepper {
   bottom: 0;
 }
 
-@media (max-width: 900px) {
-  label.error {
-    padding-left: 2rem;
-  }
-}
-
-
 @media (max-width: 480px) {
   label.error {
     padding-left: 0;

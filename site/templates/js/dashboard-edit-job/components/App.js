@@ -2,6 +2,8 @@ import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import KbfDatepicker from "../../components/KbfDatePicker";
 import KbfTabs from "../../components/KbfTabs";
 import KbfDropdown from "../../components/KbfDropdown";
+import KbfCityAutocomplete from "../../components/KbfCityAutocomplete";
+import KbfWysiwyg from "../../components/KbfWysiwyg";
 
 class App {
 
@@ -18,6 +20,7 @@ class App {
         let $ = window.$;
 
         this.$submitButton = $('.submit-button');
+        this.$provinceNameField = $('[name="province_name"]');
 
         // Datepicker
         this.datepickerJobExpire = new KbfDatepicker('.job_expire-date-picker', '[name="job_expire"]');
@@ -27,18 +30,20 @@ class App {
         this.tabs = new KbfTabs('dashboard-job-edit');
 
         // Rodzaj etatu
-        this.jobTypeDropdown = new KbfDropdown('.dropdown-job-type', ['Wybierz', 'Pełen etat', 'Pół etatu', '1/4 etatu', 'Umowa o dzieło', 'Umowa zlecenie', 'Kontrakt']);
+        this.jobTypeDropdown = new KbfDropdown('.dropdown-job_type');
 
+        // Miasto autocomplete
+        this.cityAutocomplete = new KbfCityAutocomplete('[name="job_city"]');
 
 
         // Wysiwyg
-        // this.$descriptionFieldHidden = $('[name="company_description_hidden"]');
         // TODO: Musi byc zmienione, ukryte pole musi byc niezalezne od kontekstu
-        // this.wysiwyg = new KbfWysiwyg('.wysiwyg');
+        this.$descriptionFieldHidden = $('[name="job_description_hidden"]');
+        this.wysiwyg = new KbfWysiwyg('.wysiwyg');
 
-        // let htmlToInsert = this.$descriptionFieldHidden.val();
-        // let editor = document.getElementsByClassName('ql-editor')
-        // editor[0].innerHTML = htmlToInsert
+        let htmlToInsert = this.$descriptionFieldHidden.val();
+        let editor = document.getElementsByClassName('ql-editor')
+        editor[0].innerHTML = htmlToInsert
 
         // Preloader button
         this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
@@ -67,11 +72,20 @@ class App {
             instance.datepickerJobExpire.hideDatePicker();
         })
 
-        $('[name="job_name"]').on('focus', function () {
-            instance.datepickerJobExpire.hideDatePicker();
-            instance.datepickerStartDate.hideDatePicker();
+        $('[name="job_name"], #job_type-button, [name="job_city"]').on('focus', this.hideAllPickers.bind(this))
+
+        this.wysiwyg.$container.find('.ql-editor').on('click', this.hideAllPickers.bind(this))
+
+        // Aktualizacja pola "Miasto"
+        this.cityAutocomplete.on('city-change', function (e) {
+            instance.$provinceNameField.val(e.detail.provinceName);
         })
 
+    }
+
+    hideAllPickers() {
+        this.datepickerJobExpire.hideDatePicker();
+        this.datepickerStartDate.hideDatePicker();
     }
 
 

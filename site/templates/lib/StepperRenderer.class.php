@@ -33,7 +33,9 @@ class StepperRenderer
 
             {messages}
 
-            {pages}
+            <div class="container">
+                {pages}
+            </div>
             
             {stepsHeader}
             
@@ -63,7 +65,7 @@ class StepperRenderer
 
             <!--  Mobile version -->
             <div class="stepper-footer-mobile container px-0 d-md-none">
-                <div class="col-12 text-center"><label class="error-stepper d-none mt-2 text-white" style="">Sprawdź poprawność wypełnienia odpowiednich pól.</label></div>
+                <div class="col-12 text-center"><label class="error-stepper d-none mt-2 text-danger" style="">Sprawdź poprawność wypełnienia odpowiednich pól.</label></div>
                 <div class="col-12 text-center text-md-right align-self-center">
                     <div class="row px-3 justify-content-around">
                         <div class="col-5 pl-0 pr-1 button-prev">

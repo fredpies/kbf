@@ -1,10 +1,10 @@
-import Inputmask from "inputmask/lib/inputmask";
 import errors from "../modules/Errors";
 import "bootstrap-autocomplete/dist/latest/bootstrap-autocomplete.min";
+import config from "../config/config";
 
 class KbfAddressAutocomplete extends EventTarget {
 
-    constructor(selector, config = {}, lang = 'pl') {
+    constructor(selector, autocompleteConfig = {}, lang = 'pl') {
 
         super();
 
@@ -26,7 +26,7 @@ class KbfAddressAutocomplete extends EventTarget {
 
             // Ustawienia resolvera
             resolverSettings: {
-            url: 'http://localhost/kbf2/api/addresses/?',
+            url: config.apiEndpoint + '/api/addresses/?',
                 fail: function () {
             }
         },
@@ -86,7 +86,7 @@ class KbfAddressAutocomplete extends EventTarget {
 
             },
 
-            ...config
+            ...autocompleteConfig
         }
 
         this.init();

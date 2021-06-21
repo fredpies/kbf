@@ -24,64 +24,72 @@ $form->onlyFields = true;
 $job_name_field = getFormField("job_name", true);
 $job_name_field->value = $sanitizer->text($job_page->get("job_name"));
 $job_name_field->className = "col-12 mb-2";
-$job_name_field->description = "";
-
-// Data waznosci
-$job_expire_field = getFormField("job_expire", true);
-$job_expire_field->name = "job_expire";
-$job_expire_field->value = $sanitizer->text($job_page->get("job_expire"));
-$job_expire_field->className = "col-12 mb-2";
-$job_expire_field->msgRequired = "Data ważności oferty musi zostać podana.";
-$job_expire_field->label = "Data ważności oferty";
-
-$job_expire_field->description = "";
+$job_name_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
 // Data rozpoczecia
 $job_start_date_field = getFormField("job_start_date", true);
-$job_start_date_field->name = "job_start_date";
 $job_start_date_field->value = $sanitizer->text($job_page->get("job_start_date"));
 $job_start_date_field->className = "col-12 mb-2";
 $job_start_date_field->msgRequired = "Data rozpoczęcia pracy musi zostać podana.";
-$job_start_date_field->label = "Data rozpoczęcia pracy";
 
+// Data waznosci
+$job_expire_field = getFormField("job_expire", true);
+$job_expire_field->value = $sanitizer->text($job_page->get("job_expire"));
+$job_expire_field->className = "col-12 mb-2";
+$job_expire_field->msgRequired = "Data ważności oferty musi zostać podana.";
 
+// Rodzaj umowy
+$job_type_field = getFormField("job_type", true);
 
+// Miasto
+$job_city_field = getFormField("job_city", true);
+$job_city_field->value = $sanitizer->text($job_page->get("job_city"));
+$job_city_field->className = "col-12 mb-2";
+$job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
-// Rodzaj etatu
-$markup = '<div data-name="job_type" id="job-type" class="dropdown dropdown-job-type row w-100 mb-3">
-                <div class="d-flex col-12 col-xl-4">
-                    <label class="align-self-center px-3 w-100 text-uppercase" for="job-type-button">Rodzaj etatu</label>
-                </div>
-                <div class="col-12 col-xl-8">
-                     <button class=" btn btn-lg btn-round btn-primary px-3 mb-md-0 dropdown-toggle w-100" type="button"
-                            id="job-type-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                </div>
-                
-               
-            </div>';
+// Wojewodztwa
+$job_province_name_field = getFormField("province_name", false, true);
+$job_province_name_field->className = "col-12";
 
-$form->addMarkup($job_name_field->render(), true);
+// Opis  pole ukryte - hack
+$job_description_hidden = getFormField('hidden');
+$job_description_hidden->name = 'job_description_hidden';
+$job_description_hidden->value = $sanitizer->entitiesMarkdown($job_page->get('job_description'));
+
+// Opis
+$job_description_field = getFormField("job_description");
+$job_description_field->className = "col-12";
+
+$form->addMarkup($job_name_field->render(false), true);
 $form->addMarkup($job_expire_field->render(), true);
 $form->addMarkup($job_start_date_field->render(), true);
-$form->addMarkup($markup, true);
+$form->addMarkup($job_type_field->render(), true);
+
+$form->addMarkup($job_city_field->render(false), true);
+$form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.', 'col-12 mb-5'), true);
+$form->addMarkup($job_province_name_field->render(false), true);
+$form->addMarkup($job_description_hidden->render(), true);
+$form->addMarkup($job_description_field->render(), true);
+
 
 $button_markup = '<div class="row justify-content-center mt-4">
                     <div class="col-12 col-sm-6">
-                        <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                        <button type="submit" class="submit-button btn-lg btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
                     </div>
                   </div>';
+
 
 // Tabs
 $tabs = new TabsRenderer("job-edit");
 $tabsPhone = new TabsRenderer("job-edit");
 
 $tabs->addMarkup($form->render(). $button_markup, "Opis");
-$tabs->addMarkup("". $button_markup, "Odpowiedzialności");
+$tabs->addMarkup("". $button_markup, "Obowiązki");
 $tabs->addMarkup("". $button_markup, "Wymagania");
 $tabs->addMarkup("". $button_markup, "Oferta pracodawcy");
 
 $tabsPhone->addMarkup($form->render(), "Opis oferty");
-$tabsPhone->addMarkup("", "Zakres Odpowiedzialności");
+$tabsPhone->addMarkup("", "Zakres obowiązków");
 $tabsPhone->addMarkup("", "Wymagania");
 $tabsPhone->addMarkup("", "Oferta pracodawcy");
 

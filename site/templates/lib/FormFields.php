@@ -5,6 +5,11 @@ include_once "functions.php";
 class FormField
 {
 
+    public static $descriptionTemplate = '
+            <div class="d-none d-lg-flex col-5 col-lg-6 align-self-center">
+                    <p class="kbf-form-info">{description}</p>
+            </div>';
+
     public $placeholderMap = array(
 
         "{type}" => "",
@@ -14,7 +19,8 @@ class FormField
         "{inputmask}" => "",
         "{value}" => "",
         "{className}" => "",
-        "{description}" => ""
+        "{description}" => "",
+        "{descriptionMarkup}" => ""
 
     );
 
@@ -28,8 +34,18 @@ class FormField
 
     }
 
-    public function renderMarkup($markup)
+    public function renderMarkup($template, $description = true)
     {
+
+        if ($description === true) {
+
+            $this->placeholderMap["{descriptionMarkup}"] = replacePlaceholders(array(
+                "{description}" => $this->placeholderMap["{description}"]
+                )
+            ,self::$descriptionTemplate);
+
+        };
+
 
         if (count($this->placeholderMap)) {
 
@@ -42,10 +58,10 @@ class FormField
             }
 
             if (empty($this->placeholderMap["{className}"])) {
-                $this->placeholderMap["{className}"] = 'col-12 col-lg-6 col-xl-5 mb-3';
+                $this->placeholderMap["{className}"] = 'col-12 col-lg-6 mb-3';
             }
 
-            return replacePlaceholders($this->placeholderMap, $markup);
+            return replacePlaceholders($this->placeholderMap, $template);
         }
 
         return "";
@@ -73,7 +89,7 @@ class FormFieldDatepicker extends FormField
         parent::__construct($disabled, $className);
     }
 
-    public static $markup = '
+    public static $template = '
 
     <div class="row justify-content-start mx-auto w-100 mb-3">
 
@@ -118,7 +134,7 @@ class FormFieldDatepicker extends FormField
 
     public function render()
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template);
     }
 
 }
@@ -131,7 +147,7 @@ class FormFieldText extends FormField
         parent::__construct($disabled, $className);
     }
 
-    public static $markup = '
+    public static $template = '
     
         <div class="{className}">
                 <div class="input-group input-group-lg input-group-round mb-4">
@@ -150,19 +166,18 @@ class FormFieldText extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-lg-4 col-xl-3 align-self-center">
-                    <p class="kbf-form-info">{description}</p>
-        </div>
+        {descriptionMarkup}
+        
     ';
 
-    public function render()
+    public function render($description = true)
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template, $description);
     }
 
 }
 
-class FormFieldAddressAutocomplete extends FormField
+class FormFieldAutocomplete extends FormField
 {
 
     public function __construct($disabled = false, $className = "")
@@ -170,7 +185,9 @@ class FormFieldAddressAutocomplete extends FormField
         parent::__construct($disabled, $className);
     }
 
-    public static $markup = '
+    public static $descriptionClass = 'd-none d-lg-flex col-5 col-xl-3 align-self-center';
+    
+    public static $template = '
         <div class="{className}">
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
@@ -188,14 +205,13 @@ class FormFieldAddressAutocomplete extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-xl-3 align-self-center">
-            <p class="kbf-form-info">{description}</p>
-        </div>
+        {descriptionMarkup}
+       
     ';
 
-    public function render()
+    public function render($description = true)
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template, $description);
     }
 
 }
@@ -203,7 +219,7 @@ class FormFieldAddressAutocomplete extends FormField
 class FormFieldHidden extends FormField
 {
 
-    public static $markup = '
+    public static $template = '
 
         <input   
                 type="hidden"
@@ -219,7 +235,7 @@ class FormFieldHidden extends FormField
 
     public function render()
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template);
     }
 
 }
@@ -227,7 +243,7 @@ class FormFieldHidden extends FormField
 class FormFieldTextArea extends FormField
 {
 
-    public static $markup = '
+    public static $template = '
 
             <div class="{className}">
                <div class="col-12 mx-lg-0 mx-auto px-0">
@@ -240,7 +256,6 @@ class FormFieldTextArea extends FormField
                     <input class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}">
             </div>
 
-
     ';
 
     public function __construct($disabled = false, $className = "")
@@ -250,7 +265,7 @@ class FormFieldTextArea extends FormField
 
     public function render()
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template);
     }
 
 }
@@ -258,7 +273,7 @@ class FormFieldTextArea extends FormField
 class FormFieldKeywords extends FormField
 {
 
-    public static $markup = '
+    public static $template = '
         
         <div class="{className}">
             <div class="col-12 mx-lg-0 mx-auto px-0">
@@ -278,7 +293,7 @@ class FormFieldKeywords extends FormField
 
     public function render()
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template);
     }
 
 }
@@ -286,11 +301,11 @@ class FormFieldKeywords extends FormField
 class FormFieldImage extends FormField
 {
 
-    public static $markup = '
+    public static $template = '
     
-        <div class="row col-12 col-lg-10 col-xl-8 px-0 {className}">
+        <div class="row col-12 col-lg-10 col-xl-8 px-0 ">
    
-            <div class="col-12 col-lg-5 mb-3">
+            <div class="col-12 col-lg-6 mb-3">
                         <div class="col-12 mx-lg-0 mx-auto px-0 {className}">
                             <label class="text-uppercase px-3 mt-3">{label}</label>
                         </div>
@@ -307,9 +322,7 @@ class FormFieldImage extends FormField
                      
             </div>
                     
-            <div class="d-none d-lg-flex col-5 col-xl-4 align-self-center">
-                <p class="kbf-form-info">{description}</p>
-            </div>
+            {descriptionMarkup}
 
         </div>
 
@@ -321,9 +334,9 @@ class FormFieldImage extends FormField
         parent::__construct($disabled, $className);
     }
 
-    public function render()
+    public function render($description = true)
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template, $description);
     }
 
 }
@@ -331,10 +344,10 @@ class FormFieldImage extends FormField
 class FormFieldIndustries extends FormField
 {
 
-    public static $markup = '
+    public static $template = '
 
-                <div class="row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3">
-                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-5 col-lg-6 mb-4 px-0">
+                <div class="row col-12 mb-3">
+                    <div data-name="industry" id="industries" class="dropdown col-12 col-md-6 mb-4 px-0">
                         <label class="text-uppercase pl-3 pl-sm-4 pl-lg-0">Branża</label>
                         <button class="btn btn-round btn-primary px-md-3 mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
@@ -343,7 +356,7 @@ class FormFieldIndustries extends FormField
                         </button>
                     </div>
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-5  col-lg-6 pl-0 pl-md-3 pr-0">
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 col-md-6 pl-0 pl-md-3 pr-0">
                         <label class="text-uppercase px-3">Sub-branża</label>
                         <button class="btn btn-round btn-primary mx-0 mx-lg-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                 type="button" {disabled}
@@ -362,7 +375,7 @@ class FormFieldIndustries extends FormField
 
     public function render()
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template);
     }
 
 }
@@ -375,9 +388,9 @@ class FormFieldRegonSearch extends FormField
         parent::__construct($disabled, $className);
     }
 
-    public static $markup = '
+    public static $template = '
     
-        <div class="col-12 col-lg-6 col-xl-5 mb-3 {className}">
+        <div class="col-12 col-lg-6 mb-3 {className}">
         
                     <div class="input-group input-group-lg input-group-round mb-4">
                         <label class="text-uppercase px-3">{label}</label>
@@ -398,15 +411,38 @@ class FormFieldRegonSearch extends FormField
                     </div>
         </div>
 
-        <div class="d-none d-lg-flex col-5 col-lg-4 col-xl-3 align-self-center">
-            <p class="kbf-form-info">{description}</p>
-        </div>
+        {descriptionMarkup}
                 
     ';
 
+    public function render($description = true)
+    {
+        return $this->renderMarkup(self::$template, $description);
+    }
+
+}
+
+class FormFieldDropdown extends FormField
+{
+
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public static $template = '<div data-options="{options}" data-name="{name}" id="{name}" class="dropdown dropdown-{name} row w-100 mb-3">
+                                <div class="d-flex col-12 col-xl-4">
+                                    <label class="align-self-center px-4 w-100 text-uppercase" for="{name}-button">{label}</label>
+                                </div>
+                                <div class="col-12 col-xl-8">
+                                     <button class=" btn btn-lg btn-round btn-primary px-3 mb-md-0 dropdown-toggle w-100" type="button"
+                                            id="{name}-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                </div>
+                            </div>';
+
     public function render()
     {
-        return $this->renderMarkup(self::$markup);
+        return $this->renderMarkup(self::$template);
     }
 
 }
