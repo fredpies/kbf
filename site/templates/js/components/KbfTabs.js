@@ -7,6 +7,15 @@ class KbfTabs {
         this.formIsValid = true;
         if (formName) this.formName = formName;
 
+        if (window.innerWidth >= 768) {
+            $('.mobile-tabs').remove();
+        }
+
+        if (window.innerWidth < 768) {
+            console.log($('.desktop-tabs'))
+            $('.desktop-tabs').remove();
+        }
+
         this.init();
         this.addListeners();
     }

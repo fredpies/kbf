@@ -3,13 +3,15 @@ import Inputmask from "inputmask/lib/inputmask";
 
 class KbfStepper {
 
-    constructor(selector) {
+    constructor(selector, validatorConfig) {
 
         let $ = window.$;
         this.$kbfStepper = $(selector);
 
         // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
         if (!selector || this.$kbfStepper.length === 0) throw errors.elementNotFound(selector);
+
+        this.validatorConfig = validatorConfig;
 
         this.init();
         this.addListeners();
@@ -115,7 +117,19 @@ class KbfStepper {
         let $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
 
         let fieldsAreValid = true;
-        if ($currentPageInputs.length) fieldsAreValid = $currentPageInputs.valid();
+
+        if ($currentPageInputs.length) {
+
+            let validator = $(`[name="${this.validatorConfig.formName}"]`).validate(this.validatorConfig);
+            let valids = [];
+
+             $currentPageInputs.each(function () {
+                 valids.push(validator.element(this))
+             })
+
+            fieldsAreValid = ! valids.includes(false);
+
+        }
 
         // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
         if (this.$errorMessageElement.length > 0) {

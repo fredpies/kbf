@@ -1182,6 +1182,12 @@ a.about-keywords:hover {
   }
 }
 
+/* Kontener stepera poza panelem */
+
+.container-stepper {
+  max-width: 850px;
+}
+
 /******************************/
 /* Fix                        */
 /******************************/

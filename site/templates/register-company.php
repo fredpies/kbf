@@ -62,7 +62,7 @@ $form_step_2->addMarkup(getFormField("industries")->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
 $form_step_2->addMarkup($company_description_hidden->render(), true);
 $form_step_2->addMarkup($company_description_field->render(), true);
-$form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'), true);
+$form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.', 'col-12 mt-3'), true);
 
 // Krok "Dane kontaktowe"
 $form_step_3 = new FormRenderer("register-company", $company_fields);

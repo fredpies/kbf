@@ -105,7 +105,7 @@ class FormFieldDatepicker extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
         
-                            <input data-inputmask-regex="\d{4}-\d{2}-\d{2}" autocomplete="off" type="text" class="form-control form-control-lg text-uppercase" name="{name}" {required} {msgRequired} value="{value}">
+                            <input data-inputmask-regex="\d{4}-\d{2}-\d{2}" autocomplete="off" type="text" class="form-control  text-uppercase" name="{name}" {required} {msgRequired} value="{value}">
         
                             <div class="input-focus-bg"></div>
         
@@ -157,7 +157,7 @@ class FormFieldText extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="text" class="form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="text" class="form-control  text-uppercase"
                                    name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
@@ -196,7 +196,7 @@ class FormFieldAutocomplete extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="{type}" class="form-control  text-uppercase"
                                    name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
                             
                             <div class="input-focus-bg"></div>
@@ -281,7 +281,7 @@ class FormFieldKeywords extends FormField
             </div>
             
             <div class="col-12 mb-3 px-0">
-                <input class="kbf-keywords form-control form-control-lg" name="company_keywords" value="{value}"></input>
+                <input class="kbf-keywords form-control " name="company_keywords" value="{value}"></input>
             </div>
         </div>
     ';
@@ -303,7 +303,7 @@ class FormFieldImage extends FormField
 
     public static $template = '
     
-        <div class="row col-12 col-lg-10 col-xl-8 px-0 ">
+        <div class="row col-12 col-lg-10 px-0 ">
    
             <div class="col-12 col-lg-6 mb-3">
                         <div class="col-12 mx-lg-0 mx-auto px-0 {className}">
@@ -311,7 +311,7 @@ class FormFieldImage extends FormField
                         </div>
                         <label class="kbf-logo-uploader input-group input-group-lg input-group-round mb-4" for="{name}">
                           
-                            <input id="{name}" type="file" class="d-none form-control form-control-lg"
+                            <input id="{name}" type="file" class="d-none form-control "
                                            name="{name}" {required} {msgRequired} {disabled} {value}>
                                            
                             <div class="d-flex no-gutters input-focus-bg justify-content-center">
@@ -397,7 +397,7 @@ class FormFieldRegonSearch extends FormField
                         
                         <div class="input-group-inner">
                           
-                            <input autocomplete="off" name="company_regon" type="text" style="font-size: 0.83rem" class="form-control form-control-lg" {disabled} {required} data-rule-minlength="7" data-msg-minlength="Numer REGON musi posiadać minimum 7 cyfr." {msgRequired} {inputmask} value="{value}">
+                            <input autocomplete="off" name="company_regon" type="text" style="font-size: 0.83rem" class="form-control " {disabled} {required} data-rule-minlength="7" data-msg-minlength="Numer REGON musi posiadać minimum 7 cyfr." {msgRequired} {inputmask} value="{value}">
                             
                             <div class="input-group-append">
                                 <button class="kbf-search-button btn btn-round btn-primary shadow-none mb-0" type="submit">Pobierz dane</button>
@@ -435,7 +435,7 @@ class FormFieldDropdown extends FormField
                                     <label class="align-self-center px-4 w-100 text-uppercase" for="{name}-button">{label}</label>
                                 </div>
                                 <div class="col-12 col-xl-8">
-                                     <button class=" btn btn-lg btn-round btn-primary px-3 mb-md-0 dropdown-toggle w-100" type="button"
+                                     <button class=" btn btn-round btn-primary px-3 mb-md-0 dropdown-toggle w-100" type="button"
                                             id="{name}-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                 </div>
                             </div>';

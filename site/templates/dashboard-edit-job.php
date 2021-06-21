@@ -47,8 +47,9 @@ $job_city_field->value = $sanitizer->text($job_page->get("job_city"));
 $job_city_field->className = "col-12 mb-2";
 $job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
-// Wojewodztwa
+// Wojewodztwo
 $job_province_name_field = getFormField("province_name", false, true);
+$job_province_name_field->value = $sanitizer->text($job_page->get("province_name"));
 $job_province_name_field->className = "col-12";
 
 // Opis  pole ukryte - hack
@@ -74,7 +75,7 @@ $form->addMarkup($job_description_field->render(), true);
 
 $button_markup = '<div class="row justify-content-center mt-4">
                     <div class="col-12 col-sm-6">
-                        <button type="submit" class="submit-button btn-lg btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                        <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
                     </div>
                   </div>';
 
@@ -151,13 +152,13 @@ $tabsPhone->addMarkup("", "Oferta pracodawcy");
 
                             <h3 class="font-weight-800 mb-0 py-3 pt-xl-5 section-title-3 text-center text-uppercase"><?= $page_title ?></h3>
 
-                            <form name="dashboard-job-edit" class="mt-5" method="get" action="">
+                            <form name="dashboard-edit-job" class="mt-5" method="get" action="">
 
-                                <div class="d-none d-xl-block">
+                                <div class="desktop-tabs d-none d-xl-block">
                                     <?= $tabs->render() ?>
                                 </div>
 
-                                <div class="d-block d-xl-none">
+                                <div class="mobile-tabs d-block d-xl-none">
                                     <?= $tabsPhone->render(true) ?>
                                     <?= $button_markup ?>
                                 </div>

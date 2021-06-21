@@ -130,7 +130,7 @@ $form_4->addMarkup($modal, true);
 
 $button_markup = '<div class=" row justify-content-center mt-4">
                     <div class="col-12 col-sm-6">
-                        <button type="submit" class="submit-button btn-lg btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                        <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
                     </div>
                   </div>';
 
@@ -193,11 +193,11 @@ $tabsPhone->addMarkup($form_4->render(), "Opis");
 
                             <form name="dashboard-company-edit" method="post" action="">
 
-                                <div class="d-none d-sm-block">
+                                <div class="desktop-tabs d-none d-sm-block">
                                     <?= $tabs->render() ?>
                                 </div>
 
-                                <div class="d-block d-sm-none">
+                                <div class="mobile-tabs d-block d-sm-none">
                                     <?= $tabsPhone->render(true) ?>
                                     <?= $button_markup ?>
                                 </div>

@@ -5192,13 +5192,14 @@
   window$1.Inputmask = Inputmask$1;
 
   var KbfStepper = /*#__PURE__*/function () {
-    function KbfStepper(selector) {
+    function KbfStepper(selector, validatorConfig) {
       _classCallCheck(this, KbfStepper);
 
       var $ = window.$;
       this.$kbfStepper = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
 
       if (!selector || this.$kbfStepper.length === 0) throw errors.elementNotFound(selector);
+      this.validatorConfig = validatorConfig;
       this.init();
       this.addListeners();
     }
@@ -5295,7 +5296,16 @@
         if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none');
         var $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
         var fieldsAreValid = true;
-        if ($currentPageInputs.length) fieldsAreValid = $currentPageInputs.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+
+        if ($currentPageInputs.length) {
+          var validator = $("[name=\"".concat(this.validatorConfig.formName, "\"]")).validate(this.validatorConfig);
+          var valids = [];
+          $currentPageInputs.each(function () {
+            valids.push(validator.element(this));
+          });
+          fieldsAreValid = !valids.includes(false);
+        } // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+
 
         if (this.$errorMessageElement.length > 0) {
           if (fieldsAreValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
@@ -6841,9 +6851,10 @@
 
     var _super = _createSuper$3(KbfDropdown);
 
-    function KbfDropdown(selector, opts) {
+    function KbfDropdown(selector) {
       var _this;
 
+      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
       _classCallCheck(this, KbfDropdown);
@@ -6851,7 +6862,6 @@
       _this = _super.call(this);
 
       if (selector === undefined) throw errors.argumentNotFound('selector');
-      if (opts === undefined) throw errors.argumentNotFound('opts');
       _this.selector = selector;
       _this.opts = opts;
       _this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
@@ -6876,7 +6886,10 @@
         this.on = this.addEventListener;
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
-        this.$dropdowns = $(this.selector);
+        this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
+
+        var dataOptions = this.$dropdowns.data('options');
+        if (dataOptions) this.opts = dataOptions.split(',');
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
@@ -6937,23 +6950,28 @@
             e.stopPropagation();
             enableScroll();
           });
-        } // Fix dla przyciskow steppera
+        } // Fix dla przyciskow steppera // TODO przeniesc do steppera
+        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
+        //
+        //     e.stopPropagation();
+        //     let $steps = $('.step');
+        //     let $buttons = $('.button-prev, .button-next, .button-register');
+        //     if ($steps.length) $steps.css('z-index', -1);
+        //     if ($buttons.length) $buttons.css('z-index', -1);
+        //
+        // });
+        //
+        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+        //
+        //     e.stopPropagation();
+        //     let $steps = $('.step');
+        //     let $buttons = $('.button-prev, .button-next, .button-register');
+        //     if ($steps.length) $steps.css('z-index', '');
+        //     if ($buttons.length) $buttons.css('z-index', '');
+        //
+        // });
+        // Gdy klikniemy na dropdown item
 
-
-        this.$dropdowns.on('shown.bs.dropdown', function (e) {
-          e.stopPropagation();
-          var $steps = $('.step');
-          var $buttons = $('.button-prev, .button-next, .button-register');
-          if ($steps.length) $steps.css('z-index', -1);
-          if ($buttons.length) $buttons.css('z-index', -1);
-        });
-        this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-          e.stopPropagation();
-          var $steps = $('.step');
-          var $buttons = $('.button-prev, .button-next, .button-register');
-          if ($steps.length) $steps.css('z-index', '');
-          if ($buttons.length) $buttons.css('z-index', '');
-        }); // Gdy klikniemy na dropdown item
 
         this.$dropdownItems.on('click', function (e) {
           e.preventDefault();
@@ -7254,8 +7272,8 @@
 
   var config = {
     env: 'dev',
-    url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf'
+    url: 'http://localhost',
+    apiEndpoint: 'http://localhost/kbf2/'
   };
 
   var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
@@ -22913,15 +22931,18 @@
 
     var _super = _createSuper$1(KbfWysiwyg);
 
-    function KbfWysiwyg(selector, options) {
+    function KbfWysiwyg(selector) {
       var _this;
+
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       _classCallCheck(this, KbfWysiwyg);
 
       _this = _super.call(this); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
 
-      if (!selector) throw errors.elementNotFound(selector);
+      if (!selector) throw errors.argumentNotFound("selector");
       _this.selector = selector;
+      _this.$container = $(selector);
       _this.options = _objectSpread({
         modules: {
           toolbar: [['bold', 'italic', 'underline', 'strike'], [{
@@ -22971,6 +22992,7 @@
         this.editor = new Quill(this.selector, this.options);
         this.$contents = $('.ql-editor');
         this.$wysiwygInput = $('.wysiwyg').next('input[type="hidden"]');
+        this.$wysiwygInput.html(this.$contents.html());
       } //Ustawia wartosc pola input
 
     }, {
@@ -23064,8 +23086,6 @@
       key: "init",
       value: function init() {
         var instance = this;
-        this.stepper = new KbfStepper('.kbf-stepper');
-        this.$kbfStepper = this.stepper.$kbfStepper;
         this.companyInfo = $('.company-info')[0];
         this.companyDescription = $('.company-description')[0];
         this.companyInfoContents = this.companyInfo.innerHTML; // Placeholder z informacjami o firmie
@@ -23073,20 +23093,7 @@
         this.companyDescriptionContents = this.companyDescription.innerHTML; // Placeholder z informacjami o firmie
 
         this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
-        this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button'); // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
-
-        if (window.innerWidth >= 768) {
-          this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
-          this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
-          this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
-          this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
-        } else {
-          this.$prevButton = this.$kbfStepper.find('.button-prev');
-          this.$nextButton = this.$kbfStepper.find('.button-next');
-          this.$registerButton = this.$kbfStepper.find('.button-register');
-          this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
-        } // Przycisk wyszukiwania po numerze REGON
-
+        this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button'); // Przycisk wyszukiwania po numerze REGON
 
         this.$searchByREGONButton = $('.kbf-search-button');
         this.$searchByREGONButton.attr('disabled', 'disabled'); //Tagify
@@ -23101,14 +23108,12 @@
 
         $.validator.addMethod('regon-not-exists', function (value, element) {
           return this.optional(element) || instance.regonNotExists;
-        }, "Firma o podanym numerze REGON jest juz zarejestrowana w KBF.");
+        }, "REGON jest już zarejestrowany w KBF.");
         $.validator.addMethod('regon-not-found', function (value, element) {
           return this.optional(element) || instance.regonFound;
         }, "Firma o podanym numerze REGON nie została odnaleziona."); // Walidacja
 
-        this.$formElement = $('form'); // TODO KbfForm ?
-
-        this.validator = this.$formElement.validate({
+        this.validatorConfig = {
           formName: 'register-company',
           ignore: [],
           rules: {
@@ -23135,12 +23140,27 @@
               $column.append($label);
             } else $label.insertAfter($element);
           }
-        }); // Wybor branz
+        };
+        this.stepper = new KbfStepper('.kbf-stepper', this.validatorConfig);
+        this.$kbfStepper = this.stepper.$kbfStepper; // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
+
+        if (window.innerWidth >= 768) {
+          this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
+          this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
+          this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
+          this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
+        } else {
+          this.$prevButton = this.$kbfStepper.find('.button-prev');
+          this.$nextButton = this.$kbfStepper.find('.button-next');
+          this.$registerButton = this.$kbfStepper.find('.button-register');
+          this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
+        } // Wybor branz
+
 
         this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", window.innerWidth <= 768, false);
         this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper)); // Wysiwyg
 
-        this.wysiwyg = new KbfWysiwyg('.wysiwyg');
+        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
         this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper));
       }
     }, {
@@ -23292,7 +23312,7 @@
         }
 
         this.companyDescription.innerHTML = replacePlaceholders({
-          '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}'
+          '{company_description_html}': $('[name="company_description_html"]').val() || ''
         }, this.companyDescriptionContents);
       } // Aktywuje przycisk wyszukiwania jezeli dlugosc REGON jest prawidlowa
 

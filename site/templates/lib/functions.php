@@ -151,7 +151,7 @@ function render_company_summary() {
 
     return '<div class="container"><div class="row mt-3">
                     
-                    <div class="col-12 col-md-7 px-0">
+                    <div class="col-12 col-md-8 px-0">
                     
                     <div style="padding-left: 15px;" class="row no-gutters">
                     
@@ -1523,7 +1523,6 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         case "job_type":
         {
 
-            echo "job_type";
             $field = new FormFieldDropdown($disabled);
             $field->label = "Rodzaj umowy";
             $field->name = $fieldName;

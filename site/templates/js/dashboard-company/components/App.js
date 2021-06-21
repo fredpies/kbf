@@ -16,13 +16,22 @@ class App {
 
     init() {
 
+        // Taby
+        this.tabs = new KbfTabs('dashboard-company-edit');
+
         this.$submitButton = $('.submit-button');
 
         this.$cityField = $('[name="company_city"]');
         this.$zipField = $('[name="company_zip"]');
 
         // Wysiwyg
-        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
+        // TODO: Musi byc zmienione, ukryte pole musi byc niezalezne od kontekstu
+        this.$descriptionFieldHidden = $('[name="company_description_hidden"]');
+        this.wysiwyg = new KbfWysiwyg('.wysiwyg');
+
+        let htmlToInsert = this.$descriptionFieldHidden.val();
+        let editor = document.getElementsByClassName('ql-editor')
+        editor[0].innerHTML = htmlToInsert
 
         //Tagify
         new KbfTagify('input.kbf-keywords');
@@ -33,8 +42,7 @@ class App {
         // Address autocomplete
         this.addressAutocomplete = new KbfAddressAutocomplete('[name="company_address"]');
 
-        // Taby
-        this.tabs = new KbfTabs('dashboard-job-edit');
+
 
     }
 

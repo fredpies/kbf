@@ -33,13 +33,13 @@ class StepperRenderer
 
             {messages}
 
-            <div class="container">
+            <div class="container container-stepper">
                 {pages}
             </div>
             
             {stepsHeader}
             
-            <div class="container d-none d-md-block my-4">
+            <div class="container  d-none d-md-block my-4">
                 <div class="col-12 text-center"><label id="company_regon-error" class="error-stepper d-none text-danger" for="company_regon" style="">Sprawdź poprawność wypełnienia odpowiednich pól.</label></div>
                 
                 <div class="col-12 text-center text-md-right align-self-center">

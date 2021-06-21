@@ -7,7 +7,6 @@ import config from "../../config/config";
 import {replacePlaceholders} from "../../functions/library";
 import KbfTagify from "../../components/KbfTagify";
 
-
 class App {
 
     constructor() {
@@ -25,8 +24,7 @@ class App {
 
         let instance = this;
 
-        this.stepper = new KbfStepper('.kbf-stepper');
-        this.$kbfStepper = this.stepper.$kbfStepper;
+
 
         this.companyInfo = $('.company-info')[0];
         this.companyDescription = $('.company-description')[0];
@@ -35,20 +33,6 @@ class App {
         this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
 
         this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button');
-
-        // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
-        if (window.innerWidth >= 768) {
-            this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
-            this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
-            this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
-            this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
-
-        } else {
-            this.$prevButton = this.$kbfStepper.find('.button-prev');
-            this.$nextButton = this.$kbfStepper.find('.button-next');
-            this.$registerButton = this.$kbfStepper.find('.button-register');
-            this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
-        }
 
         // Przycisk wyszukiwania po numerze REGON
         this.$searchByREGONButton = $('.kbf-search-button');
@@ -68,15 +52,14 @@ class App {
         // Ustaw walidator dla numeru REGON
         $.validator.addMethod('regon-not-exists', function (value, element) {
             return this.optional(element) || instance.regonNotExists
-        }, "Firma o podanym numerze REGON jest juz zarejestrowana w KBF.");
+        }, "REGON jest już zarejestrowany w KBF.");
 
         $.validator.addMethod('regon-not-found', function (value, element) {
             return this.optional(element) || instance.regonFound
         }, "Firma o podanym numerze REGON nie została odnaleziona.");
 
         // Walidacja
-        this.$formElement = $('form'); // TODO KbfForm ?
-        this.validator = this.$formElement.validate({
+        this.validatorConfig = {
 
             formName: 'register-company',
             ignore: [],
@@ -108,7 +91,24 @@ class App {
                     $column.append($label);
                 } else $label.insertAfter($element);
             }
-        });
+        };
+
+        this.stepper = new KbfStepper('.kbf-stepper', this.validatorConfig);
+        this.$kbfStepper = this.stepper.$kbfStepper;
+
+        // Ustaw przyciski w zaleznosci od szerokosci urzadzenia
+        if (window.innerWidth >= 768) {
+            this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
+            this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
+            this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
+            this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
+
+        } else {
+            this.$prevButton = this.$kbfStepper.find('.button-prev');
+            this.$nextButton = this.$kbfStepper.find('.button-next');
+            this.$registerButton = this.$kbfStepper.find('.button-register');
+            this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
+        }
 
         // Wybor branz
         this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", window.innerWidth <= 768, false);
@@ -274,7 +274,7 @@ class App {
         }
 
         this.companyDescription.innerHTML = replacePlaceholders({
-            '{company_description_html}': $('[name="company_description"]').val() || '{company_description_html}',
+            '{company_description_html}': $('[name="company_description_html"]').val() || '',
         }, this.companyDescriptionContents)
 
     }

@@ -22,19 +22,19 @@ class App {
         this.$submitButton = $('.submit-button');
         this.$provinceNameField = $('[name="province_name"]');
 
+        // Taby
+        this.tabs = new KbfTabs('dashboard-edit-job');
+
         // Datepicker
         this.datepickerJobExpire = new KbfDatepicker('.job_expire-date-picker', '[name="job_expire"]');
         this.datepickerStartDate = new KbfDatepicker('.job_start_date-date-picker', '[name="job_start_date"]');
 
-        // Taby
-        this.tabs = new KbfTabs('dashboard-job-edit');
 
         // Rodzaj etatu
         this.jobTypeDropdown = new KbfDropdown('.dropdown-job_type');
 
         // Miasto autocomplete
         this.cityAutocomplete = new KbfCityAutocomplete('[name="job_city"]');
-
 
         // Wysiwyg
         // TODO: Musi byc zmienione, ukryte pole musi byc niezalezne od kontekstu
@@ -47,7 +47,6 @@ class App {
 
         // Preloader button
         this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
-
 
     }
 
