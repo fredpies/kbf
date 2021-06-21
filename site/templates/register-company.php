@@ -72,7 +72,7 @@ $company_keywords_field = getFormField("company_keywords");
 $company_keywords_field->className = "row col-12 mb-3 px-3";
 
 $company_email_field = getFormField("company_email", true);
-$company_email_field->inputmask = "[a-zA-ZńółźżęśćŃÓŁŹŻĘŚĆ.]+@[a-zA-ZńółźżęśćŃÓŁŹŻĘŚĆ.]+";
+$company_email_field->inputmask = ".+@.+";
 
 $company_field_phone_1 = getFormField("company_phone_1", true);
 $company_field_phone_1->inputmask = "\d+";

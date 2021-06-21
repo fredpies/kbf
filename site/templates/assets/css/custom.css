@@ -434,11 +434,11 @@
 /* 3.1 Oferta pracy     */
 /************************/
 
-.job-details .list-group-item {
+.job-details .list-group-item, .job-details-edit .list-group-item {
   position: relative;
 }
 
-.job-details .list-group-item:after {
+.job-details .list-group-item:after, .job-details-edit .list-group-item:after  {
   position: absolute;
   content: '';
   top: 0.7rem;

@@ -59,7 +59,7 @@ $job_description_hidden->value = $sanitizer->entitiesMarkdown($job_page->get('jo
 
 // Opis
 $job_description_field = getFormField("job_description");
-$job_description_field->className = "col-12";
+$job_description_field->className = "col-12 mb-3";
 
 $form->addMarkup($job_name_field->render(false), true);
 $form->addMarkup($job_expire_field->render(), true);
@@ -72,11 +72,22 @@ $form->addMarkup($job_province_name_field->render(false), true);
 $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
 
+// Obowiazki
+
+$responsibilities = array(
+        'kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
+        'przeprowadzanie rytuałów pielęgnacyjnych',
+        'budowanie długofalowych relacji z klientem',
+        'sprzedaż kosmetyków i doradztwo w zakresie ich właściwego doboru i stosowania'
+);
+
+$responsibilities_markup = render_job_repeater($responsibilities, "job_responsibility");
+
 
 $button_markup = '<div class="row justify-content-center mt-4">
-                    <div class="col-12 col-sm-6">
-                        <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
-                    </div>
+                        <div class="col-12 col-sm-6">
+                            <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                        </div>
                   </div>';
 
 
@@ -85,12 +96,12 @@ $tabs = new TabsRenderer("job-edit");
 $tabsPhone = new TabsRenderer("job-edit");
 
 $tabs->addMarkup($form->render(). $button_markup, "Opis");
-$tabs->addMarkup("". $button_markup, "Obowiązki");
+$tabs->addMarkup($responsibilities_markup, "Obowiązki");
 $tabs->addMarkup("". $button_markup, "Wymagania");
-$tabs->addMarkup("". $button_markup, "Oferta pracodawcy");
+$tabs->addMarkup("". $button_markup, "Oferta");
 
 $tabsPhone->addMarkup($form->render(), "Opis oferty");
-$tabsPhone->addMarkup("", "Zakres obowiązków");
+$tabsPhone->addMarkup($responsibilities_markup, "Zakres obowiązków");
 $tabsPhone->addMarkup("", "Wymagania");
 $tabsPhone->addMarkup("", "Oferta pracodawcy");
 
@@ -154,11 +165,11 @@ $tabsPhone->addMarkup("", "Oferta pracodawcy");
 
                             <form name="dashboard-edit-job" class="mt-5" method="get" action="">
 
-                                <div class="desktop-tabs d-none d-xl-block">
+                                <div class="desktop-tabs">
                                     <?= $tabs->render() ?>
                                 </div>
 
-                                <div class="mobile-tabs d-block d-xl-none">
+                                <div class="mobile-tabs">
                                     <?= $tabsPhone->render(true) ?>
                                     <?= $button_markup ?>
                                 </div>
