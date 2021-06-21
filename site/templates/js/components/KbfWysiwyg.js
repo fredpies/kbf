@@ -3,12 +3,14 @@ import Quill from "quill";
 
 class KbfWysiwyg extends EventTarget {
 
-    constructor(selector, options) {
+    constructor(selector, options = {}) {
 
         super();
 
         // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
-        if (!selector) throw errors.elementNotFound(selector);
+
+        if (!selector) throw errors.argumentNotFound("selector");
+
         this.selector = selector;
 
         this.options = {
@@ -57,6 +59,8 @@ class KbfWysiwyg extends EventTarget {
         this.editor = new Quill(this.selector, this.options);
         this.$contents = $('.ql-editor');
         this.$wysiwygInput = $('.wysiwyg').next('input[type="hidden"]');
+
+        this.$wysiwygInput.html(this.$contents.html());
 
     }
 

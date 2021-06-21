@@ -21,6 +21,7 @@
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-replace": "^2.4.2",
     "animate.css": "^3.7.2",
+    "app-datepicker": "^4.5.3",
     "babelrc-rollup": "^3.0.0",
     "bootstrap-autocomplete": "^2.3.7",
     "check-node-version": "^3.2.0",

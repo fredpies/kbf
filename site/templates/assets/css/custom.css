@@ -900,6 +900,40 @@ input[name*="sub-industry"] + label.error {
   font-size: .75rem;
 }
 
+/******************************/
+/* Date picker                */
+/******************************/
+
+app-datepicker {
+  --app-datepicker-border-top-left-radius: 8px;
+  --app-datepicker-border-top-right-radius: 8px;
+  --app-datepicker-border-bottom-right-radius: 8px;
+  --app-datepicker-border-bottom-left-radius: 8px;
+  --app-datepicker-accent-color: #2196f3;
+  --app-datepicker-bg-color: #fff;
+  --app-datepicker-color: #000;
+  --app-datepicker-disabled-day-color: rgba(0, 0, 0, .55);
+  --app-datepicker-focused-day-color: #fff;
+  --app-datepicker-focused-year-bg-color: #000;
+  --app-datepicker-selector-color: rgba(0, 0, 0, .55);
+  --app-datepicker-separator-color: #ddd;
+  --app-datepicker-weekday-color: rgba(0, 0, 0, .55);
+}
+
+.kbf-date-picker {
+  display: none;
+  position: absolute;
+  top: 100%;
+  z-index: 9;
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  .kbf-date-picker {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
 
 /******************************/
 /* Autocomplete               */

@@ -130,7 +130,3 @@ $config->userTemplateIDs = array(3, 49);
 $config->userPageIDs = array(29, 43);
 
 
-$config->sessionExpireSeconds = 432000;
-$config->sessionFingerprint = 0;
-
-

@@ -60,12 +60,14 @@ $company_phone_1_field = getFormField("company_phone_1", true);
 $company_phone_1_field->value = $sanitizer->text($company_page->get('company_phone_1'));
 $company_phone_1_field->className = "col-12 mb-3";
 $company_phone_1_field->description = "";
+$company_phone_1_field->inputmask = "\d+";
 
 //  Drugi numer telefonu
 $company_phone_2_field = getFormField("company_phone_2");
 $company_phone_2_field->value = $sanitizer->text($company_page->get('company_phone_2'));
 $company_phone_2_field->className = "col-12 mb-3";
 $company_phone_2_field->description = "";
+$company_phone_2_field->inputmask = "\d+";
 
 //  FAX
 $company_fax_field = getFormField("company_fax");

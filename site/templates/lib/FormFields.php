@@ -66,6 +66,63 @@ class FormField
 
 }
 
+class FormFieldDatepicker extends FormField
+{
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public static $markup = '
+
+    <div class="row justify-content-start mx-auto w-100 mb-3">
+
+       <div class="col-12 col-xl-4 align-self-center mb-3">
+                <label class="kbf-form-info text-uppercase px-3">{label}</label>
+        </div>
+        
+        <div class="col-12 col-xl-8">
+                <div class="input-group input-group-lg input-group-round mb-4">
+                        <div class="input-group-inner position-relative">
+                        
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
+                            </div>
+        
+                            <input data-inputmask-regex="\d{4}-\d{2}-\d{2}" autocomplete="off" type="text" class="form-control form-control-lg text-uppercase" name="{name}" {required} {msgRequired} value="{value}">
+        
+                            <div class="input-focus-bg"></div>
+        
+                            <div class="kbf-date-picker {name}-date-picker shadow-md">
+                        
+                            <app-datepicker
+                              firstdayofweek="1"
+                              weeknumbertype="first-4-day-week"
+                              startview="calendar"
+                              value="{value}"
+                              locale="pl-PL"
+                              weeklabel="Wk"
+                              dragratio="0.15"
+                              inline
+                            ></app-datepicker>
+                        
+                        </div>
+        
+                        </div>
+                        
+                </div>
+        </div>
+
+    </div>
+';
+
+    public function render()
+    {
+        return $this->renderMarkup(self::$markup);
+    }
+
+}
+
 class FormFieldText extends FormField
 {
 
@@ -84,7 +141,7 @@ class FormFieldText extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="{type}" class="form-control form-control-lg text-uppercase"
+                            <input autocomplete="off" type="text" class="form-control form-control-lg text-uppercase"
                                    name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>

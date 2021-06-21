@@ -10,7 +10,7 @@ class TabsRenderer
 
     // Markups
 
-    public static $tabPhoneMarkup = '<h5 class="my-3 text-center">{tab}</h5>{tabContent}';
+    public static $tabPhoneMarkup = '<h5 class="mt-3 mb-4 text-center">{tab}</h5>{tabContent}';
 
     public static $tabsContainer = '{contents}';
 

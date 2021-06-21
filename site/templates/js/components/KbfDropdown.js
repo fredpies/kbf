@@ -88,26 +88,26 @@ class KbfDropdown extends EventTarget {
             });
         }
 
-        // Fix dla przyciskow steppera
-        this.$dropdowns.on('shown.bs.dropdown', function (e) {
-
-            e.stopPropagation();
-            let $steps = $('.step');
-            let $buttons = $('.button-prev, .button-next, .button-register');
-            if ($steps.length) $steps.css('z-index', -1);
-            if ($buttons.length) $buttons.css('z-index', -1);
-
-        });
-
-        this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-
-            e.stopPropagation();
-            let $steps = $('.step');
-            let $buttons = $('.button-prev, .button-next, .button-register');
-            if ($steps.length) $steps.css('z-index', '');
-            if ($buttons.length) $buttons.css('z-index', '');
-
-        });
+        // Fix dla przyciskow steppera // TODO przeniesc do steppera
+        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
+        //
+        //     e.stopPropagation();
+        //     let $steps = $('.step');
+        //     let $buttons = $('.button-prev, .button-next, .button-register');
+        //     if ($steps.length) $steps.css('z-index', -1);
+        //     if ($buttons.length) $buttons.css('z-index', -1);
+        //
+        // });
+        //
+        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+        //
+        //     e.stopPropagation();
+        //     let $steps = $('.step');
+        //     let $buttons = $('.button-prev, .button-next, .button-register');
+        //     if ($steps.length) $steps.css('z-index', '');
+        //     if ($buttons.length) $buttons.css('z-index', '');
+        //
+        // });
 
 
         // Gdy klikniemy na dropdown item

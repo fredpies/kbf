@@ -53,9 +53,14 @@ $form_step_2->onlyFields = true;
 $company_description_field = getFormField("company_description", true);
 $company_description_field->className = "row col-12 col-lg-10 col-xl-8 px-0 col-12 col-lg-6 col-xl-5 mb-3";
 
+// Opis firmy pole ukryte - hack
+$company_description_hidden = getFormField('hidden');
+$company_description_hidden->name = 'company_description_hidden';
+
 $form_step_2->addMarkup($company_logo_field->render(), true);
 $form_step_2->addMarkup(getFormField("industries")->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
+$form_step_2->addMarkup($company_description_hidden->render(), true);
 $form_step_2->addMarkup($company_description_field->render(), true);
 $form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.'), true);
 

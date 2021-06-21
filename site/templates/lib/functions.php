@@ -1472,6 +1472,39 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return new FormFieldKeywords();
         }
 
+        // PRACA
+
+        case "job_name":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Nazwa stanowiska";
+            $field->name = "job_name";
+            $field->description = "Podaj nazwę proponowanego stanowiska pracy.";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Nazwa stanowiska pracy nie może być pusta.";
+            }
+
+            $field->icon = "fa-info";
+            return $field;
+        }
+
+        case "job_expire" || "job_start_date":
+        {
+            $field = new FormFieldDatepicker($disabled);
+            $field->label = "Data picker";
+
+            if ($required) {
+                $field->required = true;
+            }
+
+            $field->icon = "fa-calendar";
+            return $field;
+        }
+
+
+
         case "industries":
         {
             return new FormFieldIndustries();

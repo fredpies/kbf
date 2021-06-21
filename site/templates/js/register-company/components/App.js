@@ -115,7 +115,7 @@ class App {
         this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper));
 
         // Wysiwyg
-        this.wysiwyg = new KbfWysiwyg('.wysiwyg');
+        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
         this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
 
     }

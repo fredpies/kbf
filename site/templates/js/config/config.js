@@ -1,8 +1,8 @@
 let config = {
 
     env: 'dev',
-    url: 'http://localhost:3000',
-    apiEndpoint: 'http://localhost:3000/kbf2'
+    url: 'https://webplanet.biz',
+    apiEndpoint: 'https://webplanet.biz/kbf'
 
 };
 
