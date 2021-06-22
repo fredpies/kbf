@@ -87,7 +87,7 @@ function _isNativeFunction(fn) {
   return Function.toString.call(fn).indexOf("[native code]") !== -1;
 }
 
-function _isNativeReflectConstruct$9() {
+function _isNativeReflectConstruct$a() {
   if (typeof Reflect === "undefined" || !Reflect.construct) return false;
   if (Reflect.construct.sham) return false;
   if (typeof Proxy === "function") return true;
@@ -101,7 +101,7 @@ function _isNativeReflectConstruct$9() {
 }
 
 function _construct(Parent, args, Class) {
-  if (_isNativeReflectConstruct$9()) {
+  if (_isNativeReflectConstruct$a()) {
     _construct = Reflect.construct;
   } else {
     _construct = function _construct(Parent, args, Class) {
@@ -178,14 +178,14 @@ errors.noGeoCoords = function () {
   return new Error("You must provide geo coordinates.");
 };
 
-function _createSuper$8(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$8(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$9(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$9(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$8() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$9() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
   _inherits(KbfPreloaderButton, _EventTarget);
 
-  var _super = _createSuper$8(KbfPreloaderButton);
+  var _super = _createSuper$9(KbfPreloaderButton);
 
   function KbfPreloaderButton(selector) {
     var _this;
@@ -1975,9 +1975,9 @@ var TemplateResult = /*#__PURE__*/function () {
   return TemplateResult;
 }();
 
-function _createSuper$7(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$7(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$8(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$8(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$7() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$8() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _createForOfIteratorHelper$5(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray$5(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
@@ -2458,7 +2458,7 @@ var BooleanAttributePart = /*#__PURE__*/function () {
 var PropertyCommitter = /*#__PURE__*/function (_AttributeCommitter) {
   _inherits(PropertyCommitter, _AttributeCommitter);
 
-  var _super = _createSuper$7(PropertyCommitter);
+  var _super = _createSuper$8(PropertyCommitter);
 
   function PropertyCommitter(element, name, strings) {
     var _this;
@@ -2500,7 +2500,7 @@ var PropertyCommitter = /*#__PURE__*/function (_AttributeCommitter) {
 var PropertyPart = /*#__PURE__*/function (_AttributePart) {
   _inherits(PropertyPart, _AttributePart);
 
-  var _super2 = _createSuper$7(PropertyPart);
+  var _super2 = _createSuper$8(PropertyPart);
 
   function PropertyPart() {
     _classCallCheck(this, PropertyPart);
@@ -3086,9 +3086,9 @@ function _unsupportedIterableToArray$4(o, minLen) { if (!o) return; if (typeof o
 
 function _arrayLikeToArray$4(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _createSuper$6(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$6(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$7(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$7(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$6() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$7() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 /**
  * @license
@@ -3192,7 +3192,7 @@ var finalized = 'finalized';
 var UpdatingElement = /*#__PURE__*/function (_HTMLElement) {
   _inherits(UpdatingElement, _HTMLElement);
 
-  var _super = _createSuper$6(UpdatingElement);
+  var _super = _createSuper$7(UpdatingElement);
 
   function UpdatingElement() {
     var _this;
@@ -4276,9 +4276,9 @@ var css = function css(strings) {
   return new CSSResult(cssText, constructionToken);
 };
 
-function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$6(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$6(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$6() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 // This line will be used in regexes to search for LitElement usage.
 // TODO(justinfagnani): inject version number at build time
 
@@ -4301,7 +4301,7 @@ var renderNotImplemented = {};
 var LitElement = /*#__PURE__*/function (_UpdatingElement) {
   _inherits(LitElement, _UpdatingElement);
 
-  var _super = _createSuper$5(LitElement);
+  var _super = _createSuper$6(LitElement);
 
   function LitElement() {
     _classCallCheck(this, LitElement);
@@ -6136,13 +6136,13 @@ var Tracker = /*#__PURE__*/function () {
 
 var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16;
 
-function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var Datepicker = /*#__PURE__*/function (_LitElement) {
   _inherits(Datepicker, _LitElement);
 
-  var _super = _createSuper$4(Datepicker);
+  var _super = _createSuper$5(Datepicker);
 
   function Datepicker() {
     var _this;
@@ -6783,14 +6783,14 @@ function customElementsDefine(tagName, baseClass) {
 
 customElementsDefine(DATEPICKER_NAME, Datepicker);
 
-function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var KbfDatepicker = /*#__PURE__*/function (_EventTarget) {
   _inherits(KbfDatepicker, _EventTarget);
 
-  var _super = _createSuper$3(KbfDatepicker);
+  var _super = _createSuper$4(KbfDatepicker);
 
   function KbfDatepicker(selector, inputElementSelector) {
     var _this;
@@ -11325,13 +11325,16 @@ var KbfTabs = /*#__PURE__*/function () {
     key: "init",
     value: function init() {
       var $ = window.$;
-      var instance = this; // Inicjuj kontroler formularza jezeli podano nazwe
+      var instance = this;
+      this.$tabToggles = $('[data-toggle="tab"]'); // Taby
+      // Inicjuj kontroler formularza jezeli podano nazwe
 
       if (this.formName) {
-        this.$tabToggles = $('[data-toggle="tab"]'); // Taby
-
         this.formController = new KbfForm({
-          formName: instance.formName
+          formName: instance.formName,
+          onfocusout: false,
+          onfocus: false,
+          onkeyup: false
         });
       }
     }
@@ -11350,8 +11353,12 @@ var KbfTabs = /*#__PURE__*/function () {
   }, {
     key: "validateForm",
     value: function validateForm() {
-      this.formController.validate();
-      this.formIsValid = this.formController.formIsValid;
+      var formExists = $("form[name=\"".concat(this.formName, "\"]")).length > 0;
+
+      if (formExists) {
+        this.formController.validate();
+        this.formIsValid = this.formController.formIsValid;
+      }
     }
   }]);
 
@@ -11563,7 +11570,7 @@ EventManager.prototype.once = function once(element, eventName, handler) {
   ee.bind(eventName, onceHandler);
 };
 
-function createEvent(name) {
+function createEvent$1(name) {
   if (typeof window.CustomEvent === 'function') {
     return new CustomEvent(name);
   } else {
@@ -11612,12 +11619,12 @@ function processScrollDiff$1(i, diff, ref, useScrollingClass, forceFireReachEven
   }
 
   if (diff) {
-    element.dispatchEvent(createEvent("ps-scroll-" + y));
+    element.dispatchEvent(createEvent$1("ps-scroll-" + y));
 
     if (diff < 0) {
-      element.dispatchEvent(createEvent("ps-scroll-" + up));
+      element.dispatchEvent(createEvent$1("ps-scroll-" + up));
     } else if (diff > 0) {
-      element.dispatchEvent(createEvent("ps-scroll-" + down));
+      element.dispatchEvent(createEvent$1("ps-scroll-" + down));
     }
 
     if (useScrollingClass) {
@@ -11626,7 +11633,7 @@ function processScrollDiff$1(i, diff, ref, useScrollingClass, forceFireReachEven
   }
 
   if (i.reach[y] && (diff || forceFireReachEvent)) {
-    element.dispatchEvent(createEvent("ps-" + y + "-reach-" + i.reach[y]));
+    element.dispatchEvent(createEvent$1("ps-" + y + "-reach-" + i.reach[y]));
   }
 }
 
@@ -12621,14 +12628,14 @@ PerfectScrollbar.prototype.removePsClasses = function removePsClasses() {
   }).join(' ');
 };
 
-function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
   _inherits(KbfDropdown, _EventTarget);
 
-  var _super = _createSuper$2(KbfDropdown);
+  var _super = _createSuper$3(KbfDropdown);
 
   function KbfDropdown(selector) {
     var _this;
@@ -12976,7 +12983,7 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
         e.stopPropagation();
         instance.scrollbar.update();
 
-        if (window.map) {
+        if (window.map.scrollWheelZoom && window.map.dragging) {
           window.map.scrollWheelZoom.disable();
           window.map.dragging.disable();
         }
@@ -12986,7 +12993,7 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
         if (window.map) window.map.dragging.enable();
       });
       this.$dropdownMenu.on('mouseleave', function () {
-        if (window.map) {
+        if (window.map.scrollWheelZoom && window.map.dragging) {
           window.map.scrollWheelZoom.enable();
           window.map.dragging.enable();
         }
@@ -13489,14 +13496,14 @@ function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if 
 
 function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var KbfAddressAutocomplete = /*#__PURE__*/function (_EventTarget) {
   _inherits(KbfAddressAutocomplete, _EventTarget);
 
-  var _super = _createSuper$1(KbfAddressAutocomplete);
+  var _super = _createSuper$2(KbfAddressAutocomplete);
 
   function KbfAddressAutocomplete(selector) {
     var _this;
@@ -14223,7 +14230,23 @@ var quill = createCommonjsModule(function (module, exports) {
         Delta.prototype.compose = function (other) {
           var thisIter = op.iterator(this.ops);
           var otherIter = op.iterator(other.ops);
-          var delta = new Delta();
+          var ops = [];
+          var firstOther = otherIter.peek();
+
+          if (firstOther != null && typeof firstOther.retain === 'number' && firstOther.attributes == null) {
+            var firstLeft = firstOther.retain;
+
+            while (thisIter.peekType() === 'insert' && thisIter.peekLength() <= firstLeft) {
+              firstLeft -= thisIter.peekLength();
+              ops.push(thisIter.next());
+            }
+
+            if (firstOther.retain - firstLeft > 0) {
+              otherIter.next(firstOther.retain - firstLeft);
+            }
+          }
+
+          var delta = new Delta(ops);
 
           while (thisIter.hasNext() || otherIter.hasNext()) {
             if (otherIter.peekType() === 'insert') {
@@ -14247,8 +14270,14 @@ var quill = createCommonjsModule(function (module, exports) {
 
                 var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === 'number');
                 if (attributes) newOp.attributes = attributes;
-                delta.push(newOp); // Other op should be delete, we could be an insert or retain
+                delta.push(newOp); // Optimization if rest of other is just retain
+
+                if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
+                  var rest = new Delta(thisIter.rest());
+                  return delta.concat(rest).chop();
+                } // Other op should be delete, we could be an insert or retain
                 // Insert + delete cancels out
+
               } else if (typeof otherOp['delete'] === 'number' && typeof thisOp.retain === 'number') {
                 delta.push(otherOp);
               }
@@ -14426,6 +14455,8 @@ var quill = createCommonjsModule(function (module, exports) {
 
         var hasOwn = Object.prototype.hasOwnProperty;
         var toStr = Object.prototype.toString;
+        var defineProperty = Object.defineProperty;
+        var gOPD = Object.getOwnPropertyDescriptor;
 
         var isArray = function isArray(arr) {
           if (typeof Array.isArray === 'function') {
@@ -14456,6 +14487,35 @@ var quill = createCommonjsModule(function (module, exports) {
           }
 
           return typeof key === 'undefined' || hasOwn.call(obj, key);
+        }; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+
+
+        var setProperty = function setProperty(target, options) {
+          if (defineProperty && options.name === '__proto__') {
+            defineProperty(target, options.name, {
+              enumerable: true,
+              configurable: true,
+              value: options.newValue,
+              writable: true
+            });
+          } else {
+            target[options.name] = options.newValue;
+          }
+        }; // Return undefined instead of __proto__ if '__proto__' is not an own property
+
+
+        var getProperty = function getProperty(obj, name) {
+          if (name === '__proto__') {
+            if (!hasOwn.call(obj, name)) {
+              return void 0;
+            } else if (gOPD) {
+              // In early versions of node, obj['__proto__'] is buggy when obj has
+              // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+              return gOPD(obj, name).value;
+            }
+          }
+
+          return obj[name];
         };
 
         module.exports = function extend() {
@@ -14482,8 +14542,8 @@ var quill = createCommonjsModule(function (module, exports) {
             if (options != null) {
               // Extend the base object
               for (name in options) {
-                src = target[name];
-                copy = options[name]; // Prevent never-ending loop
+                src = getProperty(target, name);
+                copy = getProperty(options, name); // Prevent never-ending loop
 
                 if (target !== copy) {
                   // Recurse if we're merging plain objects or arrays
@@ -14496,9 +14556,15 @@ var quill = createCommonjsModule(function (module, exports) {
                     } // Never move original objects, clone them
 
 
-                    target[name] = extend(deep, clone, copy); // Don't bring in undefined values
+                    setProperty(target, {
+                      name: name,
+                      newValue: extend(deep, clone, copy)
+                    }); // Don't bring in undefined values
                   } else if (typeof copy !== 'undefined') {
-                    target[name] = copy;
+                    setProperty(target, {
+                      name: name,
+                      newValue: copy
+                    });
                   }
                 }
               }
@@ -15514,7 +15580,7 @@ var quill = createCommonjsModule(function (module, exports) {
         Quill.events = _emitter4.default.events;
         Quill.sources = _emitter4.default.sources; // eslint-disable-next-line no-undef
 
-        Quill.version = "1.3.6";
+        Quill.version = "1.3.7";
         Quill.imports = {
           'delta': _quillDelta2.default,
           'parchment': _parchment2.default,
@@ -18398,9 +18464,9 @@ var quill = createCommonjsModule(function (module, exports) {
           };
 
           LeafBlot.prototype.value = function () {
-            return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
-
             var _a;
+
+            return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
           };
 
           LeafBlot.scope = Registry.Scope.INLINE_BLOT;
@@ -18564,6 +18630,22 @@ var quill = createCommonjsModule(function (module, exports) {
           return 'retain';
         };
 
+        Iterator.prototype.rest = function () {
+          if (!this.hasNext()) {
+            return [];
+          } else if (this.offset === 0) {
+            return this.ops.slice(this.index);
+          } else {
+            var offset = this.offset;
+            var index = this.index;
+            var next = this.next();
+            var rest = this.ops.slice(this.index);
+            this.offset = offset;
+            this.index = index;
+            return [next].concat(rest);
+          }
+        };
+
         module.exports = lib;
         /***/
       },
@@ -18672,7 +18754,14 @@ var quill = createCommonjsModule(function (module, exports) {
               } else if (clone.__isDate(parent)) {
                 child = new Date(parent.getTime());
               } else if (useBuffer && Buffer.isBuffer(parent)) {
-                child = new Buffer(parent.length);
+                if (Buffer.allocUnsafe) {
+                  // Node.js >= 4.5.0
+                  child = Buffer.allocUnsafe(parent.length);
+                } else {
+                  // Older Node.js versions
+                  child = new Buffer(parent.length);
+                }
+
                 parent.copy(child);
                 return child;
               } else if (_instanceof(parent, Error)) {
@@ -20649,6 +20738,7 @@ var quill = createCommonjsModule(function (module, exports) {
 
               value = this.sanitize(value);
               node.setAttribute('href', value);
+              node.setAttribute('rel', 'noopener noreferrer');
               node.setAttribute('target', '_blank');
               return node;
             }
@@ -26650,7 +26740,7 @@ var quill = createCommonjsModule(function (module, exports) {
           return SnowTooltip;
         }(_base.BaseTooltip);
 
-        SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
+        SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
         exports.default = SnowTheme;
         /***/
       },
@@ -28944,14 +29034,14 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var KbfWysiwyg = /*#__PURE__*/function (_EventTarget) {
   _inherits(KbfWysiwyg, _EventTarget);
 
-  var _super = _createSuper(KbfWysiwyg);
+  var _super = _createSuper$1(KbfWysiwyg);
 
   function KbfWysiwyg(selector) {
     var _this;
@@ -29039,6 +29129,361 @@ var KbfWysiwyg = /*#__PURE__*/function (_EventTarget) {
   return KbfWysiwyg;
 }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
+var map = typeof Map === "function" ? new Map() : function () {
+  var keys = [];
+  var values = [];
+  return {
+    has: function has(key) {
+      return keys.indexOf(key) > -1;
+    },
+    get: function get(key) {
+      return values[keys.indexOf(key)];
+    },
+    set: function set(key, value) {
+      if (keys.indexOf(key) === -1) {
+        keys.push(key);
+        values.push(value);
+      }
+    },
+    delete: function _delete(key) {
+      var index = keys.indexOf(key);
+
+      if (index > -1) {
+        keys.splice(index, 1);
+        values.splice(index, 1);
+      }
+    }
+  };
+}();
+
+var createEvent = function createEvent(name) {
+  return new Event(name, {
+    bubbles: true
+  });
+};
+
+try {
+  new Event('test');
+} catch (e) {
+  // IE does not support `new Event()`
+  createEvent = function createEvent(name) {
+    var evt = document.createEvent('Event');
+    evt.initEvent(name, true, false);
+    return evt;
+  };
+}
+
+function assign(ta) {
+  if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || map.has(ta)) return;
+  var heightOffset = null;
+  var clientWidth = null;
+  var cachedHeight = null;
+
+  function init() {
+    var style = window.getComputedStyle(ta, null);
+
+    if (style.resize === 'vertical') {
+      ta.style.resize = 'none';
+    } else if (style.resize === 'both') {
+      ta.style.resize = 'horizontal';
+    }
+
+    if (style.boxSizing === 'content-box') {
+      heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+    } else {
+      heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+    } // Fix when a textarea is not on document body and heightOffset is Not a Number
+
+
+    if (isNaN(heightOffset)) {
+      heightOffset = 0;
+    }
+
+    update();
+  }
+
+  function changeOverflow(value) {
+    {
+      // Chrome/Safari-specific fix:
+      // When the textarea y-overflow is hidden, Chrome/Safari do not reflow the text to account for the space
+      // made available by removing the scrollbar. The following forces the necessary text reflow.
+      var width = ta.style.width;
+      ta.style.width = '0px'; // Force reflow:
+
+      /* jshint ignore:start */
+
+      ta.offsetWidth;
+      /* jshint ignore:end */
+
+      ta.style.width = width;
+    }
+    ta.style.overflowY = value;
+  }
+
+  function getParentOverflows(el) {
+    var arr = [];
+
+    while (el && el.parentNode && el.parentNode instanceof Element) {
+      if (el.parentNode.scrollTop) {
+        arr.push({
+          node: el.parentNode,
+          scrollTop: el.parentNode.scrollTop
+        });
+      }
+
+      el = el.parentNode;
+    }
+
+    return arr;
+  }
+
+  function resize() {
+    if (ta.scrollHeight === 0) {
+      // If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
+      return;
+    }
+
+    var overflows = getParentOverflows(ta);
+    var docTop = document.documentElement && document.documentElement.scrollTop; // Needed for Mobile IE (ticket #240)
+
+    ta.style.height = '';
+    ta.style.height = ta.scrollHeight + heightOffset + 'px'; // used to check if an update is actually necessary on window.resize
+
+    clientWidth = ta.clientWidth; // prevents scroll-position jumping
+
+    overflows.forEach(function (el) {
+      el.node.scrollTop = el.scrollTop;
+    });
+
+    if (docTop) {
+      document.documentElement.scrollTop = docTop;
+    }
+  }
+
+  function update() {
+    resize();
+    var styleHeight = Math.round(parseFloat(ta.style.height));
+    var computed = window.getComputedStyle(ta, null); // Using offsetHeight as a replacement for computed.height in IE, because IE does not account use of border-box
+
+    var actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(computed.height)) : ta.offsetHeight; // The actual height not matching the style height (set via the resize method) indicates that 
+    // the max-height has been exceeded, in which case the overflow should be allowed.
+
+    if (actualHeight < styleHeight) {
+      if (computed.overflowY === 'hidden') {
+        changeOverflow('scroll');
+        resize();
+        actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(window.getComputedStyle(ta, null).height)) : ta.offsetHeight;
+      }
+    } else {
+      // Normally keep overflow set to hidden, to avoid flash of scrollbar as the textarea expands.
+      if (computed.overflowY !== 'hidden') {
+        changeOverflow('hidden');
+        resize();
+        actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(window.getComputedStyle(ta, null).height)) : ta.offsetHeight;
+      }
+    }
+
+    if (cachedHeight !== actualHeight) {
+      cachedHeight = actualHeight;
+      var evt = createEvent('autosize:resized');
+
+      try {
+        ta.dispatchEvent(evt);
+      } catch (err) {// Firefox will throw an error on dispatchEvent for a detached element
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=889376
+      }
+    }
+  }
+
+  var pageResize = function pageResize() {
+    if (ta.clientWidth !== clientWidth) {
+      update();
+    }
+  };
+
+  var destroy = function (style) {
+    window.removeEventListener('resize', pageResize, false);
+    ta.removeEventListener('input', update, false);
+    ta.removeEventListener('keyup', update, false);
+    ta.removeEventListener('autosize:destroy', destroy, false);
+    ta.removeEventListener('autosize:update', update, false);
+    Object.keys(style).forEach(function (key) {
+      ta.style[key] = style[key];
+    });
+    map.delete(ta);
+  }.bind(ta, {
+    height: ta.style.height,
+    resize: ta.style.resize,
+    overflowY: ta.style.overflowY,
+    overflowX: ta.style.overflowX,
+    wordWrap: ta.style.wordWrap
+  });
+
+  ta.addEventListener('autosize:destroy', destroy, false); // IE9 does not fire onpropertychange or oninput for deletions,
+  // so binding to onkeyup to catch most of those events.
+  // There is no way that I know of to detect something like 'cut' in IE9.
+
+  if ('onpropertychange' in ta && 'oninput' in ta) {
+    ta.addEventListener('keyup', update, false);
+  }
+
+  window.addEventListener('resize', pageResize, false);
+  ta.addEventListener('input', update, false);
+  ta.addEventListener('autosize:update', update, false);
+  ta.style.overflowX = 'hidden';
+  ta.style.wordWrap = 'break-word';
+  map.set(ta, {
+    destroy: destroy,
+    update: update
+  });
+  init();
+}
+
+function destroy(ta) {
+  var methods = map.get(ta);
+
+  if (methods) {
+    methods.destroy();
+  }
+}
+
+function update(ta) {
+  var methods = map.get(ta);
+
+  if (methods) {
+    methods.update();
+  }
+}
+
+var autosize = null; // Do nothing in Node.js environment and IE8 (or lower)
+
+if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+  autosize = function autosize(el) {
+    return el;
+  };
+
+  autosize.destroy = function (el) {
+    return el;
+  };
+
+  autosize.update = function (el) {
+    return el;
+  };
+} else {
+  autosize = function autosize(el, options) {
+    if (el) {
+      Array.prototype.forEach.call(el.length ? el : [el], function (x) {
+        return assign(x);
+      });
+    }
+
+    return el;
+  };
+
+  autosize.destroy = function (el) {
+    if (el) {
+      Array.prototype.forEach.call(el.length ? el : [el], destroy);
+    }
+
+    return el;
+  };
+
+  autosize.update = function (el) {
+    if (el) {
+      Array.prototype.forEach.call(el.length ? el : [el], update);
+    }
+
+    return el;
+  };
+}
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
+  _inherits(KbfRepeaterItem, _EventTarget);
+
+  var _super = _createSuper(KbfRepeaterItem);
+
+  function KbfRepeaterItem(selector) {
+    var _this;
+
+    _classCallCheck(this, KbfRepeaterItem);
+
+    _this = _super.call(this);
+    var $ = window.$; // Sprawdz czy podano argumenty
+
+    if (!selector) throw errors.argumentNotFound("Selector");
+    _this.$repeaterItems = $(selector);
+    if (_this.$repeaterItems.length === 0) throw errors.elementNotFound(selector);
+    _this.$currentInput = undefined;
+    _this.$currentItems = [];
+
+    _this.init();
+
+    _this.addListeners();
+
+    return _this;
+  }
+
+  _createClass(KbfRepeaterItem, [{
+    key: "init",
+    value: function init() {
+
+      this.on = this.addEventListener;
+      this.off = this.removeEventListener;
+      this.emit = this.dispatchEvent;
+      this.$removeButtons = this.$repeaterItems.find('.repeater-actions a');
+      this.$repeaterItemContents = this.$repeaterItems.find('span');
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var instance = this;
+      this.$removeButtons.on('click', function (e) {
+        instance.removeItem(e);
+      });
+      this.$repeaterItemContents.on('blur', function (e) {
+        instance.currentRepeater = e.target.closest('.job-details-edit');
+        instance.$currentInput = $(instance.currentRepeater).find('[type="hidden"]');
+        instance.getCurrentItems();
+        instance.updateInput();
+      });
+    }
+  }, {
+    key: "removeItem",
+    value: function removeItem(e) {
+      e.preventDefault();
+      var instance = this;
+      this.currentRepeater = e.target.closest('.job-details-edit');
+      this.$currentInput = $(this.currentRepeater).find('[type="hidden"]');
+      var $target = $(e.target.parentElement);
+      $target.closest('.repeater-item').fadeOut(250, function () {
+        this.remove();
+        instance.getCurrentItems();
+        instance.updateInput();
+      });
+    }
+  }, {
+    key: "updateInput",
+    value: function updateInput() {
+      var itemContents = [];
+      this.$currentItems.each(function (idx, $item) {
+        itemContents.push($item.innerHTML.trim());
+      });
+      this.$currentInput.val(itemContents.join(','));
+    }
+  }, {
+    key: "getCurrentItems",
+    value: function getCurrentItems() {
+      this.$currentItems = $(this.currentRepeater).find('.repeater-item span');
+    }
+  }]);
+
+  return KbfRepeaterItem;
+}( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
 var App = /*#__PURE__*/function () {
   function App() {
     _classCallCheck(this, App);
@@ -29070,7 +29515,9 @@ var App = /*#__PURE__*/function () {
       var editor = document.getElementsByClassName('ql-editor');
       editor[0].innerHTML = htmlToInsert; // Preloader button
 
-      this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
+      this.preloaderButton = new KbfPreloaderButton('.submit-button', false); // Repeaters
+
+      this.repeaters = new KbfRepeaterItem('.repeater-item');
     }
   }, {
     key: "addListeners",

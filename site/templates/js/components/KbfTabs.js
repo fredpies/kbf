@@ -25,11 +25,16 @@ class KbfTabs {
         let $ = window.$;
         let instance = this;
 
+        this.$tabToggles = $('[data-toggle="tab"]'); // Taby
+
         // Inicjuj kontroler formularza jezeli podano nazwe
         if (this.formName) {
-            this.$tabToggles = $('[data-toggle="tab"]'); // Taby
+
             this.formController = new KbfForm({
-                formName: instance.formName
+                formName: instance.formName,
+                onfocusout: false,
+                onfocus: false,
+                onkeyup: false
             })
         }
 
@@ -52,9 +57,15 @@ class KbfTabs {
 
 
     validateForm() {
-        this.formController.validate();
-        this.formIsValid = this.formController.formIsValid;
-    }
+
+        let formExists = $(`form[name="${this.formName}"]`).length > 0;
+
+        if (formExists) {
+            this.formController.validate();
+            this.formIsValid = this.formController.formIsValid;
+        }
+
+        }
 }
 
 export default KbfTabs;

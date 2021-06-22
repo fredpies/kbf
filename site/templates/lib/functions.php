@@ -241,29 +241,43 @@ function render_job_info($job_data = array(), $device = "desktop") {
 };
 
 // Renderuje repeater dla ofert pracy
-function render_job_repeater($items = array(), $fieldName = "field") {
+function render_job_repeater($items = array(), $fieldName = "field", $title = "") {
 
-    $itemTemplate = '<li class="repeater-item d-flex list-group-item"><span class="col-10">{itemName}</span><div class="repeater-actions d-inline-block col-3"><a href="#">Edytuj</a><a class="d-inline-block ml-2" href="#">Usuń</</div></a></li>';
+    // TODO: Trzeba ustawic na realne dane
+    $itemTemplate = '<li data-item-id="43432" class="repeater-item d-flex list-group-item"><span contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
+
+    $value = "";
+    $idx = 0;
+
+    foreach ($items as $itemName) {
+        if ($idx === 0) $value .= $itemName;
+        else $value .= "," . $itemName;
+        $idx++;
+    }
 
     $template = '<div class="job-details-edit row justify-content-center">
             
+                <div class="col-12 d-none d-md-block">
+                    <h5>{title}</h5>
+                </div>
                 <div class="col-12">
                     <ul class="list-group list-group-flush pb-0">
                        {items}
                     </ul>
                 </div>
-                
-                <div class="col-12 d-flex mt-3">
-                    <div class="col-12 col-md-9 input-group input-group-lg input-group-round mb-4 mr-md-3 mr-lg-1 px-0">
+                <div class="col-12 input-group input-group-round my-3 px-0">
+                    
                         <div class="input-group-inner">
                             <input autocomplete="off" type="text" class="{fieldName}-input form-control valid" data-inputmask-regex="[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+">
-                            <input type="hidden" name="{fieldName}">
-                        <div class="input-focus-bg"></div>
+                            <div class="input-group-append"><button type="button" class="{fieldName}-button btn btn-round btn-primary mb-0">Dodaj</button></div>
+                            <div class="input-focus-bg"></div>
+
+                        </div>
+                        
                     </div>
-                </div>
-                    <button type="submit" class="col-12 col-md-2 col-lg-3 {fieldName}-button btn btn-round btn-primary mb-4 ml-md-4 ml-lg-2">Dodaj</button>
-                </div>
-            </div>';
+                    
+                <input type="hidden" name="{fieldName}" value="{value}">
+                </div>';
 
     // Przygotuj {items}
 
@@ -276,8 +290,10 @@ function render_job_repeater($items = array(), $fieldName = "field") {
     }
 
     return replacePlaceholders(array(
+        "{title}" => $title,
         "{items}" => $itemsMarkup,
-        "{fieldName}" => $fieldName
+        "{fieldName}" => $fieldName,
+        "{value}" => $value
     ), $template);
 
 }

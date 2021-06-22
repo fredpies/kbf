@@ -389,7 +389,7 @@ class KbfDropdown extends EventTarget {
 
             instance.scrollbar.update();
 
-            if (window.map) {
+            if (window.map.scrollWheelZoom && window.map.dragging) {
                 window.map.scrollWheelZoom.disable();
                 window.map.dragging.disable();
             }
@@ -401,7 +401,7 @@ class KbfDropdown extends EventTarget {
         })
 
         this.$dropdownMenu.on('mouseleave', function () {
-            if (window.map) {
+            if (window.map.scrollWheelZoom && window.map.dragging) {
                 window.map.scrollWheelZoom.enable();
                 window.map.dragging.enable();
             }

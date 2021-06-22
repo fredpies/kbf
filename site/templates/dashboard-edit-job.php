@@ -13,7 +13,8 @@ $sanitizer = wire('sanitizer');
 $page_title = $sanitizer->text($page->title);
 
 // TODO: Nalezy pobierac dla firmy
-$job_page = $pages->get(348503);
+//$job_page = $pages->get(348503);
+$job_page = $pages->get(348446);
 $job_fields = $job_page->fields;
 
 // Formularz dla zakladki "Opis oferty"
@@ -75,13 +76,33 @@ $form->addMarkup($job_description_field->render(), true);
 // Obowiazki
 
 $responsibilities = array(
-        'kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
-        'przeprowadzanie rytuałów pielęgnacyjnych',
-        'budowanie długofalowych relacji z klientem',
-        'sprzedaż kosmetyków i doradztwo w zakresie ich właściwego doboru i stosowania'
+        'Kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
+        'Przeprowadzanie rytuałów pielęgnacyjnych',
+        'Budowanie długofalowych relacji z klientem',
+        'Sprzedaż kosmetyków i doradztwo w zakresie ich właściwego doboru i stosowania'
 );
 
-$responsibilities_markup = render_job_repeater($responsibilities, "job_responsibility");
+
+
+// Wymagania
+
+$requirements = array(
+    'Znajomość towarów – drewna i materiałów drzewnych',
+    'Komunikatywność w rozmowie z klientam',
+    'Obsługa wózka widłowego',
+);
+
+// Oferta
+
+$offers = array(
+    'Pakiet socjalny',
+    'Dobra atmosfera pracy',
+    'Wysokie wynagrodzenie',
+);
+
+$responsibilities_markup = render_job_repeater($responsibilities, "job_responsibilities", "Obowiązki pracownika");
+$requirements_markup = render_job_repeater($requirements, "job_requirements", "Wymagania dla pracownika");
+$offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy");
 
 
 $button_markup = '<div class="row justify-content-center mt-4">
@@ -97,13 +118,13 @@ $tabsPhone = new TabsRenderer("job-edit");
 
 $tabs->addMarkup($form->render(). $button_markup, "Opis");
 $tabs->addMarkup($responsibilities_markup, "Obowiązki");
-$tabs->addMarkup("". $button_markup, "Wymagania");
-$tabs->addMarkup("". $button_markup, "Oferta");
+$tabs->addMarkup($requirements_markup, "Wymagania");
+$tabs->addMarkup($offers_markup, "Oferta");
 
 $tabsPhone->addMarkup($form->render(), "Opis oferty");
 $tabsPhone->addMarkup($responsibilities_markup, "Zakres obowiązków");
-$tabsPhone->addMarkup("", "Wymagania");
-$tabsPhone->addMarkup("", "Oferta pracodawcy");
+$tabsPhone->addMarkup($requirements_markup, "Wymagania");
+$tabsPhone->addMarkup($offers_markup, "Oferta pracodawcy");
 
 
 ?>
