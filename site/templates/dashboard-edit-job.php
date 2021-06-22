@@ -13,8 +13,8 @@ $sanitizer = wire('sanitizer');
 $page_title = $sanitizer->text($page->title);
 
 // TODO: Nalezy pobierac dla firmy
-//$job_page = $pages->get(348503);
-$job_page = $pages->get(348446);
+$job_page = $pages->get(348503);
+//$job_page = $pages->get(348446);
 $job_fields = $job_page->fields;
 
 // Formularz dla zakladki "Opis oferty"

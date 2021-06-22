@@ -244,7 +244,7 @@ function render_job_info($job_data = array(), $device = "desktop") {
 function render_job_repeater($items = array(), $fieldName = "field", $title = "") {
 
     // TODO: Trzeba ustawic na realne dane
-    $itemTemplate = '<li data-item-id="43432" class="repeater-item d-flex list-group-item"><span contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
+    $itemTemplate = '<li data-item-id="43432" class="repeater-item d-flex list-group-item"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
 
     $value = "";
     $idx = 0;
@@ -269,7 +269,7 @@ function render_job_repeater($items = array(), $fieldName = "field", $title = ""
                     
                         <div class="input-group-inner">
                             <input autocomplete="off" type="text" class="{fieldName}-input form-control valid" data-inputmask-regex="[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+">
-                            <div class="input-group-append"><button type="button" class="{fieldName}-button btn btn-round btn-primary mb-0">Dodaj</button></div>
+                            <div class="input-group-append"><button type="button" class="add-button btn btn-round btn-primary mb-0">Dodaj</button></div>
                             <div class="input-focus-bg"></div>
 
                         </div>
@@ -297,7 +297,6 @@ function render_job_repeater($items = array(), $fieldName = "field", $title = ""
     ), $template);
 
 }
-
 
 // Renderuje panel z informacjami o produkcie
 function render_product_info($product_data, $device="desktop") {

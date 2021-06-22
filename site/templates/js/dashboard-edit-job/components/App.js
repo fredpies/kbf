@@ -4,7 +4,7 @@ import KbfTabs from "../../components/KbfTabs";
 import KbfDropdown from "../../components/KbfDropdown";
 import KbfCityAutocomplete from "../../components/KbfCityAutocomplete";
 import KbfWysiwyg from "../../components/KbfWysiwyg";
-import KbfRepeaterItem from "../../components/KbfRepeaterItem";
+import KbfRepeater from "../../components/KbfRepeater";
 
 class App {
 
@@ -49,9 +49,8 @@ class App {
         // Preloader button
         this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
 
-        // Repeaters
-
-        this.repeaters = new KbfRepeaterItem('.repeater-item');
+        // Repeater
+        this.repeater = new KbfRepeater('.repeater-item');
 
     }
 

@@ -11570,7 +11570,7 @@ EventManager.prototype.once = function once(element, eventName, handler) {
   ee.bind(eventName, onceHandler);
 };
 
-function createEvent$1(name) {
+function createEvent(name) {
   if (typeof window.CustomEvent === 'function') {
     return new CustomEvent(name);
   } else {
@@ -11619,12 +11619,12 @@ function processScrollDiff$1(i, diff, ref, useScrollingClass, forceFireReachEven
   }
 
   if (diff) {
-    element.dispatchEvent(createEvent$1("ps-scroll-" + y));
+    element.dispatchEvent(createEvent("ps-scroll-" + y));
 
     if (diff < 0) {
-      element.dispatchEvent(createEvent$1("ps-scroll-" + up));
+      element.dispatchEvent(createEvent("ps-scroll-" + up));
     } else if (diff > 0) {
-      element.dispatchEvent(createEvent$1("ps-scroll-" + down));
+      element.dispatchEvent(createEvent("ps-scroll-" + down));
     }
 
     if (useScrollingClass) {
@@ -11633,7 +11633,7 @@ function processScrollDiff$1(i, diff, ref, useScrollingClass, forceFireReachEven
   }
 
   if (i.reach[y] && (diff || forceFireReachEvent)) {
-    element.dispatchEvent(createEvent$1("ps-" + y + "-reach-" + i.reach[y]));
+    element.dispatchEvent(createEvent("ps-" + y + "-reach-" + i.reach[y]));
   }
 }
 
@@ -14230,23 +14230,7 @@ var quill = createCommonjsModule(function (module, exports) {
         Delta.prototype.compose = function (other) {
           var thisIter = op.iterator(this.ops);
           var otherIter = op.iterator(other.ops);
-          var ops = [];
-          var firstOther = otherIter.peek();
-
-          if (firstOther != null && typeof firstOther.retain === 'number' && firstOther.attributes == null) {
-            var firstLeft = firstOther.retain;
-
-            while (thisIter.peekType() === 'insert' && thisIter.peekLength() <= firstLeft) {
-              firstLeft -= thisIter.peekLength();
-              ops.push(thisIter.next());
-            }
-
-            if (firstOther.retain - firstLeft > 0) {
-              otherIter.next(firstOther.retain - firstLeft);
-            }
-          }
-
-          var delta = new Delta(ops);
+          var delta = new Delta();
 
           while (thisIter.hasNext() || otherIter.hasNext()) {
             if (otherIter.peekType() === 'insert') {
@@ -14270,14 +14254,8 @@ var quill = createCommonjsModule(function (module, exports) {
 
                 var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === 'number');
                 if (attributes) newOp.attributes = attributes;
-                delta.push(newOp); // Optimization if rest of other is just retain
-
-                if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
-                  var rest = new Delta(thisIter.rest());
-                  return delta.concat(rest).chop();
-                } // Other op should be delete, we could be an insert or retain
+                delta.push(newOp); // Other op should be delete, we could be an insert or retain
                 // Insert + delete cancels out
-
               } else if (typeof otherOp['delete'] === 'number' && typeof thisOp.retain === 'number') {
                 delta.push(otherOp);
               }
@@ -14455,8 +14433,6 @@ var quill = createCommonjsModule(function (module, exports) {
 
         var hasOwn = Object.prototype.hasOwnProperty;
         var toStr = Object.prototype.toString;
-        var defineProperty = Object.defineProperty;
-        var gOPD = Object.getOwnPropertyDescriptor;
 
         var isArray = function isArray(arr) {
           if (typeof Array.isArray === 'function') {
@@ -14487,35 +14463,6 @@ var quill = createCommonjsModule(function (module, exports) {
           }
 
           return typeof key === 'undefined' || hasOwn.call(obj, key);
-        }; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
-
-
-        var setProperty = function setProperty(target, options) {
-          if (defineProperty && options.name === '__proto__') {
-            defineProperty(target, options.name, {
-              enumerable: true,
-              configurable: true,
-              value: options.newValue,
-              writable: true
-            });
-          } else {
-            target[options.name] = options.newValue;
-          }
-        }; // Return undefined instead of __proto__ if '__proto__' is not an own property
-
-
-        var getProperty = function getProperty(obj, name) {
-          if (name === '__proto__') {
-            if (!hasOwn.call(obj, name)) {
-              return void 0;
-            } else if (gOPD) {
-              // In early versions of node, obj['__proto__'] is buggy when obj has
-              // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
-              return gOPD(obj, name).value;
-            }
-          }
-
-          return obj[name];
         };
 
         module.exports = function extend() {
@@ -14542,8 +14489,8 @@ var quill = createCommonjsModule(function (module, exports) {
             if (options != null) {
               // Extend the base object
               for (name in options) {
-                src = getProperty(target, name);
-                copy = getProperty(options, name); // Prevent never-ending loop
+                src = target[name];
+                copy = options[name]; // Prevent never-ending loop
 
                 if (target !== copy) {
                   // Recurse if we're merging plain objects or arrays
@@ -14556,15 +14503,9 @@ var quill = createCommonjsModule(function (module, exports) {
                     } // Never move original objects, clone them
 
 
-                    setProperty(target, {
-                      name: name,
-                      newValue: extend(deep, clone, copy)
-                    }); // Don't bring in undefined values
+                    target[name] = extend(deep, clone, copy); // Don't bring in undefined values
                   } else if (typeof copy !== 'undefined') {
-                    setProperty(target, {
-                      name: name,
-                      newValue: copy
-                    });
+                    target[name] = copy;
                   }
                 }
               }
@@ -15580,7 +15521,7 @@ var quill = createCommonjsModule(function (module, exports) {
         Quill.events = _emitter4.default.events;
         Quill.sources = _emitter4.default.sources; // eslint-disable-next-line no-undef
 
-        Quill.version = "1.3.7";
+        Quill.version = "1.3.6";
         Quill.imports = {
           'delta': _quillDelta2.default,
           'parchment': _parchment2.default,
@@ -18464,9 +18405,9 @@ var quill = createCommonjsModule(function (module, exports) {
           };
 
           LeafBlot.prototype.value = function () {
-            var _a;
-
             return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
+
+            var _a;
           };
 
           LeafBlot.scope = Registry.Scope.INLINE_BLOT;
@@ -18630,22 +18571,6 @@ var quill = createCommonjsModule(function (module, exports) {
           return 'retain';
         };
 
-        Iterator.prototype.rest = function () {
-          if (!this.hasNext()) {
-            return [];
-          } else if (this.offset === 0) {
-            return this.ops.slice(this.index);
-          } else {
-            var offset = this.offset;
-            var index = this.index;
-            var next = this.next();
-            var rest = this.ops.slice(this.index);
-            this.offset = offset;
-            this.index = index;
-            return [next].concat(rest);
-          }
-        };
-
         module.exports = lib;
         /***/
       },
@@ -18754,14 +18679,7 @@ var quill = createCommonjsModule(function (module, exports) {
               } else if (clone.__isDate(parent)) {
                 child = new Date(parent.getTime());
               } else if (useBuffer && Buffer.isBuffer(parent)) {
-                if (Buffer.allocUnsafe) {
-                  // Node.js >= 4.5.0
-                  child = Buffer.allocUnsafe(parent.length);
-                } else {
-                  // Older Node.js versions
-                  child = new Buffer(parent.length);
-                }
-
+                child = new Buffer(parent.length);
                 parent.copy(child);
                 return child;
               } else if (_instanceof(parent, Error)) {
@@ -20738,7 +20656,6 @@ var quill = createCommonjsModule(function (module, exports) {
 
               value = this.sanitize(value);
               node.setAttribute('href', value);
-              node.setAttribute('rel', 'noopener noreferrer');
               node.setAttribute('target', '_blank');
               return node;
             }
@@ -26740,7 +26657,7 @@ var quill = createCommonjsModule(function (module, exports) {
           return SnowTooltip;
         }(_base.BaseTooltip);
 
-        SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
+        SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
         exports.default = SnowTheme;
         /***/
       },
@@ -29129,287 +29046,31 @@ var KbfWysiwyg = /*#__PURE__*/function (_EventTarget) {
   return KbfWysiwyg;
 }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-var map = typeof Map === "function" ? new Map() : function () {
-  var keys = [];
-  var values = [];
-  return {
-    has: function has(key) {
-      return keys.indexOf(key) > -1;
-    },
-    get: function get(key) {
-      return values[keys.indexOf(key)];
-    },
-    set: function set(key, value) {
-      if (keys.indexOf(key) === -1) {
-        keys.push(key);
-        values.push(value);
-      }
-    },
-    delete: function _delete(key) {
-      var index = keys.indexOf(key);
+function replacePlaceholders(placeholderMap, string) {
+  for (var _i = 0, _Object$entries = Object.entries(placeholderMap); _i < _Object$entries.length; _i++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+        placeholder = _Object$entries$_i[0],
+        value = _Object$entries$_i[1];
 
-      if (index > -1) {
-        keys.splice(index, 1);
-        values.splice(index, 1);
-      }
-    }
-  };
-}();
-
-var createEvent = function createEvent(name) {
-  return new Event(name, {
-    bubbles: true
-  });
-};
-
-try {
-  new Event('test');
-} catch (e) {
-  // IE does not support `new Event()`
-  createEvent = function createEvent(name) {
-    var evt = document.createEvent('Event');
-    evt.initEvent(name, true, false);
-    return evt;
-  };
-}
-
-function assign(ta) {
-  if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || map.has(ta)) return;
-  var heightOffset = null;
-  var clientWidth = null;
-  var cachedHeight = null;
-
-  function init() {
-    var style = window.getComputedStyle(ta, null);
-
-    if (style.resize === 'vertical') {
-      ta.style.resize = 'none';
-    } else if (style.resize === 'both') {
-      ta.style.resize = 'horizontal';
-    }
-
-    if (style.boxSizing === 'content-box') {
-      heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
-    } else {
-      heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
-    } // Fix when a textarea is not on document body and heightOffset is Not a Number
-
-
-    if (isNaN(heightOffset)) {
-      heightOffset = 0;
-    }
-
-    update();
+    string = string.replace(placeholder, value);
   }
 
-  function changeOverflow(value) {
-    {
-      // Chrome/Safari-specific fix:
-      // When the textarea y-overflow is hidden, Chrome/Safari do not reflow the text to account for the space
-      // made available by removing the scrollbar. The following forces the necessary text reflow.
-      var width = ta.style.width;
-      ta.style.width = '0px'; // Force reflow:
-
-      /* jshint ignore:start */
-
-      ta.offsetWidth;
-      /* jshint ignore:end */
-
-      ta.style.width = width;
-    }
-    ta.style.overflowY = value;
-  }
-
-  function getParentOverflows(el) {
-    var arr = [];
-
-    while (el && el.parentNode && el.parentNode instanceof Element) {
-      if (el.parentNode.scrollTop) {
-        arr.push({
-          node: el.parentNode,
-          scrollTop: el.parentNode.scrollTop
-        });
-      }
-
-      el = el.parentNode;
-    }
-
-    return arr;
-  }
-
-  function resize() {
-    if (ta.scrollHeight === 0) {
-      // If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
-      return;
-    }
-
-    var overflows = getParentOverflows(ta);
-    var docTop = document.documentElement && document.documentElement.scrollTop; // Needed for Mobile IE (ticket #240)
-
-    ta.style.height = '';
-    ta.style.height = ta.scrollHeight + heightOffset + 'px'; // used to check if an update is actually necessary on window.resize
-
-    clientWidth = ta.clientWidth; // prevents scroll-position jumping
-
-    overflows.forEach(function (el) {
-      el.node.scrollTop = el.scrollTop;
-    });
-
-    if (docTop) {
-      document.documentElement.scrollTop = docTop;
-    }
-  }
-
-  function update() {
-    resize();
-    var styleHeight = Math.round(parseFloat(ta.style.height));
-    var computed = window.getComputedStyle(ta, null); // Using offsetHeight as a replacement for computed.height in IE, because IE does not account use of border-box
-
-    var actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(computed.height)) : ta.offsetHeight; // The actual height not matching the style height (set via the resize method) indicates that 
-    // the max-height has been exceeded, in which case the overflow should be allowed.
-
-    if (actualHeight < styleHeight) {
-      if (computed.overflowY === 'hidden') {
-        changeOverflow('scroll');
-        resize();
-        actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(window.getComputedStyle(ta, null).height)) : ta.offsetHeight;
-      }
-    } else {
-      // Normally keep overflow set to hidden, to avoid flash of scrollbar as the textarea expands.
-      if (computed.overflowY !== 'hidden') {
-        changeOverflow('hidden');
-        resize();
-        actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(window.getComputedStyle(ta, null).height)) : ta.offsetHeight;
-      }
-    }
-
-    if (cachedHeight !== actualHeight) {
-      cachedHeight = actualHeight;
-      var evt = createEvent('autosize:resized');
-
-      try {
-        ta.dispatchEvent(evt);
-      } catch (err) {// Firefox will throw an error on dispatchEvent for a detached element
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=889376
-      }
-    }
-  }
-
-  var pageResize = function pageResize() {
-    if (ta.clientWidth !== clientWidth) {
-      update();
-    }
-  };
-
-  var destroy = function (style) {
-    window.removeEventListener('resize', pageResize, false);
-    ta.removeEventListener('input', update, false);
-    ta.removeEventListener('keyup', update, false);
-    ta.removeEventListener('autosize:destroy', destroy, false);
-    ta.removeEventListener('autosize:update', update, false);
-    Object.keys(style).forEach(function (key) {
-      ta.style[key] = style[key];
-    });
-    map.delete(ta);
-  }.bind(ta, {
-    height: ta.style.height,
-    resize: ta.style.resize,
-    overflowY: ta.style.overflowY,
-    overflowX: ta.style.overflowX,
-    wordWrap: ta.style.wordWrap
-  });
-
-  ta.addEventListener('autosize:destroy', destroy, false); // IE9 does not fire onpropertychange or oninput for deletions,
-  // so binding to onkeyup to catch most of those events.
-  // There is no way that I know of to detect something like 'cut' in IE9.
-
-  if ('onpropertychange' in ta && 'oninput' in ta) {
-    ta.addEventListener('keyup', update, false);
-  }
-
-  window.addEventListener('resize', pageResize, false);
-  ta.addEventListener('input', update, false);
-  ta.addEventListener('autosize:update', update, false);
-  ta.style.overflowX = 'hidden';
-  ta.style.wordWrap = 'break-word';
-  map.set(ta, {
-    destroy: destroy,
-    update: update
-  });
-  init();
-}
-
-function destroy(ta) {
-  var methods = map.get(ta);
-
-  if (methods) {
-    methods.destroy();
-  }
-}
-
-function update(ta) {
-  var methods = map.get(ta);
-
-  if (methods) {
-    methods.update();
-  }
-}
-
-var autosize = null; // Do nothing in Node.js environment and IE8 (or lower)
-
-if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
-  autosize = function autosize(el) {
-    return el;
-  };
-
-  autosize.destroy = function (el) {
-    return el;
-  };
-
-  autosize.update = function (el) {
-    return el;
-  };
-} else {
-  autosize = function autosize(el, options) {
-    if (el) {
-      Array.prototype.forEach.call(el.length ? el : [el], function (x) {
-        return assign(x);
-      });
-    }
-
-    return el;
-  };
-
-  autosize.destroy = function (el) {
-    if (el) {
-      Array.prototype.forEach.call(el.length ? el : [el], destroy);
-    }
-
-    return el;
-  };
-
-  autosize.update = function (el) {
-    if (el) {
-      Array.prototype.forEach.call(el.length ? el : [el], update);
-    }
-
-    return el;
-  };
+  return string;
 }
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
-  _inherits(KbfRepeaterItem, _EventTarget);
+var KbfRepeater = /*#__PURE__*/function (_EventTarget) {
+  _inherits(KbfRepeater, _EventTarget);
 
-  var _super = _createSuper(KbfRepeaterItem);
+  var _super = _createSuper(KbfRepeater);
 
-  function KbfRepeaterItem(selector) {
+  function KbfRepeater(selector) {
     var _this;
 
-    _classCallCheck(this, KbfRepeaterItem);
+    _classCallCheck(this, KbfRepeater);
 
     _this = _super.call(this);
     var $ = window.$; // Sprawdz czy podano argumenty
@@ -29417,7 +29078,7 @@ var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
     if (!selector) throw errors.argumentNotFound("Selector");
     _this.$repeaterItems = $(selector);
     if (_this.$repeaterItems.length === 0) throw errors.elementNotFound(selector);
-    _this.$currentInput = undefined;
+    _this.$currentHiddenInput = undefined;
     _this.$currentItems = [];
 
     _this.init();
@@ -29427,29 +29088,70 @@ var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
     return _this;
   }
 
-  _createClass(KbfRepeaterItem, [{
+  _createClass(KbfRepeater, [{
     key: "init",
     value: function init() {
 
       this.on = this.addEventListener;
       this.off = this.removeEventListener;
       this.emit = this.dispatchEvent;
+      this.$addButtons = this.$repeaterItems.closest('.job-details-edit').find('.add-button');
       this.$removeButtons = this.$repeaterItems.find('.repeater-actions a');
-      this.$repeaterItemContents = this.$repeaterItems.find('span');
+      this.$repeaterItems = this.$repeaterItems.find('span');
     }
   }, {
     key: "addListeners",
     value: function addListeners() {
       var instance = this;
       this.$removeButtons.on('click', function (e) {
-        instance.removeItem(e);
+        instance.removeHandler(e);
       });
-      this.$repeaterItemContents.on('blur', function (e) {
-        instance.currentRepeater = e.target.closest('.job-details-edit');
-        instance.$currentInput = $(instance.currentRepeater).find('[type="hidden"]');
-        instance.getCurrentItems();
-        instance.updateInput();
+      this.$repeaterItems.on('blur', function (e) {
+        instance.updateHandler(e);
       });
+      this.$addButtons.on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $itemsContainer = $(this).closest('.job-details-edit').find('.list-group');
+        var content = replacePlaceholders({
+          '{itemName}': $this.parent().prev().val()
+        }, KbfRepeater.itemTemplate);
+        var $contentElement = $(content);
+        $itemsContainer.append($contentElement);
+        $this.parent().prev().val('');
+        $contentElement.animate({
+          opacity: 1,
+          bottom: 0
+        }, function () {
+          var $removeButton = $contentElement.find('.repeater-actions a');
+          var $span = $contentElement.find('span'); // Dodaj listenery do dodanego elementu
+
+          $removeButton.on('click', function (e) {
+            instance.removeHandler(e);
+          });
+          $span.on('blur', function (e) {
+            instance.updateHandler(e);
+          }); // Zaktualizuj ukryte pole
+
+          instance.currentRepeater = $contentElement[0].closest('.job-details-edit');
+          instance.$currentHiddenInput = $(instance.currentRepeater).find('[type="hidden"]');
+          instance.getCurrentItems();
+          instance.updateInput();
+        });
+      });
+    }
+  }, {
+    key: "updateHandler",
+    value: function updateHandler(e) {
+      this.currentRepeater = e.target.closest('.job-details-edit');
+      this.$currentHiddenInput = $(this.currentRepeater).find('[type="hidden"]');
+      this.getCurrentItems();
+      this.updateInput();
+    }
+  }, {
+    key: "removeHandler",
+    value: function removeHandler(e) {
+      this.removeItem(e);
     }
   }, {
     key: "removeItem",
@@ -29457,7 +29159,7 @@ var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
       e.preventDefault();
       var instance = this;
       this.currentRepeater = e.target.closest('.job-details-edit');
-      this.$currentInput = $(this.currentRepeater).find('[type="hidden"]');
+      this.$currentHiddenInput = $(this.currentRepeater).find('[type="hidden"]');
       var $target = $(e.target.parentElement);
       $target.closest('.repeater-item').fadeOut(250, function () {
         this.remove();
@@ -29472,7 +29174,7 @@ var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
       this.$currentItems.each(function (idx, $item) {
         itemContents.push($item.innerHTML.trim());
       });
-      this.$currentInput.val(itemContents.join(','));
+      this.$currentHiddenInput.val(itemContents.join(','));
     }
   }, {
     key: "getCurrentItems",
@@ -29481,8 +29183,10 @@ var KbfRepeaterItem = /*#__PURE__*/function (_EventTarget) {
     }
   }]);
 
-  return KbfRepeaterItem;
+  return KbfRepeater;
 }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
+KbfRepeater.itemTemplate = '<li style="opacity: 0; bottom: -8px" class="repeater-item position-relative list-group-item d-flex"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
 
 var App = /*#__PURE__*/function () {
   function App() {
@@ -29515,9 +29219,9 @@ var App = /*#__PURE__*/function () {
       var editor = document.getElementsByClassName('ql-editor');
       editor[0].innerHTML = htmlToInsert; // Preloader button
 
-      this.preloaderButton = new KbfPreloaderButton('.submit-button', false); // Repeaters
+      this.preloaderButton = new KbfPreloaderButton('.submit-button', false); // Repeater
 
-      this.repeaters = new KbfRepeaterItem('.repeater-item');
+      this.repeater = new KbfRepeater('.repeater-item');
     }
   }, {
     key: "addListeners",
