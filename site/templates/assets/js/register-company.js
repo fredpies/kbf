@@ -7197,7 +7197,7 @@
           e.stopPropagation();
           instance.scrollbar.update();
 
-          if (window.map) {
+          if (window.map.scrollWheelZoom && window.map.dragging) {
             window.map.scrollWheelZoom.disable();
             window.map.dragging.disable();
           }
@@ -7207,7 +7207,7 @@
           if (window.map) window.map.dragging.enable();
         });
         this.$dropdownMenu.on('mouseleave', function () {
-          if (window.map) {
+          if (window.map.scrollWheelZoom && window.map.dragging) {
             window.map.scrollWheelZoom.enable();
             window.map.dragging.enable();
           }
