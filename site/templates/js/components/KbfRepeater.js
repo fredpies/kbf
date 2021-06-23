@@ -64,9 +64,11 @@ class KbfRepeater extends EventTarget {
             e.preventDefault();
 
             let $this = $(this);
+            let contentToBeAdded = $this.parent().prev().val();
+            if (contentToBeAdded.length === 0) return;
 
             let $itemsContainer = $(this).closest('.job-details-edit').find('.list-group');
-            let content = replacePlaceholders({ '{itemName}': $this.parent().prev().val() }, KbfRepeater.itemTemplate);
+            let content = replacePlaceholders({ '{itemName}': contentToBeAdded }, KbfRepeater.itemTemplate);
 
             let $contentElement = $(content);
             $itemsContainer.append($contentElement);
@@ -83,7 +85,8 @@ class KbfRepeater extends EventTarget {
                 // Dodaj listenery do dodanego elementu
                 $removeButton.on('click', function (e) {
                     e.preventDefault();
-                    instance.removeItem(e.target)
+                    instance.currentRemoveButton = e.target;
+                    instance.$confirmation.modal();
                 })
 
                 $span.on('blur', function (e) {

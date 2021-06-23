@@ -12,7 +12,6 @@ class KbfTabs {
         }
 
         if (window.innerWidth < 768) {
-            console.log($('.desktop-tabs'))
             $('.desktop-tabs').remove();
         }
 

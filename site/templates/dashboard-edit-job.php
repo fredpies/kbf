@@ -68,13 +68,12 @@ $form->addMarkup($job_start_date_field->render(), true);
 $form->addMarkup($job_type_field->render(), true);
 
 $form->addMarkup($job_city_field->render(false), true);
-$form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.', 'col-12 mb-5'), true);
+$form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'), true);
 $form->addMarkup($job_province_name_field->render(false), true);
 $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
 
 // Obowiazki
-
 $responsibilities = array(
         'Kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
         'Przeprowadzanie rytuałów pielęgnacyjnych',
@@ -103,10 +102,9 @@ $responsibilities_markup = render_job_repeater($responsibilities, "job_responsib
 $requirements_markup = render_job_repeater($requirements, "job_requirements", "Wymagania dla pracownika");
 $offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy");
 
-
 $button_markup = '<div class="row justify-content-center mt-4">
                         <div class="col-12 col-sm-6">
-                            <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                            <button type="submit" class="submit-button btn btn-round btn-secondary mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
                         </div>
                   </div>';
 
@@ -116,9 +114,9 @@ $tabs = new TabsRenderer("job-edit");
 $tabsPhone = new TabsRenderer("job-edit");
 
 $tabs->addMarkup($form->render(). $button_markup, "Opis");
-$tabs->addMarkup($responsibilities_markup, "Obowiązki");
-$tabs->addMarkup($requirements_markup, "Wymagania");
-$tabs->addMarkup($offers_markup, "Oferta");
+$tabs->addMarkup($responsibilities_markup. $button_markup, "Obowiązki");
+$tabs->addMarkup($requirements_markup. $button_markup, "Wymagania");
+$tabs->addMarkup($offers_markup. $button_markup, "Oferta");
 
 $tabsPhone->addMarkup($form->render(), "Opis oferty");
 $tabsPhone->addMarkup($responsibilities_markup, "Zakres obowiązków");

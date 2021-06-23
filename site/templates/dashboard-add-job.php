@@ -82,7 +82,7 @@ $form->addMarkup($job_start_date_field->render(), true);
 $form->addMarkup($job_type_field->render(), true);
 
 $form->addMarkup($job_city_field->render(false), true);
-$form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.', 'col-12 mb-5'), true);
+$form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'), true);
 $form->addMarkup($job_province_name_field->render(false), true);
 $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
@@ -119,9 +119,9 @@ $offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy")
 
 // Rejestruj kroki
 $stepper->registerStep("Opis oferty", "Wpisz podstawowe informacje o ofercie pracy.", $form->render());
-$stepper->registerStep("Obowiązki", "Podaj minimalny zakres obowiązków na stanowisku pracy.", $responsibilities_markup);
-$stepper->registerStep("Wymagania", "Podaj minimalne wymagania pracodawcy na stanowisku pracy.", $requirements_markup);
-$stepper->registerStep("Oferta pracodawcy", "Podaj ofertę pracodawcy.", $offers_markup);
+$stepper->registerStep("Obowiązki", "Podaj minimalny zakres obowiązków na stanowisku pracy.", $responsibilities_markup . render_info_message('Wpisz zakres odpowiedzialności pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
+$stepper->registerStep("Wymagania", "Podaj minimalne wymagania pracodawcy na stanowisku pracy.", $requirements_markup. render_info_message('Wpisz zakres wymaganie dla pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
+$stepper->registerStep("Oferta pracodawcy", "Podaj ofertę pracodawcy.", $requirements_markup. render_info_message('Wpisz ofertę pracodawcy i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
 
 $stepperMarkup = $stepper->render();
 

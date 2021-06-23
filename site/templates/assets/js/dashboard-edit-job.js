@@ -222,7 +222,12 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
     value: function triggerStart(buttonElement) {
       var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
 
-      var bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+      var $buttonElement = $(buttonElement);
+      var bgColor;
+      $buttonElement.on('click', function () {
+        console.log('not touch');
+        bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+      });
       this.$preloaderButton.trigger({
         type: 'start-preloader',
         buttonGeometry: buttonGeometry,
@@ -11313,7 +11318,6 @@ var KbfTabs = /*#__PURE__*/function () {
     }
 
     if (window.innerWidth < 768) {
-      console.log($('.desktop-tabs'));
       $('.desktop-tabs').remove();
     }
 
@@ -29210,9 +29214,11 @@ var KbfRepeater = /*#__PURE__*/function (_EventTarget) {
       this.$addButtons.on('click', function (e) {
         e.preventDefault();
         var $this = $(this);
+        var contentToBeAdded = $this.parent().prev().val();
+        if (contentToBeAdded.length === 0) return;
         var $itemsContainer = $(this).closest('.job-details-edit').find('.list-group');
         var content = replacePlaceholders({
-          '{itemName}': $this.parent().prev().val()
+          '{itemName}': contentToBeAdded
         }, KbfRepeater.itemTemplate);
         var $contentElement = $(content);
         $itemsContainer.append($contentElement);
@@ -29226,7 +29232,8 @@ var KbfRepeater = /*#__PURE__*/function (_EventTarget) {
 
           $removeButton.on('click', function (e) {
             e.preventDefault();
-            instance.removeItem(e.target);
+            instance.currentRemoveButton = e.target;
+            instance.$confirmation.modal();
           });
           $span.on('blur', function (e) {
             instance.updateHandler(e);

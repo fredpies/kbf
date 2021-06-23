@@ -6,6 +6,7 @@ class KbfPreloaderButton extends EventTarget {
 
         super();
         let $ = window.$;
+
         this.$preloaderButton = $(selector);
 
         // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
@@ -32,7 +33,16 @@ class KbfPreloaderButton extends EventTarget {
     triggerStart(buttonElement) {
 
         let buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
-        let bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+
+        let $buttonElement = $(buttonElement);
+        let bgColor;
+
+
+        $buttonElement.on('click', function () {
+            console.log('not touch')
+            bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        })
+
 
         this.$preloaderButton.trigger({
             type: 'start-preloader',
