@@ -389,22 +389,31 @@ class KbfDropdown extends EventTarget {
 
             instance.scrollbar.update();
 
-            if (window.map.scrollWheelZoom && window.map.dragging) {
-                window.map.scrollWheelZoom.disable();
-                window.map.dragging.disable();
+            if (window.map) {
+                if (window.map.scrollWheelZoom && window.map.dragging) {
+                    window.map.scrollWheelZoom.disable();
+                    window.map.dragging.disable();
+                }
             }
+
         })
 
         // Wlacz pan mapy gdy kursor opuszcza dropdown i mapa istnieje
         this.$psRail.on('mouseleave', function () {
-            if (window.map) window.map.dragging.enable();
+            if (window.map) {
+                if (window.map.dragging) window.map.dragging.enable();
+            }
         })
 
         this.$dropdownMenu.on('mouseleave', function () {
-            if (window.map.scrollWheelZoom && window.map.dragging) {
-                window.map.scrollWheelZoom.enable();
-                window.map.dragging.enable();
+
+            if (window.map) {
+                if (window.map.scrollWheelZoom && window.map.dragging) {
+                    window.map.scrollWheelZoom.enable();
+                    window.map.dragging.enable();
+                }
             }
+
         })
 
         this.$psRail.on('mousedown mouseup click', function (e) {

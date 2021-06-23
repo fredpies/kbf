@@ -34,18 +34,27 @@ class KbfRepeater extends EventTarget {
 
         this.$addButtons = this.$repeaterItems.closest('.job-details-edit').find('.add-button');
         this.$removeButtons = this.$repeaterItems.find('.repeater-actions a');
+        this.$confirmationButtons= $('.confirm-button');
         this.$repeaterItems = this.$repeaterItems.find('span');
 
+        this.$confirmation = $('#confirmation');
     }
 
     addListeners() {
 
         let instance = this;
 
+        this.$confirmationButtons.on('click', function (e) {
+            e.preventDefault();
+            instance.$confirmation.modal('hide');
+            instance.removeItem(instance.currentRemoveButton);
+        })
+        
         this.$removeButtons.on('click', (e) => {
-            instance.removeHandler(e)
-
+            instance.currentRemoveButton = e.target;
+            instance.$confirmation.modal();
         });
+
         this.$repeaterItems.on('blur', function (e) {
             instance.updateHandler(e);
         });
@@ -73,7 +82,8 @@ class KbfRepeater extends EventTarget {
 
                 // Dodaj listenery do dodanego elementu
                 $removeButton.on('click', function (e) {
-                    instance.removeHandler(e)
+                    e.preventDefault();
+                    instance.removeItem(e.target)
                 })
 
                 $span.on('blur', function (e) {
@@ -99,19 +109,14 @@ class KbfRepeater extends EventTarget {
 
     }
 
-    removeHandler(e) {
-        this.removeItem(e);
-    }
+    removeItem(item) {
 
-    removeItem(e) {
-
-        e.preventDefault();
         let instance = this;
 
-        this.currentRepeater = e.target.closest('.job-details-edit');
+        this.currentRepeater = item.closest('.job-details-edit');
         this.$currentHiddenInput = $(this.currentRepeater).find('[type="hidden"]');
 
-        let $target = $(e.target.parentElement);
+        let $target = $(item.parentElement);
 
         $target.closest('.repeater-item').fadeOut(250, function () {
             this.remove();

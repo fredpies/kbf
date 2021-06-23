@@ -260,11 +260,13 @@ function render_job_repeater($items = array(), $fieldName = "field", $title = ""
                 <div class="col-12 d-none d-md-block">
                     <h5>{title}</h5>
                 </div>
+                
                 <div class="col-12">
                     <ul class="list-group list-group-flush pb-0">
                        {items}
                     </ul>
                 </div>
+                
                 <div class="col-12 input-group input-group-round my-3 px-0">
                     
                         <div class="input-group-inner">
@@ -274,9 +276,10 @@ function render_job_repeater($items = array(), $fieldName = "field", $title = ""
 
                         </div>
                         
-                    </div>
+                </div>
                     
                 <input type="hidden" name="{fieldName}" value="{value}">
+                
                 </div>';
 
     // Przygotuj {items}
@@ -681,7 +684,7 @@ function render_info_message($msg, $classList="col-12 mb-3 ") {
 
 }
 
-// Modal
+// Modale
 function render_modal($id = "modal", $title="Modal", $contents = "", $size="md") {
     $template = '
     
@@ -729,6 +732,20 @@ function render_modal($id = "modal", $title="Modal", $contents = "", $size="md")
     ), $template);
 
 }
+
+function render_confirmation_modal() {
+    $modalContents = '
+
+    <h5 class="text-center">Czy jesteś pewien, że chcesz usunąć wybraną pozycję ?</h5>
+    <div class="row mt-5">
+        <div class="col"><button type="button" class="confirm-button btn btn-round btn-danger w-100">Usuń</button></div>
+        <div class="col"><button data-dismiss="modal" type="button" class="cancel-button btn btn-round btn-success w-100">Anuluj</button></div>    
+    </div>
+';
+
+    return render_modal("confirmation", "Potwierdzenie", $modalContents);
+}
+
 
 /******************
  *   PANEL FIRMY
