@@ -1488,17 +1488,20 @@
 
     var _super = _createSuper$1(KbfDropdown);
 
-    function KbfDropdown(selector, opts) {
+    function KbfDropdown(selector) {
       var _this;
+
+      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+      var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
       _classCallCheck(this, KbfDropdown);
 
       _this = _super.call(this);
 
       if (selector === undefined) throw errors.argumentNotFound('selector');
-      if (opts === undefined) throw errors.argumentNotFound('opts');
       _this.selector = selector;
       _this.opts = opts;
+      _this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
 
       _this.init(); // Inicjalizuj
 
@@ -1520,12 +1523,15 @@
         this.on = this.addEventListener;
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
-        this.$dropdowns = $(this.selector);
+        this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
+
+        var dataOptions = this.$dropdowns.data('options');
+        if (dataOptions) this.opts = dataOptions.split(',');
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
 
-        this.$dropdowns.append($('<input type="hidden">'));
+        this.$dropdowns.append($('<input class="form-control" type="hidden">'));
         this.$hiddenInputs = this.$dropdowns.find('input[type="hidden"]'); // Ustaw opcje
 
         this.setOptions(this.opts);
@@ -1569,17 +1575,40 @@
           window.removeEventListener('touchmove', preventDefault, {
             passive: false
           });
-        } // Blokowanie scrollingu body kiedy dropdown jest widoczny
+        }
 
+        if (this.scrollBlock) {
+          // Blokowanie scrollingu body kiedy dropdown jest widoczny
+          this.$dropdowns.on('shown.bs.dropdown', function (e) {
+            e.stopPropagation();
+            disableScroll();
+          });
+          this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+            e.stopPropagation();
+            enableScroll();
+          });
+        } // Fix dla przyciskow steppera // TODO przeniesc do steppera
+        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
+        //
+        //     e.stopPropagation();
+        //     let $steps = $('.step');
+        //     let $buttons = $('.button-prev, .button-next, .button-register');
+        //     if ($steps.length) $steps.css('z-index', -1);
+        //     if ($buttons.length) $buttons.css('z-index', -1);
+        //
+        // });
+        //
+        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+        //
+        //     e.stopPropagation();
+        //     let $steps = $('.step');
+        //     let $buttons = $('.button-prev, .button-next, .button-register');
+        //     if ($steps.length) $steps.css('z-index', '');
+        //     if ($buttons.length) $buttons.css('z-index', '');
+        //
+        // });
+        // Gdy klikniemy na dropdown item
 
-        this.$dropdowns.on('shown.bs.dropdown', function (e) {
-          e.stopPropagation();
-          disableScroll();
-        });
-        this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-          e.stopPropagation();
-          enableScroll();
-        }); // Gdy klikniemy na dropdown item
 
         this.$dropdownItems.on('click', function (e) {
           e.preventDefault();
@@ -1790,18 +1819,19 @@
       key: "initScrollBar",
       value: function initScrollBar() {
         var instance = this;
-        this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
-        this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]');
         if (this.scrollbar) this.scrollbar.destroy(); // Inicjuj scrollbar
 
         this.scrollbar = new PerfectScrollbar(this.$dropdownMenu[0], {
           minScrollbarLength: 20
-        }); // Wylacz pan mapy gdy kursor znajduje sie na scrollbar i mapa istnieje
+        });
+        this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
+        this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]'); // Wylacz pan mapy gdy kursor znajduje sie na scrollbar i mapa istnieje
 
         this.$psRail.on('mouseenter', function () {
           if (window.map) window.map.dragging.disable();
         });
-        this.$dropdownMenu.on('mouseenter', function () {
+        this.$dropdownMenu.on('mouseenter', function (e) {
+          e.stopPropagation();
           instance.scrollbar.update();
 
           if (window.map) {
@@ -2601,6 +2631,8 @@
     function KbfAreaSwitcher(provincesId, areasId) {
       var _this;
 
+      var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
       _classCallCheck(this, KbfAreaSwitcher);
 
       // Sprawdz czy podano argumenty
@@ -2609,6 +2641,8 @@
       _this = _super.call(this);
       _this.provincesId = provincesId;
       _this.areasId = areasId;
+      _this.scrollBlock = scrollBlock; // Czy blokowac scroll
+
       _this.areasDictionary = {}; // Slownik wojewodztwo - powiaty
 
       _this.provinces = []; // Nazwy wojewodztw
@@ -2682,9 +2716,9 @@
         this.areasDictionary = getProvinceAreaDict(areasGeoJSON);
         this.provinces = getProvinceNames(this.areasDictionary); // Inicjalizuj dropdown wojewodztw
 
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie'].concat(_toConsumableArray(this.provinces))); // Inicjalizuj dropdown powiatow
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie'].concat(_toConsumableArray(this.provinces)), this.scrollBlock); // Inicjalizuj dropdown powiatow
 
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie'].concat(_toConsumableArray(this.areas))); // Element dropdown powiatow
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie'].concat(_toConsumableArray(this.areas)), this.scrollBlock); // Element dropdown powiatow
 
         this.$areasDropdown = $('#' + this.areasId).find('button');
         this.$areasDropdown.attr('disabled', 'true'); // Pobierz dane poczatkowe dla dropdown'ow
@@ -92026,11 +92060,26 @@
     _createClass(App, [{
       key: "init",
       value: function init() {
-        new KbfAreaSwitcher('provinces', 'areas');
+        new KbfAreaSwitcher('provinces', 'areas'); // First section industries sub-menu opening and closing
+
+        $("#industriesSidebarOpenButton").click(function () {
+          $("#top-section").removeClass('col-12');
+          $("#top-section").addClass('col-9');
+          $("#industriesSidebar").addClass('d-xl-block');
+          $("#industriesSidebarOpenButton").removeClass('d-xl-block');
+          $("#industriesSidebarOpenButton").addClass('d-none');
+          $("#industriesSidebarCloseButton").addClass('d-xl-block');
+        });
+        $("#industriesSidebarCloseButton").click(function () {
+          $("#top-section").removeClass('col-9');
+          $("#top-section").addClass('col-12');
+          $("#industriesSidebar").removeClass('d-xl-block');
+          $("#industriesSidebar").addClass('d-none');
+          $("#industriesSidebarCloseButton").removeClass('d-xl-block');
+          $("#industriesSidebarCloseButton").addClass('d-none');
+          $("#industriesSidebarOpenButton").addClass('d-xl-block');
+        });
       }
-    }, {
-      key: "addListeners",
-      value: function addListeners() {}
     }]);
 
     return App;

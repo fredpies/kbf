@@ -1,0 +1,55 @@
+.sidebarActionButton {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -15px;
+}
+
+#industriesSidebar {
+    color: #fff;
+    border-right: 10px solid #fbc02d;
+    box-shadow: 0 12px 35px -10px rgb(251 192 45 / 55%), 0 8px 10px -5px rgb(0 0 0 / 9%), 0 4px 25px -2px rgb(0 0 0 / 14%);
+}
+
+#industriesSidebar div.col-lg-6 {
+    margin: 0 0 2rem;
+    padding: 0;
+}
+
+#industriesSidebar h6 {
+    font-size: 0.5rem;
+    max-width: 80px;
+    margin: auto;
+}
+
+#industriesSidebar div.icon-info-text {
+    padding: 0;
+}
+
+@media (min-width: 1440px) {
+    #industriesSidebar h6 {
+        font-size: 0.6rem;
+        max-width: 100px;
+    }
+}
+
+@media (min-width: 1920px) {
+    #industriesSidebar h6 {
+        font-size: 0.7rem;
+    }
+    #industriesSidebar div.icon-info-text {
+        padding-left: 0.3rem;
+        padding-right: 0.3rem;
+    }
+    #industriesSidebar div.col-lg6 {
+        padding: 0.3rem;
+    }
+}
+
+#industriesSidebar .icon-element {
+    width: 60px;
+    height: 60px;
+}
+
+#industriesSidebar .icon-element img {
+    width: 35px;
+}
