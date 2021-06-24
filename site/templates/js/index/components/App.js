@@ -18,8 +18,8 @@ class App {
 
         // First section industries sub-menu opening and closing
         $("#industriesSidebarOpenButton").click(function() {
-            $("#top-section").removeClass('col-12');
-            $("#top-section").addClass('col-9');
+            $("#top-section").removeClass('col-xl-12');
+            $("#top-section").addClass('col-xl-9');
 
             $("#industriesSidebar").addClass('d-xl-block');
 
@@ -30,8 +30,8 @@ class App {
         });
 
         $("#industriesSidebarCloseButton").click(function() {
-            $("#top-section").removeClass('col-9');
-            $("#top-section").addClass('col-12');
+            $("#top-section").removeClass('col-xl-9');
+            $("#top-section").addClass('col-xl-12');
 
             $("#industriesSidebar").removeClass('d-xl-block');
             $("#industriesSidebar").addClass('d-none');

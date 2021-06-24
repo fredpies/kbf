@@ -20,9 +20,8 @@ include_once "lib/functions.php";
 
 <!-- Top Search Section -->
 <div class="bg-image overflow-hidden" data-img-src="<?php echo $urls->images ?>section1-bg.png">
-    <button id="industriesSidebarOpenButton" class="btn btn-round btn-warning mt-5 sidebarActionButton d-none">&#9776;
-        Firmy wg branży
-    </button>
+
+    <button id="industriesSidebarOpenButton" class="btn btn-round btn-warning mt-5 sidebarActionButton d-none">&#9776;Firmy wg branży</button>
 
     <div class="row">
 
@@ -248,10 +247,10 @@ include_once "lib/functions.php";
         </div>
 
 
-        <div id="top-section" class="col-9">
-            <button id="industriesSidebarCloseButton"
-                    class="d-none d-xl-block btn btn-round btn-warning mt-5 sidebarActionButton"><<
-            </button>
+        <div id="top-section" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-9 mt-5 mt-lg-0">
+
+            <button id="industriesSidebarCloseButton" class="d-none d-xl-block btn btn-round btn-warning mt-5 sidebarActionButton"><<</button>
+
             <div class="container d-flex flex-column">
                 <div class="row page-header-block-height">
 

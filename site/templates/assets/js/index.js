@@ -1835,18 +1835,24 @@
           instance.scrollbar.update();
 
           if (window.map) {
-            window.map.scrollWheelZoom.disable();
-            window.map.dragging.disable();
+            if (window.map.scrollWheelZoom && window.map.dragging) {
+              window.map.scrollWheelZoom.disable();
+              window.map.dragging.disable();
+            }
           }
         }); // Wlacz pan mapy gdy kursor opuszcza dropdown i mapa istnieje
 
         this.$psRail.on('mouseleave', function () {
-          if (window.map) window.map.dragging.enable();
+          if (window.map) {
+            if (window.map.dragging) window.map.dragging.enable();
+          }
         });
         this.$dropdownMenu.on('mouseleave', function () {
           if (window.map) {
-            window.map.scrollWheelZoom.enable();
-            window.map.dragging.enable();
+            if (window.map.scrollWheelZoom && window.map.dragging) {
+              window.map.scrollWheelZoom.enable();
+              window.map.dragging.enable();
+            }
           }
         });
         this.$psRail.on('mousedown mouseup click', function (e) {
@@ -92063,16 +92069,16 @@
         new KbfAreaSwitcher('provinces', 'areas'); // First section industries sub-menu opening and closing
 
         $("#industriesSidebarOpenButton").click(function () {
-          $("#top-section").removeClass('col-12');
-          $("#top-section").addClass('col-9');
+          $("#top-section").removeClass('col-xl-12');
+          $("#top-section").addClass('col-xl-9');
           $("#industriesSidebar").addClass('d-xl-block');
           $("#industriesSidebarOpenButton").removeClass('d-xl-block');
           $("#industriesSidebarOpenButton").addClass('d-none');
           $("#industriesSidebarCloseButton").addClass('d-xl-block');
         });
         $("#industriesSidebarCloseButton").click(function () {
-          $("#top-section").removeClass('col-9');
-          $("#top-section").addClass('col-12');
+          $("#top-section").removeClass('col-xl-9');
+          $("#top-section").addClass('col-xl-12');
           $("#industriesSidebar").removeClass('d-xl-block');
           $("#industriesSidebar").addClass('d-none');
           $("#industriesSidebarCloseButton").removeClass('d-xl-block');
