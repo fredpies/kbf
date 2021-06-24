@@ -1,11 +1,37 @@
 <?php namespace ProcessWire;
 
+
+$pages = wire('pages');
+$user = wire('user');
+$input = wire('input');
+$session = wire('session');
+
 // Strona glowna
 $home_page_url = $pages->get(1)->url;
 
 // Strona z lista firm
 $company_list_page_url = $pages->get("template=companies")->url;
 
+$company_page = null;
+
+if ($user->isLoggedin()) {
+    $company_page = get_user_company($user);
+}
+
+
+// Wylogowywanie
+$targetURL = $pages->get('template=login')->url;
+$targetMethod = 'get';
+
+if ($user->isLoggedin()) {
+    $targetMethod = 'post';
+}
+
+if ($input->post('action', 'text'))
+    if ($input->post('action', 'text') === 'logout') {
+        $session->logout();
+        $session->redirect($targetURL);
+    }
 ?>
 
 <header>
@@ -26,7 +52,14 @@ $company_list_page_url = $pages->get("template=companies")->url;
                 <nav class="navik-menu menu-hover-reset menu-caret submenu-top-border submenu-scale">
                     <ul>
                         <li>
-                            <a href="<?php echo $pages->get(1)->url ?>rejestracja-firmy">Dodaj Firmę</a>
+                            <?php
+                                if ($company_page) {
+                                    echo '<a href="' . $pages->get("template=dashboard")->url . '">Panel zarządzania</a>';
+                                } else
+                                    echo '<a href="' . $pages->get("template=register-company")->url . '">Dodaj firmę</a>';
+
+                            ?>
+
                         </li>
                         <li>
                             <a href="#">Firmy wg branży</a>
@@ -73,12 +106,18 @@ $company_list_page_url = $pages->get("template=companies")->url;
                             </ul>
                         </li>
                         <li class="ml-5 kbf-menu-item">
-                            <form action="<?php echo $pages->get(1)->url ?>panel" method="get">
-                                <button type="submit" class="btn btn-round btn-outline-dark">MOJE KBF</button>
+
+                            <form action="<?= $targetURL ?>" method="<?= $targetMethod ?>">
+                                <button type="submit" class="btn btn-round btn-outline-dark"><?= $user->isLoggedin() ? 'WYLOGUJ' : 'MOJE KBF'?></button>
+
+                                <?
+                                    if ($user->isLoggedin()) echo '<input type="hidden" name="action" value="logout">'
+                                ?>
+
                             </form>
                         </li>
                         <li class="kbf-menu-item-mobile">
-                            <a href="<?php echo $pages->get(1)->url ?>panel">MOJE KBF</a>
+                            <a href="<?php echo $pages->get(1)->url ?>panel"><?= $user->isLoggedin() ? 'WYLOGUJ' : 'MOJE KBF'?></a>
                         </li>
                     </ul>
                 </nav>

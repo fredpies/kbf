@@ -3,6 +3,18 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$user = wire('user');
+$pages = wire('pages');
+
+check_redirect($user);
+$company_page = get_user_company($user);
+$company_page_data = array();
+
+if ($company_page) {
+    $company_page_data = sanitize_company_data($company_page);
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -51,13 +63,13 @@ include_once "lib/functions.php";
 
                             <div class="row">
                                 <div class="col-12 col-md-7">
-                                    <h5 class="font-weight-700 mb-2 section-title-4 text-left">Pracownia Fryzjerska Lilianna Baj</h5>
-                                    <div class="company-street">MŁYŃSKA 51</div>
+                                    <h5 class="font-weight-700 mb-2 section-title-4 text-left"><?= $company_page_data["company_name"] ?></h5>
+                                    <div class="company-street"><?= $company_page_data["company_address"] ?></div>
                                     <div class="company-zip-city">
-                                        <span class="company-zip">88-100</span>
-                                        <span class="company-city">INOWROCŁAW</span>
+                                        <span class="company-zip"><?= $company_page_data["company_zip"] ?></span>
+                                        <span class="company-city"><?= $company_page_data["company_city"] ?></span>
                                     </div>
-                                    <a class="text-dark text-nowrap" href="tel:602879723"><i class="fas fa-phone-alt mr-2"></i>602879723</a>
+                                    <a class="text-dark text-nowrap" href="tel:602879723"><i class="fas fa-phone-alt mr-2"></i><?= $company_page_data["company_phone_1"] ?></a>
                                 </div>
 
                                 <div class="col-12 col-md-5 text-center text-md-right">
@@ -68,7 +80,7 @@ include_once "lib/functions.php";
 
                             <div class="row py-3">
                                 <div class="col-12">
-                                    <p>Powstaliśmy w 2020 roku by profesjonalnie i niepowtarzalnie spełniać życzenia i marzenia klientów. Specjalizujemy się w lansowaniu fryzur lekkich i naturalnych zgodnie ze światowymi trendami mody. W naszej pracowni stawiamy na pielęgnację i regenerację włosów – to nasz atut. Zdrowe i błyszczące włosy to podstawowy warunek by fryzjer stworzył piękną, praktyczną i niepowtarzalną fryzurę. Nasz zespół na bieżąco podnosi swoje kwalifikacje poprzez liczne szkolenia. Serdecznie zapraszamy do naszej pracowni, w której panuje przyjazna i luźna atmosfera, a czas spędzony u nas uświetni dobra kawa.</p>
+                                    <p><?= $company_page_data["company_description_html"] ?></p>
                                     <a href="<?php echo $pages->get(1)->url ?>panel/dane-firmy" class="d-block text-primary text-nowrap text-right">Edytuj</a>
                                 </div>
                             </div>
@@ -86,7 +98,7 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>W ofercie</span>
-                                                <span class="font-weight-bold">5</span>
+                                                <span class="font-weight-bold"><?= get_products_count($company_page) ?></span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Sprzedane</span>
@@ -107,7 +119,7 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>W ofercie</span>
-                                                <span class="font-weight-bold">6</span>
+                                                <span class="font-weight-bold"><?= get_services_count($company_page) ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -124,11 +136,11 @@ include_once "lib/functions.php";
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Aktywne</span>
-                                                <span class="font-weight-bold">1</span>
+                                                <span class="font-weight-bold"><?= get_jobs_count($company_page) ?></span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <span>Otrzymane CV</span>
-                                                <span class="font-weight-bold">6</span>
+                                                <span class="font-weight-bold">0</span>
                                             </div>
                                         </div>
                                     </div>

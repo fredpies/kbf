@@ -493,7 +493,7 @@
 /*  5. Formularze             */
 /******************************/
 
-label.error {
+.error {
   color: red;
   position: absolute;
   width: 100%;
@@ -501,7 +501,7 @@ label.error {
   max-width: 650px;
 }
 
-label.error#company_description-error {
+.error#company_description-error {
   bottom: -1rem;
 }
 
@@ -510,18 +510,24 @@ label.error-stepper {
   bottom: 0;
 }
 
+.error.kbf-login-error {
+  display: inline-block;
+  bottom: 0 !important;
+  text-align: center;
+}
+
 @media (max-width: 480px) {
-  label.error {
+  .error {
     padding-left: 0;
   }
 }
 
 
-input + label.error {
+input + .error {
   bottom: -2rem;
 }
 
-input[name*="sub-industry"] + label.error {
+input[name*="sub-industry"] + .error {
   bottom: -0.5rem;
 }
 

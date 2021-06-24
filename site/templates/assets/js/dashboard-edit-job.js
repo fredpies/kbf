@@ -13498,8 +13498,8 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
 
 var config = {
   env: 'dev',
-  url: 'http://localhost',
-  apiEndpoint: 'http://localhost/kbf2/'
+  url: 'https://webplanet.biz',
+  apiEndpoint: 'https://webplanet.biz/kbf/'
 };
 
 function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }

@@ -6,10 +6,14 @@ include_once "lib/FormRenderer.class.php";
 include_once "lib/StepperRenderer.class.php";
 include_once "lib/Alert.class.php";
 
+check_redirect(wire('user'));
+
 $pages = wire('pages');
 $page = wire('page');
 $urls = wire('urls');
 $sanitizer = wire('sanitizer');
+
+
 
 $page_title = $sanitizer->text($page->title);
 
@@ -35,19 +39,16 @@ $form->onlyFields = true;
 
 // Nazwa stanowiska
 $job_name_field = getFormField("job_name", true);
-$job_name_field->value = $sanitizer->text($job_page->get("job_name"));
 $job_name_field->className = "col-12 mb-2";
 $job_name_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
 // Data rozpoczecia
 $job_start_date_field = getFormField("job_start_date", true);
-$job_start_date_field->value = $sanitizer->text($job_page->get("job_start_date"));
 $job_start_date_field->className = "col-12 mb-2";
 $job_start_date_field->msgRequired = "Data rozpoczęcia pracy musi zostać podana.";
 
 // Data waznosci
 $job_expire_field = getFormField("job_expire", true);
-$job_expire_field->value = $sanitizer->text($job_page->get("job_expire"));
 $job_expire_field->className = "col-12 mb-2";
 $job_expire_field->msgRequired = "Data ważności oferty musi zostać podana.";
 
@@ -56,25 +57,21 @@ $job_type_field = getFormField("job_type", true);
 
 // Miasto
 $job_city_field = getFormField("job_city", true);
-$job_city_field->value = $sanitizer->text($job_page->get("job_city"));
 $job_city_field->className = "col-12 mb-2";
 $job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
 // Wojewodztwo
 $job_province_name_field = getFormField("province_name", false, true);
-$job_province_name_field->value = $sanitizer->text($job_page->get("province_name"));
 $job_province_name_field->className = "col-12";
 
 // Opis  pole ukryte - hack
 $job_description_hidden = getFormField('hidden');
 $job_description_hidden->name = 'job_description_hidden';
-$job_description_hidden->value = $sanitizer->entitiesMarkdown($job_page->get('job_description'));
 
 // Opis
 $job_description_field = getFormField("job_description", true);
 $job_description_field->className = "col-12 mb-3";
 $job_description_field->msgRequired = "Opis oferty pracy musi zostać wypełniony.";
-
 
 $form->addMarkup($job_name_field->render(false), true);
 $form->addMarkup($job_expire_field->render(), true);
@@ -121,7 +118,7 @@ $offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy")
 $stepper->registerStep("Opis oferty", "Wpisz podstawowe informacje o ofercie pracy.", $form->render());
 $stepper->registerStep("Obowiązki", "Podaj minimalny zakres obowiązków na stanowisku pracy.", $responsibilities_markup . render_info_message('Wpisz zakres odpowiedzialności pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
 $stepper->registerStep("Wymagania", "Podaj minimalne wymagania pracodawcy na stanowisku pracy.", $requirements_markup. render_info_message('Wpisz zakres wymaganie dla pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
-$stepper->registerStep("Oferta pracodawcy", "Podaj ofertę pracodawcy.", $requirements_markup. render_info_message('Wpisz ofertę pracodawcy i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
+$stepper->registerStep("Oferta pracodawcy", "Podaj ofertę pracodawcy.", $offers_markup. render_info_message('Wpisz ofertę pracodawcy i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
 
 $stepperMarkup = $stepper->render();
 
@@ -141,7 +138,6 @@ $stepperMarkup = $stepper->render();
 
     <!-- Tagify -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.3.0/tagify.min.css" integrity="sha512-ReP7vz5wsq3jOdrhlHFgSXFhlCfNSPj+pOOHd/LYVndKcKMZYam/1QboZsNFfQ1rrIOh9P592n3Dj0lvnJ6+8Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 
 </head>
 <body>

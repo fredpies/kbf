@@ -5479,7 +5479,12 @@
       value: function triggerStart(buttonElement) {
         var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
 
-        var bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        var $buttonElement = $(buttonElement);
+        var bgColor;
+        $buttonElement.on('click', function () {
+          console.log('not touch');
+          bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        });
         this.$preloaderButton.trigger({
           type: 'start-preloader',
           buttonGeometry: buttonGeometry,
@@ -7197,19 +7202,25 @@
           e.stopPropagation();
           instance.scrollbar.update();
 
-          if (window.map.scrollWheelZoom && window.map.dragging) {
-            window.map.scrollWheelZoom.disable();
-            window.map.dragging.disable();
+          if (window.map) {
+            if (window.map.scrollWheelZoom && window.map.dragging) {
+              window.map.scrollWheelZoom.disable();
+              window.map.dragging.disable();
+            }
           }
         }); // Wlacz pan mapy gdy kursor opuszcza dropdown i mapa istnieje
 
         this.$psRail.on('mouseleave', function () {
-          if (window.map) window.map.dragging.enable();
+          if (window.map) {
+            if (window.map.dragging) window.map.dragging.enable();
+          }
         });
         this.$dropdownMenu.on('mouseleave', function () {
-          if (window.map.scrollWheelZoom && window.map.dragging) {
-            window.map.scrollWheelZoom.enable();
-            window.map.dragging.enable();
+          if (window.map) {
+            if (window.map.scrollWheelZoom && window.map.dragging) {
+              window.map.scrollWheelZoom.enable();
+              window.map.dragging.enable();
+            }
           }
         });
         this.$psRail.on('mousedown mouseup click', function (e) {
@@ -7272,8 +7283,8 @@
 
   var config = {
     env: 'dev',
-    url: 'http://localhost',
-    apiEndpoint: 'http://localhost/kbf2/'
+    url: 'https://webplanet.biz',
+    apiEndpoint: 'https://webplanet.biz/kbf/'
   };
 
   var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
@@ -8201,7 +8212,23 @@
           Delta.prototype.compose = function (other) {
             var thisIter = op.iterator(this.ops);
             var otherIter = op.iterator(other.ops);
-            var delta = new Delta();
+            var ops = [];
+            var firstOther = otherIter.peek();
+
+            if (firstOther != null && typeof firstOther.retain === 'number' && firstOther.attributes == null) {
+              var firstLeft = firstOther.retain;
+
+              while (thisIter.peekType() === 'insert' && thisIter.peekLength() <= firstLeft) {
+                firstLeft -= thisIter.peekLength();
+                ops.push(thisIter.next());
+              }
+
+              if (firstOther.retain - firstLeft > 0) {
+                otherIter.next(firstOther.retain - firstLeft);
+              }
+            }
+
+            var delta = new Delta(ops);
 
             while (thisIter.hasNext() || otherIter.hasNext()) {
               if (otherIter.peekType() === 'insert') {
@@ -8225,8 +8252,14 @@
 
                   var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === 'number');
                   if (attributes) newOp.attributes = attributes;
-                  delta.push(newOp); // Other op should be delete, we could be an insert or retain
+                  delta.push(newOp); // Optimization if rest of other is just retain
+
+                  if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
+                    var rest = new Delta(thisIter.rest());
+                    return delta.concat(rest).chop();
+                  } // Other op should be delete, we could be an insert or retain
                   // Insert + delete cancels out
+
                 } else if (typeof otherOp['delete'] === 'number' && typeof thisOp.retain === 'number') {
                   delta.push(otherOp);
                 }
@@ -8404,6 +8437,8 @@
 
           var hasOwn = Object.prototype.hasOwnProperty;
           var toStr = Object.prototype.toString;
+          var defineProperty = Object.defineProperty;
+          var gOPD = Object.getOwnPropertyDescriptor;
 
           var isArray = function isArray(arr) {
             if (typeof Array.isArray === 'function') {
@@ -8434,6 +8469,35 @@
             }
 
             return typeof key === 'undefined' || hasOwn.call(obj, key);
+          }; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+
+
+          var setProperty = function setProperty(target, options) {
+            if (defineProperty && options.name === '__proto__') {
+              defineProperty(target, options.name, {
+                enumerable: true,
+                configurable: true,
+                value: options.newValue,
+                writable: true
+              });
+            } else {
+              target[options.name] = options.newValue;
+            }
+          }; // Return undefined instead of __proto__ if '__proto__' is not an own property
+
+
+          var getProperty = function getProperty(obj, name) {
+            if (name === '__proto__') {
+              if (!hasOwn.call(obj, name)) {
+                return void 0;
+              } else if (gOPD) {
+                // In early versions of node, obj['__proto__'] is buggy when obj has
+                // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+                return gOPD(obj, name).value;
+              }
+            }
+
+            return obj[name];
           };
 
           module.exports = function extend() {
@@ -8460,8 +8524,8 @@
               if (options != null) {
                 // Extend the base object
                 for (name in options) {
-                  src = target[name];
-                  copy = options[name]; // Prevent never-ending loop
+                  src = getProperty(target, name);
+                  copy = getProperty(options, name); // Prevent never-ending loop
 
                   if (target !== copy) {
                     // Recurse if we're merging plain objects or arrays
@@ -8474,9 +8538,15 @@
                       } // Never move original objects, clone them
 
 
-                      target[name] = extend(deep, clone, copy); // Don't bring in undefined values
+                      setProperty(target, {
+                        name: name,
+                        newValue: extend(deep, clone, copy)
+                      }); // Don't bring in undefined values
                     } else if (typeof copy !== 'undefined') {
-                      target[name] = copy;
+                      setProperty(target, {
+                        name: name,
+                        newValue: copy
+                      });
                     }
                   }
                 }
@@ -9492,7 +9562,7 @@
           Quill.events = _emitter4.default.events;
           Quill.sources = _emitter4.default.sources; // eslint-disable-next-line no-undef
 
-          Quill.version = "1.3.6";
+          Quill.version = "1.3.7";
           Quill.imports = {
             'delta': _quillDelta2.default,
             'parchment': _parchment2.default,
@@ -12376,9 +12446,9 @@
             };
 
             LeafBlot.prototype.value = function () {
-              return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
-
               var _a;
+
+              return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
             };
 
             LeafBlot.scope = Registry.Scope.INLINE_BLOT;
@@ -12542,6 +12612,22 @@
             return 'retain';
           };
 
+          Iterator.prototype.rest = function () {
+            if (!this.hasNext()) {
+              return [];
+            } else if (this.offset === 0) {
+              return this.ops.slice(this.index);
+            } else {
+              var offset = this.offset;
+              var index = this.index;
+              var next = this.next();
+              var rest = this.ops.slice(this.index);
+              this.offset = offset;
+              this.index = index;
+              return [next].concat(rest);
+            }
+          };
+
           module.exports = lib;
           /***/
         },
@@ -12650,7 +12736,14 @@
                 } else if (clone.__isDate(parent)) {
                   child = new Date(parent.getTime());
                 } else if (useBuffer && Buffer.isBuffer(parent)) {
-                  child = new Buffer(parent.length);
+                  if (Buffer.allocUnsafe) {
+                    // Node.js >= 4.5.0
+                    child = Buffer.allocUnsafe(parent.length);
+                  } else {
+                    // Older Node.js versions
+                    child = new Buffer(parent.length);
+                  }
+
                   parent.copy(child);
                   return child;
                 } else if (_instanceof(parent, Error)) {
@@ -14627,6 +14720,7 @@
 
                 value = this.sanitize(value);
                 node.setAttribute('href', value);
+                node.setAttribute('rel', 'noopener noreferrer');
                 node.setAttribute('target', '_blank');
                 return node;
               }
@@ -20628,7 +20722,7 @@
             return SnowTooltip;
           }(_base.BaseTooltip);
 
-          SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
+          SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
           exports.default = SnowTheme;
           /***/
         },

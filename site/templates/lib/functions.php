@@ -3,12 +3,9 @@
 require_once __DIR__ . "../../../../vendor/autoload.php";
 include_once "FormFields.php";
 
-use DateTimeImmutable;
 use GusApi\Exception\InvalidUserKeyException;
 use GusApi\Exception\NotFoundException;
 use GusApi\GusApi;
-use GusApi\ReportTypes;
-use GusApi\BulkReportTypes;
 
 /****************
  *  BAZA DANYCH
@@ -924,9 +921,47 @@ function render_dashboard_product_inventory_list_item($product_data) {
 
 }
 
+// Sprawdza czy przekierowac na login
+function check_redirect($user) {
+    $session = wire('session');
+    $pages = wire('pages');
+    if (!$user->isLoggedIn()) $session->redirect($pages->get('template=login')->url);
+}
+
+function get_user_company($user) {
+
+    $pages = wire('pages');
+
+    if ($user->get('company_id')) {
+        return $pages->get($user->get('company_id'));
+    }
+}
+
+function get_products_count($company_page) {
+
+    $sanitizer = wire('sanitizer');
+
+    $products = $company_page->get('title=Produkty')->find('template=product');
+    $product_count = 0;
+
+    foreach ($products as $product) {
+        $product_count += $sanitizer->int($product->product_inventory);
+    }
+
+    return $product_count;
+
+}
+
+function get_services_count($company_page) {
+    return $company_page->get('title=Usługi')->numChildren;
+}
+
+function get_jobs_count($company_page) {
+    return $company_page->get('title=Oferty Pracy')->numChildren;
+}
 
 /****************
- *   DANE KBF
+ *   SANITIZER
  * *************/
 
 // Pobiera podstawowe informacje o firmie
@@ -1305,8 +1340,6 @@ function get_data_by_regon($regon) {
         return array("error" => "No data found");
     }
 
-
-
 }
 
 /****************
@@ -1482,7 +1515,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
         case "company_email":
             {
-                $field = new FormFieldText($disabled);
+                $field = new FormFieldEmail($disabled);
                 $field->label = "Adres e-mail";
                 $field->name = $fieldName;
                 $field->description = "Wpisz główny adres e-mail do firmy. Wypełnienie pola jest wymagane.";
@@ -1580,7 +1613,6 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return $field;
         }
 
-
         case "job_expire":
         {
             $field = new FormFieldDatepicker($disabled);
@@ -1611,7 +1643,6 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
             return $field;
         }
-
 
         case "job_city":
         {
@@ -1644,7 +1675,6 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return $field;
         }
 
-
         case "province_name":
         {
             $field = new FormFieldText($disabled);
@@ -1671,11 +1701,44 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return new FormFieldHidden();
         }
 
+        // UZYTKOWNICY
+
+        case "email":
+        {
+            $field = new FormFieldEmail($disabled);
+            $field->label = "Adres e-mail";
+            $field->name = $fieldName;
+            $field->description = "Podaj adres e-email.";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z adresem e-mail jest wymagane.";
+            }
+
+            $field->icon = "fa-envelope";
+            return $field;
+        }
+
+        case "pass": {
+            {
+                $field = new FormFieldPassword($disabled);
+                $field->label = "Hasło";
+                $field->name = $fieldName;
+                $field->description = "Podaj swoje hasło.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Wypełnienie pola z hasłem jest wymagane.";
+                }
+
+                $field->icon = "fa-lock";
+                return $field;
+            }
+
+
+        }
 
     }
-
-
-
 
 
 }
