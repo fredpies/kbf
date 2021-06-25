@@ -506,7 +506,7 @@ class FormFieldDropdown extends FormField
         parent::__construct($disabled, $className);
     }
 
-    public static $template = '<div data-options="{options}" data-name="{name}" id="{name}" class="dropdown dropdown-{name} row w-100 mb-3">
+    public static $template = '<div data-value="{value}" data-options="{options}" data-name="{name}" id="{name}" class="dropdown dropdown-{name} row w-100 mb-3">
                                 <div class="d-flex col-12 col-xl-4">
                                     <label class="align-self-center px-4 w-100 text-uppercase" for="{name}-button">{label}</label>
                                 </div>

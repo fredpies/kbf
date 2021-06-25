@@ -21,6 +21,7 @@ class App {
         let instance = this;
 
         this.$provinceNameField = $('[name="province_name"]');
+        this.$form = $('form[name="add-job"]');
 
         // Sprawdz czy walidator istnieje
         if (!$.fn.validate) throw errors.noValidator();
@@ -148,6 +149,7 @@ class App {
 
     submitForm() {
         this.$prevButton.find('button').attr('disabled', 'disabled').off('click'); // Wylacz prev button
+        this.$form.submit();
     }
 
     hideAllPickers() {

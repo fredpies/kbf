@@ -29,7 +29,7 @@ class StepperRenderer
         
         </div>
 
-        <form action="{action}" name="{formName}" class="{isHidden} position-relative">
+        <form action="{action}" method="post" name="{formName}" class="{isHidden} position-relative">
 
             {messages}
 
@@ -118,7 +118,10 @@ class StepperRenderer
 
         if ($property === "isHidden") {
             $this->isHidden = $value;
+        } else {
+            $this[$property] = $value;
         }
+
     }
 
 
@@ -191,6 +194,7 @@ class StepperRenderer
             "{messages}" => $messages,
             "{pages}" => $pages,
             "{actionName}" => $this->actionName,
+            "{action}" => $this->action,
             "{formName}" => $this->formName
 
         ), self::$stepperMarkup);

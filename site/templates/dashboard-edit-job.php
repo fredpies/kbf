@@ -7,16 +7,26 @@ include_once "lib/TabsRenderer.class.php";
 
 check_redirect(wire('user'));
 
+$session = wire('session');
 $pages = wire('pages');
+$user = wire('user');
+
+if ($session->company_page_id !== $user->company_id ) $session->redirect($pages->get('template=dashboard')->url); // Przekieruj na dashboard jezeli uzytkownika nie ma prawa edycji
+
 $page = wire('page');
+$input = wire('input');
 $urls = wire('urls');
+
+if (!$input->get('id')) $session->redirect($pages->get('template=dashboard')->url);
+$editId = $input->get('id');
+
+// Dane oferty pracy
+$job_page = $pages->get($editId);
+$job_page_data = sanitize_job_data($job_page);
+
 $sanitizer = wire('sanitizer');
 
 $page_title = $sanitizer->text($page->title);
-
-// TODO: Nalezy pobierac dla firmy
-//$job_page = $pages->get(348503);
-$job_page = $pages->get(348446);
 $job_fields = $job_page->fields;
 
 // Formularz dla zakladki "Opis oferty"
@@ -25,40 +35,49 @@ $form->onlyFields = true;
 
 // Nazwa stanowiska
 $job_name_field = getFormField("job_name", true);
-$job_name_field->value = $sanitizer->text($job_page->get("job_name"));
+$job_name_field->value = $job_page_data["job_name"];
 $job_name_field->className = "col-12 mb-2";
 $job_name_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
 // Data rozpoczecia
 $job_start_date_field = getFormField("job_start_date", true);
-$job_start_date_field->value = $sanitizer->text($job_page->get("job_start_date"));
+$job_start_date_field->value = $job_page_data["job_start_date"];
 $job_start_date_field->className = "col-12 mb-2";
 $job_start_date_field->msgRequired = "Data rozpoczęcia pracy musi zostać podana.";
 
 // Data waznosci
 $job_expire_field = getFormField("job_expire", true);
-$job_expire_field->value = $sanitizer->text($job_page->get("job_expire"));
+$job_expire_field->value = $job_page_data["job_expire"];
 $job_expire_field->className = "col-12 mb-2";
 $job_expire_field->msgRequired = "Data ważności oferty musi zostać podana.";
 
 // Rodzaj umowy
 $job_type_field = getFormField("job_type", true);
+$job_type_field->value = $job_page_data["job_type"];
 
 // Miasto
 $job_city_field = getFormField("job_city", true);
-$job_city_field->value = $sanitizer->text($job_page->get("job_city"));
+$job_city_field->value = $job_page_data["job_city"];
 $job_city_field->className = "col-12 mb-2";
 $job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
 // Wojewodztwo
 $job_province_name_field = getFormField("province_name", false, true);
-$job_province_name_field->value = $sanitizer->text($job_page->get("province_name"));
+$job_province_name_field->name = "job_province_name";
+$job_province_name_field->value = $job_page_data["job_province_name"];
 $job_province_name_field->className = "col-12";
+
+
+// Wojewodztwo ukryte
+$job_province_name_hidden_field = getFormField("hidden");
+$job_province_name_hidden_field->name = "province_name";
+$job_province_name_hidden_field->value = $job_page_data["job_province_name"];
+
 
 // Opis  pole ukryte - hack
 $job_description_hidden = getFormField('hidden');
 $job_description_hidden->name = 'job_description_hidden';
-$job_description_hidden->value = $sanitizer->entitiesMarkdown($job_page->get('job_description'));
+$job_description_hidden->value = $job_page_data["job_description"];
 
 // Opis
 $job_description_field = getFormField("job_description");
@@ -72,44 +91,46 @@ $form->addMarkup($job_type_field->render(), true);
 $form->addMarkup($job_city_field->render(false), true);
 $form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'), true);
 $form->addMarkup($job_province_name_field->render(false), true);
+$form->addMarkup($job_province_name_hidden_field->render(false), true);
 $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
 
 // Obowiazki
-$responsibilities = array(
-        'Kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
-        'Przeprowadzanie rytuałów pielęgnacyjnych',
-        'Budowanie długofalowych relacji z klientem',
-        'Sprzedaż kosmetyków i doradztwo w zakresie ich właściwego doboru i stosowania'
-);
 
+$responsibilities_repeater = $job_page_data["job_responsibilities"];
+$responsibilities = array();
+foreach ($responsibilities_repeater as $responsibility_repeater) {
+ array_push($responsibilities, $responsibility_repeater->job_responsibility);
+}
 
 // Wymagania
 
-$requirements = array(
-    'Znajomość towarów – drewna i materiałów drzewnych',
-    'Komunikatywność w rozmowie z klientam',
-    'Obsługa wózka widłowego',
-);
+$requirements_repeater = $job_page_data["job_requirements"];
+$requirements = array();
+foreach ($requirements_repeater as $requirement_repeater) {
+    array_push($requirements, $requirement_repeater->job_requirement);
+}
 
 // Oferta
 
-$offers = array(
-    'Pakiet socjalny',
-    'Dobra atmosfera pracy',
-    'Wysokie wynagrodzenie',
-);
+$offers_repeater = $job_page_data["job_offers"];
+$offers = array();
+foreach ($offers_repeater as $offer_repeater) {
+    array_push($offers, $offer_repeater->job_offer);
+}
 
 $responsibilities_markup = render_job_repeater($responsibilities, "job_responsibilities", "Obowiązki pracownika");
 $requirements_markup = render_job_repeater($requirements, "job_requirements", "Wymagania dla pracownika");
 $offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy");
 
-$button_markup = '<div class="row justify-content-center mt-4">
-                        <div class="col-12 col-sm-6">
-                            <button type="submit" class="submit-button btn btn-round btn-secondary mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+$button_markup = '<div class="d-flex justify-content-between flex-wrap mt-4">
+                        <div class="col-12 col-sm-5 px-0">
+                            <a href="' . $pages->get('template=dashboard-jobs')->url . '" class="back-button btn btn-round btn-secondary mb-4 w-100 text-white">Powrót</a>
+                        </div>
+                        <div class="col-12 col-sm-5 px-0">
+                            <button type="button" class="submit-button btn btn-round btn-primary mb-4 w-100">Zapisz zmiany</button>
                         </div>
                   </div>';
-
 
 // Tabs
 $tabs = new TabsRenderer("job-edit");
@@ -183,7 +204,7 @@ $tabsPhone->addMarkup($offers_markup, "Oferta pracodawcy");
 
                             <h3 class="font-weight-800 mb-0 py-3 pt-xl-5 section-title-3 text-center text-uppercase"><?= $page_title ?></h3>
 
-                            <form name="dashboard-edit-job" class="mt-5" method="get" action="">
+                            <form method="post" action="<?= $pages->get('template=dashboard-jobs')->url ?>" name="dashboard-edit-job" class="mt-5">
 
                                 <div class="desktop-tabs">
                                     <?= $tabs->render() ?>
@@ -194,6 +215,8 @@ $tabsPhone->addMarkup($offers_markup, "Oferta pracodawcy");
                                     <?= $button_markup ?>
                                 </div>
 
+                                <input type="hidden" name="action" value="update-job">
+                                <input type="hidden" name="job_id" value="<?= $editId ?>">
 
                             </form>
 
@@ -203,9 +226,12 @@ $tabsPhone->addMarkup($offers_markup, "Oferta pracodawcy");
                 </div>
             </div>
         </div>
+
+        <?= render_confirmation_modal() ?>
+
     </div>
 
-    <?= render_confirmation_modal() ?>
+
 
 </div>
 

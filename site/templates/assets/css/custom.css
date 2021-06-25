@@ -516,6 +516,10 @@ label.error-stepper {
   text-align: center;
 }
 
+.login-form {
+  max-width: 400px;
+}
+
 @media (max-width: 480px) {
   .error {
     padding-left: 0;
@@ -1205,6 +1209,23 @@ a.about-keywords:hover {
   background: #f1f1f1;
 }
 
+.repeater-delete-action {
+  color: #2196f3 !important;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.repeater-delete-action:hover {
+  opacity: 0.8;
+}
+
+/* Alert */
+
+.alert.alert-light {
+  border-left: 5px solid green !important;
+}
+
+
 /******************************/
 /* Fix                        */
 /******************************/
@@ -1246,4 +1267,10 @@ textarea {
   .page-wrapper {
     padding-bottom: 120px !important;
   }
+}
+
+/*Modal fix*/
+
+body.modal-open {
+  overflow: visible;
 }

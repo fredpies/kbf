@@ -20,8 +20,12 @@ class App {
         let instance = this;
         let $ = window.$;
 
-        this.$submitButton = $('.submit-button');
-        this.$provinceNameField = $('[name="province_name"]');
+
+        this.$submitButton = $('.submit-button'); // Submit
+        this.$form = $('form[name="dashboard-edit-job"]');
+
+        this.$provinceNameField = $('[name="job_province_name"]');
+        this.$provinceNameHIddenField = $('[name="province_name"]');
 
         // Taby
         this.tabs = new KbfTabs('dashboard-edit-job');
@@ -29,7 +33,6 @@ class App {
         // Datepicker
         this.datepickerJobExpire = new KbfDatepicker('.job_expire-date-picker', '[name="job_expire"]');
         this.datepickerStartDate = new KbfDatepicker('.job_start_date-date-picker', '[name="job_start_date"]');
-
 
         // Rodzaj etatu
         this.jobTypeDropdown = new KbfDropdown('.dropdown-job_type');
@@ -49,6 +52,9 @@ class App {
         // Preloader button
         this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
 
+        // Back button
+        this.backButton = new KbfPreloaderButton('.back-button');
+
         // Repeater
         this.repeater = new KbfRepeater('.repeater-item');
 
@@ -60,9 +66,17 @@ class App {
         let instance = this;
 
         this.$submitButton.on('click', function (e) {
+
             e.preventDefault();
+
             instance.tabs.validateForm();
-            if(instance.tabs.formIsValid) instance.preloaderButton.triggerStart(this);
+            if(instance.tabs.formIsValid) {
+
+                instance.preloaderButton.triggerStart(this);
+                instance.$form.submit();
+
+            }
+
         });
 
 
@@ -82,6 +96,7 @@ class App {
         // Aktualizacja pola "Miasto"
         this.cityAutocomplete.on('city-change', function (e) {
             instance.$provinceNameField.val(e.detail.provinceName);
+            instance.$provinceNameHIddenField.val(e.detail.provinceName);
         })
 
     }

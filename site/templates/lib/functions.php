@@ -241,7 +241,7 @@ function render_job_info($job_data = array(), $device = "desktop") {
 function render_job_repeater($items = array(), $fieldName = "field", $title = "") {
 
     // TODO: Trzeba ustawic na realne dane
-    $itemTemplate = '<li data-item-id="43432" class="repeater-item d-flex list-group-item"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
+    $itemTemplate = '<li data-item-id="43432" class="repeater-item d-flex list-group-item"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="repeater-delete-action d-inline-block ml-2">Usuń</a></div></li>';
 
     $value = "";
     $idx = 0;
@@ -681,7 +681,7 @@ function render_info_message($msg, $classList="col-12 mb-3 ") {
 
 }
 
-// Modale
+// Modal
 function render_modal($id = "modal", $title="Modal", $contents = "", $size="md") {
     $template = '
     
@@ -743,6 +743,22 @@ function render_confirmation_modal() {
     return render_modal("confirmation", "Potwierdzenie", $modalContents);
 }
 
+// Alert
+function render_alert($message, $type="success") {
+
+    $template = '<div class="alert alert-{type} alert-dismissible fade show" role="alert">
+                    <p class="mb-0 font-weight-600">{message}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>';
+
+    return replacePlaceholders(array(
+        "{type}" => $type,
+        "{message}" => $message
+    ), $template);
+}
+
 
 /******************
  *   PANEL FIRMY
@@ -780,7 +796,10 @@ function render_dashboard_advertiser_list_item($register_date, $first_name, $las
 
 }
 
-function render_dashboard_job_list_item($job_name, $job_type, $job_expire) {
+function render_dashboard_job_list_item($job_name, $job_type, $job_expire, $job_id) {
+
+    $pages = wire('pages');
+    $editURL = $pages->get('template=dashboard-edit-job')->url . '?id=' . $job_id;
 
     $template = '
     
@@ -804,8 +823,8 @@ function render_dashboard_job_list_item($job_name, $job_type, $job_expire) {
         </div>
 
         <div class="text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0">
-            <a href="#" class="p-1 mr-n1" title="edytuj">Edytuj</a>
-            <a href="#" class="p-1 mr-n1" title="usun">Usuń</a>
+            <a href="' . $editURL . '" class="p-1 mr-n1" title="edytuj">Edytuj</a>
+            <a data-toggle="modal" href="#confirmation" class="p-1 mr-n1" title="usun">Usuń</a>
         </div>
 
     </div>';
@@ -844,7 +863,7 @@ function render_dashboard_product_list_item($product_data) {
             </div>
         
             <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                 <a href=''#' class='mr-n1' title='usun'>Usuń z listy</a>
+                 <a class='mr-n1' title='usun'>Usuń z listy</a>
             </div>
         
         </div>
@@ -928,6 +947,7 @@ function check_redirect($user) {
     if (!$user->isLoggedIn()) $session->redirect($pages->get('template=login')->url);
 }
 
+// Pobiera strone firmy zalogowanego uzytkownika
 function get_user_company($user) {
 
     $pages = wire('pages');
@@ -938,6 +958,8 @@ function get_user_company($user) {
 }
 
 function get_products_count($company_page) {
+
+    if (!isset($company_page)) return;
 
     $sanitizer = wire('sanitizer');
 
@@ -953,10 +975,12 @@ function get_products_count($company_page) {
 }
 
 function get_services_count($company_page) {
+    if (!isset($company_page)) return;
     return $company_page->get('title=Usługi')->numChildren;
 }
 
 function get_jobs_count($company_page) {
+    if (!isset($company_page)) return;
     return $company_page->get('title=Oferty Pracy')->numChildren;
 }
 
@@ -1013,12 +1037,12 @@ function sanitize_job_data($job_page) {
         "job_url" => $job_page->url,
         "job_id" => $job_page->id,
         "job_name" => $sanitizer->text($job_page->job_name),
-        "job_expire" => $sanitizer->text($job_page->job_expire),
+        "job_expire" => $sanitizer->date($job_page->job_expire, "Y-m-d"),
         "job_city" => $sanitizer->text($job_page->job_city),
         "job_province_name" => $sanitizer->text($job_page->province_name),
         "job_type" => $sanitizer->text($job_page->job_type),
-        "job_description" => $sanitizer->text($job_page->job_description),
-        "job_start_date" => $sanitizer->text($job_page->job_start_date),
+        "job_description" => $job_page->job_description,
+        "job_start_date" => $sanitizer->date($job_page->job_start_date, "Y-m-d"),
         "job_responsibilities" => $job_page->job_responsibilities,
         "job_requirements" => $job_page->job_requirements,
         "job_offers" => $job_page->job_offers,
@@ -1634,7 +1658,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             $field->label = "Rodzaj umowy";
             $field->name = $fieldName;
             $field->description = "Wybierz rodzaj umowy z pracodawcą.";
-            $field->options = "Pełen etat, Pół etatu, 1/4 etatu, Umowa o dzieło, Umowa zlecenie, Kontrakt";
+            $field->options = "Pełen etat,Pół etatu,1/4 etatu,Umowa o dzieło,Umowa zlecenie,Kontrakt";
 
             if ($required) {
                 $field->required = true;
@@ -1742,3 +1766,50 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
 
 }
+
+/****************
+ *  PROCESSWIRE
+ * *************/
+
+
+function update_repeater_values($repeater_pages, $values) {
+
+    $_values = explode(",", $values);
+
+    // Usun wszystkie
+
+
+
+    // Dodaj nowe
+    foreach ($_values as $_value) {
+
+        //
+
+
+    }
+
+
+
+}
+
+function add_page() {}
+
+function update_page($page_id, $page_data = array(), $ignore = array()) {
+
+    $pages = wire('pages');
+    $sanitizer = wire('sanitizer');
+
+    $_page = $pages->get($sanitizer->int($page_id));
+    $_page->of(false);
+
+    foreach ($page_data as $page_field => $value) {
+
+        if (!in_array($page_field, $ignore))
+            $_page->set($page_field, $value);
+    }
+
+    $_page->save();
+    $_page->of(true);
+
+}
+

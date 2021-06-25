@@ -28195,6 +28195,9 @@
 
         this.setOptions(this.opts);
         this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
+
+        this.startValue = this.$dropdowns.data().value;
+        if (this.startValue) this.setActive(this.startValue);
       } // Dodaje listenery
 
     }, {
@@ -28246,27 +28249,7 @@
             e.stopPropagation();
             enableScroll();
           });
-        } // Fix dla przyciskow steppera // TODO przeniesc do steppera
-        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', -1);
-        //     if ($buttons.length) $buttons.css('z-index', -1);
-        //
-        // });
-        //
-        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', '');
-        //     if ($buttons.length) $buttons.css('z-index', '');
-        //
-        // });
-        // Gdy klikniemy na dropdown item
+        } // Gdy klikniemy na dropdown item
 
 
         this.$dropdownItems.on('click', function (e) {
@@ -29283,7 +29266,8 @@
     _createClass(App, [{
       key: "init",
       value: function init() {
-        this.$provinceNameField = $('[name="province_name"]'); // Sprawdz czy walidator istnieje
+        this.$provinceNameField = $('[name="province_name"]');
+        this.$form = $('form[name="add-job"]'); // Sprawdz czy walidator istnieje
 
         if (!$.fn.validate) throw errors.noValidator(); // Walidacja
 
@@ -29385,6 +29369,8 @@
       key: "submitForm",
       value: function submitForm() {
         this.$prevButton.find('button').attr('disabled', 'disabled').off('click'); // Wylacz prev button
+
+        this.$form.submit();
       }
     }, {
       key: "hideAllPickers",
