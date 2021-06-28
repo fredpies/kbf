@@ -114,7 +114,11 @@ class KbfStepper {
 
         if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none')
 
-        let $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        let $pages = $('.page');
+        let $currentInputs = $pages.eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        let $currentRepeaterInputs = $pages.eq(this.currentPageIdx).find('.repeater-hidden-input');
+
+        let $currentPageInputs = $currentInputs.add($currentRepeaterInputs);
 
         let fieldsAreValid = true;
 

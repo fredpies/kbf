@@ -5,6 +5,7 @@ include_once "lib/functions.php";
 
 check_redirect(wire('user'));
 
+$urls = wire('urls');
 $page = wire('page');
 $pages = wire('pages');
 $session = wire('session');
@@ -14,12 +15,8 @@ $input = wire('input');
 
 $company_page = $pages->get($session->company_page_id);
 $jobs_container = $company_page->get('title=Oferty Pracy');
-$jobs = $jobs_container->find('template=job');
-
-$pagination = get_pagination($jobs);
 
 // Przetwarzanie formularza
-
 
 if ($input->post('action')) {
 
@@ -27,10 +24,17 @@ if ($input->post('action')) {
 
     foreach ($input->post as $value_name => $value) {
 
-    if ($value_name !== 'action' && $value_name !== 'page_id')
-        $input_data[$value_name] = $value;
-    }
+    if ($value_name !== 'action' && $value_name !== 'page_id') {
 
+        // Zabezpiecz dane
+        $input_data[$value_name] = $sanitizer->text($value);
+
+        // Branza sub-branza
+        $input_data["industry"] =  $sanitizer->text($company_page->industry);
+        $input_data["sub_industry"] =  $sanitizer->text($company_page->sub_industry);
+
+    }
+}
 
     // UPDATE
 
@@ -40,25 +44,98 @@ if ($input->post('action')) {
         update_page($input->post->job_id, $input_data, ["job_responsibilities", "job_requirements", "job_offers", "job_description_hidden"]);
 
         $_job_page = $pages->get("id=" . $input->post->job_id);
-        $_job_responsibilities = $_job_page->job_responsibilities;
-        update_repeater_values($_job_responsibilities, $input->post->job_responsibilities);
 
+        // Aktualizuj odpowiedzialnosco
+        update_repeater_values(array(
 
+            "page" => $_job_page,
+            "repeater_pages" => $_job_page->job_responsibilities,
+            "repeater_field_name" => "job_responsibility",
+            "values" => $input->post->job_responsibilities
+
+        ));
+
+        // Aktualizuj wymagania
+        update_repeater_values(array(
+
+            "page" => $_job_page,
+            "repeater_pages" => $_job_page->job_requirements,
+            "repeater_field_name" => "job_requirement",
+            "values" => $input->post->job_requirements
+
+        ));
+
+        // Aktualizuj oferte pracodawcy
+        update_repeater_values(array(
+
+            "page" => $_job_page,
+            "repeater_pages" => $_job_page->job_offers,
+            "repeater_field_name" => "job_offer",
+            "values" => $input->post->job_offers
+
+        ));
+    }
+
+    // DODAWANIE
+
+    if ($input->post->action === 'add-job') {
+
+        $_job_page = add_job($jobs_container, $input_data);
+
+        // Aktualizuj odpowiedzialnosco
+        update_repeater_values(array(
+
+            "page" => $_job_page,
+            "repeater_pages" => $_job_page->job_responsibilities,
+            "repeater_field_name" => "job_responsibility",
+            "values" => $input->post->job_responsibilities
+
+        ));
+
+        // Aktualizuj wymagania
+        update_repeater_values(array(
+
+            "page" => $_job_page,
+            "repeater_pages" => $_job_page->job_requirements,
+            "repeater_field_name" => "job_requirement",
+            "values" => $input->post->job_requirements
+
+        ));
+
+        // Aktualizuj oferte pracodawcy
+        update_repeater_values(array(
+
+            "page" => $_job_page,
+            "repeater_pages" => $_job_page->job_offers,
+            "repeater_field_name" => "job_offer",
+            "values" => $input->post->job_offers
+
+        ));
 
     }
 
+    // USUWANIE
 
+    if ($input->post->action === 'delete-job') {
+        delete_page($sanitizer->int($input->post->job_id));
+    }
 
 }
+
+
+$jobs = $jobs_container->find('template=job');
+$pagination = get_pagination($jobs);
+
 
 // Modal
 $modalMarkup = '
 
-    <h5 class="text-center">Czy jesteś pewien, że chcesz wybraną ofertę pracy ?</h5>
-    <form class="row mt-5" action="' . $page->url . '" method="post">
+    <h5 class="text-center">Jesteś pewien, że chcesz usunąć ofertę pracy ?</h5>
+    <form class="row mt-5" action="' . $page->url . '" method="post" name="delete-confirmation">
         <div class="col"><button type="submit" class="confirm-button btn btn-round btn-danger w-100">Usuń</button></div>
         <div class="col"><button data-dismiss="modal" type="button" class="cancel-button btn btn-round btn-success w-100">Anuluj</button></div>
-        <input type="hidden" name="action" value="delete-job">    
+        <input type="hidden" name="action" value="delete-job">
+        <input type="hidden" name="job_id">   
     </form>
 
 ';
@@ -116,36 +193,42 @@ $modalMarkup = '
 
                             <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
 
-                            <div class="row px-3">
-                                <div class="col-12">
+                            <?php if($jobs->count) { ?>
 
-                                    <div class="row mt-5 mb-3 d-none d-md-flex">
+                                <div class="row px-3">
 
-                                        <div class="col-12 col-sm-4 col-lg-5 col-xl-4 pr-4 pl-xl-4">
-                                           Stanowisko
+                                    <div class="col-12">
+
+                                        <div class="row mt-5 mb-3 d-none d-md-flex">
+
+                                            <div class="col-12 col-sm-4 col-lg-5 col-xl-4 pr-4 pl-xl-4">
+                                               Stanowisko
+                                            </div>
+
+                                            <div class="col-12 col-sm-3 col-lg-2 col-xl-3 pl-xl-4">
+                                                Rodzaj
+                                            </div>
+
+                                            <div class="col-12 col-sm-3 col-lg-5 col-xl-3">
+                                                Data ważności
+                                            </div>
+
+                                            <div class="col-12 col-sm-2 col-lg-1"></div>
+
                                         </div>
 
-                                        <div class="col-12 col-sm-3 col-lg-2 col-xl-3 pl-xl-4">
-                                            Rodzaj
-                                        </div>
-
-                                        <div class="col-12 col-sm-3 col-lg-5 col-xl-3">
-                                            Data ważności
-                                        </div>
-
-                                        <div class="col-12 col-sm-2 col-lg-1"></div>
-
-                                    </div>
+                            <?php } ?>
 
                                     <?php
 
-                                    foreach ($jobs as $job) {
+                                    if ($jobs->count) {
+                                        foreach ($jobs as $job) {
 
-                                        $jobs_data = sanitize_job_data($job);
-                                        echo render_dashboard_job_list_item($jobs_data["job_name"], $jobs_data["job_type"], $jobs_data["job_expire"], $jobs_data["job_id"]);
-                                    }
-
-
+                                            $jobs_data = sanitize_job_data($job);
+                                            echo render_dashboard_job_list_item($jobs_data["job_name"], $jobs_data["job_type"], $jobs_data["job_expire"], $jobs_data["job_id"]);
+                                        }
+                                    } else
+                                        echo render_info_message('Nie posiadasz aktualanie zarejestrowanej żadnej oferty pracy. Wybierz opcję "DODAJ OFERTĘ PRACY" w celu jej rejestracji.<div style="height: 0" class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3');
                                     ?>
 
                                     <br>
@@ -194,7 +277,7 @@ $modalMarkup = '
 <?php include_once "partials/_scripts.php" ?>
 
 <!-- Main script -->
-<script src="<?php echo $urls->js ?>dashboard.js"></script>
+<script src="<?php echo $urls->js ?>dashboard-jobs.js"></script>
 <script>
 
     $(function () {

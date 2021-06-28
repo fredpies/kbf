@@ -4527,7 +4527,10 @@
       key: "validateCurrentPage",
       value: function validateCurrentPage() {
         if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none');
-        var $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        var $pages = $('.page');
+        var $currentInputs = $pages.eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        var $currentRepeaterInputs = $pages.eq(this.currentPageIdx).find('.repeater-hidden-input');
+        var $currentPageInputs = $currentInputs.add($currentRepeaterInputs);
         var fieldsAreValid = true;
 
         if ($currentPageInputs.length) {
@@ -28185,7 +28188,9 @@
         this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
 
         var dataOptions = this.$dropdowns.data('options');
-        if (dataOptions) this.opts = dataOptions.split(',');
+        if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
+
+        this.startValue = this.$dropdowns.data('value');
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
@@ -28196,7 +28201,6 @@
         this.setOptions(this.opts);
         this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
 
-        this.startValue = this.$dropdowns.data().value;
         if (this.startValue) this.setActive(this.startValue);
       } // Dodaje listenery
 
@@ -29156,7 +29160,7 @@
         this.on = this.addEventListener;
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
-        this.$addButtons = this.$repeaterItems.closest('.job-details-edit').find('.add-button');
+        this.$addButtons = $('.job-details-edit').find('.add-button');
         this.$removeButtons = this.$repeaterItems.find('.repeater-actions a');
         this.$confirmationButtons = $('.confirm-button');
         this.$repeaterItems = this.$repeaterItems.find('span');
@@ -29266,7 +29270,8 @@
     _createClass(App, [{
       key: "init",
       value: function init() {
-        this.$provinceNameField = $('[name="province_name"]');
+        this.$provinceNameField = $('[name="job_province_name"]');
+        this.$provinceNameFieldHidden = $('[name="province_name"]');
         this.$form = $('form[name="add-job"]'); // Sprawdz czy walidator istnieje
 
         if (!$.fn.validate) throw errors.noValidator(); // Walidacja
@@ -29336,6 +29341,7 @@
 
         this.cityAutocomplete.on('city-change', function (e) {
           instance.$provinceNameField.val(e.detail.provinceName);
+          instance.$provinceNameFieldHidden.val(e.detail.provinceName);
         });
       }
     }, {

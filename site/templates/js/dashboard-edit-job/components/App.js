@@ -96,7 +96,7 @@ class App {
         // Aktualizacja pola "Miasto"
         this.cityAutocomplete.on('city-change', function (e) {
             instance.$provinceNameField.val(e.detail.provinceName);
-            instance.$provinceNameHIddenField.val(e.detail.provinceName);
+            instance.$provinceNameHIddenFieldField.val(e.detail.provinceName);
         })
 
     }

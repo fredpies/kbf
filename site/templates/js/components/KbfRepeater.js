@@ -17,7 +17,7 @@ class KbfRepeater extends EventTarget {
 
         this.$currentHiddenInput = undefined;
         this.$currentItems = [];
-        
+
         this.init();
         this.addListeners();
     }
@@ -32,7 +32,7 @@ class KbfRepeater extends EventTarget {
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
 
-        this.$addButtons = this.$repeaterItems.closest('.job-details-edit').find('.add-button');
+        this.$addButtons = $('.job-details-edit').find('.add-button');
         this.$removeButtons = this.$repeaterItems.find('.repeater-actions a');
         this.$confirmationButtons= $('.confirm-button');
         this.$repeaterItems = this.$repeaterItems.find('span');
@@ -49,7 +49,7 @@ class KbfRepeater extends EventTarget {
             instance.$confirmation.modal('hide');
             instance.removeItem(instance.currentRemoveButton);
         })
-        
+
         this.$removeButtons.on('click', (e) => {
             instance.currentRemoveButton = e.target;
             instance.$confirmation.modal();
@@ -71,6 +71,7 @@ class KbfRepeater extends EventTarget {
             let content = replacePlaceholders({ '{itemName}': contentToBeAdded }, KbfRepeater.itemTemplate);
 
             let $contentElement = $(content);
+
             $itemsContainer.append($contentElement);
             $this.parent().prev().val('');
 

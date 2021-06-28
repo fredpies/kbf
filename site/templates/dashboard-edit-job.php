@@ -11,13 +11,13 @@ $session = wire('session');
 $pages = wire('pages');
 $user = wire('user');
 
-if ($session->company_page_id !== $user->company_id ) $session->redirect($pages->get('template=dashboard')->url); // Przekieruj na dashboard jezeli uzytkownika nie ma prawa edycji
+if ($session->company_page_id !== $user->company_id ) $session->redirect($pages->get('template=dashboard')->url); // Przekieruj na dashboard jezeli uzytkownik nie ma prawa edycji
 
 $page = wire('page');
 $input = wire('input');
 $urls = wire('urls');
 
-if (!$input->get('id')) $session->redirect($pages->get('template=dashboard')->url);
+if (!$input->get('id')) $session->redirect($pages->get('template=dashboard')->url); // Przekieruj na dashboard jezeli nie podano id
 $editId = $input->get('id');
 
 // Dane oferty pracy
@@ -63,14 +63,14 @@ $job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 
 // Wojewodztwo
 $job_province_name_field = getFormField("province_name", false, true);
-$job_province_name_field->name = "job_province_name";
+$job_province_name_field->name = "province_name";
 $job_province_name_field->value = $job_page_data["job_province_name"];
 $job_province_name_field->className = "col-12";
 
 
 // Wojewodztwo ukryte
 $job_province_name_hidden_field = getFormField("hidden");
-$job_province_name_hidden_field->name = "province_name";
+$job_province_name_hidden_field->name = "job_province_name";
 $job_province_name_hidden_field->value = $job_page_data["job_province_name"];
 
 

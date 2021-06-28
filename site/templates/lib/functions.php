@@ -241,7 +241,7 @@ function render_job_info($job_data = array(), $device = "desktop") {
 function render_job_repeater($items = array(), $fieldName = "field", $title = "") {
 
     // TODO: Trzeba ustawic na realne dane
-    $itemTemplate = '<li data-item-id="43432" class="repeater-item d-flex list-group-item"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="repeater-delete-action d-inline-block ml-2">Usuń</a></div></li>';
+    $itemTemplate = '<li class="repeater-item d-flex list-group-item"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="repeater-delete-action d-inline-block ml-2">Usuń</a></div></li>';
 
     $value = "";
     $idx = 0;
@@ -254,29 +254,31 @@ function render_job_repeater($items = array(), $fieldName = "field", $title = ""
 
     $template = '<div class="job-details-edit row justify-content-center">
             
-                <div class="col-12 d-none d-md-block">
-                    <h5>{title}</h5>
-                </div>
+                    <div class="col-12 d-none d-md-block">
+                        <h5>{title}</h5>
+                    </div>
                 
-                <div class="col-12">
-                    <ul class="list-group list-group-flush pb-0">
-                       {items}
-                    </ul>
-                </div>
+                    <div class="col-12">
+                        <ul class="list-group list-group-flush pb-0">
+                           {items}
+                           <li class="repeater-item d-none"></li>
+                        </ul>
+                    </div>
                 
-                <div class="col-12 input-group input-group-round my-3 px-0">
+                    <div class="col-12 input-group input-group-round my-3 px-0">
                     
                         <div class="input-group-inner">
                             <input autocomplete="off" type="text" class="{fieldName}-input form-control valid" data-inputmask-regex="[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+">
                             <div class="input-group-append"><button type="button" class="add-button btn btn-round btn-primary mb-0">Dodaj</button></div>
                             <div class="input-focus-bg"></div>
-
                         </div>
                         
-                </div>
+                    </div>
                     
-                <input type="hidden" name="{fieldName}" value="{value}">
+                    <input class="repeater-hidden-input" type="hidden" name="{fieldName}" required data-msg-required="Dodaj przynajmniej jedną pozycję do listy." value="{value}">
                 
+                    <label id="repeater-error" class="error kbf-error-message" for="{fieldName}"</label>
+                    
                 </div>';
 
     // Przygotuj {items}
@@ -824,13 +826,13 @@ function render_dashboard_job_list_item($job_name, $job_type, $job_expire, $job_
 
         <div class="text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0">
             <a href="' . $editURL . '" class="p-1 mr-n1" title="edytuj">Edytuj</a>
-            <a data-toggle="modal" href="#confirmation" class="p-1 mr-n1" title="usun">Usuń</a>
+            <a data-id="{job_id}" data-toggle="modal" href="#confirmation" class="p-1 mr-n1" title="usun">Usuń</a>
         </div>
 
     </div>';
 
-
     return replacePlaceholders(array(
+        "{job_id}" => $job_id,
         "{job_name}" => $job_name,
         "{job_type}" => $job_type,
         "{job_expire}" => $job_expire
@@ -1039,7 +1041,7 @@ function sanitize_job_data($job_page) {
         "job_name" => $sanitizer->text($job_page->job_name),
         "job_expire" => $sanitizer->date($job_page->job_expire, "Y-m-d"),
         "job_city" => $sanitizer->text($job_page->job_city),
-        "job_province_name" => $sanitizer->text($job_page->province_name),
+        "job_province_name" => $sanitizer->text($job_page->job_province_name),
         "job_type" => $sanitizer->text($job_page->job_type),
         "job_description" => $job_page->job_description,
         "job_start_date" => $sanitizer->date($job_page->job_start_date, "Y-m-d"),
@@ -1772,27 +1774,88 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
  * *************/
 
 
-function update_repeater_values($repeater_pages, $values) {
+function update_repeater_values($repeater_data = array()) {
 
-    $_values = explode(",", $values);
+    if (count($repeater_data) === 0) return;
 
-    // Usun wszystkie
+    $page = $repeater_data["page"];
+    $repeater_pages = $repeater_data["repeater_pages"];
+    $data = $repeater_data["values"];
 
+    $page->of(false);
 
+    // Usun wszystkie repeatery
 
-    // Dodaj nowe
-    foreach ($_values as $_value) {
-
-        //
-
-
+    if ($repeater_pages->count) {
+        foreach ($repeater_pages as $repeater_page) {
+            $repeater_page->delete();
+            $repeater_page->save();
+        }
+        $page->save();
     }
 
+    if (!empty($data)) {
 
+        // Dodaj nowe repeatery
+        foreach (explode(",", $data) as $_value) {
+
+            $newPage = $repeater_pages->getNew();
+            $newPage->set($repeater_data["repeater_field_name"], $_value);
+            $newPage->save();
+
+        }
+    }
+
+    $page->save();
+    $page->of(true);
 
 }
 
-function add_page() {}
+function get_page_for_insert($parent_page, $template, $page_data, $ignore = array()) {
+
+    if (!isset($parent_page)) return;
+    if (!isset($template)) return;
+    if (!isset($page_data)) return;
+
+    $_page = new Page();
+    $_page->of(false);
+
+    $_page->template = $template;
+    $_page->parent = $parent_page;
+
+    return $_page;
+
+}
+
+function add_job ($parent_page, $page_data, $template = "job", $ignore = ["name", "title", "job_responsibilities", "job_requirements", "job_offers", "job_description_hidden"]) {
+
+    $_page = get_page_for_insert($parent_page, $template, $page_data, $ignore);
+
+    $_page->name = $page_data["job_name"];
+    $_page->title = $page_data["job_name"];
+
+    foreach ($page_data as $page_field => $value) {
+        if (!in_array($page_field, $ignore)) {
+            $_page->set($page_field, $value);
+        }
+    }
+
+    $_page->save();
+    $_page->of(true);
+
+    return $_page;
+
+}
+
+function delete_page($page_id) {
+
+    if (!isset($page_id)) return;
+
+    $pages = wire('pages');
+    $_page = $pages->get($page_id);
+    $_page->delete();
+
+}
 
 function update_page($page_id, $page_data = array(), $ignore = array()) {
 

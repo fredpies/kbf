@@ -20,7 +20,8 @@ class App {
 
         let instance = this;
 
-        this.$provinceNameField = $('[name="province_name"]');
+        this.$provinceNameField = $('[name="job_province_name"]');
+        this.$provinceNameFieldHidden = $('[name="province_name"]');
         this.$form = $('form[name="add-job"]');
 
         // Sprawdz czy walidator istnieje
@@ -111,6 +112,7 @@ class App {
         // Aktualizacja pola "Miasto"
         this.cityAutocomplete.on('city-change', function (e) {
             instance.$provinceNameField.val(e.detail.provinceName);
+            instance.$provinceNameFieldHidden.val(e.detail.provinceName);
         })
       
 

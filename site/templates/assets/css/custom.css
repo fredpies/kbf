@@ -493,7 +493,7 @@
 /*  5. Formularze             */
 /******************************/
 
-.error {
+label.error {
   color: red;
   position: absolute;
   width: 100%;
@@ -501,7 +501,7 @@
   max-width: 650px;
 }
 
-.error#company_description-error {
+label.error#company_description-error {
   bottom: -1rem;
 }
 
@@ -1217,6 +1217,10 @@ a.about-keywords:hover {
 
 .repeater-delete-action:hover {
   opacity: 0.8;
+}
+
+#repeater-error {
+  position: static;
 }
 
 /* Alert */

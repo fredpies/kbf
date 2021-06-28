@@ -56,6 +56,11 @@ $job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 // Wojewodztwo
 $job_province_name_field = getFormField("province_name", false, true);
 $job_province_name_field->className = "col-12";
+$job_province_name_field->name = "province_name";
+
+// Wojewodztwo ukryte
+$job_province_name_hidden_field = getFormField("hidden");
+$job_province_name_hidden_field->name = "job_province_name";
 
 // Opis pole ukryte - hack
 $job_description_hidden = getFormField('hidden');
@@ -79,39 +84,15 @@ $form->addMarkup($job_type_field->render(), true);
 $form->addMarkup($job_city_field->render(false), true);
 $form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'), true);
 $form->addMarkup($job_province_name_field->render(false), true);
+$form->addMarkup($job_province_name_hidden_field->render(false), true);
 $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
 $form->addMarkup($job_action_field->render(), true);
 
-// Obowiazki
 
-$responsibilities = array(
-    'Kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
-    'Przeprowadzanie rytuałów pielęgnacyjnych',
-    'Budowanie długofalowych relacji z klientem',
-    'Sprzedaż kosmetyków i doradztwo w zakresie ich właściwego doboru i stosowania'
-);
-
-
-// Wymagania
-
-$requirements = array(
-    'Znajomość towarów – drewna i materiałów drzewnych',
-    'Komunikatywność w rozmowie z klientam',
-    'Obsługa wózka widłowego',
-);
-
-// Oferta
-
-$offers = array(
-    'Pakiet socjalny',
-    'Dobra atmosfera pracy',
-    'Wysokie wynagrodzenie',
-);
-
-$responsibilities_markup = render_job_repeater($responsibilities, "job_responsibilities", "Obowiązki pracownika");
-$requirements_markup = render_job_repeater($requirements, "job_requirements", "Wymagania dla pracownika");
-$offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy");
+$responsibilities_markup = render_job_repeater(array(), "job_responsibilities", "Obowiązki pracownika");
+$requirements_markup = render_job_repeater(array(), "job_requirements", "Wymagania dla pracownika");
+$offers_markup = render_job_repeater(array(), "job_offers", "Oferta pracodawcy");
 
 // Rejestruj kroki
 $stepper->registerStep("Opis oferty", "Wpisz podstawowe informacje o ofercie pracy.", $form->render());
