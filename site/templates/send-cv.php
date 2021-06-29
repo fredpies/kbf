@@ -290,7 +290,7 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
                             <div class="col-12 text-center text-md-right align-self-center mt-4">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-md-5">
-                                        <button type="submit" class=" btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij</button>
+                                        <button type="submit" class="send-cv btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij</button>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <button type="button"

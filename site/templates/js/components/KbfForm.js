@@ -60,21 +60,6 @@ class KbfForm {
 
     addListeners() {
 
-        let instance = this;
-        let $ = window.$;
-
-        // // Usun domyslne zachowanie formularza
-        // this.$formElement.on('submit', function (e) {
-        //     e.stopPropagation();
-        //     e.preventDefault();
-        // });
-        //
-        // // Waliduj formularz
-        // this.$submitButton.on('click', function (e) {
-        //     e.stopPropagation();
-        //     instance.$formElement.validate({ ...instance.defaultValidatorConfig, ...instance.validatorConfig });
-        //     instance.handleErrorMessage.call(instance);
-        // });
     }
 
     validate() {

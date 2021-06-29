@@ -1876,3 +1876,28 @@ function update_page($page_id, $page_data = array(), $ignore = array()) {
 
 }
 
+function mailTo($mailData) {
+
+    if (!isset($mailData)) return;
+
+    $mail = new WireMail();
+    $mail->to($mailData["to"]);
+    $mail->from($mailData["from"]);
+//    $mail->fromName($mailData["fromName"]);
+    $mail->bodyHTML('<html><body>' . $mailData["bodyHTML"] .'</body></html>');
+//    $mail->attachment('/path/to/file.ext');
+
+    $c = $mail->send();
+
+
+    return array(
+        "status" => "sent",
+        "mails" => $c,
+        "from" => $mailData["from"],
+        "to" => $mailData["to"],
+        "fromName" => $mailData["fromName"],
+        "bodyHTML" => $mailData["bodyHTML"],
+    );
+
+}
+

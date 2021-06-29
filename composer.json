@@ -13,6 +13,7 @@
         }
     ],
     "require": {
-        "gusapi/gusapi": "^5.3"
+        "gusapi/gusapi": "^5.3",
+        "ext-json": "*"
     }
 }

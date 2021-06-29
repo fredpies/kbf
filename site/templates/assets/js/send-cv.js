@@ -4501,8 +4501,8 @@
       this.lang = lang || 'pl'; // Sprawdz czy formularz o podanej nazwie istnieje
 
       if (!this.formElement) throw errors.formNotFound(this.formName);
-      this.$formElement = $(this.formElement);
-      this.$submitButton = this.$formElement.find('button[type="submit"]'); // Error message
+      this.$formElement = $(this.formElement); // this.$submitButton = this.$formElement.find('button[type="submit"]');
+      // Error message
 
       this.$errorMessageElement = $('.kbf-error-message'); // Sprawdz czy walidator istnieje
 
@@ -4529,41 +4529,29 @@
     _createClass(KbfForm, [{
       key: "init",
       value: function init() {
-        var $ = window.$; // Ustaw custom rules
-
-        $.validator.addMethod("kbfPhone", function (value, element) {
-          return this.optional(element) || /[1-9][0-9]{2}-[0-9]{3}-[0-9]{3,}/.test(value);
-        }); // Ustaw maski
-
+        // Ustaw maski
         Array.from(this.formElement.elements).forEach(function (formElement) {
           new Inputmask$1().mask(formElement);
         });
       }
     }, {
       key: "addListeners",
-      value: function addListeners() {
-        var instance = this;
-
-        this.$formElement.on('submit', function (e) {
-          e.stopPropagation();
-          e.preventDefault();
-        }); // Waliduj formularz
-
-        this.$submitButton.on('click', function (e) {
-          e.stopPropagation();
-          instance.$formElement.validate(_objectSpread(_objectSpread({}, instance.defaultValidatorConfig), instance.validatorConfig));
-          instance.handleErrorMessage.call(instance);
-        });
+      value: function addListeners() {}
+    }, {
+      key: "validate",
+      value: function validate() {
+        this.$formElement.validate(_objectSpread(_objectSpread({}, this.defaultValidatorConfig), this.validatorConfig));
+        this.handleErrorMessage();
       } // Ustawia error message jezeli istnieje
 
     }, {
       key: "handleErrorMessage",
       value: function handleErrorMessage() {
-        var formIsValid = this.$formElement.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
+        this.formIsValid = this.$formElement.valid(); // Wyswietl komunikat o bledzie jeżeli pole komunikatu istnieje
 
         if (this.$errorMessageElement.length > 0) {
-          if (formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
-          if (!formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
+          if (this.formIsValid && !this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.addClass('d-none');
+          if (!this.formIsValid && this.$errorMessageElement.hasClass('d-none')) this.$errorMessageElement.removeClass('d-none');
         }
       }
     }]);
@@ -4571,14 +4559,14 @@
     return KbfForm;
   }();
 
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfSendCv = /*#__PURE__*/function (_KbfForm) {
     _inherits(KbfSendCv, _KbfForm);
 
-    var _super = _createSuper(KbfSendCv);
+    var _super = _createSuper$1(KbfSendCv);
 
     function KbfSendCv() {
       _classCallCheck(this, KbfSendCv);
@@ -4588,58 +4576,197 @@
       }, 'pl');
     }
 
+    _createClass(KbfSendCv, [{
+      key: "init",
+      value: function init() {
+        this.$submitButton = $('button.send-cv[type="submit"]');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        this.$submitButton.on('click', function (e) {
+          e.preventDefault();
+          $.post("https://webplanet.biz/kbf/api/mail/", {
+            from: "administrator@webplanet.biz",
+            to: "pkwiecien13@gmail.com",
+            subject: "test",
+            bodyHTML: "<p><b>test</b></p>"
+          }).fail(function () {
+            console.log('fail');
+          }).done(function (data) {
+            console.log("Data Loaded: " + JSON.stringify(data));
+          });
+        });
+      }
+    }]);
+
     return KbfSendCv;
   }(KbfForm);
 
-  var KbfPreloaderButton = /*#__PURE__*/function () {
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+
+  function _isNativeReflectConstruct$1() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct$1()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null || !_isNativeFunction(Class)) return Class;
+
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+
+        _cache.set(Class, Wrapper);
+      }
+
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+
+    return _wrapNativeSuper(Class);
+  }
+
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+  var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
+    _inherits(KbfPreloaderButton, _EventTarget);
+
+    var _super = _createSuper(KbfPreloaderButton);
+
     function KbfPreloaderButton(selector) {
+      var _this;
+
+      var auto = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
       _classCallCheck(this, KbfPreloaderButton);
 
+      _this = _super.call(this);
       var $ = window.$;
-      this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
+      _this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
 
-      if (!selector || this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
-      this.init();
-      this.addListeners();
+      if (!selector || _this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
+      _this.auto = auto; // Czy automatycznie dodawac listener
+
+      _this.init();
+
+      _this.addListeners();
+
+      return _this;
     }
 
     _createClass(KbfPreloaderButton, [{
       key: "init",
       value: function init() {
+        // Aliasy
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.emit = this.dispatchEvent;
         this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
+      }
+    }, {
+      key: "triggerStart",
+      value: function triggerStart(buttonElement) {
+        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
+
+        var $buttonElement = $(buttonElement);
+        var bgColor;
+        $buttonElement.on('click', function () {
+          console.log('not touch');
+          bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        });
+        this.$preloaderButton.trigger({
+          type: 'start-preloader',
+          buttonGeometry: buttonGeometry,
+          bgColor: bgColor
+        });
+        this.emit(new CustomEvent('click'));
       } // Startuje preloader
 
     }, {
       key: "startPreloader",
-      value: function startPreloader(buttonElement) {
+      value: function startPreloader(buttonElement, buttonGeometry, bgColor) {
         var $ = window.$;
-        var $this = $(buttonElement);
-        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
-
-        $this.css('width', buttonGeometry.width + 'px');
-        $this.css('height', buttonGeometry.height + 'px');
-        $this.css('padding', 0); // $this.css('padding-bottom', 0);
-
-        $this.html(KbfPreloaderButton.preloaderMarkup);
+        var $buttonElement = $(buttonElement);
+        $buttonElement.attr('disabled', 'disabled');
+        $buttonElement.css('width', buttonGeometry.width + 'px');
+        $buttonElement.css('height', buttonGeometry.height + 'px');
+        $buttonElement.css('padding', 0);
+        $buttonElement.css('background-color', bgColor);
+        $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
       } // Zatrzymuje preloader
 
     }, {
       key: "stopPreloader",
       value: function stopPreloader() {
         this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
+        this.$preloaderButton.removeAttr('disabled');
       }
     }, {
       key: "addListeners",
       value: function addListeners() {
-        var instance = this;
-        this.$preloaderButton.on('click', function () {
-          instance.startPreloader(this);
+        var instance = this; // Rejestruj handler warunkowo
+
+        if (this.auto) {
+          this.$preloaderButton.on('click', function () {
+            instance.triggerStart(this);
+          });
+        }
+
+        this.$preloaderButton.on('start-preloader', function (e) {
+          instance.startPreloader(this, e.buttonGeometry, e.bgColor);
         });
       }
     }]);
 
     return KbfPreloaderButton;
-  }();
+  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
   KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
