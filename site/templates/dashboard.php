@@ -3,14 +3,21 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-$pages = wire('pages');
-$page = wire('page');
 $urls = wire('urls');
 $sanitizer = wire('sanitizer');
 
+$user = wire('user');
+$pages = wire('pages');
+$session = wire('session');
 
-// TODO: Nalezy zmienic na dane zalogowanego uzytkownika/firmy
-$company_page = $pages->get(348487);
+check_redirect($user);
+$company_page = get_user_company($user);
+
+if (!$session->company_page_id) {
+    if ($company_page) {
+        $session->set('company_page_id', $company_page->id);
+    }
+}
 
 // Informacje o firmie
 $company_data = sanitize_company_data($company_page);
@@ -27,10 +34,8 @@ $products = $company_page->find("title=Produkty");
 $products_count = 0;
 if ($products->count()) $products_count = $products[0]->children()->count();
 
-// Produkty
-$services = $company_page->find("title=Usługi");
-$services_count = 0;
-if ($services->count()) $services_count = $services[0]->children()->count();
+// Usługi
+$services_count = get_services_count($company_page);
 
 // Oferty pracy
 // TODO: sprawdzaanie daty oferty - counter tylko na aktywne
@@ -38,30 +43,7 @@ $jobs = $company_page->find("title=Oferty Pracy");
 $jobs_count = 0;
 if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
 
-
-$user = wire('user');
-$pages = wire('pages');
-$session = wire('session');
-
-check_redirect($user);
-$company_page = get_user_company($user);
-
-if (!$session->company_page_id) {
-    if ($company_page) {
-        $session->set('company_page_id', $company_page->id);
-    }
-}
-
-$company_page_data = array();
-
-if (isset($company_page) && !empty($company_page)) {
-    $company_page_data = sanitize_company_data($company_page);
-}
-
-
-// TODO: "w kbf od" - pobrac dane z zalogowanego uzytkownika?
-
-// TODO: brakjujące counters w małych panelach: sprzadane produkty, otrzymane cv, banery acktywne i zapisane
+// TODO: brakjujące counters w małych panelach: sprzadane produkty, otrzymane cv, banery aktywne i zapisane
 
 // TODO: pozycjonerzy
 
