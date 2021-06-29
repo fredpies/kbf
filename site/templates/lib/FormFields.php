@@ -139,6 +139,44 @@ class FormFieldDatepicker extends FormField
 
 }
 
+class FormFieldEmail extends FormField
+{
+
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public static $template = '
+    
+        <div class="{className}">
+                <div class="input-group input-group-lg input-group-round mb-4">
+                        <label class="text-uppercase px-3">{label}</label>
+                        <div class="input-group-inner">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
+                            </div>
+
+                            <input autocomplete="off" type="text" class="form-control"
+                                   name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
+
+                            <div class="input-focus-bg"></div>
+
+                        </div>
+                    </div>
+        </div>
+
+        {descriptionMarkup}
+        
+    ';
+
+    public function render($description = true)
+    {
+        return $this->renderMarkup(self::$template, $description);
+    }
+
+}
+
 class FormFieldText extends FormField
 {
 
@@ -157,7 +195,45 @@ class FormFieldText extends FormField
                                 <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
                             </div>
 
-                            <input autocomplete="off" type="text" class="form-control  text-uppercase"
+                            <input autocomplete="off" type="text" class="form-control text-uppercase"
+                                   name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
+
+                            <div class="input-focus-bg"></div>
+
+                        </div>
+                    </div>
+        </div>
+
+        {descriptionMarkup}
+        
+    ';
+
+    public function render($description = true)
+    {
+        return $this->renderMarkup(self::$template, $description);
+    }
+
+}
+
+class FormFieldPassword extends FormField
+{
+
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public static $template = '
+    
+        <div class="{className}">
+                <div class="input-group input-group-lg input-group-round mb-4">
+                        <label class="text-uppercase px-3">{label}</label>
+                        <div class="input-group-inner">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-group-icon"><i class="fa {icon}"></i></span>
+                            </div>
+
+                            <input autocomplete="off" type="password" class="form-control"
                                    name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>

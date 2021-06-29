@@ -39,6 +39,18 @@ $jobs_count = 0;
 if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
 
 
+$user = wire('user');
+$pages = wire('pages');
+
+check_redirect($user);
+$company_page = get_user_company($user);
+$company_page_data = array();
+
+if ($company_page) {
+    $company_page_data = sanitize_company_data($company_page);
+}
+
+
 // TODO: "w kbf od" - pobrac dane z zalogowanego uzytkownika?
 
 // TODO: brakjujące counters w małych panelach: sprzadane produkty, otrzymane cv, banery acktywne i zapisane
@@ -241,8 +253,8 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                         </div>
                                         <div class="divider-1 divider-light-1 m-0"></div>
                                         <div class="card-body">
-                                           <h6 class="text-white text-center">150 PLN</h6>
-                                           <button type="button" class="w-100 btn btn-round btn-warning mt-3 mb-0">WYPŁATA</button>
+                                            <h6 class="text-white text-center">150 PLN</h6>
+                                            <button type="button" class="w-100 btn btn-round btn-warning mt-3 mb-0">WYPŁATA</button>
                                         </div>
                                     </div>
                                 </div>

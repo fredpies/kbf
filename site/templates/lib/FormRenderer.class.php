@@ -3,7 +3,6 @@
 include_once "functions.php";
 include_once "FormFields.php";
 
-
 class FormRenderer
 {
 

@@ -5,6 +5,8 @@ include_once "lib/functions.php";
 include_once "lib/FormRenderer.class.php";
 include_once "lib/TabsRenderer.class.php";
 
+check_redirect(wire('user'));
+
 $pages = wire('pages');
 $page = wire('page');
 $urls = wire('urls');

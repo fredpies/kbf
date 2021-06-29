@@ -1,5 +1,11 @@
 <?php namespace ProcessWire;
 include_once "partials/_init.php";
+
+
+$user = wire('user');
+$company_page = get_user_company($user);
+
+
 ?>
 <!-- Sidebar -->
 <div class="col-lg-4">
@@ -39,15 +45,15 @@ include_once "partials/_init.php";
                     </a>
                     <a href="<?php echo $pages->get(1)->url ?>panel/produkty" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Produkty</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-indigo rounded-xl px-2 mb-1">5</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-indigo rounded-xl px-2 mb-1"><?= get_products_count($company_page) ?></small>
                     </a>
                     <a href="<?php echo $pages->get(1)->url ?>panel/uslugi" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Usługi</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-rose rounded-xl px-2 mb-1">6</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-rose rounded-xl px-2 mb-1"><?= get_services_count($company_page) ?></small>
                     </a>
                     <a href="<?php echo $pages->get(1)->url ?>panel/oferty-pracy" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <h6 class="font-weight-700">Oferty pracy</h6>
-                        <small class="text-white font-weight-600 text-uppercase bg-carrot rounded-xl px-2 mb-1">1</small>
+                        <small class="text-white font-weight-600 text-uppercase bg-carrot rounded-xl px-2 mb-1"><?= get_jobs_count($company_page) ?></small>
                     </a>
                 </ul>
 
