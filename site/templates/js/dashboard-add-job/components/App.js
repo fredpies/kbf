@@ -20,7 +20,9 @@ class App {
 
         let instance = this;
 
-        this.$provinceNameField = $('[name="province_name"]');
+        this.$provinceNameField = $('[name="job_province_name"]');
+        this.$provinceNameFieldHidden = $('[name="province_name"]');
+        this.$form = $('form[name="add-job"]');
 
         // Sprawdz czy walidator istnieje
         if (!$.fn.validate) throw errors.noValidator();
@@ -110,6 +112,7 @@ class App {
         // Aktualizacja pola "Miasto"
         this.cityAutocomplete.on('city-change', function (e) {
             instance.$provinceNameField.val(e.detail.provinceName);
+            instance.$provinceNameFieldHidden.val(e.detail.provinceName);
         })
       
 
@@ -148,6 +151,7 @@ class App {
 
     submitForm() {
         this.$prevButton.find('button').attr('disabled', 'disabled').off('click'); // Wylacz prev button
+        this.$form.submit();
     }
 
     hideAllPickers() {

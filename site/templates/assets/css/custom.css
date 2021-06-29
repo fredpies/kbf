@@ -493,7 +493,7 @@
 /*  5. Formularze             */
 /******************************/
 
-.error {
+label.error {
   color: red;
   position: absolute;
   width: 100%;
@@ -501,7 +501,7 @@
   max-width: 650px;
 }
 
-.error#company_description-error {
+label.error#company_description-error {
   bottom: -1rem;
 }
 
@@ -514,6 +514,10 @@ label.error-stepper {
   display: inline-block;
   bottom: 0 !important;
   text-align: center;
+}
+
+.login-form {
+  max-width: 400px;
 }
 
 @media (max-width: 480px) {
@@ -1205,6 +1209,27 @@ a.about-keywords:hover {
   background: #f1f1f1;
 }
 
+.repeater-delete-action {
+  color: #2196f3 !important;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.repeater-delete-action:hover {
+  opacity: 0.8;
+}
+
+#repeater-error {
+  position: static;
+}
+
+/* Alert */
+
+.alert.alert-light {
+  border-left: 5px solid green !important;
+}
+
+
 /******************************/
 /* Fix                        */
 /******************************/
@@ -1246,4 +1271,10 @@ textarea {
   .page-wrapper {
     padding-bottom: 120px !important;
   }
+}
+
+/*Modal fix*/
+
+body.modal-open {
+  overflow: visible;
 }

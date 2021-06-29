@@ -38,6 +38,9 @@ class KbfDropdown extends EventTarget {
         let dataOptions = this.$dropdowns.data('options');
         if (dataOptions) this.opts = dataOptions.split(',');
 
+        // Wartosc poczatkowa
+        this.startValue = this.$dropdowns.data('value');
+
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
 
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
@@ -49,6 +52,7 @@ class KbfDropdown extends EventTarget {
         // Ustaw opcje
         this.setOptions(this.opts);
         this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
+        if (this.startValue) this.setActive(this.startValue);
 
     }
 
@@ -91,28 +95,6 @@ class KbfDropdown extends EventTarget {
                 enableScroll();
             });
         }
-
-        // Fix dla przyciskow steppera // TODO przeniesc do steppera
-        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', -1);
-        //     if ($buttons.length) $buttons.css('z-index', -1);
-        //
-        // });
-        //
-        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', '');
-        //     if ($buttons.length) $buttons.css('z-index', '');
-        //
-        // });
-
 
         // Gdy klikniemy na dropdown item
         this.$dropdownItems.on('click', function (e) {

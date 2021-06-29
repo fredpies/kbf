@@ -103,6 +103,9 @@ class FormRenderer
         if ($property === "isHidden") {
             $this->isHidden = $value;
         }
+        if ($property === "action") {
+            $this->action = $value;
+        }
 
     }
 

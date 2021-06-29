@@ -41,12 +41,20 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
 
 $user = wire('user');
 $pages = wire('pages');
+$session = wire('session');
 
 check_redirect($user);
 $company_page = get_user_company($user);
+
+if (!$session->company_page_id) {
+    if ($company_page) {
+        $session->set('company_page_id', $company_page->id);
+    }
+}
+
 $company_page_data = array();
 
-if ($company_page) {
+if (isset($company_page) && !empty($company_page)) {
     $company_page_data = sanitize_company_data($company_page);
 }
 

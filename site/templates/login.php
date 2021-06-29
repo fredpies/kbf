@@ -22,8 +22,6 @@ $credentialsValid = true;
 $email = '';
 $pass = '';
 
-$session->logout();
-
 // Przetwarzanie logowania
 if ($input->post('submit')) {
 
@@ -31,10 +29,10 @@ if ($input->post('submit')) {
     $pass = $input->post('pass', 'text');
 
     $user = $session->login($email, $pass);
-    echo $user;
 
     if ($user) {
-        $session->redirect($dashboardURL);
+        //$session->set('company_page', get_user_company($user)); // Ustaw strone firmy dla sesji
+       $session->redirect($dashboardURL);
     }
     else $credentialsValid = false;
 
@@ -86,7 +84,7 @@ $loginForm->addMarkup($passField->render(false), true);
 
     <div class="d-flex justify-content-center">
 
-        <form novalidate class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3" method="post" action="<?= $page->url ?>">
+        <form novalidate class="login-form col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3" method="post" action="<?= $page->url ?>">
 
 
             <?= $loginForm->render() ?>
@@ -119,7 +117,6 @@ $loginForm->addMarkup($passField->render(false), true);
 <?php include_once "partials/_scripts.php" ?>
 
 <!-- Index js -->
-<script src="<?php echo $urls->js ?>index.js"></script>
 
 </body>
 </html>

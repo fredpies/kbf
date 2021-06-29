@@ -12679,7 +12679,9 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
       this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
 
       var dataOptions = this.$dropdowns.data('options');
-      if (dataOptions) this.opts = dataOptions.split(',');
+      if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
+
+      this.startValue = this.$dropdowns.data('value');
       if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
       this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
       // Wstaw ukryte pole formularza
@@ -12689,6 +12691,8 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
 
       this.setOptions(this.opts);
       this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
+
+      if (this.startValue) this.setActive(this.startValue);
     } // Dodaje listenery
 
   }, {
@@ -12740,27 +12744,7 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
           e.stopPropagation();
           enableScroll();
         });
-      } // Fix dla przyciskow steppera // TODO przeniesc do steppera
-      // this.$dropdowns.on('shown.bs.dropdown', function (e) {
-      //
-      //     e.stopPropagation();
-      //     let $steps = $('.step');
-      //     let $buttons = $('.button-prev, .button-next, .button-register');
-      //     if ($steps.length) $steps.css('z-index', -1);
-      //     if ($buttons.length) $buttons.css('z-index', -1);
-      //
-      // });
-      //
-      // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-      //
-      //     e.stopPropagation();
-      //     let $steps = $('.step');
-      //     let $buttons = $('.button-prev, .button-next, .button-register');
-      //     if ($steps.length) $steps.css('z-index', '');
-      //     if ($buttons.length) $buttons.css('z-index', '');
-      //
-      // });
-      // Gdy klikniemy na dropdown item
+      } // Gdy klikniemy na dropdown item
 
 
       this.$dropdownItems.on('click', function (e) {
@@ -29189,7 +29173,7 @@ var KbfRepeater = /*#__PURE__*/function (_EventTarget) {
       this.on = this.addEventListener;
       this.off = this.removeEventListener;
       this.emit = this.dispatchEvent;
-      this.$addButtons = this.$repeaterItems.closest('.job-details-edit').find('.add-button');
+      this.$addButtons = $('.job-details-edit').find('.add-button');
       this.$removeButtons = this.$repeaterItems.find('.repeater-actions a');
       this.$confirmationButtons = $('.confirm-button');
       this.$repeaterItems = this.$repeaterItems.find('span');
@@ -29300,8 +29284,11 @@ var App = /*#__PURE__*/function () {
     key: "init",
     value: function init() {
       var $ = window.$;
-      this.$submitButton = $('.submit-button');
-      this.$provinceNameField = $('[name="province_name"]'); // Taby
+      this.$submitButton = $('.submit-button'); // Submit
+
+      this.$form = $('form[name="dashboard-edit-job"]');
+      this.$provinceNameField = $('[name="job_province_name"]');
+      this.$provinceNameHIddenField = $('[name="province_name"]'); // Taby
 
       this.tabs = new KbfTabs('dashboard-edit-job'); // Datepicker
 
@@ -29319,7 +29306,9 @@ var App = /*#__PURE__*/function () {
       var editor = document.getElementsByClassName('ql-editor');
       editor[0].innerHTML = htmlToInsert; // Preloader button
 
-      this.preloaderButton = new KbfPreloaderButton('.submit-button', false); // Repeater
+      this.preloaderButton = new KbfPreloaderButton('.submit-button', false); // Back button
+
+      this.backButton = new KbfPreloaderButton('.back-button'); // Repeater
 
       this.repeater = new KbfRepeater('.repeater-item');
     }
@@ -29330,7 +29319,11 @@ var App = /*#__PURE__*/function () {
       this.$submitButton.on('click', function (e) {
         e.preventDefault();
         instance.tabs.validateForm();
-        if (instance.tabs.formIsValid) instance.preloaderButton.triggerStart(this);
+
+        if (instance.tabs.formIsValid) {
+          instance.preloaderButton.triggerStart(this);
+          instance.$form.submit();
+        }
       }); // Datepicker
 
       $('[name="job_expire"]').on('focus', function () {
@@ -29344,6 +29337,7 @@ var App = /*#__PURE__*/function () {
 
       this.cityAutocomplete.on('city-change', function (e) {
         instance.$provinceNameField.val(e.detail.provinceName);
+        instance.$provinceNameHIddenField.val(e.detail.provinceName);
       });
     }
   }, {

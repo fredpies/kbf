@@ -8,29 +8,22 @@ include_once "lib/Alert.class.php";
 
 check_redirect(wire('user'));
 
-$pages = wire('pages');
+$templates = wire('templates');
 $page = wire('page');
+$pages = wire('pages');
 $urls = wire('urls');
 $sanitizer = wire('sanitizer');
 
+$job_template = $templates->get('job');
+$job_fields = $job_template->fields;
 
-
-$page_title = $sanitizer->text($page->title);
-
-// TODO: Nalezy pobierac dla firmy
-$job_page = $pages->get(348503);
-//$job_page = $pages->get(348446);
-$job_fields = $job_page->fields;
-
-//$templates = wire("templates");
-//$job_template = $templates->get("company");
-//$company_fields = $company_template->fields;
 
 // Stepper
 $stepper = new StepperRenderer("kbf-stepper");
 $stepper->stepperName = "Dodaj ofertę pracy";
 $stepper->actionName = "Dodaj ofertę";
 $stepper->formName = 'add-job';
+$stepper->action = $pages->get("template=dashboard-jobs")->url;
 
 // Krok "Opis oferty
 
@@ -63,8 +56,13 @@ $job_city_field->inputmask = "[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\s]+";
 // Wojewodztwo
 $job_province_name_field = getFormField("province_name", false, true);
 $job_province_name_field->className = "col-12";
+$job_province_name_field->name = "province_name";
 
-// Opis  pole ukryte - hack
+// Wojewodztwo ukryte
+$job_province_name_hidden_field = getFormField("hidden");
+$job_province_name_hidden_field->name = "job_province_name";
+
+// Opis pole ukryte - hack
 $job_description_hidden = getFormField('hidden');
 $job_description_hidden->name = 'job_description_hidden';
 
@@ -72,6 +70,11 @@ $job_description_hidden->name = 'job_description_hidden';
 $job_description_field = getFormField("job_description", true);
 $job_description_field->className = "col-12 mb-3";
 $job_description_field->msgRequired = "Opis oferty pracy musi zostać wypełniony.";
+
+// Pole ukryte akcji
+$job_action_field = getFormField("hidden");
+$job_action_field->name = "action";
+$job_action_field->value = "add-job";
 
 $form->addMarkup($job_name_field->render(false), true);
 $form->addMarkup($job_expire_field->render(), true);
@@ -81,44 +84,21 @@ $form->addMarkup($job_type_field->render(), true);
 $form->addMarkup($job_city_field->render(false), true);
 $form->addMarkup(render_info_message('Wpisz nazwę miasta i wybierz odpowiednią pozycję z listy w celu wypełnienia informacji o województwie.<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'), true);
 $form->addMarkup($job_province_name_field->render(false), true);
+$form->addMarkup($job_province_name_hidden_field->render(false), true);
 $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
-
-// Obowiazki
-
-$responsibilities = array(
-    'Kreowanie wizerunku z zakresu stylizacji i koloryzacji włosów',
-    'Przeprowadzanie rytuałów pielęgnacyjnych',
-    'Budowanie długofalowych relacji z klientem',
-    'Sprzedaż kosmetyków i doradztwo w zakresie ich właściwego doboru i stosowania'
-);
+$form->addMarkup($job_action_field->render(), true);
 
 
-// Wymagania
-
-$requirements = array(
-    'Znajomość towarów – drewna i materiałów drzewnych',
-    'Komunikatywność w rozmowie z klientam',
-    'Obsługa wózka widłowego',
-);
-
-// Oferta
-
-$offers = array(
-    'Pakiet socjalny',
-    'Dobra atmosfera pracy',
-    'Wysokie wynagrodzenie',
-);
-
-$responsibilities_markup = render_job_repeater($responsibilities, "job_responsibilities", "Obowiązki pracownika");
-$requirements_markup = render_job_repeater($requirements, "job_requirements", "Wymagania dla pracownika");
-$offers_markup = render_job_repeater($offers, "job_offers", "Oferta pracodawcy");
+$responsibilities_markup = render_job_repeater(array(), "job_responsibilities", "Obowiązki pracownika");
+$requirements_markup = render_job_repeater(array(), "job_requirements", "Wymagania dla pracownika");
+$offers_markup = render_job_repeater(array(), "job_offers", "Oferta pracodawcy");
 
 // Rejestruj kroki
 $stepper->registerStep("Opis oferty", "Wpisz podstawowe informacje o ofercie pracy.", $form->render());
 $stepper->registerStep("Obowiązki", "Podaj minimalny zakres obowiązków na stanowisku pracy.", $responsibilities_markup . render_info_message('Wpisz zakres odpowiedzialności pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
-$stepper->registerStep("Wymagania", "Podaj minimalne wymagania pracodawcy na stanowisku pracy.", $requirements_markup. render_info_message('Wpisz zakres wymaganie dla pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
-$stepper->registerStep("Oferta pracodawcy", "Podaj ofertę pracodawcy.", $offers_markup. render_info_message('Wpisz ofertę pracodawcy i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
+$stepper->registerStep("Wymagania", "Podaj minimalne wymagania pracodawcy na stanowisku pracy.", $requirements_markup. render_info_message('Wpisz zakres wymagań dla pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
+$stepper->registerStep("Oferta pracodawcy", "Podaj ofertę pracodawcy.", $offers_markup. render_info_message('Wpisz co oferuje pracodawca dla pracownika i wybierz "DODAJ"<div class="header-shadow-wrapper position-static z-index-0 mt-2"></div>'));
 
 $stepperMarkup = $stepper->render();
 
