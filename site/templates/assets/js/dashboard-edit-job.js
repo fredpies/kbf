@@ -11271,19 +11271,7 @@ var KbfForm = /*#__PURE__*/function () {
     }
   }, {
     key: "addListeners",
-    value: function addListeners() {
-      // this.$formElement.on('submit', function (e) {
-      //     e.stopPropagation();
-      //     e.preventDefault();
-      // });
-      //
-      // // Waliduj formularz
-      // this.$submitButton.on('click', function (e) {
-      //     e.stopPropagation();
-      //     instance.$formElement.validate({ ...instance.defaultValidatorConfig, ...instance.validatorConfig });
-      //     instance.handleErrorMessage.call(instance);
-      // });
-    }
+    value: function addListeners() {}
   }, {
     key: "validate",
     value: function validate() {
@@ -29337,7 +29325,7 @@ var App = /*#__PURE__*/function () {
 
       this.cityAutocomplete.on('city-change', function (e) {
         instance.$provinceNameField.val(e.detail.provinceName);
-        instance.$provinceNameHIddenField.val(e.detail.provinceName);
+        instance.$provinceNameHIddenFieldField.val(e.detail.provinceName);
       });
     }
   }, {

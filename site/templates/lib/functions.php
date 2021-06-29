@@ -1660,7 +1660,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             $field->label = "Rodzaj umowy";
             $field->name = $fieldName;
             $field->description = "Wybierz rodzaj umowy z pracodawcą.";
-            $field->options = "Pełen etat,Pół etatu,1/4 etatu,Umowa o dzieło,Umowa zlecenie,Kontrakt";
+            $field->options = "Pełny etat,Pół etatu,1/4 etatu,Umowa o dzieło,Umowa zlecenie,Kontrakt";
 
             if ($required) {
                 $field->required = true;
