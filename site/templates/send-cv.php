@@ -176,7 +176,9 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
             <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
                 <div class="card-body pt-0">
 
-                    <form novalidate role="form" name="send-cv" class="pl-lg-5">
+                    <form enctype="multipart/form-data" novalidate role="form" name="send-cv" class="pl-lg-5">
+                        <input type="hidden" name="job_name" value="<?= $job_data["job_name"] ?>">
+                        <input type="hidden" name="job_url" value="<?= $job_data["job_url"] ?>">
                         <div class="row justify-content-center">
 
                             <div class="col-12 col-lg-5 mb-3">
@@ -272,7 +274,7 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
 
                                 <label for="cv-field" class="d-block text-uppercase px-3">Załącz cv</label>
                                 <input style="border: 0" type="file" autocomplete="off" class="align-self-center form-control form-control-lg pl-3"
-                                       name="cv"
+                                       name="attachment"
                                        id="cv-field"
                                        required
                                        data-msg-required="W celu wysłania aplikacji należy dołączyć swoje CV."

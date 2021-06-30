@@ -4559,6 +4559,12 @@
     return KbfForm;
   }();
 
+  var config = {
+    env: 'dev',
+    url: 'https://webplanet.biz',
+    apiEndpoint: 'https://webplanet.biz/kbf/'
+  };
+
   function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
   function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -4579,22 +4585,39 @@
     _createClass(KbfSendCv, [{
       key: "init",
       value: function init() {
+        this.$jobNameField = $('input[name="job_name"]');
+        this.$jobURLField = $('input[name="job_url"]');
+        this.$nameField = $('input[name="name"]');
+        this.$phoneField = $('input[name="phone"]');
+        this.$emailField = $('input[name="email"]');
+        this.$attachmentField = $('input[name="attachment"]');
         this.$submitButton = $('button.send-cv[type="submit"]');
+        this.formData = new FormData();
       }
     }, {
       key: "addListeners",
       value: function addListeners() {
+        var instance = this;
         this.$submitButton.on('click', function (e) {
           e.preventDefault();
-          $.post("https://webplanet.biz/kbf/api/mail/", {
-            from: "administrator@webplanet.biz",
-            to: "pkwiecien13@gmail.com",
-            subject: "test",
-            bodyHTML: "<p><b>test</b></p>"
+          instance.formData.append('to', 'pkwiecien13@gmail.com');
+          instance.formData.append('to', 'pkwiecien13@gmail.com');
+          instance.formData.append('name', instance.$nameField.val());
+          instance.formData.append('subject', "Aplikacja na stanowisko: ".concat(instance.$jobNameField.val()));
+          instance.formData.append('phone', instance.$phoneField.val());
+          instance.formData.append('email', instance.$emailField.val());
+          instance.formData.append('attachment', instance.$attachmentField[0].files[0]);
+          var message = "\n                <p style=\"font-weight: bold\">Dzie\u0144 dobry.</p>\n                <p>W za\u0142\u0105czeniu przesy\u0142am aplikacj\u0119 na stanowisko pracy zaproponowane w ofercie.</p>\n                <p>Link do og\u0142oszenia : <a href=\"".concat(instance.$jobURLField.val(), "\">").concat(instance.$jobURLField.val(), "</a> </p>\n                <p>Moje dane kontaktowe :</p>\n                <p>Telefon: ").concat(instance.$phoneField.val(), "</p>\n                <p>Email: ").concat(instance.$emailField.val(), "</p>\n                <p style=\"font-weight: bold\">Pozdrawiam,</p>\n                <p>").concat(instance.$nameField.val(), "</p>\n            ");
+          instance.formData.append('bodyHTML', message);
+          $.ajax("".concat(config.apiEndpoint, "api/mail-cv/"), {
+            type: 'POST',
+            data: instance.formData,
+            processData: false,
+            contentType: false
+          }).done(function (res) {
+            console.log(res);
           }).fail(function () {
             console.log('fail');
-          }).done(function (data) {
-            console.log("Data Loaded: " + JSON.stringify(data));
           });
         });
       }

@@ -1881,22 +1881,21 @@ function mailTo($mailData) {
     if (!isset($mailData)) return;
 
     $mail = new WireMail();
+    $mail->subject($mailData["subject"]);
     $mail->to($mailData["to"]);
-    $mail->from($mailData["from"]);
-//    $mail->fromName($mailData["fromName"]);
-    $mail->bodyHTML('<html><body>' . $mailData["bodyHTML"] .'</body></html>');
-//    $mail->attachment('/path/to/file.ext');
+    $mail->from($mailData["email"]);
+    $mail->bodyHTML($mailData["bodyHTML"]);
+    $mail->attachment($mailData["targetFile"]);
 
     $c = $mail->send();
-
 
     return array(
         "status" => "sent",
         "mails" => $c,
-        "from" => $mailData["from"],
+        "from" => $mailData["email"],
         "to" => $mailData["to"],
-        "fromName" => $mailData["fromName"],
-        "bodyHTML" => $mailData["bodyHTML"],
+        "fromName" => $mailData["name"],
+        "bodyHTML" => $mailData['bodyHTML']
     );
 
 }
