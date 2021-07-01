@@ -746,14 +746,16 @@ function render_confirmation_modal() {
 }
 
 // Alert
-function render_alert($message, $type="success") {
+function render_alert($message, $type="success", $close=true) {
+
+    $closeMarkup = $close ? '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>' : '';
 
     $template = '<div class="alert alert-{type} alert-dismissible fade show" role="alert">
-                    <p class="mb-0 font-weight-600">{message}</p>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>';
+                    <p class="mb-0 font-weight-600">{message}</p>'
+                 . $closeMarkup .
+                '</div>';
 
     return replacePlaceholders(array(
         "{type}" => $type,
@@ -1881,22 +1883,22 @@ function mailTo($mailData) {
     if (!isset($mailData)) return;
 
     $mail = new WireMail();
+    $mail->subject($mailData["subject"]);
     $mail->to($mailData["to"]);
     $mail->from($mailData["from"]);
-//    $mail->fromName($mailData["fromName"]);
-    $mail->bodyHTML('<html><body>' . $mailData["bodyHTML"] .'</body></html>');
-//    $mail->attachment('/path/to/file.ext');
+    $mail->fromName('KBF');
+    $mail->bodyHTML($mailData["bodyHTML"]);
+    $mail->attachment($mailData["targetFile"]);
 
     $c = $mail->send();
-
+    unlink($mailData["targetFile"]);
 
     return array(
         "status" => "sent",
         "mails" => $c,
         "from" => $mailData["from"],
         "to" => $mailData["to"],
-        "fromName" => $mailData["fromName"],
-        "bodyHTML" => $mailData["bodyHTML"],
+        "bodyHTML" => $mailData['bodyHTML']
     );
 
 }
