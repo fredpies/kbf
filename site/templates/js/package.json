@@ -25,6 +25,7 @@
     "babelrc-rollup": "^3.0.0",
     "bootstrap-autocomplete": "^2.3.7",
     "check-node-version": "^3.2.0",
+    "cropperjs": "^1.5.12",
     "events": "^3.3.0",
     "imagesloaded": "^4.1.4",
     "inputmask": "^5.0.5",

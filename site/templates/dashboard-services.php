@@ -25,6 +25,8 @@ else $services = array();
 <html lang="en">
 <head>
     <?php include_once "partials/_head.php" ?>
+    <!-- crop images: Cropper CSS -->
+    <link rel="stylesheet" href="<?php echo $urls->css ?>cropper.css">
 </head>
 <body>
 
@@ -121,8 +123,50 @@ else $services = array();
 
                                 </div>
 
-                                <div class="tab-pane fade" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
+                                <div class="tab-pane fade add-service" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
                                     <p>Formularz dodawania usługi</p>
+
+                                    <div class="image_area w-50">
+                                        <form method="post">
+                                            <label for="upload_image">
+                                                <img src="<?php echo $urls->images ?>image-placeholder.jpg" id="uploaded_image" class="d-block mx-auto img-fluid img-thumbnail" />
+                                                <div class="overlay" id="selectImage">
+                                                    <div class="text">Kliknij aby wybrać obraz.</div>
+                                                </div>
+                                                <input type="file" name="image" class="image" id="upload_image" accept="image/*" style="display:none" />
+                                            </label>
+                                        </form>
+                                    </div>
+
+                                    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Przytnij obraz do wymaganych wymiarów przed przesłaniem.</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="img-container">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <img src="" id="sample_image" />
+                                                            </div>
+                                                            <div class="col-md-6 text-center">
+                                                                <p>Podgląd przyciętego obrazu</p>
+                                                                <div class="preview mx-auto img-thumbnail"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Wróć</button>
+                                                    <button type="button" id="crop" class="btn btn-primary">Przytnij</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -145,6 +189,8 @@ else $services = array();
 
 <!-- Scripts -->
 <?php include_once "partials/_scripts.php" ?>
+
+<script src="<?php echo $urls->js ?>vendor/cropper.js"></script>
 
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>dashboard-services.js"></script>
