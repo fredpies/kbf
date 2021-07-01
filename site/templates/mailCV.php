@@ -32,10 +32,8 @@ http_response_code($statuscode);
 
         $mailData = array(
             "to" => $input->post->to,
-            "email" => $input->post->email,
+            "from" => $input->post->from,
             "subject" => $input->post->subject,
-            "name" => $input->post->name,
-            "phone" => $input->post->phone,
             "targetFile" => $target_file,
             "bodyHTML" => $input->post->bodyHTML
         );

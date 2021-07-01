@@ -16,7 +16,6 @@ class KbfForm {
         if (!this.formElement) throw errors.formNotFound(this.formName);
 
         this.$formElement = $(this.formElement);
-        // this.$submitButton = this.$formElement.find('button[type="submit"]');
 
         // Error message
         this.$errorMessageElement = $('.kbf-error-message');

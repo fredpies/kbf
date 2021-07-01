@@ -3,7 +3,13 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$pages = wire('pages');
+$sanitizer = wire('sanitizer');
+$session = wire('session');
+$urls = wire('urls');
+
 $home_page_url = $pages->get(1)->url;
+$confirmation_page_url = $pages->get('template=send-cv-confirmation')->url;
 
 if (isset($input->company_id)) {
     $company_id = $sanitizer->selectorValue($input->company_id);
@@ -177,8 +183,14 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
                 <div class="card-body pt-0">
 
                     <form enctype="multipart/form-data" novalidate role="form" name="send-cv" class="pl-lg-5">
+
                         <input type="hidden" name="job_name" value="<?= $job_data["job_name"] ?>">
                         <input type="hidden" name="job_url" value="<?= $job_data["job_url"] ?>">
+                        <input type="hidden" name="company_email" value="<?= $company_data["company_email"] ?>">
+                        <input type="hidden" name="company_id" value="<?= $company_data["company_id"] ?>">
+                        <input type="hidden" name="job_id" value="<?= $job_data["job_id"] ?>">
+                        <input type="hidden" name="confirmation_page_url" value="<?= $confirmation_page_url ?>">
+
                         <div class="row justify-content-center">
 
                             <div class="col-12 col-lg-5 mb-3">
@@ -192,7 +204,9 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
                                         <input autocomplete="off" type="text" class="form-control form-control-lg"
                                                name="name"
                                                required
-                                               data-msg-required="Pole z imieniem i nazwiskiem nie może być puste.">
+                                               data-msg-required="Pole z imieniem i nazwiskiem nie może być puste."
+                                               data-inputmask-regex="[A-Za-z\sążźćłóęńśĄŻŹĆŁÓĘŃŚ]+"
+                                        >
 
                                         <div class="input-focus-bg"></div>
                                     </div>
