@@ -161,7 +161,7 @@ else $services = array();
 
                                 <div class="tab-pane fade add-service" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
 
-                                    <form method="post">
+                                    <form method="post" id="service" name="service">
                                         <div class="row justify-content-center">
 
                                             <div class="col-12 col-lg-6 mb-3">
@@ -213,7 +213,6 @@ else $services = array();
                                                         <div class="text">Kliknij aby wybrać obraz.</div>
                                                     </div>
                                                     <input type="file" class="image" id="upload_image" accept="image/*" style="display:none" />
-                                                    <input type="hidden" name="service_image" id="service_image" />
                                                 </label>
                                             </div>
 

@@ -80,6 +80,17 @@
 
             reader.onloadend = function () {
               var base64data = reader.result;
+              var formData = new FormData();
+              formData.append("service_image", blob, "image.png");
+              $.ajax({
+                type: 'POST',
+                url: '/kbf/api/upload/',
+                data: formData,
+                processData: false,
+                contentType: false
+              }).done(function (data) {
+                console.log(data);
+              });
               $('#uploaded_image').attr('src', base64data);
               $modal.modal('hide');
             };
