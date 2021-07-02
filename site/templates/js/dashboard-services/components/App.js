@@ -54,8 +54,9 @@ class App {
                 reader.onloadend = function(){
                     let base64data = reader.result;
 
-                    $modal.modal('hide');
                     $('#uploaded_image').attr('src', base64data);
+                    
+                    $modal.modal('hide');
                 };
             });
         });

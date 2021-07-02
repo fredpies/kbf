@@ -3,21 +3,57 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-check_redirect(wire('user'));
-
-$pages = wire('pages');
+$templates = wire('templates');
+$input = wire('input');
 $page = wire('page');
-$urls = wire('urls');
 $sanitizer = wire('sanitizer');
 
 $page_title = $sanitizer->text($page->title);
 
-// TODO: Nalezy zmienic na dane zalogowanego uzytkownika/firmy
-$company_page = $pages->get(348487);
+$user = wire('user');
+$company_page = get_user_company($user);
+check_redirect(wire('user'));
 
 $services_group = $company_page->find("name=uslugi");
+
+if ($input->post->service_name) {
+    echo "nazwa: ";
+    echo $input->post->service_name;
+
+// Save in the ProcessWire page tree; map submission to the template fields
+    $np = new Page(); // create new page object
+    $np->template = $templates->get("service");
+    $np->parent = $services_group[0];
+    echo "<br>";
+    echo $np->template;
+
+
+// Match up the sanitized inputs we just got with the template fields
+    $np->of(false);
+    $np->title = $sanitizer->text($input->post->service_name);
+    $np->name = $sanitizer->text($input->post->service_name);
+    $np->service_name = $sanitizer->text($input->post->service_name);
+    $np->service_description = $sanitizer->textarea($input->post->service_description);
+
+    //$np->service_price = $sanitizer->textarea($input->post->service_price);
+
+    echo $np->service_name;
+
+// Save/create the page
+    try {
+        $np->save();
+        echo "saved";
+        $np->service_image = $input->post->service_image;
+        $np->save();
+    } catch (WireException $e) {
+        echo $e;
+    }
+
+}
+
 if ($services_group->count()) $services = $services_group[0]->children();
 else $services = array();
+
 
 ?>
 
@@ -124,19 +160,85 @@ else $services = array();
                                 </div>
 
                                 <div class="tab-pane fade add-service" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
-                                    <p>Formularz dodawania usługi</p>
 
-                                    <div class="image_area w-50">
-                                        <form method="post">
-                                            <label for="upload_image">
-                                                <img src="<?php echo $urls->images ?>image-placeholder.jpg" id="uploaded_image" class="d-block mx-auto img-fluid img-thumbnail" />
-                                                <div class="overlay" id="selectImage">
-                                                    <div class="text">Kliknij aby wybrać obraz.</div>
+                                    <form method="post">
+                                        <div class="row justify-content-center">
+
+                                            <div class="col-12 col-lg-6 mb-3">
+                                                <div class="input-group input-group-lg input-group-round">
+                                                    <label class="text-uppercase px-3">Nazwa usługi:</label>
+                                                    <div class="input-group-inner">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text input-group-icon"><i class="fa fa-shipping-fast"></i></span>
+                                                        </div>
+
+                                                        <input autocomplete="off" type="text" class="form-control form-control-lg"
+                                                               name="service_name"
+                                                               required
+                                                               data-msg-required="Nazwa jest wymagana."
+                                                               data-inputmask-regex="[A-Za-z\sążźćłóęńśĄŻŹĆŁÓĘŃŚ]+"
+                                                        >
+
+                                                        <div class="input-focus-bg"></div>
+                                                    </div>
                                                 </div>
-                                                <input type="file" name="image" class="image" id="upload_image" accept="image/*" style="display:none" />
-                                            </label>
-                                        </form>
-                                    </div>
+                                            </div>
+
+                                            <div class="d-none d-lg-flex col-6">
+                                                <p class="kbf-form-info align-self-center">
+                                                    Wpisz nazwę usługi. <br/>Wypełnienie pola jest wymagane.
+                                                </p>
+                                            </div>
+
+                                            <div class="col-12 mb-4 text-carrot error d-none">W celu wysłania formularza należy wypełnić pole "Nazwa".
+                                            </div>
+
+
+                                            <div class="col-12 col-lg-6 mb-3">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase px-3">Opis:</label>
+                                                    <textarea class="form-control form-round form-control-lg" rows="5" name="service_description" placeholder=""></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="d-none d-lg-flex col-6">
+                                                <p class="kbf-form-info align-self-center">
+                                                    Uzupełnij opis.
+                                                </p>
+                                            </div>
+
+                                            <div class="image_area col-12 col-lg-6">
+                                                <label for="upload_image">
+                                                    <img src="<?php echo $urls->images ?>image-placeholder.jpg" id="uploaded_image" class="d-block mx-auto img-fluid img-thumbnail" />
+                                                    <div class="overlay" id="selectImage">
+                                                        <div class="text">Kliknij aby wybrać obraz.</div>
+                                                    </div>
+                                                    <input type="file" class="image" id="upload_image" accept="image/*" style="display:none" />
+                                                    <input type="hidden" name="service_image" id="service_image" />
+                                                </label>
+                                            </div>
+
+                                            <div class="d-none d-lg-flex col-6">
+                                                <p class="kbf-form-info align-self-center">
+                                                    Wymagania:
+                                                </p>
+                                            </div>
+
+                                            <div class="col-12 col-lg-6 text-center text-md-right align-self-center mt-4">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-12 col-md-6">
+                                                        <button type="button" class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
+                                                            Wróć
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <button type="submit" class="send-cv btn btn-round btn-block shadow-none btn-primary mr-lg-4">Zapisz</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+
 
                                     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
@@ -167,6 +269,7 @@ else $services = array();
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 

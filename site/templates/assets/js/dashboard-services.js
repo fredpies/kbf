@@ -80,8 +80,8 @@
 
             reader.onloadend = function () {
               var base64data = reader.result;
-              $modal.modal('hide');
               $('#uploaded_image').attr('src', base64data);
+              $modal.modal('hide');
             };
           });
         });
