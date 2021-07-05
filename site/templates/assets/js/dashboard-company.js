@@ -222,7 +222,12 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
     value: function triggerStart(buttonElement) {
       var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
 
-      var bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+      var $buttonElement = $(buttonElement);
+      var bgColor;
+      $buttonElement.on('click', function () {
+        console.log('not touch');
+        bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+      });
       this.$preloaderButton.trigger({
         type: 'start-preloader',
         buttonGeometry: buttonGeometry,
@@ -16262,8 +16267,8 @@ var KbfTagify = /*#__PURE__*/function (_EventTarget) {
 
 var config = {
   env: 'dev',
-  url: 'http://localhost',
-  apiEndpoint: 'http://localhost/kbf2/'
+  url: 'https://webplanet.biz',
+  apiEndpoint: 'https://webplanet.biz/kbf/'
 };
 
 function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -16308,24 +16313,26 @@ var KbfAddressAutocomplete = /*#__PURE__*/function (_EventTarget) {
       },
       // Formatuj wyniki
       formatResult: function formatResult(item) {
-        // Aktualizuj dane o adresie
-        instance.currentAddressInfo = {
-          lat: item.lat,
-          lon: item.lon,
-          address: item.address.road,
-          city: item.address.city,
-          zip: item.address.postcode
-        };
-        instance.emitAddressChange();
-        var houseNumber;
         var city;
+        var houseNumber;
 
         if (item.address.house_number) {
           houseNumber = item.address.house_number.toUpperCase();
         } else houseNumber = '';
 
         if (item.address.town) city = item.address.town;
-        if (item.address.city) city = item.address.city;
+        if (item.address.city) city = item.address.city; // Aktualizuj dane o adresie
+
+        instance.currentAddressInfo = {
+          lat: item.lat,
+          lon: item.lon,
+          address: item.address.road,
+          houseNumber: houseNumber,
+          city: city,
+          zip: item.address.postcode
+        };
+        console.log(item);
+        instance.emitAddressChange();
         return {
           id: item.place_id,
           text: item.address.road + ' ' + houseNumber,
@@ -16336,7 +16343,7 @@ var KbfAddressAutocomplete = /*#__PURE__*/function (_EventTarget) {
         // Testuj query przed zapytaniem
         searchPre: function searchPre(query) {
           query = query.replace(new RegExp("_+"), '');
-          var isQueryValid = new RegExp("[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+\\s\\d{1,3}[a-zA-Z]?\\s[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+").test(query);
+          var isQueryValid = new RegExp("[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\\s-]+\\d+[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\\s-]+").test(query);
           if (isQueryValid) return query;else return false;
         },
         // Przygotuj wyniki
@@ -16376,7 +16383,7 @@ var KbfAddressAutocomplete = /*#__PURE__*/function (_EventTarget) {
             detail: instance.currentAddressInfo
           }));
         }
-      }, 500);
+      }, 200);
     }
   }]);
 
@@ -20756,8 +20763,7 @@ var KbfForm = /*#__PURE__*/function () {
     this.lang = lang || 'pl'; // Sprawdz czy formularz o podanej nazwie istnieje
 
     if (!this.formElement) throw errors.formNotFound(this.formName);
-    this.$formElement = $(this.formElement); // this.$submitButton = this.$formElement.find('button[type="submit"]');
-    // Error message
+    this.$formElement = $(this.formElement); // Error message
 
     this.$errorMessageElement = $('.kbf-error-message'); // Sprawdz czy walidator istnieje
 
@@ -20784,26 +20790,16 @@ var KbfForm = /*#__PURE__*/function () {
   _createClass(KbfForm, [{
     key: "init",
     value: function init() {
-      // Ustaw maski
+      var instance = this;
+      this.inputmask = new Inputmask$1(); // Ustaw maski
+
       Array.from(this.formElement.elements).forEach(function (formElement) {
-        new Inputmask$1().mask(formElement);
+        instance.inputmask.mask(formElement);
       });
     }
   }, {
     key: "addListeners",
-    value: function addListeners() {
-      // this.$formElement.on('submit', function (e) {
-      //     e.stopPropagation();
-      //     e.preventDefault();
-      // });
-      //
-      // // Waliduj formularz
-      // this.$submitButton.on('click', function (e) {
-      //     e.stopPropagation();
-      //     instance.$formElement.validate({ ...instance.defaultValidatorConfig, ...instance.validatorConfig });
-      //     instance.handleErrorMessage.call(instance);
-      // });
-    }
+    value: function addListeners() {}
   }, {
     key: "validate",
     value: function validate() {
@@ -20838,7 +20834,6 @@ var KbfTabs = /*#__PURE__*/function () {
     }
 
     if (window.innerWidth < 768) {
-      console.log($('.desktop-tabs'));
       $('.desktop-tabs').remove();
     }
 
@@ -20850,13 +20845,16 @@ var KbfTabs = /*#__PURE__*/function () {
     key: "init",
     value: function init() {
       var $ = window.$;
-      var instance = this; // Inicjuj kontroler formularza jezeli podano nazwe
+      var instance = this;
+      this.$tabToggles = $('[data-toggle="tab"]'); // Taby
+      // Inicjuj kontroler formularza jezeli podano nazwe
 
       if (this.formName) {
-        this.$tabToggles = $('[data-toggle="tab"]'); // Taby
-
         this.formController = new KbfForm({
-          formName: instance.formName
+          formName: instance.formName,
+          onfocusout: false,
+          onfocus: false,
+          onkeyup: false
         });
       }
     }
@@ -20875,8 +20873,12 @@ var KbfTabs = /*#__PURE__*/function () {
   }, {
     key: "validateForm",
     value: function validateForm() {
-      this.formController.validate();
-      this.formIsValid = this.formController.formIsValid;
+      var formExists = $("form[name=\"".concat(this.formName, "\"]")).length > 0;
+
+      if (formExists) {
+        this.formController.validate();
+        this.formIsValid = this.formController.formIsValid;
+      }
     }
   }]);
 
@@ -20896,9 +20898,12 @@ var App = /*#__PURE__*/function () {
     value: function init() {
       // Taby
       this.tabs = new KbfTabs('dashboard-company-edit');
+      this.$form = $('[name="dashboard-company-edit"]');
       this.$submitButton = $('.submit-button');
       this.$cityField = $('[name="company_city"]');
-      this.$zipField = $('[name="company_zip"]'); // Wysiwyg
+      this.$zipField = $('[name="company_zip"]');
+      this.$latField = $('[name="lat"]');
+      this.$lonField = $('[name="lon"]'); // Wysiwyg
       // TODO: Musi byc zmienione, ukryte pole musi byc niezalezne od kontekstu
 
       this.$descriptionFieldHidden = $('[name="company_description_hidden"]');
@@ -20920,11 +20925,17 @@ var App = /*#__PURE__*/function () {
       this.$submitButton.on('click', function (e) {
         e.preventDefault();
         instance.tabs.validateForm();
-        if (instance.tabs.formIsValid) instance.preloaderButton.triggerStart(this);
+
+        if (instance.tabs.formIsValid) {
+          instance.preloaderButton.triggerStart(this);
+          instance.$form.submit();
+        }
       });
       this.addressAutocomplete.on('address-change', function (e) {
-        instance.$cityField.val(e.detail.city);
-        instance.$zipField.val(e.detail.zip);
+        instance.$cityField.attr('value', e.detail.city);
+        instance.$zipField.attr('value', e.detail.zip);
+        instance.$latField.attr('value', e.detail.lat);
+        instance.$lonField.attr('value', e.detail.lon);
       });
     }
   }]);

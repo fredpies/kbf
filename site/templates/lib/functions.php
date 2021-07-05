@@ -1449,6 +1449,7 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             $field->label = "Kod pocztowy";
             $field->name = $fieldName;
             $field->description = "Kod pocztowy pobrany z rejestru";
+            $field->inputmask = "\d{2}-\d{3}";
 
             if ($required) {
                 $field->required = true;

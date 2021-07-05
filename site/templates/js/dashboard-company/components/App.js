@@ -19,10 +19,13 @@ class App {
         // Taby
         this.tabs = new KbfTabs('dashboard-company-edit');
 
+        this.$form = $('[name="dashboard-company-edit"]');
         this.$submitButton = $('.submit-button');
 
         this.$cityField = $('[name="company_city"]');
         this.$zipField = $('[name="company_zip"]');
+        this.$latField = $('[name="lat"]');
+        this.$lonField = $('[name="lon"]');
 
         // Wysiwyg
         // TODO: Musi byc zmienione, ukryte pole musi byc niezalezne od kontekstu
@@ -42,8 +45,6 @@ class App {
         // Address autocomplete
         this.addressAutocomplete = new KbfAddressAutocomplete('[name="company_address"]');
 
-
-
     }
 
     addListeners() {
@@ -53,14 +54,18 @@ class App {
         this.$submitButton.on('click', function (e) {
             e.preventDefault();
             instance.tabs.validateForm();
-            if(instance.tabs.formIsValid) instance.preloaderButton.triggerStart(this);
+            if(instance.tabs.formIsValid) {
+                instance.preloaderButton.triggerStart(this);
+                instance.$form.submit();
+            }
         });
 
         this.addressAutocomplete.on('address-change', function (e) {
-            instance.$cityField.val(e.detail.city);
-            instance.$zipField.val(e.detail.zip);
+            instance.$cityField.attr('value', e.detail.city);
+            instance.$zipField.attr('value', e.detail.zip);
+            instance.$latField.attr('value', e.detail.lat);
+            instance.$lonField.attr('value', e.detail.lon);
         })
-
     }
 
 }

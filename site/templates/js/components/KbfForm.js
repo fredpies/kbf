@@ -50,15 +50,18 @@ class KbfForm {
 
     init() {
 
+        let instance = this;
+        this.inputmask = new Inputmask();
+
         // Ustaw maski
         Array.from(this.formElement.elements).forEach(function (formElement) {
-            new Inputmask().mask(formElement)
+                instance.inputmask.mask(formElement)
+
         })
 
     }
 
     addListeners() {
-
     }
 
     validate() {

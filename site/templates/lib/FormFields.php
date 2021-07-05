@@ -54,7 +54,7 @@ class FormField
             }
 
             if (!empty($this->placeholderMap["{inputmask}"])) {
-                $this->placeholderMap["{inputmask}"] = 'data-inputmask-regex="' . $this->placeholderMap["{inputmask}"] . '"';
+                $this->placeholderMap["{inputmask}"] = 'data-inputmask-greedy="false" data-inputmask-regex="' . $this->placeholderMap["{inputmask}"] . '"';
             }
 
             if (empty($this->placeholderMap["{className}"])) {

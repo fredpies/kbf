@@ -34,19 +34,8 @@ class KbfAddressAutocomplete extends EventTarget {
             // Formatuj wyniki
             formatResult: function (item) {
 
-                // Aktualizuj dane o adresie
-                instance.currentAddressInfo = {
-                        lat: item.lat,
-                        lon: item.lon,
-                        address: item.address.road,
-                        city: item.address.city,
-                        zip: item.address.postcode,
-                };
-
-                instance.emitAddressChange();
-
-                let houseNumber;
                 let city;
+                let houseNumber;
 
                 if (item.address.house_number) {
                     houseNumber = item.address.house_number.toUpperCase();
@@ -55,6 +44,19 @@ class KbfAddressAutocomplete extends EventTarget {
                 if (item.address.town) city = item.address.town;
                 if (item.address.city) city = item.address.city;
 
+                // Aktualizuj dane o adresie
+                instance.currentAddressInfo = {
+                        lat: item.lat,
+                        lon: item.lon,
+                        address: item.address.road,
+                        houseNumber,
+                        city,
+                        zip: item.address.postcode,
+                };
+
+                console.log(item);
+
+                instance.emitAddressChange();
 
                 return {
                     id: item.place_id,
@@ -69,7 +71,7 @@ class KbfAddressAutocomplete extends EventTarget {
                 searchPre: function (query) {
 
                     query = query.replace(new RegExp("_+"), '');
-                    let isQueryValid = new RegExp("[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+\\s\\d{1,3}[a-zA-Z]?\\s[a-zA-ZńółęśźżŃÓŁĘŚŹŻ]+").test(query);
+                    let isQueryValid = new RegExp("[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\\s-]+\\d+[a-zA-ZńółęśźżŃÓŁĘŚŹŻ\\s-]+").test(query);
                     if (isQueryValid ) return query;
                     else return false;
 
@@ -120,7 +122,7 @@ class KbfAddressAutocomplete extends EventTarget {
                     instance.emit(new CustomEvent('address-change', { detail: instance.currentAddressInfo }))
                 }
 
-        }, 500);
+        }, 200);
 
     }
 }
