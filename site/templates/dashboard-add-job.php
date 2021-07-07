@@ -6,17 +6,18 @@ include_once "lib/FormRenderer.class.php";
 include_once "lib/StepperRenderer.class.php";
 include_once "lib/Alert.class.php";
 
-check_redirect(wire('user'));
-
 $templates = wire('templates');
 $page = wire('page');
+$user = wire('user');
 $pages = wire('pages');
 $urls = wire('urls');
 $sanitizer = wire('sanitizer');
 
+check_user($user);
+check_user_company(get_user_company($user));
+
 $job_template = $templates->get('job');
 $job_fields = $job_template->fields;
-
 
 // Stepper
 $stepper = new StepperRenderer("kbf-stepper");

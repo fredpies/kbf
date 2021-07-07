@@ -24,16 +24,10 @@ http_response_code($statuscode);
 
     if (Request::is('post')) {
 
-        $file_name = $_FILES["attachment"]["name"];
-        $tmp_file_name = $_FILES["attachment"]["tmp_name"];
-        $target_file = '/home/wplanet/public_html/webplanet.biz/kbf/site/templates/temp/' . basename($file_name);
-        move_uploaded_file($tmp_file_name, $target_file);
-
         $mailData = array(
             "to" => $input->post->to,
             "from" => $input->post->from,
             "subject" => $input->post->subject,
-            "targetFile" => $target_file,
             "bodyHTML" => $input->post->bodyHTML
         );
 

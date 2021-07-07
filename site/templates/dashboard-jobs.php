@@ -3,8 +3,7 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-check_redirect(wire('user'));
-
+$user = wire('user');
 $urls = wire('urls');
 $page = wire('page');
 $pages = wire('pages');
@@ -13,7 +12,10 @@ $sanitizer = wire('sanitizer');
 $page_title = $sanitizer->text($page->title);
 $input = wire('input');
 
+check_user($user);
 $company_page = $pages->get($session->company_page_id);
+check_user_company($company_page);
+
 $jobs_container = $company_page->get('title=Oferty Pracy');
 
 // Przetwarzanie formularza
@@ -115,17 +117,13 @@ if ($input->post('action')) {
     }
 
     // USUWANIE
-
     if ($input->post->action === 'delete-job') {
         delete_page($sanitizer->int($input->post->job_id));
     }
-
 }
-
 
 $jobs = $jobs_container->find('template=job');
 $pagination = get_pagination($jobs);
-
 
 // Modal
 $modalMarkup = '
@@ -137,7 +135,6 @@ $modalMarkup = '
         <input type="hidden" name="action" value="delete-job">
         <input type="hidden" name="job_id">   
     </form>
-
 ';
 
 ?>

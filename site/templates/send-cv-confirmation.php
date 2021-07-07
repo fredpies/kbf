@@ -20,8 +20,16 @@ if (isset($input->job_id)) {
 }
 else $session->redirect($home_page_url);
 
+$company_page = $pages->get("template=company,company_id=$company_id");
+$company_page->of(false);
+$current_cv_counter = $sanitizer->int($company_page->company_cv_counter);
+$current_cv_counter = ++$current_cv_counter;
+$company_page->company_cv_counter = $current_cv_counter;
+$company_page->save();
+$company_page->of(true);
+
 // Przygotuj dane
-$company_data = sanitize_company_data($pages->get("template=company,company_id=$company_id"));
+$company_data = sanitize_company_data($company_page);
 $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
 
 ?>

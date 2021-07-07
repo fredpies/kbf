@@ -5,17 +5,16 @@ include_once "lib/functions.php";
 include_once "lib/FormRenderer.class.php";
 include_once "lib/TabsRenderer.class.php";
 
-check_redirect(wire('user'));
-
 $session = wire('session');
+$page = wire('page');
 $pages = wire('pages');
 $user = wire('user');
-
-if ($session->company_page_id !== $user->company_id ) $session->redirect($pages->get('template=dashboard')->url); // Przekieruj na dashboard jezeli uzytkownik nie ma prawa edycji
-
-$page = wire('page');
+$sanitizer = wire('sanitizer');
 $input = wire('input');
 $urls = wire('urls');
+
+check_user($user);
+check_user_company(get_user_company($user));
 
 if (!$input->get('id')) $session->redirect($pages->get('template=dashboard')->url); // Przekieruj na dashboard jezeli nie podano id
 $editId = $input->get('id');
@@ -23,8 +22,6 @@ $editId = $input->get('id');
 // Dane oferty pracy
 $job_page = $pages->get($editId);
 $job_page_data = sanitize_job_data($job_page);
-
-$sanitizer = wire('sanitizer');
 
 $page_title = $sanitizer->text($page->title);
 $job_fields = $job_page->fields;
@@ -67,12 +64,10 @@ $job_province_name_field->name = "province_name";
 $job_province_name_field->value = $job_page_data["job_province_name"];
 $job_province_name_field->className = "col-12";
 
-
 // Wojewodztwo ukryte
 $job_province_name_hidden_field = getFormField("hidden");
 $job_province_name_hidden_field->name = "job_province_name";
 $job_province_name_hidden_field->value = $job_page_data["job_province_name"];
-
 
 // Opis  pole ukryte - hack
 $job_description_hidden = getFormField('hidden');
@@ -96,7 +91,6 @@ $form->addMarkup($job_description_hidden->render(), true);
 $form->addMarkup($job_description_field->render(), true);
 
 // Obowiazki
-
 $responsibilities_repeater = $job_page_data["job_responsibilities"];
 $responsibilities = array();
 foreach ($responsibilities_repeater as $responsibility_repeater) {
@@ -104,7 +98,6 @@ foreach ($responsibilities_repeater as $responsibility_repeater) {
 }
 
 // Wymagania
-
 $requirements_repeater = $job_page_data["job_requirements"];
 $requirements = array();
 foreach ($requirements_repeater as $requirement_repeater) {
@@ -112,7 +105,6 @@ foreach ($requirements_repeater as $requirement_repeater) {
 }
 
 // Oferta
-
 $offers_repeater = $job_page_data["job_offers"];
 $offers = array();
 foreach ($offers_repeater as $offer_repeater) {

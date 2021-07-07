@@ -3,16 +3,17 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$user = wire('user');
 $templates = wire('templates');
 $input = wire('input');
 $page = wire('page');
 $sanitizer = wire('sanitizer');
 
-$page_title = $sanitizer->text($page->title);
-
-$user = wire('user');
+check_user($user);
 $company_page = get_user_company($user);
-check_redirect(wire('user'));
+check_user_company($company_page);
+
+$page_title = $sanitizer->text($page->title);
 
 $services_group = $company_page->find("name=uslugi");
 

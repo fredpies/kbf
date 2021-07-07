@@ -23,9 +23,6 @@ class KbfForm {
         // Sprawdz czy walidator istnieje
         if (!$.fn.validate) throw errors.noValidator();
 
-        // Konfiguracja walidatora
-        this.validatorConfig = formConfig.validator;
-
         // Domyslna konfiguracja walidatora
         this.defaultValidatorConfig = {
 
@@ -65,7 +62,8 @@ class KbfForm {
     }
 
     validate() {
-        this.$formElement.validate({ ...this.defaultValidatorConfig, ...this.validatorConfig });
+
+        this.$formElement.validate({ ...this.defaultValidatorConfig, ...this.formConfig });
         this.handleErrorMessage();
     }
 

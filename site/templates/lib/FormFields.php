@@ -18,6 +18,8 @@ class FormField
         "{msgRequired}" => "",
         "{inputmask}" => "",
         "{value}" => "",
+        "{name}" => "",
+        "{id}" => "",
         "{className}" => "",
         "{description}" => "",
         "{descriptionMarkup}" => ""
@@ -59,6 +61,10 @@ class FormField
 
             if (empty($this->placeholderMap["{className}"])) {
                 $this->placeholderMap["{className}"] = 'col-12 col-lg-6 mb-3';
+            }
+
+            if (!empty($this->placeholderMap["{id}"])) {
+                $this->placeholderMap["{id}"] = 'id="' . $this->placeholderMap["{id}"] . '"';
             }
 
             return replacePlaceholders($this->placeholderMap, $template);
@@ -234,7 +240,7 @@ class FormFieldPassword extends FormField
                             </div>
 
                             <input autocomplete="off" type="password" class="form-control"
-                                   name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
+                                   name="{name}" {id} {disabled} {required} {msgRequired} {inputmask} value="{value}">
 
                             <div class="input-focus-bg"></div>
 

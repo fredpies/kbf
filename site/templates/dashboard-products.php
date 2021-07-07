@@ -3,17 +3,20 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-check_redirect(wire('user'));
+check_user(wire('user'));
 
 $pages = wire('pages');
 $page = wire('page');
+$session = wire('session');
+$user = wire('user');
 $urls = wire('urls');
 $sanitizer = wire('sanitizer');
 
 $page_title = $sanitizer->text($page->title);
 
-// TODO: Nalezy zmienic na dane zalogowanego uzytkownika/firmy
-$company_page = $pages->get(348487);
+check_user($user);
+$company_page = $pages->get($session->company_page_id);
+check_user_company($company_page);
 
 $products_group = $company_page->find("title=Produkty");
 if ($products_group->count()) $products = $products_group[0]->children();

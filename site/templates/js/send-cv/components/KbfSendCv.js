@@ -26,8 +26,7 @@ class KbfSendCv extends KbfForm {
         this.$submitButton = $('button.send-cv[type="submit"]');
         this.formData = new FormData();
 
-        // this.preloaderButton = new KbfPreloaderButton('button.send-cv[type="submit"]');
-
+        this.preloaderButton = new KbfPreloaderButton('button.send-cv[type="submit"]');
 
     }
 
@@ -42,7 +41,7 @@ class KbfSendCv extends KbfForm {
 
             instance.formData.append('subject', `Aplikacja na stanowisko: "${instance.$jobNameField.val()}"`);
             instance.formData.append('to', instance.$companyEmailField.val());
-            instance.formData.append('from', 'administrator@webplanet.biz');
+            instance.formData.append('from', 'administrator@webplanet.biz'); //TODO: Zmiana wg configa
 
             instance.formData.append('name', instance.$nameField.val());
             instance.formData.append('phone', instance.$phoneField.val());
@@ -71,8 +70,7 @@ class KbfSendCv extends KbfForm {
                     processData: false,
                     contentType: false,
 
-                }).done(function (res) {
-                    console.log(res);
+                }).done(function () {
                     window.location.replace(window.location.protocol + '//' + instance.hostname + instance.$confirmationPageURLField.val() + `?company_id=${instance.$companyIdField.val()}&job_id=${instance.$jobIdField.val()}`);
 
                 }).fail(function () {

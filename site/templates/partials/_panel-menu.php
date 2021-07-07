@@ -86,9 +86,9 @@ $company_page = get_user_company($user);
                             <span class="pl-3">Dane firmy</span>
                         </div>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
+                    <a href="<?= $pages->get('template=dashboard-change-password')->url ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <div class="d-flex align-items-center">
-                            <span class="pl-3">Hasło</span>
+                            <span class="pl-3">Zmiana hasła</span>
                         </div>
                     </a>
                     <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">

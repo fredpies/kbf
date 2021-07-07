@@ -3,10 +3,12 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-check_redirect(wire('user'));
-
 $page = wire('page');
+$user = wire('user');
 $sanitizer = wire('sanitizer');
+
+check_user($user);
+check_user_company(get_user_company($user));
 
 $page_title = $sanitizer->text($page->title);
 

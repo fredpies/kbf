@@ -5,7 +5,7 @@ include_once "lib/functions.php";
 include_once "lib/FormRenderer.class.php";
 include_once "lib/TabsRenderer.class.php";
 
-check_redirect(wire('user'));
+check_user(wire('user'));
 
 $pages = wire('pages');
 $page = wire('page');
@@ -24,7 +24,8 @@ $company_fields = $company_page->fields;
 if (isset($input->post->company_id) && $input->post->action === 'update-company') {
 
     if ($user->company_id === $sanitizer->int($input->post->company_id) && $user->company_id = $session->company_page_id) {
-        $company_page->of(false);
+
+        $page_data = array();
 
         // Przygotuj slowa kluczowe
         if (!empty($input->post->company_keywords)) {
@@ -35,20 +36,19 @@ if (isset($input->post->company_id) && $input->post->action === 'update-company'
             foreach ($company_keywords_field as $keyword) array_push($keywords, $keyword->value);
             $company_keywords_field = implode(',', $keywords);
             $keywords = $company_keywords_field;
-            $company_page->company_keywords = $keywords;
+            $page_data["company_keywords"] = $keywords;
 
         }
 
-        if (!empty($input->post->company_address)) $company_page->company_address = $input->post->company_address;
-        if (!empty($input->post->company_description_html)) $company_page->company_description_html = $input->post->company_description_html;
-        if (!empty($input->post->company_phone_1)) $company_page->company_phone_1 = $input->post->company_phone_1;
-        if (!empty($input->post->company_phone_2)) $company_page->company_phone_2 = $input->post->company_phone_2;
-        if (!empty($input->post->company_fax)) $company_page->fax = $input->post->company_fax;
-        if (!empty($input->post->lat)) $company_page->lat = $input->post->lat;
-        if (!empty($input->post->lon)) $company_page->lon = $input->post->lon;
+        if (isset($input->post->company_address)) $page_data["company_address"] = $input->post->company_address;
+        if (isset($input->post->company_description_html)) $page_data["company_description_html"] = $input->post->company_description_html;
+        if (isset($input->post->company_phone_1)) $page_data["company_phone_1"] = $input->post->company_phone_1;
+        if (isset($input->post->company_phone_2)) $page_data["company_phone_2"] = $input->post->company_phone_2;
+        if (isset($input->post->company_fax)) $page_data["company_fax"] = $input->post->company_fax;
+        if (isset($input->post->lat)) $page_data["lat"] = $input->post->lat;
+        if (isset($input->post->lon)) $page_data["lon"] = $input->post->lon;
 
-        $company_page->save();
-        $company_page->of(true);
+        update_page($sanitizer->int($input->post->company_id), $page_data);
 
     }
 }
@@ -169,7 +169,7 @@ $form_4->addMarkup($modal, true);
 
 $button_markup = '<div class="row justify-content-center mt-4">
                     <div class="col-12 col-sm-6">
-                        <button type="submit" class="submit-button btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
+                        <button type="submit" class="submit-button btn btn-round btn-primary mb-4 mx-2 mx-lg-0 w-100">Zapisz zmiany</button>
                     </div>
                   </div>';
 

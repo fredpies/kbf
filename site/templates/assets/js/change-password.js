@@ -23,42 +23,6 @@
     return Constructor;
   }
 
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-
-  function _superPropBase(object, property) {
-    while (!Object.prototype.hasOwnProperty.call(object, property)) {
-      object = _getPrototypeOf(object);
-      if (object === null) break;
-    }
-
-    return object;
-  }
-
-  function _get(target, property, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get = Reflect.get;
-    } else {
-      _get = function _get(target, property, receiver) {
-        var base = _superPropBase(target, property);
-        if (!base) return;
-        var desc = Object.getOwnPropertyDescriptor(base, property);
-
-        if (desc.get) {
-          return desc.get.call(receiver);
-        }
-
-        return desc.value;
-      };
-    }
-
-    return _get(target, property, receiver || target);
-  }
-
   function _setPrototypeOf(o, p) {
     _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
@@ -113,6 +77,13 @@
     }
 
     return _assertThisInitialized(self);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
   }
 
   function _defineProperty(obj, key, value) {
@@ -4534,9 +4505,7 @@
 
       this.$errorMessageElement = $('.kbf-error-message'); // Sprawdz czy walidator istnieje
 
-      if (!$.fn.validate) throw errors.noValidator(); // Konfiguracja walidatora
-
-      this.validatorConfig = formConfig.validator; // Domyslna konfiguracja walidatora
+      if (!$.fn.validate) throw errors.noValidator(); // Domyslna konfiguracja walidatora
 
       this.defaultValidatorConfig = {
         ignore: [],
@@ -4570,7 +4539,7 @@
     }, {
       key: "validate",
       value: function validate() {
-        this.$formElement.validate(_objectSpread(_objectSpread({}, this.defaultValidatorConfig), this.validatorConfig));
+        this.$formElement.validate(_objectSpread(_objectSpread({}, this.defaultValidatorConfig), this.formConfig));
         this.handleErrorMessage();
       } // Ustawia error message jezeli istnieje
 
@@ -4756,136 +4725,83 @@
 
   KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
-  var config = {
-    env: 'dev',
-    url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf/'
-  };
-
   function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
   function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-  var KbfSendCv = /*#__PURE__*/function (_KbfForm) {
-    _inherits(KbfSendCv, _KbfForm);
+  var App = /*#__PURE__*/function (_KbfForm) {
+    _inherits(App, _KbfForm);
 
-    var _super = _createSuper(KbfSendCv);
+    var _super = _createSuper(App);
 
-    function KbfSendCv() {
-      _classCallCheck(this, KbfSendCv);
+    function App() {
+      var _this;
 
-      return _super.call(this, {
-        formName: 'send-cv'
+      _classCallCheck(this, App);
+
+      _this = _super.call(this, {
+        formName: 'change-password',
+        rules: {
+          pass: {
+            minlength: 8
+          },
+          'pass-new': {
+            minlength: 8
+          },
+          'pass-repeat': {
+            minlength: 8,
+            equalTo: "#pass-new"
+          }
+        },
+        messages: {
+          pass: {
+            minlength: 'Hasło musi posiadać minimum 8 znaków.'
+          },
+          'pass-new': {
+            minlength: 'Hasło musi posiadać minimum 8 znaków.'
+          },
+          'pass-repeat': {
+            minlength: 'Hasło musi posiadać minimum 8 znaków.',
+            equalTo: 'Hasła nie mogą się różnić.'
+          }
+        }
       }, 'pl');
+
+      _this.init();
+
+      _this.addListeners();
+
+      return _this;
     }
 
-    _createClass(KbfSendCv, [{
+    _createClass(App, [{
       key: "init",
       value: function init() {
-        _get(_getPrototypeOf(KbfSendCv.prototype), "init", this).call(this);
-
-        this.$jobNameField = $('input[name="job_name"]');
-        this.$jobURLField = $('input[name="job_url"]');
-        this.$confirmationPageURLField = $('input[name="confirmation_page_url"]');
-        this.$jobIdField = $('input[name="job_id"]');
-        this.$nameField = $('input[name="name"]');
-        this.$phoneField = $('input[name="phone"]');
-        this.$emailField = $('input[name="email"]');
-        this.$companyEmailField = $('input[name="company_email"]');
-        this.$companyIdField = $('input[name="company_id"]');
-        this.$attachmentField = $('input[name="attachment"]');
-        this.$submitButton = $('button.send-cv[type="submit"]');
-        this.formData = new FormData();
-        this.preloaderButton = new KbfPreloaderButton('button.send-cv[type="submit"]');
+        this.formElement = $('form[name="change-password"]');
+        this.$submitButton = $('.submit-button');
+        new KbfPreloaderButton('.back-button');
       }
     }, {
       key: "addListeners",
       value: function addListeners() {
         var instance = this;
         this.$submitButton.on('click', function (e) {
+          e.stopPropagation();
           e.preventDefault();
-          instance.hostname = window.location.hostname;
-          instance.formData.append('subject', "Aplikacja na stanowisko: \"".concat(instance.$jobNameField.val(), "\""));
-          instance.formData.append('to', instance.$companyEmailField.val());
-          instance.formData.append('from', 'administrator@webplanet.biz');
-          instance.formData.append('name', instance.$nameField.val());
-          instance.formData.append('phone', instance.$phoneField.val());
-          instance.formData.append('email', instance.$emailField.val());
-          instance.formData.append('attachment', instance.$attachmentField[0].files[0]);
-          var message = "\n                <p style=\"font-weight: bold\">Dzie\u0144 dobry.</p>\n                <p>W za\u0142\u0105czeniu przesy\u0142am swoj\u0105 aplikacj\u0119.</p>\n                <p>Link do og\u0142oszenia : <a href=\"".concat(instance.hostname + instance.$jobURLField.val(), "\">").concat(instance.hostname + instance.$jobURLField.val(), "</a> </p>\n                <p>Dane kontaktowe :</p>\n                <p>Numer telefonu: ").concat(instance.$phoneField.val(), "</p>\n                <p>Adres e-mail: ").concat(instance.$emailField.val(), "</p>\n                <p style=\"font-weight: bold\">Pozdrawiam,</p>\n                <p>").concat(instance.$nameField.val(), "</p>\n            ");
-          instance.formData.append('bodyHTML', message);
           instance.validate();
 
           if (instance.formIsValid) {
-            $.ajax("".concat(config.apiEndpoint, "api/mail-cv/"), {
-              type: 'POST',
-              data: instance.formData,
-              processData: false,
-              contentType: false
-            }).done(function () {
-              window.location.replace(window.location.protocol + '//' + instance.hostname + instance.$confirmationPageURLField.val() + "?company_id=".concat(instance.$companyIdField.val(), "&job_id=").concat(instance.$jobIdField.val()));
-            }).fail(function () {
-              console.log('Error sending CV.');
-            });
+            instance.formElement.submit();
           }
         });
       }
-    }]);
-
-    return KbfSendCv;
-  }(KbfForm);
-
-  var KbfBackButton = /*#__PURE__*/function () {
-    function KbfBackButton(selector) {
-      _classCallCheck(this, KbfBackButton);
-
-      var $ = window.$;
-      this.$backButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
-
-      if (!selector || this.$backButton.length === 0) throw errors.elementNotFound(selector);
-      this.init(selector);
-      this.addListeners();
-    }
-
-    _createClass(KbfBackButton, [{
-      key: "init",
-      value: function init(selector) {
-        this.preloaderButton = new KbfPreloaderButton(selector);
-        this.$backButton.hide();
-        if (window.history.length > 1) this.$backButton.show();
-      }
     }, {
-      key: "addListeners",
-      value: function addListeners() {
-        if (window.history.length > 1) {
-          this.$backButton.on('click', function () {
-            window.history.back();
-          });
-        }
-      }
-    }]);
-
-    return KbfBackButton;
-  }();
-
-  var App = /*#__PURE__*/function () {
-    function App() {
-      _classCallCheck(this, App);
-
-      this.init();
-    }
-
-    _createClass(App, [{
-      key: "init",
-      value: function init() {
-        new KbfSendCv(); // Inicjuj formularz
-
-        new KbfBackButton('.kbf-back-button');
-      }
+      key: "sendConfirmationLink",
+      value: function sendConfirmationLink() {}
     }]);
 
     return App;
-  }();
+  }(KbfForm);
 
   (function ($) {
     $(document).ready(function () {
@@ -4894,4 +4810,4 @@
   })(window.$);
 
 }());
-//# sourceMappingURL=send-cv.js.map
+//# sourceMappingURL=change-password.js.map

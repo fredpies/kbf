@@ -945,10 +945,20 @@ function render_dashboard_product_inventory_list_item($product_data) {
 }
 
 // Sprawdza czy przekierowac na login
-function check_redirect($user) {
+function check_user($user) {
     $session = wire('session');
     $pages = wire('pages');
-    if (!$user->isLoggedIn()) $session->redirect($pages->get('template=login')->url);
+    if (!$user->isLoggedIn() || $user->activated === 0) $session->redirect($pages->get('template=login')->url);
+}
+
+// Sprawdza czy uzytkownik posiada firme
+function check_user_company($company_page) {
+
+    $session = wire('session');
+    $pages = wire('pages');
+
+    if (!isset($company_page)) $session->redirect($pages->get(1)->url); // Przekieruj na strone glowna jezeli konto nie jest zwiazane z firma
+
 }
 
 // Pobiera strone firmy zalogowanego uzytkownika
@@ -1130,7 +1140,6 @@ function get_lat_lon($street, $city, $zip = "")
 // Pobiera liste adresow
 function get_addresses($query)
 {
-
 
     $request_url = "https://nominatim.openstreetmap.org/search?q=" . $query . "&addressdetails=1&format=json&polygon=0&email=pawel.kwiecien@webplanet.biz";
 
@@ -1763,10 +1772,26 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
                 $field->icon = "fa-lock";
                 return $field;
             }
+        }
+
+        case "pass-repeat": {
+            {
+                $field = new FormFieldPassword($disabled);
+                $field->label = "Hasło";
+                $field->name = $fieldName;
+                $field->description = "Powtórz nowe hasło.";
+
+                if ($required) {
+                    $field->required = true;
+                    $field->msgRequired = "Hasła różnią się od siebie. Sprawdź poprawność wypełnienia pola.";
+                }
+
+                $field->icon = "fa-lock";
+                return $field;
+            }
 
 
         }
-
     }
 
 
@@ -1775,7 +1800,6 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 /****************
  *  PROCESSWIRE
  * *************/
-
 
 function update_repeater_values($repeater_data = array()) {
 
@@ -1889,10 +1913,10 @@ function mailTo($mailData) {
     $mail->from($mailData["from"]);
     $mail->fromName('KBF');
     $mail->bodyHTML($mailData["bodyHTML"]);
-    $mail->attachment($mailData["targetFile"]);
+    if (isset($mailData["targetFile"]) && !empty($mailData["targetFile"])) $mail->attachment($mailData["targetFile"]);
 
     $c = $mail->send();
-    unlink($mailData["targetFile"]);
+    if (isset($mailData["targetFile"]) && !empty($mailData["targetFile"])) unlink($mailData["targetFile"]);
 
     return array(
         "status" => "sent",

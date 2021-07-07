@@ -10,8 +10,9 @@ $user = wire('user');
 $pages = wire('pages');
 $session = wire('session');
 
-check_redirect($user);
+check_user($user);
 $company_page = get_user_company($user);
+check_user_company($company_page);
 
 if (!$session->company_page_id) {
     if ($company_page) {

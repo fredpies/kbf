@@ -3,7 +3,7 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-check_redirect(wire('user'));
+check_user(wire('user'));
 
 $page = wire('page');
 $sanitizer = wire('sanitizer');
