@@ -3,6 +3,9 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$page = wire('pages');
+$pages = wire('pages');
+
 // Przygotuj dane o firmie
 $company_data = sanitize_company_data($page->parent("template=company"));
 $lat = $company_data["lat"];

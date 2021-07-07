@@ -1,11 +1,19 @@
 <?php namespace ProcessWire;
 
 
+$page = wire('page');
 $pages = wire('pages');
 $urls = wire('urls');
 $user = wire('user');
 $input = wire('input');
 $session = wire('session');
+$sanitizer = wire('sanitizer');
+
+// Aktualny template
+$template_name = $sanitizer->text($page->template);
+
+// Lista szablonow dla ktorych nie wyswietlac menu
+$no_menu_templates = array('register-company', 'choose-registration');
 
 // Strona glowna
 $home_page_url = $pages->get(1)->url;
@@ -45,6 +53,9 @@ if ($input->post('action', 'text'))
                     <a href="<?php echo $home_page_url; ?>"><img src="<?php echo $urls->images ?>logo-kbf.png"
                                                                  alt="logo"/></a>
                 </div>
+
+                <?php if (!in_array($template_name, $no_menu_templates)) {?>
+
                 <!-- Burger menu -->
                 <div class="burger-menu">
                     <div class="line-menu line-half first-line"></div>
@@ -59,7 +70,7 @@ if ($input->post('action', 'text'))
                             if ($company_page) {
                                 echo '<a href="' . $pages->get("template=dashboard")->url . '">Panel zarządzania</a>';
                             } else
-                                echo '<a href="' . $pages->get("template=register-company")->url . '">Dodaj firmę</a>';
+                                echo '<a href="' . $pages->get("template=choose-registration")->url . '">Rejestracja</a>';
 
                             ?>
 
@@ -144,6 +155,9 @@ if ($input->post('action', 'text'))
 
                     </ul>
                 </nav>
+
+                <?php } ?>
+
             </div>
         </div>
     </div>
