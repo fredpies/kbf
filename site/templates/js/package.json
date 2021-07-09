@@ -20,6 +20,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-replace": "^2.4.2",
+    "alpinejs": "^3.2.1",
     "animate.css": "^3.7.2",
     "app-datepicker": "^4.5.3",
     "babelrc-rollup": "^3.0.0",

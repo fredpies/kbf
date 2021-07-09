@@ -6,8 +6,22 @@ include_once "lib/functions.php";
 check_user(wire('user'));
 
 $page = wire('page');
+$pages = wire('pages');
+$urls = wire('urls');
 $sanitizer = wire('sanitizer');
+
 $page_title = $sanitizer->text($page->title);
+
+// Modal
+$modalMarkup = '
+
+    <h5 class="text-center">Jesteś pewien, że chcesz usunąć produkt z listy ulubionych ?</h5>
+    <div class="row mt-5">
+        <div @click.window="removeFromFavourites" class="col"><button type="submit" class="confirm-button btn btn-round btn-danger w-100">Usuń</button></div>
+        <div class="col"><button data-dismiss="modal" type="button" class="cancel-button btn btn-round btn-success w-100">Anuluj</button></div>
+    </div>
+';
+
 
 ?>
 
@@ -43,79 +57,58 @@ $page_title = $sanitizer->text($page->title);
                     <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
-                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
+                            <nav class="d-none d-sm-block" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3 mb-sm-0">
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard')->url ?>">Panel</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
+                                </ol>
+                            </nav>
 
-                            <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                    <a href="#">
-                                        <img src="<?php echo $urls->images ?>tmp/p1.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                    </a>
+                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left pl-3"><?= $page_title ?></h5>
+
+                            <!-- Favorite companies -->
+                            <div x-data="KbfFavouriteProducts()">
+
+                                <template x-for="favouriteProduct in favouriteProducts" :key="favouriteProduct.product_id">
+                                    <div class="row bg-white rounded-lg shadow-sm p-4 mb-4 company-list-item">
+
+                                        <div class="col-12 col-sm-2 p-xl-4">
+                                            <img :src="favouriteProduct.product_first_image_url" alt="image" class="product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail">
+                                        </div>
+
+                                        <div class="col-12 col-sm-8 col-xl-7 text-center text-sm-left">
+
+                                            <a class="product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left" :href="favouriteProduct.product_url">
+                                                <span x-text="favouriteProduct.product_name"></span></a>
+                                            <div class="product-description font-weight-300 text-sm-left">
+                                                <p></p><p x-text="favouriteProduct.product_description"></p>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-12 col-sm-2 col-xl-2 mt-2 mt-sm-0 text-center text-sm-right">
+                                            <a @click.self.prevent="companyToDelete = Number($el.dataset.companyId); elementToFadeOut = $el.parentElement.parentElement" :data-company-id="favouriteProduct.company_id" data-toggle="modal" href="#confirmation" class="mr-n1" title="usun">Usuń</a>
+                                        </div>
+
+
+                                    </div>
+
+                                </template>
+
+                                <div x-show="favouriteProducts.length === 0">
+                                    <?= render_info_message('Nie posiadasz aktualanie produktów dodanych do listy ulubionych.<div style="height: 0" class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'); ?>
                                 </div>
 
-                                <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
-                                    <a href="#">
-                                        <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'><span>KEMON YO COND CLEAR COLOR SYSTEM ODŻYWKA PIELĘGNUJĄCA KOLOR WŁOSÓW 250ML</span></p>
-                                    </a>
+                                <?= render_modal("confirmation", "Potwierdzenie", $modalMarkup) ?>
+
+                                <div class="row justify-content-center mt-4">
+                                    <div class="col-12 col-sm-6">
+                                        <a href="<?= $pages->get('template=dashboard')->url ?>" class="preloader-button btn btn-round cursor-pointer btn-secondary mb-4 mx-2 mx-lg-0 w-100 text-white">Powrót</a>
+                                    </div>
                                 </div>
 
-                                <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                    <span class='product-price badge badge-pill badge-danger d-inline-block'>75 PLN</span>
-                                </div>
-
-                                <div class='col-12 col-sm-3 col-xl-2 mt-2 mt-sm-0 text-center text-sm-left'>
-                                    <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Oferta</a>
-                                    <a href="#" class="d-inline-block d-sm-block text-center text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Usuń z ulubionych">
-                                        <img width="25" height="25" class="d-inline-block" src="<?php echo $urls->images ?>trash.svg" alt="">
-                                    </a>
-                                </div>
                             </div>
 
-                            <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                    <a href="#">
-                                        <img src="<?php echo $urls->images ?>tmp/p2.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                    </a>
-                                </div>
-
-                                <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
-                                    <a href="#">
-                                        <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'><span>KEMON YO COND COLOR SYSTEM ROSSO - CZERWIEŃ | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
-                                    </a>
-                                </div>
-
-                                <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                    <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
-                                </div>
-
-                                <div class='col-12 col-sm-3 col-xl-2 mt-2 mt-sm-0 text-center text-sm-left'>
-                                    <a href="#" class='d-inline-block d-sm-block text-center mb-0 mr-2 mr-sm-0' title='oferta'>Oferta</a>
-                                    <a href="#" class="d-inline-block d-sm-block text-center text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Usuń z ulubionych">
-                                        <img width="25" height="25" class="d-inline-block" src="<?php echo $urls->images ?>trash.svg" alt="">
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="text-center mx-auto">
-                                <nav aria-label="navigation">
-                                    <ul class="pagination pagination-round justify-content-center">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">«</span>
-                                                <span class="sr-only">Poprzednia</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">»</span>
-                                                <span class="sr-only">Następna</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
 
                         </div>
                     </div>
@@ -133,9 +126,6 @@ $page_title = $sanitizer->text($page->title);
 
 <!-- Footer -->
 <?php include_once "partials/_footer.php" ?>
-
-<!-- Scripts -->
-<?php include_once "partials/_scripts.php" ?>
 
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>dashboard-favourite-products.js"></script>

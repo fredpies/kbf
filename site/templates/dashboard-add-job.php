@@ -146,6 +146,15 @@ $stepperMarkup = $stepper->render();
                 <div class="col-lg-8">
                     <div class="pb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
+
+                            <nav class="d-none d-sm-block" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3 mb-sm-0">
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard')->url ?>">Panel</a></li>
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard-jobs')->url ?>">Oferty pracy</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
+                                </ol>
+                            </nav>
+
                             <?= $stepperMarkup ?>
                         </div>
                     </div>

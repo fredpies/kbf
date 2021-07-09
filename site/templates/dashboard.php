@@ -269,9 +269,6 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
 <!-- Footer -->
 <?php include_once "partials/_footer.php" ?>
 
-<!-- Scripts -->
-<?php include_once "partials/_scripts.php" ?>
-
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>dashboard.js"></script>
 <script>

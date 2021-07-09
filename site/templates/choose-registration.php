@@ -20,16 +20,13 @@ $pages = wire('pages');
 <!-- Preloader -->
 <?php include_once "partials/_preloader.php" ?>
 
-<!-- Navigation menu -->
-<?php include_once "partials/_menu.php" ?>
-
 <!-- Content -->
 
 <div class="main-content py-0 product">
     <div class="container">
 
-        <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">REJESTRACJA KONTA</h3>
-        <div class="top-message justify-content-center w-100 mx-0 d-flex" style="display: none;"><div class="text-center col-12 col-md-10 my-4"><h5 class="d-inline-block font-weight-400 page-info-msg-contents">Wybierz rodzaj rejestracji, aby dowiedzieć się więcej szczegółów.</h5></div></div>
+        <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">REJESTRACJA</h3>
+        <div class="top-message justify-content-center w-100 mx-0 d-flex" style="display: none;"><div class="text-center col-12 col-md-10 my-4"><h5 class="d-inline-block font-weight-400 page-info-msg-contents">Wybierz rodzaj konta które chcesz zarejestrować.</h5></div></div>
 
         <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
 
@@ -93,30 +90,9 @@ $pages = wire('pages');
 
 </div>
 
-<!-- Footer -->
-<?php include_once "partials/_footer.php" ?>
-
-<!-- Go to top -->
-<?php include_once "partials/_go-to-top.php" ?>
-
 <!-- Scripts -->
 <?php include_once "partials/_scripts.php" ?>
 
-<!-- Main script -->
 
-
-<script>
-
-    $(function () {
-
-        // Ustaw tooltips
-        $('.tooltip-btn').tooltip()
-        $('.tooltip-btn-light').tooltip({
-            template: '<div class="tooltip tooltip-light" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
-        })
-
-    })
-
-</script>
 </body>
 </html>

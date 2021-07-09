@@ -130,20 +130,11 @@ $stepperMarkup = $stepper->render();
 <!-- Preloader -->
 <?php include_once "partials/_preloader.php" ?>
 
-<!-- Navigation menu -->
-<?php include_once "partials/_menu.php" ?>
-
 <!-- Content -->
 <div class="main-content pt-4 pb-0 mt-4">
 
     <?= $stepperMarkup ?>
 
-</div>
-
-<!-- Footer -->
-
-<div class="d-none d-xl-block">
-    <?php include_once "partials/_footer.php" ?>
 </div>
 
 <!-- Scripts -->

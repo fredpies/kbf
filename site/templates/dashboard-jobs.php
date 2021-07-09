@@ -171,6 +171,13 @@ $modalMarkup = '
                     <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
+                            <nav class="d-none d-sm-block" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3 mb-sm-0">
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard')->url ?>">Panel</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
+                                </ol>
+                            </nav>
+
                             <?php
 
                                 if ($input->post->action === 'update-job') {
@@ -188,7 +195,7 @@ $modalMarkup = '
                             ?>
 
 
-                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
+                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left pl-3"><?= $page_title ?></h5>
 
                             <?php if($jobs->count) { ?>
 
@@ -232,19 +239,15 @@ $modalMarkup = '
                                     <?= $pagination ?>
 
 
-                                    <form class="mt-5" method="get" action="">
-
-                                        <div class="d-flex justify-content-between flex-wrap mt-4">
-                                            <div class="col-12 col-sm-5 px-0">
-                                                <a href=" <?= $pages->get('template=dashboard')->url ?>" class="back-button btn btn-round btn-secondary mb-4 w-100 text-white">Powrót</a>
-                                            </div>
-                                            <div class="col-12 col-sm-5 px-0">
-                                                <a type="button" href="<?= $pages->get('template=dashboard-add-job')->url ?>" class="btn btn-round btn-primary mb-4 w-100 text-white">Dodaj ofertę pracy</a>
-                                            </div>
+                                    <div class="d-flex justify-content-between flex-wrap mt-4">
+                                        <div class="col-12 col-sm-5 px-0">
+                                            <a href=" <?= $pages->get('template=dashboard')->url ?>" class="back-button btn btn-round btn-secondary mb-4 w-100 text-white">Powrót</a>
                                         </div>
+                                        <div class="col-12 col-sm-5 px-0">
+                                            <a type="button" href="<?= $pages->get('template=dashboard-add-job')->url ?>" class="btn btn-round btn-primary mb-4 w-100 text-white">Dodaj ofertę pracy</a>
+                                        </div>
+                                    </div>
 
-
-                                    </form>
 
                                 </div>
 

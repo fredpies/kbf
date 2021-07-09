@@ -1,5 +1,7 @@
 import KbfIndustryFilter from "../../components/KbfIndustryFilter";
 import KbgTag from "../../components/KbfTag";
+import KbfLikeProduct from "../../components/KbfLikeProduct";
+import Alpine from "alpinejs";
 
 class App {
 
@@ -35,10 +37,13 @@ class App {
         this.kbfTag.on('badge-remove', function (e) {
             instance.kbfIndustryFilter.uncheck(e.detail.name);
         })
+
+        new KbfLikeProduct();
+
+        window.Alpine = Alpine;
+        Alpine.start();
+
     }
-
-
-
 }
 
 export default App;

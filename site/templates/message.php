@@ -3,9 +3,10 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-
 // Strona glowna
 $home_page_url = $pages->get(1)->url;
+
+if (!$user->isLoggedIn()) $session->redirect($home_page_url);
 
 if ($input->company_id) {
 
@@ -48,32 +49,9 @@ if ($input->company_id) {
 <div class="main-content py-0">
     <div class="container">
 
-        <!-- Company details -->
-        <div class="bg-white p-md-5 px-4 rounded-xl shadow-sm mb-3">
-            <div class="row">
-                <div class="col-12 col-md-7 px-0">
-                    <?php render_company_info($company_data); ?>
-                </div>
-
-                <!-- Minimap -->
-                <div class="col-12 col-md-4 my-3 my-md-0 no-gutters">
-                    <div id="kbf-minimap" data-lat="<?php if (isset($lat) && !empty($lat)) echo $lat; ?>"
-                         data-lon="<?php if (isset($lon) && !empty($lon)) echo $lon; ?>"></div>
-                </div>
-                <div class="col-12 col-md-1 text-center text-md-right mb-3">
-                    <a href="#" class="text-dark tooltip-btn p-1 mr-n1" data-toggle="tooltip" data-placement="right"
-                       title="Dodaj do ulubionych">
-                        <img src="<?php echo $urls->images ?>heart.svg" alt="heart-image" class="d-inline-block">
-                    </a>
-                </div>
-
-            </div>
-        </div>
 
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-lg-0 py-4 section-title-3 text-center text-uppercase">Wyślij wiadomość</h3>
         <h6 class="font-weight-400 text-center mt-3 mb-4">Podaj swoje dane i wpisz treść wiadomości.</h6>
-
-
         <div class="kbf-send-message mt-3 mt-md-5">
 
             <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
@@ -167,15 +145,15 @@ if ($input->company_id) {
                             <div class="col-12 text-center text-md-right align-self-center">
                                 <div class="row justify-content-center">
                                     <div class="col-12 col-md-5">
-                                        <button type="submit"
-                                                class=" btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij
-                                            wiadomość
+                                        <button type="button"
+                                                class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
+                                            POWRÓT
                                         </button>
                                     </div>
                                     <div class="col-12 col-md-5">
-                                        <button type="button"
-                                                class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
-                                            WRÓĆ
+                                        <button type="submit"
+                                                class=" btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij
+                                            wiadomość
                                         </button>
                                     </div>
                                 </div>
@@ -187,6 +165,45 @@ if ($input->company_id) {
                 </div>
 
                 <hr class="mb-3 mb-md-0">
+
+            </div>
+        </div>
+
+        <!-- Company details -->
+        <div class="bg-white p-md-5 px-4 rounded-xl shadow-sm mb-3">
+            <div class="row">
+                <div class="col-12 col-md-7 px-0">
+                    <?php  render_company_info($company_data); ?>
+                </div>
+
+                <!-- Minimap -->
+                <div class="col-12 col-md-4 my-3 my-md-0 no-gutters">
+                    <div id="kbf-minimap" data-lat="<?php if(isset($lat) && !empty($lat)) echo $lat; ?>" data-lon="<?php if(isset($lon) && !empty($lon)) echo $lon; ?>"></div>
+                </div>
+                <?php if ($user->isLoggedIn()) {?>
+
+                    <div class="col-12 col-md-1 text-center text-md-right mb-3">
+
+                        <span x-data="KbfLikeCompany()">
+                            <a x-ref="anchor" :class="disabled ? 'disabled-anchor' : ''" data-company-id="<?= $company_data["company_id"] ?>" href="#" class="d-block text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych">
+                                <img @click.prevent.self="addToFavourites" src="<?php echo $urls->images ?>heart.svg" alt="heart-image" class="d-inline-block">
+                            </a>
+                        </span>
+
+                    </div>
+
+                <?php } ?>
+
+                <div class="col-12">
+
+                    <?php
+
+                    // Opis firmy
+                    if (!empty($company_description_html))
+                        echo "<div class=\"company-description my-2 my-md-4\">" . $company_description_html . "<div style=\"z-index: 0;\" class=\"header-shadow-wrapper d-sm-none\"></div>" . "</div>";
+                    ?>
+
+                </div>
 
             </div>
         </div>

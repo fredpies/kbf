@@ -67,16 +67,27 @@ $message_url = $pages->get("template=message")->url . "?company_id=" . $sanitize
                 <div class="col-12 col-md-4 my-3 my-md-0 no-gutters">
                     <div id="kbf-minimap" data-lat="<?php if(isset($lat) && !empty($lat)) echo $lat; ?>" data-lon="<?php if(isset($lon) && !empty($lon)) echo $lon; ?>"></div>
                 </div>
-                <div class="col-12 col-md-1 text-center text-md-right mb-3">
-                    <a href="#" class="d-block text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych">
-                        <img src="<?php echo $urls->images ?>heart.svg" alt="heart-image" class="d-inline-block">
-                    </a>
+                <?php if ($user->isLoggedIn()) {?>
 
-                    <a href="<?php echo $message_url ?>" class="d-block text-dark tooltip-btn mr-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Wyślij wiadomość">
-                        <img width="23" height="24" class="d-inline-block mx-auto" src="<?php echo $urls->images?>email.svg" alt="email-image">
-                    </a>
+                <div class="col-12 col-md-1 text-center text-md-right mb-3">
+
+                    <div class="d-flex flex-sm-column justify-content-center">
+                        <span x-data="KbfLikeCompany()">
+                        <a x-ref="anchor" :class="disabled ? 'disabled-anchor' : ''" data-company-id="<?= $company_data["company_id"] ?>" href="#" class="d-block text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych">
+                            <img @hover.prevent.stop @click.prevent.self="addToFavourites" src="<?php echo $urls->images ?>heart.svg" alt="heart-image" class="d-inline-block">
+                        </a>
+                    </span>
+
+                        <a href="<?php echo $message_url ?>" class="d-block text-dark tooltip-btn mt-1 ml-3 ml-sm-0 mr-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Wyślij wiadomość">
+                            <img width="23" height="24" class="d-inline-block mx-auto" src="<?php echo $urls->images?>email.svg" alt="email-image">
+                        </a>
+                    </div>
+
 
                 </div>
+
+                <?php } ?>
+
                 <div class="col-12">
 
                     <?php
@@ -85,6 +96,10 @@ $message_url = $pages->get("template=message")->url . "?company_id=" . $sanitize
                     if (!empty($company_description_html))
                         echo "<div class=\"company-description my-2 my-md-4\">" . $company_description_html . "<div style=\"z-index: 0;\" class=\"header-shadow-wrapper d-sm-none\"></div>" . "</div>";
                     ?>
+
+                    <div class="d-flex justify-content-center justify-content-sm-end">
+                        <button type="button" class="kbf-back-button btn btn-round btn-secondary shadow-none m-0 mt-3 ml-sm-3 mt-sm-0 mb-4" style="">POWRÓT</button>
+                    </div>
 
                 </div>
 

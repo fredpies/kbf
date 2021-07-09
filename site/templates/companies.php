@@ -982,6 +982,7 @@ $home_page_url = $pages->get(1)->url;
                             </nav>
 
                             <?php
+
                             // Lista firm
                             foreach ($companies as $company) {
                                 $company_data = sanitize_company_data($company);

@@ -1,3 +1,5 @@
+import Alpine from "alpinejs";
+
 class App {
 
     constructor() {
@@ -6,7 +8,10 @@ class App {
     }
 
     init() {
-        console.log('dashboard')
+
+        window.Alpine = Alpine;
+        Alpine.start();
+
     }
 
     addListeners() {

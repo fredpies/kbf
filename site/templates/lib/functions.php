@@ -415,6 +415,8 @@ function render_service_info($service_data, $device="desktop") {
 // Renderuje element listy firm
 function render_company_list_item($company_data) {
 
+    $user = wire('user');
+
     if(count($company_data) === 0) return;
 
     $urls = wire("urls");
@@ -448,13 +450,28 @@ function render_company_list_item($company_data) {
     } else $fax_markup = "";
 
     // Czy istnieje e-mail
-    if (!empty($company_data["company_email"])) {
+    if (!empty($company_data["company_email"]) && $user->isLoggedin()) {
         $email_markup = "
-            <a href='" . $message_url ."' class='d-inline-block d-sm-block text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='left' title='Wyślij wiadomość' data-original-title='Wyślij wiadomość'>
+            <a href='" . $message_url ."' class='d-inline-block d-sm-block text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='right' title='Wyślij wiadomość' data-original-title='Wyślij wiadomość'>
                 <img width='20' height='22' class='d-inline-block mx-auto' src='" . $urls->images ."email.svg' alt='email-image'>
             </a>
         ";
     } else $email_markup = "";
+
+    if ($user->isLoggedin()) {
+
+        $like_markup = '
+            <span x-data="KbfLikeCompany()">
+                <a x-ref="anchor" :class="disabled ? \'disabled-anchor\' : \'\'" data-company-id="' . $company_data["company_id"] . '" href="#" class="d-inline-block d-sm-block text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="Dodaj do ulubionych" data-original-title="Dodaj do ulubionych">
+                    <img @click.prevent.self="addToFavourites" width="25" height="25" class="d-inline-block mx-auto" src="' . $urls->images . 'heart.svg" alt="heart-image">
+                </a>
+            </span>
+        ';
+        $margin_left = '';
+    } else {
+        $like_markup = "";
+        $margin_left = ' ml-5';
+    }
 
     // Usun bledy w informacji o firmie
     $filtered_company = filter_company_name($company_data);
@@ -478,18 +495,15 @@ function render_company_list_item($company_data) {
                 $company_www_markup
             </div>
             
-            <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left'>
+            <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left". $margin_left . "'>
                     <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-3' title='Telefon kontaktowy' href='tel:" . $company_phone_1 . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_phone_1 . "</a>
                     $second_phone_markup
                     $fax_markup
             </div>
             
                 <div class='d-flex justify-content-center d-sm-block justify-content-end col-12 col-sm-1 px-0 p-xl-3 mt-2 mt-sm-3 mt-xl-0'>
-                    <a href='#' class='d-inline-block d-sm-block text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='Dodaj do ulubionych' data-original-title='Dodaj do ulubionych'>
-                        <img width='25' height='25' class='d-inline-block mx-auto' src='" . $urls->images ."heart.svg' alt='heart-image'>
-                    </a>
+                    $like_markup
                     $email_markup
-                    
                 </div>
                 
             </div>
@@ -571,11 +585,30 @@ function render_job_list_item($job_data) {
 // Renderuje element listy produktow
 function render_product_list_item($product_data) {
 
+    $user = wire('user');
+
     if(count($product_data) === 0) return;
     $urls = wire("urls");
 
     // Pierwszy obraz produktu
     $product_image_url = $product_data["product_images"]->first()->url;
+
+    if($user->isLoggedin()) {
+        $like_markup = '
+
+        <span x-data="KbfLikeProduct()">
+            <a x-ref="anchor" :class="disabled ? \'disabled-anchor\' : \'\'" data-product-id="' . $product_data["product_id"] . '" href="#" class="text-dark tooltip-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Dodaj do ulubionych">
+                <img @click.prevent.self="addToFavourites" class="list-heart mx-auto mx-sm-0 position-relative d-inline-block" src="' . $urls->images . 'heart.svg" alt="heart-image">
+            </a>
+        </span>
+    ';
+
+        $margin_left = '';
+    }
+    else {
+        $like_markup = '';
+        $margin_left = ' ml-5';
+    }
 
     // Renderuj markup
     echo "
@@ -592,14 +625,12 @@ function render_product_list_item($product_data) {
                 </div>
             </div>
         
-            <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
+            <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left" . $margin_left . "'>
                 <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
             </div>
         
             <div class='col-12 col-sm-1 mt-2 mt-sm-0 text-center text-sm-left'>
-                <a href='#' class='text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='' data-original-title='Dodaj do ulubionych'>
-                    <img class='list-heart mx-auto mx-sm-0 position-relative d-inline-block' src='" . $urls->images . "heart.svg' alt='heart-image'>
-                </a>
+                $like_markup
             </div>
         
         </div>
@@ -1074,9 +1105,11 @@ function sanitize_product_data($product_page) {
     $sanitizer = wire("sanitizer");
 
     $product_data = array(
+        "product_id" => $product_page->id,
         "product_url" => $product_page->url,
         "product_name" => $sanitizer->text($product_page->product_name),
         "product_images" => $product_page->product_images,
+        "product_first_image_url" => $product_page->product_images->first()->url,
         "product_description" => $product_page->product_description,
         "product_price" => $sanitizer->float($product_page->product_price),
         "product_inventory" => $sanitizer->int($product_page->product_inventory),

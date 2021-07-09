@@ -16,6 +16,7 @@ $user_company_page = get_user_company($user);
 check_user_company($user_company_page);
 $company_data = sanitize_company_data($user_company_page);
 
+$page_title = $sanitizer->text($page->title);
 $dashboard_page_url = $pages->get('template=dashboard')->url;
 $confirmation_page_url = $pages->get('template=change-password-confirmation')->url;
 
@@ -127,8 +128,14 @@ if ($submitted && !$password_valid) {
                     <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
-                            <h3 class="font-weight-800 mb-0 py-3 pt-xl-5 pb-xl-4 section-title-3 text-center text-uppercase">
-                                Zmiana hasła</h3>
+                            <nav class="d-none d-sm-block" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3 mb-sm-0">
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard')->url ?>">Panel</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
+                                </ol>
+                            </nav>
+
+                            <h3 class="font-weight-800 mb-0 py-3 pt-xl-5 pb-xl-4 section-title-3 text-center text-uppercase"><?= $page_title ?></h3>
                             <?php if (!$password_valid) echo render_alert('Wprowadzone, istniejące hasło użytkownika jest nieprawidłowe.', 'danger') ?>
 
                             <div class="form-container <?php if ($submitted && $password_valid) echo 'd-none'; ?>">

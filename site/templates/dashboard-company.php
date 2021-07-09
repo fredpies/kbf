@@ -229,6 +229,13 @@ $tabsPhone->addMarkup($form_4->render(), "Opis");
                     <div class="pb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
+                            <nav class="d-none d-sm-block" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3 mb-sm-0">
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard')->url ?>">Panel</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
+                                </ol>
+                            </nav>
+
                             <?php
 
                             if ($input->post->action === 'update-company') {
@@ -237,7 +244,7 @@ $tabsPhone->addMarkup($form_4->render(), "Opis");
 
                             ?>
 
-                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
+                            <h3 class="font-weight-800 mb-0 py-3 pt-xl-5 pb-xl-4 section-title-3 text-center text-uppercase"><?= $page_title ?></h3>
 
                             <form name="dashboard-company-edit" method="post" action="<?= $page->url ?>">
 

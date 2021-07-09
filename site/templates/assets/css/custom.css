@@ -554,7 +554,7 @@ input[name*="sub-industry"] + .error {
     font-size: 0.85rem;
   }
 
-  .company-list-item .company-name:hover, .job-list-item .job-name:hover, .product-list-item .product-name:hover {
+  a.company-name:hover, a.product-name:hover, a.product-name:hover {
 
     color: rgb(106, 184, 247) !important;
 
@@ -1261,7 +1261,7 @@ textarea {
   resize: none;
 }
 
-/* Treansition na przyciskach */
+/* Transition na przyciskach */
 .btn {
   transition: background-color .2s ease-in-out, border-color .2s ease-in-out, box-shadow .2s ease-in-out !important;
 }
@@ -1277,4 +1277,14 @@ textarea {
 
 body.modal-open {
   overflow: visible;
+}
+
+.disabled-anchor {
+  transition: opacity 0.3s ease-out;
+  opacity: 0.2;
+  cursor: default;
+}
+
+a.btn {
+  cursor: pointer !important;
 }

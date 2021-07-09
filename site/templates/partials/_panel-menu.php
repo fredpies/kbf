@@ -66,13 +66,13 @@ $company_page = get_user_company($user);
                         <div class="d-flex align-items-center">
                             <span class="pl-3">Firmy</span>
                         </div>
-                        <small class="text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1">1</small>
+                        <small x-data="favouriteCompaniesCount()" class="companies-counter text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1"><span x-text="counterValue"></span></small>
                     </a>
                     <a href="<?php echo $pages->get(1)->url ?>panel/ulubione-produkty" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 px-md-5 px-lg-4 px-xl-5">
                         <div class="d-flex align-items-center">
                             <span class="pl-3">Produkty</span>
                         </div>
-                        <small class="text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1">2</small>
+                        <small x-data="favouriteProductsCount()" class="products-counter text-white font-weight-600 text-uppercase bg-primary rounded-xl px-2 mb-1"><span x-text="counterValue"></span></small>
                     </a>
                 </ul>
 
@@ -120,4 +120,10 @@ $company_page = get_user_company($user);
         </div>
     </div>
 </div>
+
+<!-- Scripts -->
+<?php include_once "partials/_scripts.php" ?>
+
+<!-- Main script -->
+<script src="<?php echo $urls->js ?>dashboard-panel.js"></script>
 
