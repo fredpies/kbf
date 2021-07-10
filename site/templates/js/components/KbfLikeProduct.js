@@ -43,7 +43,7 @@ class KbfLikeProduct {
                     let instance = this;
 
                     if (!this.disabled) {
-                        $.get(`http://localhost/kbf2/api/get-product/?product_id=${e.target.parentElement.dataset.productId}`)
+                        $.get(`${config.apiEndpoint}api/get-product/?product_id=${e.target.parentElement.dataset.productId}`)
                             .done(function (res) {
 
                                 let favouriteProducts = localStorage.getItem('favourite-products');

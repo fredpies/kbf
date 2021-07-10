@@ -131,7 +131,7 @@ $stepperMarkup = $stepper->render();
 <?php include_once "partials/_preloader.php" ?>
 
 <!-- Content -->
-<div class="main-content pt-4 pb-0 mt-4">
+<div class="bg-image main-content pt-4 pb-0 mt-4" data-img-src="<?= $urls->images ?>upload/section-bg-shape-02.png" style="background-image: url('<?= $urls->images ?>upload/section-bg-shape-02.png');">
 
     <?= $stepperMarkup ?>
 

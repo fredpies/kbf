@@ -1827,7 +1827,7 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("http://localhost/kbf2/api/get-company/?company_id=".concat(e.target.parentElement.dataset.companyId)).done(function (res) {
+            $.get("".concat(config.apiEndpoint, "api/get-company/?company_id=").concat(e.target.parentElement.dataset.companyId)).done(function (res) {
               var favouriteCompanies = localStorage.getItem('favourite-companies');
               if (favouriteCompanies) instance.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
               instance.currentFavouriteCompanies.push({
@@ -1886,7 +1886,7 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("http://localhost/kbf2/api/get-product/?product_id=".concat(e.target.parentElement.dataset.productId)).done(function (res) {
+            $.get("".concat(config.apiEndpoint, "api/get-product/?product_id=").concat(e.target.parentElement.dataset.productId)).done(function (res) {
               var favouriteProducts = localStorage.getItem('favourite-products');
               if (favouriteProducts) instance.currentFavouriteProducts = _toConsumableArray(JSON.parse(favouriteProducts));
               instance.currentFavouriteProducts.push({

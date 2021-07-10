@@ -22,13 +22,13 @@ $pages = wire('pages');
 
 <!-- Content -->
 
-<div class="main-content py-0 product">
+<div class="main-content py-0 product bg-image" data-img-src="<?= $urls->images ?>upload/section-bg-shape-01.png" style="background-image: url('<?= $urls->images ?>upload/section-bg-shape-01.png');">
     <div class="container">
 
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">REJESTRACJA</h3>
         <div class="top-message justify-content-center w-100 mx-0 d-flex" style="display: none;"><div class="text-center col-12 col-md-10 my-4"><h5 class="d-inline-block font-weight-400 page-info-msg-contents">Wybierz rodzaj konta które chcesz zarejestrować.</h5></div></div>
 
-        <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
+        <div class="bg-transparent rounded-xl mb-3 mb-md-5">
 
             <div class="row justify-content-center mb-5">
 

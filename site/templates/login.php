@@ -71,7 +71,7 @@ $loginForm->addMarkup($passField->render(false), true);
     <!-- Perfect scrollbar-->
     <link rel="stylesheet" href="<?php echo $urls->css ?>perfect-scrollbar.css">
 </head>
-<body>
+<body class="bg-image" data-img-src="<?= $urls->images ?>upload/section-bg-shape-02.png" style="background-image: url('<?= $urls->images ?>upload/section-bg-shape-02.png');">
 
 <!-- Preloader -->
 <?php include_once "partials/_preloader.php" ?>

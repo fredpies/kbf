@@ -43,7 +43,7 @@ class KbfLikeCompany {
                     let instance = this;
 
                     if (!this.disabled) {
-                        $.get(`http://localhost/kbf2/api/get-company/?company_id=${e.target.parentElement.dataset.companyId}`)
+                        $.get(`${config.apiEndpoint}api/get-company/?company_id=${e.target.parentElement.dataset.companyId}`)
                             .done(function (res) {
 
                                 let favouriteCompanies = localStorage.getItem('favourite-companies');

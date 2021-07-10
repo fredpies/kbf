@@ -3,7 +3,7 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-$page = wire('pages');
+$page = wire('page');
 $pages = wire('pages');
 
 // Przygotuj dane o firmie

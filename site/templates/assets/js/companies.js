@@ -2658,6 +2658,12 @@
 
   var regenerator = runtime_1;
 
+  var config = {
+    env: 'dev',
+    url: 'https://webplanet.biz',
+    apiEndpoint: 'https://webplanet.biz/kbf/'
+  };
+
   function getAreaNames(areasGeoJSON) {
     var result = [];
     areasGeoJSON.features.forEach(function (feature) {
@@ -92495,7 +92501,7 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("http://localhost/kbf2/api/get-company/?company_id=".concat(e.target.parentElement.dataset.companyId)).done(function (res) {
+            $.get("".concat(config.apiEndpoint, "api/get-company/?company_id=").concat(e.target.parentElement.dataset.companyId)).done(function (res) {
               var favouriteCompanies = localStorage.getItem('favourite-companies');
               if (favouriteCompanies) instance.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
               instance.currentFavouriteCompanies.push({
