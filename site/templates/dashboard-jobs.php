@@ -194,7 +194,6 @@ $modalMarkup = '
 
                             ?>
 
-
                             <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left pl-3"><?= $page_title ?></h5>
 
                             <?php if($jobs->count) { ?>
@@ -238,7 +237,6 @@ $modalMarkup = '
                                     <br>
                                     <?= $pagination ?>
 
-
                                     <div class="d-flex justify-content-between flex-wrap mt-4">
                                         <div class="col-12 col-sm-5 px-0">
                                             <a href=" <?= $pages->get('template=dashboard')->url ?>" class="back-button btn btn-round btn-secondary mb-4 w-100 text-white">Powrót</a>
@@ -246,6 +244,7 @@ $modalMarkup = '
                                         <div class="col-12 col-sm-5 px-0">
                                             <a type="button" href="<?= $pages->get('template=dashboard-add-job')->url ?>" class="btn btn-round btn-primary mb-4 w-100 text-white">Dodaj ofertę pracy</a>
                                         </div>
+                                    </div>
                                     </div>
 
 

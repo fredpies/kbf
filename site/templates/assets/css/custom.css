@@ -520,6 +520,13 @@ label.error-stepper {
   max-width: 400px;
 }
 
+.login-content, .choose-registration-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+}
+
 @media (max-width: 480px) {
   .error {
     padding-left: 0;
@@ -903,6 +910,62 @@ input[name*="sub-industry"] + .error {
   font-size: .75rem;
 }
 
+/*Obrazy produktu*/
+
+.product-images {
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 1.6875rem !important;
+  min-height: 4.5rem !important;
+  height: auto;
+  padding: 0.85rem 1.375rem !important;
+  line-height: 1.5 !important;
+  transition: all .2s ease-in-out;
+}
+
+.product-image-item  {
+  height: 100%;
+  width: 10rem;
+  cursor: pointer;
+  margin: 1rem 0;
+}
+
+
+.product-image-item {
+  position: relative;
+  margin-right: 2rem;
+}
+
+.product-image-add {
+  font-size: .75rem;
+  background: #ececec;
+  cursor: pointer;
+  height: 100%;
+  width: 10rem;
+
+}
+
+.product-image-add:hover, .product-image-item:hover {
+  opacity: 0.8;
+}
+
+.product-image-item:hover .delete-button {
+  display: block;
+}
+
+.product-image-add-icon {
+  font-size: 1.5rem;
+}
+
+.delete-button {
+  position: absolute;
+  display: none;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+
 /******************************/
 /* Date picker                */
 /******************************/
@@ -1095,6 +1158,11 @@ a.about-keywords:hover {
   border-color: #45a7f5 !important;
   box-shadow: 0 1px 9px 0 rgba(33,150,243,.5) !important;
   transition: all .2s ease-in-out !important;
+}
+
+.sidebar-contents {
+  position: sticky;
+  top: 0;
 }
 
 /* Preloader button */

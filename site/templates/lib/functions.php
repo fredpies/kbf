@@ -785,14 +785,20 @@ function render_alert($message, $type="success", $close=true) {
                                 <span aria-hidden="true">&times;</span>
                             </button>' : '';
 
+    $iconMarkup = '';
+
+    if ($type === 'success') $iconMarkup = '<i style="font-size: 1.2rem" class="fas fa-info d-none d-xl-inline-block"></i>';
+    if ($type === 'danger') $iconMarkup = '<i style="font-size: 1.2rem" class="fas fa-exclamation-triangle d-none d-xl-inline-block"></i>';
+
     $template = '<div class="alert alert-{type} alert-dismissible fade show" role="alert">
-                    <p class="mb-0 font-weight-600">{message}</p>'
+                    <p class="mb-0 font-weight-600">{iconMarkup}{message}</p>'
                  . $closeMarkup .
                 '</div>';
 
     return replacePlaceholders(array(
         "{type}" => $type,
-        "{message}" => $message
+        "{message}" => '<span class="d-inline-block ml-3">' . $message . '</span>',
+        "{iconMarkup}" => $iconMarkup
     ), $template);
 }
 
@@ -860,8 +866,8 @@ function render_dashboard_job_list_item($job_name, $job_type, $job_expire, $job_
         </div>
 
         <div class="text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0">
-            <a href="' . $editURL . '" class="p-1 mr-n1" title="edytuj">Edytuj</a>
-            <a data-id="{job_id}" data-toggle="modal" href="#confirmation" class="p-1 mr-n1" title="usun">Usuń</a>
+            <a href="' . $editURL . '" class="p-1" title="edytuj">Edytuj</a>
+            <a data-id="{job_id}" data-toggle="modal" href="#confirmation" class="p-1" title="usun">Usuń</a>
         </div>
 
     </div>';
@@ -885,7 +891,6 @@ function render_dashboard_product_list_item($product_data) {
 
     // Renderuj markup
     echo "
-    
         <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
             <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
                 <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
@@ -916,33 +921,37 @@ function render_dashboard_product_sold_list_item($product_data) {
     // Pierwszy obraz produktu
     $product_image_url = $product_data["product_images"]->first()->url;
 
-    // Renderuj markup
-    echo "
+    $template = "
     
         <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
             <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                <img src='{product_image}' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
             </div>
         
-            <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>" . $product_data["product_name"] . "</span></p>
-                <p class='text-center text-sm-left'>Sprzedane: 23</p>
+            <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
+                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>{product_name}</span></p>
+                <p class='text-center text-sm-left'>Sprzedane: {product_sold}</p>
             </div>
         
-            <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
+            <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>{product_price} PLN</span>
             </div>
-        
-            <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                 <a href=''#' class='mr-n1' title='usun'>Usuń z listy</a>
-            </div>
-        
         </div>
+    
     ";
+
+
+    return replacePlaceholders(array(
+        "{product_image}" => $product_image_url,
+        "{product_name}" => $product_data["product_name"],
+        "{product_sold}" => $product_data["product_sold"],
+        "{product_inventory}" => $product_data["product_inventory"],
+        "{product_price}" => $product_data["product_price"],
+    ), $template);
 
 }
 
-function render_dashboard_product_inventory_list_item($product_data) {
+function render_dashboard_product_inventory_list_item($product_data, $editUrl = '') {
 
     if(count($product_data) === 0) return;
     $urls = wire("urls");
@@ -950,30 +959,40 @@ function render_dashboard_product_inventory_list_item($product_data) {
     // Pierwszy obraz produktu
     $product_image_url = $product_data["product_images"]->first()->url;
 
-    // Renderuj markup
-    echo "
+    $template = "
     
         <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-            <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+        
+            <div class='col-12 col-sm-4 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
+                <img src='{product_image}' alt='image' class='product-image d-block mx-auto img-fluid mt-sm-0 img-thumbnail'>
             </div>
         
-            <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>" . $product_data["product_name"] . "</span></p>
-                <p class='text-center text-sm-left'>Dostępne: 42</p>
+            <div class='col-12 col-sm-4 col-xl-6 pt-sm-0 text-center text-lg-left'>
+                <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>{product_name}</span></p>
+                <p class='text-center text-sm-left'>Dostępne: {product_inventory}</p>
             </div>
         
             <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                <span class='product-price badge badge-pill badge-danger d-inline-block'>" . $product_data["product_price"] . " PLN</span>
+                <span class='product-price badge badge-pill badge-danger d-inline-block'>{product_price} PLN</span>
             </div>
         
-            <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                 <a href=''#' class='mr-n1' title='usun'>Usuń</a><br>
-                 <a href=''#' class='mr-n1' title='edytuj'>Edytuj</a>
+           <div class='text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0'>
+                <a href='{edit_url}' class='p-1' title='edytuj'>Edytuj</a>
+                <a data-id='{product_id}' data-toggle='modal' href='#confirmation' class='p-1' title='usun'>Usuń</a>
             </div>
         
         </div>
+    
     ";
+
+    return replacePlaceholders(array(
+        "{product_id}" => $product_data["product_id"],
+        "{product_image}" => $product_image_url,
+        "{product_name}" => $product_data["product_name"],
+        "{product_inventory}" => $product_data["product_inventory"],
+        "{product_price}" => $product_data["product_price"],
+        "{edit_url}" => $editUrl,
+    ), $template);
 
 }
 
@@ -1007,6 +1026,13 @@ function get_user_company($user) {
 function get_products_count($company_page) {
 
     if (!isset($company_page)) return;
+    return $company_page->get('title=Produkty')->find('template=product')->count();
+
+}
+
+function get_products_all_count($company_page) {
+
+    if (!isset($company_page)) return;
 
     $sanitizer = wire('sanitizer');
 
@@ -1015,6 +1041,23 @@ function get_products_count($company_page) {
 
     foreach ($products as $product) {
         $product_count += $sanitizer->int($product->product_inventory);
+    }
+
+    return $product_count;
+
+}
+
+function get_products_sold_all_count($company_page) {
+
+    if (!isset($company_page)) return;
+
+    $sanitizer = wire('sanitizer');
+
+    $products = $company_page->get('title=Produkty')->find('template=product, product_sold>0');
+    $product_count = 0;
+
+    foreach ($products as $product) {
+        $product_count += $sanitizer->int($product->product_sold);
     }
 
     return $product_count;
@@ -1114,9 +1157,11 @@ function sanitize_product_data($product_page) {
         "product_first_image_url" => $product_page->product_images->first()->url,
         "product_description" => $product_page->product_description,
         "product_price" => $sanitizer->float($product_page->product_price),
+        "product_sold" => $sanitizer->int($product_page->product_sold),
         "product_inventory" => $sanitizer->int($product_page->product_inventory),
         "product_blocked" => $product_page->product_blocked,
         "product_shipping_cost" => $sanitizer->float($product_page->product_shipping_cost),
+        "product_weight" => $sanitizer->int($product_page->product_weight),
         "siblings" => $product_page->siblings(false)
     );
 
@@ -1827,6 +1872,55 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
 
 
         }
+
+        // PRODUKTY
+
+        case "product_name":
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Nazwa produktu";
+            $field->name = $fieldName;
+            $field->description = "Podaj nazwę produktu.";
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Nazwa produktu nie może być pusta.";
+            }
+
+            $field->icon = "fa-info";
+            return $field;
+        }
+
+        case "product_description":
+        {
+            $field = new FormFieldTextArea($disabled);
+            $field->label = "Opis produktu";
+            $field->name = 'product_description';
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z opisem produktu jest wymagane.";
+            }
+
+            return $field;
+        }
+
+        // INNE
+
+        case "number":
+        {
+            $field = new FormFieldNumber($disabled);
+            $field->label = "Number";
+            $field->name = $fieldName;
+
+            if ($required) {
+                $field->required = true;
+            }
+
+            return $field;
+        }
+
+
     }
 
 
@@ -1938,7 +2032,7 @@ function update_page($page_id, $page_data = array(), $ignore = array()) {
 
 }
 
-function mailTo($mailData) {
+function mailTo($mailData, $fromName = 'KBF') {
 
     if (!isset($mailData)) return;
 
@@ -1946,7 +2040,7 @@ function mailTo($mailData) {
     $mail->subject($mailData["subject"]);
     $mail->to($mailData["to"]);
     $mail->from($mailData["from"]);
-    $mail->fromName('KBF');
+    $mail->fromName($fromName);
     $mail->bodyHTML($mailData["bodyHTML"]);
     if (isset($mailData["targetFile"]) && !empty($mailData["targetFile"])) $mail->attachment($mailData["targetFile"]);
 

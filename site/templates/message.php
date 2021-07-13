@@ -52,12 +52,16 @@ if ($input->company_id) {
 
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-lg-0 py-4 section-title-3 text-center text-uppercase">Wyślij wiadomość</h3>
         <h6 class="font-weight-400 text-center mt-3 mb-4">Podaj swoje dane i wpisz treść wiadomości.</h6>
+
         <div class="kbf-send-message mt-3 mt-md-5">
 
             <div class="bg-white rounded-xl shadow-sm mb-3 mb-md-5">
                 <div class="card-body">
 
                     <form novalidate role="form" name="send-message" class="pl-lg-5">
+
+                        <input type="hidden" name="company_email" value="<?= $company_data["company_email"] ?>">
+
                         <div class="row justify-content-center">
 
                             <div class="col-12 col-lg-5 mb-2">
@@ -152,7 +156,7 @@ if ($input->company_id) {
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <button type="submit"
-                                                class=" btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij
+                                                class="send-message btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij
                                             wiadomość
                                         </button>
                                     </div>
@@ -168,6 +172,16 @@ if ($input->company_id) {
 
             </div>
         </div>
+
+        <div class="send-message-confirmation row justify-content-center d-none">
+            <div class="col-12 col-md-9">
+                <?= render_alert('Wiadomość do firmy została wysłana.', 'primary', false); ?>
+            </div>
+            <div class="col-12 d-flex mt-3">
+                <button type="button" class="kbf-back-button d-inline-block mt-0 mx-auto btn btn-round shadow-none btn-secondary">Powrót</button>
+            </div>
+        </div>
+
 
         <!-- Company details -->
         <div class="bg-white p-md-5 px-4 rounded-xl shadow-sm mb-3">

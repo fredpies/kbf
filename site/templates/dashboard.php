@@ -30,11 +30,6 @@ $company_city = $filtered_company["company_city"];
 $company_description_html = $company_data["company_description_html"];
 $company_subscription_expire = date('d.m.Y', $sanitizer->date($company_page->company_subscription_expire));
 
-// Produkty
-$products = $company_page->find("title=Produkty");
-$products_count = 0;
-if ($products->count()) $products_count = $products[0]->children()->count();
-
 // Usługi
 $services_count = get_services_count($company_page);
 
@@ -147,12 +142,12 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                         </div>
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <span>W ofercie</span>
-                                                <span class="font-weight-bold"><?= $products_count ?></span>
+                                                <span>W ofercie (szt.)</span>
+                                                <span class="font-weight-bold"><?= get_products_all_count($company_page) ?></span>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <span>Sprzedane</span>
-                                                <span class="font-weight-bold">2</span>
+                                                <span>Sprzedane (szt.)</span>
+                                                <span class="font-weight-bold"><?= get_products_sold_all_count($company_page) ?></span>
                                             </div>
                                         </div>
                                     </div>

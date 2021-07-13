@@ -221,6 +221,45 @@ class FormFieldText extends FormField
 
 }
 
+class FormFieldNumber extends FormField
+{
+
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public static $template = '
+    
+        <div class="{className}">
+               
+               <div class="input-group input-group-lg input-group-round d-block d-sm-inline-block w-100">
+               
+                        <label class="text-uppercase px-3">{label}</label>
+               
+                        <div class="input-group-inner">
+                            <input autocomplete="off" type="number" class="form-control text-uppercase"
+                                   name="{name}" {disabled} {required} {msgRequired} {inputmask} value="{value}">
+                            <div class="input-group-append">
+                                <span class="d-inline-block pr-2" style="line-height: 2.5">{appendText}</span>
+                            </div>
+                            <div class="input-focus-bg"></div>
+                        </div>
+                    </div>
+
+            
+        </div>
+
+            
+    ';
+
+    public function render($description = true)
+    {
+        return $this->renderMarkup(self::$template, $description);
+    }
+
+}
+
 class FormFieldPassword extends FormField
 {
 

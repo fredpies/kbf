@@ -27,20 +27,20 @@ if ($user->isLoggedin()) {
     $company_page = get_user_company($user);
 }
 
-
-// Wylogowywanie
 $targetURL = $pages->get('template=login')->url;
 $targetMethod = 'get';
 
 if ($user->isLoggedin()) {
     $targetMethod = 'post';
+    $targetURL = $page->url;
 }
 
 if ($input->post('action', 'text'))
     if ($input->post('action', 'text') === 'logout') {
         $session->logout();
-        $session->redirect($targetURL);
+        $session->redirect($pages->get(1)->url);
     }
+
 ?>
 
 <header>
@@ -146,7 +146,7 @@ if ($input->post('action', 'text'))
                         </li>
 
                         <?php
-                        if ($user->isLoggedin()) echo '<input type="hidden" name="action" value="logout">'
+                        if ($user->isLoggedin()) echo '<input type="hidden" name="action" value="logout">';
                         ?>
 
                         </form>

@@ -12,6 +12,7 @@ $header = Header::mimeType('json'); // Format wyjsciowy
 $response = array(); // Zbior wynikowy
 
 $input = wire('input');
+$sanitizer = wire('sanitizer');
 
 header($header);
 header('Access-Control-Allow-Origin: *');
@@ -31,7 +32,10 @@ http_response_code($statuscode);
             "bodyHTML" => $input->post->bodyHTML
         );
 
-        $response = mailTo($mailData);
+        if ($input->post->fromName) {
+            $fromName = $sanitizer->text($input->post->fromName);
+            $response = mailTo($mailData, $fromName);
+        } else  $response = mailTo($mailData);
 
     }
 
