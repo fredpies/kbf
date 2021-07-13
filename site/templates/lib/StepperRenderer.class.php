@@ -14,7 +14,6 @@ class StepperRenderer
     private $className = "";
     private $isHidden = false;
 
-
     // Markups
 
     public static $stepperMarkup = '
@@ -83,7 +82,10 @@ class StepperRenderer
                     </div>
             </div>
 
+        
+        
         </form>
+        
     </div>';
 
 

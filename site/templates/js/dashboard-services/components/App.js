@@ -6,6 +6,7 @@ class App {
     }
 
     init() {
+
         let $modal = $('#modal');
         let image = document.getElementById('sample_image');
         let cropper = null;

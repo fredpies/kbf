@@ -1,5 +1,5 @@
 import KbfMiniMap from "../../components/KbfMiniMap";
-import KbfSendForm from "./KbfSendForm";
+import KbfSendMessage from "./KbfSendMessage";
 import KbfBackButton from "../../components/KbfBackButton";
 import KbfLikeCompany from "../../components/KbfLikeCompany";
 import Alpine from "alpinejs";
@@ -17,7 +17,7 @@ class App {
     init() {
 
         new KbfMiniMap('#kbf-minimap'); // Inicjalizuj minimape
-        new KbfSendForm(); // Inicjuj formularz
+        new KbfSendMessage(); // Inicjuj formularz
         new KbfBackButton('.kbf-back-button');
 
         new KbfLikeCompany();

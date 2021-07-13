@@ -249,8 +249,6 @@ $send_cv_page_url = $pages->get("template=send-cv")->url;
 <!-- Footer -->
 <?php include_once "partials/_footer.php" ?>
 
-
-
 <!-- Scripts -->
 <?php include_once "partials/_scripts.php" ?>
 

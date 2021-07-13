@@ -22,7 +22,8 @@ $pages = wire('pages');
 
 <!-- Content -->
 
-<div class="main-content py-0 product bg-image" data-img-src="<?= $urls->images ?>upload/section-bg-shape-01.png" style="background-image: url('<?= $urls->images ?>upload/section-bg-shape-01.png');">
+<div class="choose-registration-content main-content py-0 product bg-image" data-img-src="<?= $urls->images ?>upload/section-bg-shape-01.png" style="background-image: url('<?= $urls->images ?>upload/section-bg-shape-01.png');">
+
     <div class="container">
 
         <h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">REJESTRACJA</h3>
@@ -86,6 +87,13 @@ $pages = wire('pages');
 
 
         </div>
+
+        <div class="row justify-content-center">
+            <div class="col-3">
+                <a href="<?= $pages->get(1)->url ?>" class="btn btn-round btn-secondary mb-4 mx-2 mx-lg-0 w-100 text-white">Powrót do KBF</a>
+            </div>
+        </div>
+
     </div>
 
 </div>

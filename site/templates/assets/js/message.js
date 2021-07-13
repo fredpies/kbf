@@ -1662,6 +1662,35 @@
     return KbfMiniMap;
   }();
 
+  function _superPropBase(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf(object);
+      if (object === null) break;
+    }
+
+    return object;
+  }
+
+  function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+
+    return _get(target, property, receiver || target);
+  }
+
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -6111,30 +6140,10 @@
 
   function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-  var KbfSendForm = /*#__PURE__*/function (_KbfForm) {
-    _inherits(KbfSendForm, _KbfForm);
-
-    var _super = _createSuper$1(KbfSendForm);
-
-    function KbfSendForm() {
-      _classCallCheck(this, KbfSendForm);
-
-      return _super.call(this, {
-        formName: 'send-message'
-      }, 'pl');
-    }
-
-    return KbfSendForm;
-  }(KbfForm);
-
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
   var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfPreloaderButton, _EventTarget);
 
-    var _super = _createSuper(KbfPreloaderButton);
+    var _super = _createSuper$1(KbfPreloaderButton);
 
     function KbfPreloaderButton(selector) {
       var _this;
@@ -6226,6 +6235,80 @@
 
   KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+  var KbfSendMessage = /*#__PURE__*/function (_KbfForm) {
+    _inherits(KbfSendMessage, _KbfForm);
+
+    var _super = _createSuper(KbfSendMessage);
+
+    function KbfSendMessage() {
+      var _this;
+
+      _classCallCheck(this, KbfSendMessage);
+
+      _this = _super.call(this, {
+        formName: 'send-message'
+      }, 'pl');
+
+      _this.init();
+
+      return _this;
+    }
+
+    _createClass(KbfSendMessage, [{
+      key: "init",
+      value: function init() {
+        _get(_getPrototypeOf(KbfSendMessage.prototype), "init", this).call(this);
+
+        this.formData = new FormData();
+        this.$nameField = $('input[name="name"]');
+        this.$emailField = $('input[name="email"]');
+        this.$companyEmailField = $('input[name="company_email"]');
+        this.$messageField = $('textarea[name="message"]');
+        this.$submitButton = $('button.send-message[type="submit"]');
+        this.$sendMessageContainer = $('.kbf-send-message');
+        this.$sendMessageConfirmation = $('.send-message-confirmation');
+        this.$h6 = $('.container h6');
+        this.preloaderButton = new KbfPreloaderButton('button.send-message[type="submit"]', false);
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$submitButton.on('click', function (e) {
+          e.preventDefault();
+          instance.formData.append('subject', "Nowa wiadomo\u015B\u0107 z KBF");
+          instance.formData.append('to', instance.$companyEmailField.val());
+          instance.formData.append('from', instance.$emailField.val());
+          instance.formData.append('fromName', instance.$nameField.val());
+          instance.formData.append('bodyHTML', instance.$messageField.val());
+          instance.validate();
+
+          if (instance.formIsValid) {
+            instance.preloaderButton.triggerStart(instance.$submitButton[0]);
+            $.ajax("".concat(config.apiEndpoint, "api/mail/"), {
+              type: 'POST',
+              data: instance.formData,
+              processData: false,
+              contentType: false
+            }).done(function () {
+              instance.$sendMessageContainer.addClass('d-none');
+              instance.$h6.addClass('d-none');
+              instance.$sendMessageConfirmation.removeClass('d-none');
+            }).fail(function () {
+              console.log('Error sending message.');
+            });
+          }
+        });
+      }
+    }]);
+
+    return KbfSendMessage;
+  }(KbfForm);
+
   var KbfBackButton = /*#__PURE__*/function () {
     function KbfBackButton(selector) {
       _classCallCheck(this, KbfBackButton);
@@ -6292,7 +6375,7 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("http://localhost/kbf2/api/get-company/?company_id=".concat(e.target.parentElement.dataset.companyId)).done(function (res) {
+            $.get("".concat(config.apiEndpoint, "api/get-company/?company_id=").concat(e.target.parentElement.dataset.companyId)).done(function (res) {
               var favouriteCompanies = localStorage.getItem('favourite-companies');
               if (favouriteCompanies) instance.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
               instance.currentFavouriteCompanies.push({
@@ -10429,7 +10512,7 @@
       value: function init() {
         new KbfMiniMap('#kbf-minimap'); // Inicjalizuj minimape
 
-        new KbfSendForm(); // Inicjuj formularz
+        new KbfSendMessage(); // Inicjuj formularz
 
         new KbfBackButton('.kbf-back-button');
         new KbfLikeCompany();

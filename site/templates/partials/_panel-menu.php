@@ -3,13 +3,15 @@ include_once "partials/_init.php";
 
 
 $user = wire('user');
+$pages = wire('pages');
+$urls = wire('urls');
 $company_page = get_user_company($user);
 
 
 ?>
 <!-- Sidebar -->
 <div class="col-lg-4">
-    <div class="pb-3 mb-3">
+    <div class="sidebar-contents pb-3">
         <div class="bg-white rounded-xl shadow-sm pt-5 pb-3">
 
             <div class="text-center px-4 px-md-5 px-lg-4 px-xl-5">

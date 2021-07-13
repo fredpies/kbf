@@ -7,6 +7,7 @@ check_user(wire('user'));
 
 $pages = wire('pages');
 $page = wire('page');
+$input = wire('input');
 $session = wire('session');
 $user = wire('user');
 $urls = wire('urls');
@@ -19,14 +20,26 @@ $company_page = $pages->get($session->company_page_id);
 check_user_company($company_page);
 
 $products_group = $company_page->find("title=Produkty");
-if ($products_group->count()) $products = $products_group[0]->children();
-else $products = array();
-
-foreach ($products as $product) {
-    //echo $sanitizer->text($product->name)."<br/>";
+if ($products_group->count()) {
+    $products = $products_group[0]->children();
+    $products_sold = $products_group[0]->children()->find('product_sold>0');
+}
+else {
+    $products = array();
+    $products_sold = array();
 }
 
-$product_data = $products[0];
+// Modal
+$modalMarkup = '
+
+    <h5 class="text-center">Jesteś pewien, że chcesz usunąć produkt ?</h5>
+    <form class="row mt-5" action="' . $page->url . '" method="post" name="delete-confirmation">
+        <div class="col"><button type="submit" class="confirm-button btn btn-round btn-danger w-100">Usuń</button></div>
+        <div class="col"><button data-dismiss="modal" type="button" class="cancel-button btn btn-round btn-success w-100">Anuluj</button></div>
+        <input type="hidden" name="action" value="delete-product">
+        <input type="hidden" name="product_id">   
+    </form>
+';
 
 ?>
 
@@ -49,7 +62,7 @@ $product_data = $products[0];
 <?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light pt-0">
+<div class="main-content bg-light pt-0 pb-5">
 
     <div class="section">
         <div class="container">
@@ -64,7 +77,31 @@ $product_data = $products[0];
                     <div class="pb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
-                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
+                            <nav class="d-none d-sm-block" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-3 mb-sm-0">
+                                    <li class="breadcrumb-item"><a href="<?= $pages->get('template=dashboard')->url ?>">Panel</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><?= $page_title ?></li>
+                                </ol>
+                            </nav>
+
+                            <?php
+
+                            if ($input->post->action === 'update-product') {
+                                echo render_alert('Dane produktu zostały zaktualizowane.', 'light');
+                            }
+
+                            if ($input->post->action === 'add-product') {
+                                echo render_alert('Nowy produkt został zarejestrowany..', 'light');
+                            }
+
+                            if ($input->post->action === 'delete-product') {
+                                echo render_alert('Produkt został trwale usunięty.', 'light');
+                            }
+
+                            ?>
+
+
+                            <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left pl-3">Lista produktów</h5>
 
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -73,192 +110,60 @@ $product_data = $products[0];
                                 </div>
                             </nav>
 
-                            <div class="tab-content" id="nav-tabContent">
+                            <form class="mt-5" method="get" action="">
+                                <div class="tab-content" id="nav-tabContent">
 
                                 <div class="tab-pane fade show active" id="registered" role="tabpanel" aria-labelledby="nav-first-tab">
 
-                                    <!--
-                                    <?= render_dashboard_product_inventory_list_item($product_data) ?> -->
+                                    <?php
 
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <img src="<?php echo $urls->images ?>tmp/p1.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                                        if ($products->count()) {
+                                            foreach ($products as $product) {
+                                            echo render_dashboard_product_inventory_list_item(sanitize_product_data($product), $pages->get('template=dashboard-edit-product')->url . '?id=' . $product->id);
+                                            }
+                                        } else
+                                            echo render_info_message('Nie posiadasz aktualnie zarejestrowanych produktów. Wybierz opcję "ZAREJESTRUJ PRODUKT", aby dodać go do listy zarejestrowanych produktów.<div style="height: 0" class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3');
+                                    ?>
+
+                                    <?= get_pagination($products); ?>
+
+                                    <div class="d-flex justify-content-between flex-wrap mt-4">
+                                        <div class="col-12 col-sm-5 px-0">
+                                            <a href=" <?= $pages->get('template=dashboard')->url ?>" class="back-button btn btn-round btn-secondary mb-4 w-100 text-white">Powrót</a>
                                         </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND CLEAR COLOR SYSTEM ODŻYWKA PIELĘGNUJĄCA KOLOR WŁOSÓW 250ML</span></p>
-                                            <p class='text-center text-sm-left'>Dostępne: 120</p>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>75 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
-                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
+                                        <div class="col-12 col-sm-5 px-0">
+                                            <a type="button" href="<?= $pages->get('template=dashboard-add-product')->url ?>" class="btn btn-round btn-primary mb-4 w-100 text-white">Zarejestruj produkt</a>
                                         </div>
                                     </div>
 
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <img src="<?php echo $urls->images ?>tmp/p2.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                        </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM ROSSO - CZERWIEŃ | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
-                                            <p class='text-center text-sm-left'>Dostępne: 21</p>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
-                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
-                                        </div>
-                                    </div>
-
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <img src="<?php echo $urls->images ?>tmp/p3.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                        </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM ARGENTO - SREBRO | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
-                                            <p class='text-center text-sm-left'>Dostępne: 12</p>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
-                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
-                                        </div>
-                                    </div>
-
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <img src="<?php echo $urls->images ?>tmp/p4.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                        </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM SABBIA - PIASEK | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
-                                            <p class='text-center text-sm-left'>Dostępne: 43</p>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
-                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
-                                        </div>
-                                    </div>
-
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <img src="<?php echo $urls->images ?>tmp/p5.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                        </div>
-
-                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND COLOR SYSTEM VIOLET - FIOLET | ODŻYWKA KOLORYZUJĄCO-PIELĘGNACYJNA DO WŁOSÓW 150ML</span></p>
-                                            <p class='text-center text-sm-left'>Dostępne: 7</p>
-                                        </div>
-
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>55 PLN</span>
-                                        </div>
-
-                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='mr-n1' title='usun'>Usuń</a><br>
-                                            <a href="#" class='mr-n1' title='edytuj'>Edytuj</a>
-                                        </div>
-                                    </div>
-
-                                    <nav aria-label="Products navigation">
-                                        <ul class="pagination pagination-round justify-content-center">
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">«</span>
-                                                    <span class="sr-only">Poprzednia</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <span aria-hidden="true">»</span>
-                                                    <span class="sr-only">Następna</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
                                 </div>
 
                                 <div class="tab-pane fade" id="sold" role="tabpanel" aria-labelledby="nav-second-tab">
 
-                                    <!--
-                                    <?= render_dashboard_product_sold_list_item($product_data) ?> -->
-                                    <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
-                                        <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
-                                            <img src="<?php echo $urls->images ?>tmp/p1.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
-                                        </div>
+                                    <?php
+                                        if ($products_sold->count()) {
+                                            foreach ($products_sold as $product_sold) {
+                                                echo render_dashboard_product_sold_list_item(sanitize_product_data($product_sold));
+                                            }
+                                        } else
+                                        echo render_info_message('Żaden z produktów nie został jeszcze sprzedany.<div style="height: 0" class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3');
 
-                                        <div class='col-12 col-sm-4 col-xl-5 pt-sm-0 text-center text-lg-left'>
-                                            <p class='text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'<span>KEMON YO COND CLEAR COLOR SYSTEM ODŻYWKA PIELĘGNUJĄCA KOLOR WŁOSÓW 250ML</span></p>
-                                            <p class='text-center text-sm-left'>Sprzedane: 2</p>
-                                        </div>
+                                    ?>
 
-                                        <div class='mt-1 mt-sm-0 col-12 col-sm-2 text-center font-weight-600 text-sm-left'>
-                                            <span class='product-price badge badge-pill badge-danger d-inline-block'>75 PLN</span>
-                                        </div>
+                                    <?= get_pagination($products_sold); ?>
 
-                                        <div class='col-12 col-sm-3 mt-2 mt-sm-0 text-center text-sm-left'>
-                                            <a href="#" class='mr-n1' title='usun'>Usuń z listy</a>
+                                    <div class="d-flex justify-content-between flex-wrap mt-4">
+                                        <div class="col-12 col-sm-5 px-0">
+                                            <a href=" <?= $pages->get('template=dashboard')->url ?>" class="back-button btn btn-round btn-secondary mb-4 w-100 text-white">Powrót</a>
+                                        </div>
+                                        <div class="col-12 col-sm-5 px-0">
+                                            <a type="button" href="<?= $pages->get('template=dashboard-add-product')->url ?>" class="btn btn-round btn-primary mb-4 w-100 text-white">Zarejestruj produkt</a>
                                         </div>
                                     </div>
-
-                                    <nav aria-label="Products navigation">
-                                        <ul class="pagination pagination-round justify-content-center">
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">«</span>
-                                                    <span class="sr-only">Poprzednia</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <span aria-hidden="true">»</span>
-                                                    <span class="sr-only">Następna</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
 
                                 </div>
 
                             </div>
-
-                            <form class="mt-5" method="get" action="">
-
-                                <div class="row justify-content-center">
-                                    <div class="col-12 col-xl-6">
-                                        <button type="submit" class="btn btn-round btn-outline-dark mb-4 mx-2 mx-lg-0 w-100">Dodaj nowy produkt</button>
-                                    </div>
-
-                                    <input name="company_id" value="3" type="hidden">
-                                    <input name="job_id" value="348459" type="hidden">
-
-                                </div>
 
                             </form>
 
@@ -275,6 +180,8 @@ $product_data = $products[0];
         </div>
     </div>
 
+    <?= render_modal("confirmation", "Potwierdzenie", $modalMarkup) ?>
+
 </div>
 
 <!-- Go to top -->
@@ -287,7 +194,7 @@ $product_data = $products[0];
 <?php include_once "partials/_scripts.php" ?>
 
 <!-- Main script -->
-<script src="<?php echo $urls->js ?>dashboard.js"></script>
+<script src="<?php echo $urls->js ?>dashboard-products.js"></script>
 <script>
 
     $(function () {

@@ -133,10 +133,11 @@ $stepperMarkup = $stepper->render();
 <?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light py-0">
+<div class="main-content bg-light py-0 pb-5">
 
     <div class="section">
         <div class="container">
+
             <div class="row">
 
                 <!-- Sidebar -->
@@ -145,6 +146,7 @@ $stepperMarkup = $stepper->render();
                 <!-- Content body -->
                 <div class="col-lg-8">
                     <div class="pb-3">
+
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
                             <nav class="d-none d-sm-block" aria-label="breadcrumb">
@@ -156,16 +158,19 @@ $stepperMarkup = $stepper->render();
                             </nav>
 
                             <?= $stepperMarkup ?>
+
                         </div>
+
                     </div>
                 </div>
 
             </div>
+
         </div>
     </div>
 
     <?= render_confirmation_modal() ?>
-</div>
+</div></div>
 
 <!-- Go to top -->
 <?php include_once "partials/_go-to-top.php" ?>

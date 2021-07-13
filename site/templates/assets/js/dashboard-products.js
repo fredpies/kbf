@@ -289,7 +289,7 @@ var App = /*#__PURE__*/function () {
     key: "init",
     value: function init() {
       this.$deleteButtons = $('a[data-id]');
-      this.$jobIdField = $('input[name="job_id"]');
+      this.$productIdField = $('input[name="product_id"]');
       this.preloaderButton = new KbfPreloaderButton('.back-button');
     }
   }, {
@@ -297,7 +297,7 @@ var App = /*#__PURE__*/function () {
     value: function addListeners() {
       var instance = this;
       this.$deleteButtons.on('click', function () {
-        instance.$jobIdField.val($(this).data('id'));
+        instance.$productIdField.val($(this).data('id'));
       });
     }
   }]);
@@ -310,4 +310,4 @@ var App = /*#__PURE__*/function () {
     new App();
   });
 })(window.$);
-//# sourceMappingURL=dashboard-jobs.js.map
+//# sourceMappingURL=dashboard-products.js.map

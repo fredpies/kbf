@@ -2,7 +2,7 @@ import errors from "../modules/Errors";
 
 class KbfPreloaderButton extends EventTarget {
 
-    constructor(selector, auto=true) {
+    constructor(selector, auto= true) {
 
         super();
         let $ = window.$;
