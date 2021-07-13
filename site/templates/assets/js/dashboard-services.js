@@ -35,7 +35,8 @@
       key: "init",
       value: function init() {
         this.$deleteButtons = $('a[data-id]');
-        this.$serviceIdField = $('input[name="service_id"]');
+        this.$serviceIdField = $('input[name="service_id"]'); //new KbfBackButton('.kbf-back-button');
+
         var $modal = $('#modal');
         var image = document.getElementById('sample_image');
         var cropper = null;

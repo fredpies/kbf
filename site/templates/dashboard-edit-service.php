@@ -157,7 +157,7 @@ $page_title = $sanitizer->text($page->title);
                                     <div class="col-12 col-lg-6 text-center text-md-right align-self-center mt-4">
                                         <div class="row justify-content-center">
                                             <div class="col-12 col-md-6">
-                                                <button type="button" class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
+                                                <button type="button" onclick="window.history.back()" class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
                                                     Wróć
                                                 </button>
                                             </div>
