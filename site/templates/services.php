@@ -962,25 +962,23 @@ $home_page_url = $pages->get(1)->url;
 
                             <nav class="mt-3" aria-label="Companies navigation">
                                 <?php
-
-                                // Paginacja
-                                echo $pagination
+                                    // Paginacja
+                                    echo $pagination
                                 ?>
                             </nav>
 
                             <?php
-                                // Lista produktów
+                                // Lista usług
                                 foreach ($services as $service) {
-                                    $product_data = sanitize_service_data($service);
-                                    render_service_list_item($product_data);
+                                    $service_data = sanitize_service_data($service);
+                                    render_service_list_item($service_data);
                                 }
                             ?>
 
                             <nav class="mt-3" aria-label="Companies navigation">
                                 <?php
-
-                                // Paginacja
-                                echo $pagination
+                                    // Paginacja
+                                    echo $pagination
                                 ?>
                             </nav>
 

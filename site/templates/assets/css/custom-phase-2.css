@@ -60,26 +60,26 @@
 /******************************/
 /* Panel firmy - Usługi */
 /******************************/
-.add-service .image_area {
+.img-cropper .image_area {
     position: relative;
 }
 
-.add-service img {
+.img-cropper img {
     display: block;
     max-width: 100%;
 }
 
-.add-service .preview {
+.img-cropper .preview {
     overflow: hidden;
     width: 200px;
     height: 200px;
 }
 
-.add-service .modal-lg {
+.img-cropper .modal-lg {
     max-width: 1000px !important;
 }
 
-.add-service .overlay {
+.img-cropper .overlay {
     position: absolute;
     bottom: 10px;
     left: 0;
@@ -91,12 +91,12 @@
     width: 100%;
 }
 
-.add-service .image_area:hover .overlay {
+.img-cropper .image_area:hover .overlay {
     height: 50%;
     cursor: pointer;
 }
 
-.add-service .text {
+.img-cropper .text {
     color: #333;
     font-size: 20px;
     position: absolute;

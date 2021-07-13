@@ -53,9 +53,30 @@ $service_data = sanitize_service_data($page);
                 <div class="col-12 col-md-4">
                     <h5 class="font-weight-700 section-title-4 text-center d-block d-md-none"><?php echo $service_data["service_name"]; ?></h5>
 
-                    <img class="d-block img-fluid" alt="image" src="<?php echo $service_data["service_image"]->url; ?>">
+                    <?php
+                        if($service_data["service_image"] !== null) {
+                            ?>
+                                <img src="<?php echo $service_data["service_image"]->url; ?>" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                            <?php
+                        } else {
+                            ?>
+                                <img src="<?php echo $urls->images ?>image-placeholder.jpg" alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
+                            <?php
+                        }
+                    ?>
+
                     <div class="text-center text-md-left mt-3">
-                        <span class="badge badge-pill badge-danger h6"><?php echo $service_data["service_price"]; ?> PLN</span>
+                    <?php
+                        if($service_data["service_price"] > 0) {
+                            ?>
+                                <span class="badge badge-pill badge-danger h6"><?php echo $service_data["service_price"]; ?> PLN</span>
+                            <?php
+                        } else {
+                            ?>
+                            <span>Skontaktuj się z firmą w celu uzyskania szczegółowych informacji.</span>
+                            <?php
+                        }
+                    ?>
                     </div>
                 </div>
 
