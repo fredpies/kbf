@@ -95,7 +95,7 @@
           formData.append("service_price", $("#service_price").val());
           $.ajax({
             type: 'POST',
-            url: '/kbf/api/upload/',
+            url: '/kbf/api/add-service/',
             data: formData,
             processData: false,
             contentType: false

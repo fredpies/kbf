@@ -643,7 +643,9 @@ function render_service_list_item($service_data) {
     if(count($service_data) === 0) return;
 
     // Obraz uslugi
-    $service_image_url = $service_data["service_image"]->url;
+    $service_image_url = wire('urls')->images."image-placeholder.jpg";
+    echo $service_data["service_image"];
+    if($service_data["service_image"] !== null) {$service_image_url = $service_data["service_image"]->url;}
 
     echo " 
         <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
