@@ -25184,6 +25184,37 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
         this.$currentImageItem = $(this.$el).parent();
         this.$confirmationModal.modal('show');
       },
+      showCropperModal: function showCropperModal() {
+        var instance = this;
+        var cropper;
+        var files = this.$el.files;
+
+        var done = function done(url) {
+          instance.$refs.sampleImage.src = url;
+          instance.$cropperModal.modal('show');
+        };
+
+        if (files && files.length > 0) {
+          var reader = new FileReader();
+
+          reader.onload = function (event) {
+            done(reader.result);
+          };
+
+          reader.readAsDataURL(files[0]);
+        }
+
+        this.$cropperModal.on('shown.bs.modal', function () {
+          cropper = new Cropper(instance.$refs.sampleImage, {
+            aspectRatio: 1,
+            viewMode: 2,
+            preview: '.preview'
+          });
+        }).on('hidden.bs.modal', function () {
+          cropper.destroy();
+          cropper = null;
+        });
+      },
       deleteImage: function deleteImage() {
         var instance = this;
         this.$confirmationModal.modal('hide');

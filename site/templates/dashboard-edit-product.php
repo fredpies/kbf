@@ -146,7 +146,7 @@ $product_images = '
                     <div class="img-container">
                         <div class="row">
                             <div class="col-md-6">
-                                <img src="" id="sample_image" />
+                                <img x-ref="sampleImage" src="" id="sample_image" />
                             </div>
                             <div class="col-md-6 text-center">
                                 <p>Podgląd przyciętego obrazu</p>
@@ -163,7 +163,7 @@ $product_images = '
         </div>
             </div>
             
-            <input class="d-none" type="file" class="image" id="upload_image" accept="image/*"/>
+            <input @change="showCropperModal" class="d-none" type="file" class="image" id="upload_image" accept="image/*"/>
             
     </div>' . render_modal("confirmation", "Potwierdzenie", $modalMarkup) . '</div>' .
 
@@ -195,6 +195,9 @@ $tabsPhone->addMarkup($product_images, "Obrazy produktu");
 
     <!-- Wysiwyg -->
     <link rel="stylesheet" href="//cdn.quilljs.com/1.3.6/quill.bubble.css">
+
+    <!-- crop images: Cropper CSS -->
+    <link rel="stylesheet" href="<?php echo $urls->css ?>cropper.css">
 
 </head>
 <body>
@@ -274,7 +277,6 @@ $tabsPhone->addMarkup($product_images, "Obrazy produktu");
 
     </div>
 
-
 </div>
 
 <!-- Go to top -->
@@ -285,6 +287,8 @@ $tabsPhone->addMarkup($product_images, "Obrazy produktu");
 
 <!-- Scripts -->
 <?php include_once "partials/_scripts.php" ?>
+
+<script src="<?php echo $urls->js ?>vendor/cropper.js"></script>
 
 <!-- Form validation -->
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
