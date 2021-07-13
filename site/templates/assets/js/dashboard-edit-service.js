@@ -34,8 +34,6 @@
     _createClass(App, [{
       key: "init",
       value: function init() {
-        this.$deleteButtons = $('a[data-id]');
-        this.$serviceIdField = $('input[name="service_id"]');
         var $modal = $('#modal');
         var image = document.getElementById('sample_image');
         var cropper = null;
@@ -88,31 +86,28 @@
             };
           });
         });
-        $("#add-service").submit(function (event) {
+        $("#edit-service").submit(function (event) {
           event.preventDefault();
+          formData.append("id", $("#service_id").val());
           formData.append("service_name", $("#service_name").val());
           formData.append("service_description", $("#service_description").val());
           formData.append("service_price", $("#service_price").val());
+          console.log(formData);
           $.ajax({
             type: 'POST',
-            url: '/kbf/api/upload/',
+            url: '/kbf/api/edit-service/',
             data: formData,
             processData: false,
             contentType: false
           }).done(function (data) {
             console.log(data);
-            window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=service-added";
+            window.location.href = location.protocol + '//' + location.host + "/kbf/panel/uslugi/?action=service-updated";
           });
         });
       }
     }, {
       key: "addListeners",
-      value: function addListeners() {
-        var instance = this;
-        this.$deleteButtons.on('click', function () {
-          instance.$serviceIdField.val($(this).data('id'));
-        });
-      }
+      value: function addListeners() {}
     }]);
 
     return App;
@@ -125,4 +120,4 @@
   })(window.$);
 
 }());
-//# sourceMappingURL=dashboard-services.js.map
+//# sourceMappingURL=dashboard-edit-service.js.map
