@@ -1359,6 +1359,14 @@ footer {
   opacity: 1;
 }
 
+footer a {
+  color: white !important;
+}
+
+footer a:hover {
+  color: #2196f3 !important;
+}
+
 /******************************/
 /* Fix                        */
 /******************************/
