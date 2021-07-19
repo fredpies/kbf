@@ -20172,68 +20172,117 @@ var KbfForm = /*#__PURE__*/function () {
   return KbfForm;
 }();
 
-var KbfTabs = /*#__PURE__*/function () {
-  function KbfTabs(formName) {
-    _classCallCheck(this, KbfTabs);
+var config = {
+  env: 'dev',
+  url: 'https://webplanet.biz',
+  apiEndpoint: 'https://webplanet.biz/kbf/'
+};
 
-    this.formIsValid = true;
-    if (formName) this.formName = formName;
+var KbfProductImagesAdd = function KbfProductImagesAdd() {
+  _classCallCheck(this, KbfProductImagesAdd);
 
-    if (window.innerWidth >= 768) {
-      $('.mobile-tabs').remove();
-    }
+  var $ = window.$;
 
-    if (window.innerWidth < 768) {
-      $('.desktop-tabs').remove();
-    }
+  window.productImagesAdd = function () {
+    return {
+      images: [],
+      imagesCount: 0,
+      imgs: [],
+      init: function init() {
+        var instance = this;
+        window.imageNames = [];
+        this.productId = this.$el.dataset.id;
+        this.$confirmationModal = $('#confirmation');
+        this.$cropperModal = $(this.$refs.cropperModal);
+        this.cropper = undefined;
+        this.formData = new FormData();
+        this.$cropperModal.on('shown.bs.modal', function () {
+          instance.cropper = new Cropper(instance.$refs.sampleImage, {
+            aspectRatio: 1,
+            viewMode: 2,
+            preview: '.preview'
+          });
+        }).on('hidden.bs.modal', function () {
+          instance.cropper.destroy();
+          instance.cropper = null;
+        });
+      },
+      showModal: function showModal() {
+        this.currentImageUrl = this.$el.dataset.imageSrc;
+        this.$currentImageItem = $(this.$el).parent();
+        this.$confirmationModal.modal('show');
+        this.currentIdx = this.$el.parentElement.dataset.idx;
+        this.currentImageName = this.$el.parentElement.dataset.imageFileName;
+      },
+      showCropperModal: function showCropperModal() {
+        var instance = this;
+        var files = this.$el.files;
 
-    this.init();
-    this.addListeners();
-  }
+        var done = function done(url) {
+          instance.$refs.sampleImage.src = url;
+          instance.$cropperModal.modal('show');
+        };
 
-  _createClass(KbfTabs, [{
-    key: "init",
-    value: function init() {
-      var $ = window.$;
-      var instance = this;
-      this.$tabToggles = $('[data-toggle="tab"]'); // Taby
-      // Inicjuj kontroler formularza jezeli podano nazwe
+        if (files && files.length > 0) {
+          this.currentFileName = files[0].name;
+          var reader = new FileReader();
 
-      if (this.formName) {
-        this.formController = new KbfForm({
-          formName: instance.formName,
-          onfocusout: false,
-          onfocus: false,
-          onkeyup: false
+          reader.onload = function (event) {
+            done(reader.result);
+          };
+
+          reader.readAsDataURL(files[0]);
+        }
+
+        $(this.$el).val('');
+      },
+      cropImage: function cropImage() {
+        var instance = this;
+        var canvas = this.cropper.getCroppedCanvas({
+          width: 400,
+          height: 400
+        });
+
+        if (canvas) {
+          canvas.toBlob(function (blob) {
+            var reader = new FileReader();
+            reader.readAsDataURL(blob);
+            instance.images.push({
+              imageSrc: URL.createObjectURL(blob),
+              imageName: instance.currentFileName
+            });
+
+            reader.onloadend = function () {
+              instance.imageData = reader.result;
+              instance.formData.append("product_image", blob, instance.currentFileName);
+              instance.$cropperModal.modal('hide');
+              $.ajax({
+                type: 'POST',
+                url: config.apiEndpoint + 'api/upload-image/',
+                data: instance.formData,
+                processData: false,
+                contentType: false
+              }).done(function () {
+                window.imageNames.push(instance.currentFileName);
+              });
+            };
+          });
+        }
+      },
+      deleteImage: function deleteImage() {
+        var instance = this;
+        this.$confirmationModal.modal('hide');
+        this.images.splice(this.currentIdx, 1);
+        window.imageNames.splice(this.currentIdx, 1);
+        this.$currentImageItem.fadeOut(350, function () {
+          $.post(config.apiEndpoint + 'api/delete-image/', {
+            imageName: instance.currentImageName
+          }).done(function () {});
         });
       }
-    }
-  }, {
-    key: "addListeners",
-    value: function addListeners() {
-      var instance = this; // Zablokuj przelaczanie tabow jezeli sa bledy w formularzu
-
-      if (this.formName) {
-        this.$tabToggles.on('click', function (e) {
-          instance.validateForm();
-          if (!instance.formIsValid) e.stopPropagation();
-        });
-      }
-    }
-  }, {
-    key: "validateForm",
-    value: function validateForm() {
-      var formExists = $("form[name=\"".concat(this.formName, "\"]")).length > 0;
-
-      if (formExists) {
-        this.formController.validate();
-        this.formIsValid = this.formController.formIsValid;
-      }
-    }
-  }]);
-
-  return KbfTabs;
-}();
+    };
+  };
+};
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
@@ -25164,166 +25213,73 @@ var src_default = alpine_default; // packages/alpinejs/builds/module.js
 
 var module_default = src_default;
 
-var config = {
-  env: 'dev',
-  url: 'https://webplanet.biz',
-  apiEndpoint: 'https://webplanet.biz/kbf/'
-};
-
-var KbfProductImagesEdit = function KbfProductImagesEdit() {
-  _classCallCheck(this, KbfProductImagesEdit);
-
-  var $ = window.$;
-
-  window.productImagesEdit = function () {
-    return {
-      images: [],
-      imagesCount: 0,
-      imgs: [],
-      init: function init() {
-        var instance = this;
-        this.productId = this.$el.dataset.id;
-        this.$confirmationModal = $('#confirmation');
-        this.$cropperModal = $(this.$refs.cropperModal);
-        this.cropper = undefined;
-        this.formData = new FormData();
-        this.$cropperModal.on('shown.bs.modal', function () {
-          instance.cropper = new Cropper(instance.$refs.sampleImage, {
-            aspectRatio: 1,
-            viewMode: 2,
-            preview: '.preview'
-          });
-        }).on('hidden.bs.modal', function () {
-          instance.cropper.destroy();
-          instance.cropper = null;
-        });
-        this.getImages();
-      },
-      updateImagesCount: function updateImagesCount() {
-        this.imagesCount = this.images.length;
-      },
-      showModal: function showModal() {
-        this.currentImageUrl = this.$el.dataset.imageSrc;
-        this.$currentImageItem = $(this.$el).parent();
-        this.$confirmationModal.modal('show');
-      },
-      showCropperModal: function showCropperModal() {
-        var instance = this;
-        var files = this.$el.files;
-
-        var done = function done(url) {
-          instance.$refs.sampleImage.src = url;
-          instance.$cropperModal.modal('show');
-        };
-
-        if (files && files.length > 0) {
-          this.currentFileName = files[0].name;
-          var reader = new FileReader();
-
-          reader.onload = function (event) {
-            done(reader.result);
-          };
-
-          reader.readAsDataURL(files[0]);
-        }
-
-        $(this.$el).val('');
-      },
-      cropImage: function cropImage() {
-        var instance = this;
-        var canvas = this.cropper.getCroppedCanvas({
-          width: 400,
-          height: 400
-        });
-        canvas.toBlob(function (blob) {
-          var reader = new FileReader();
-          reader.readAsDataURL(blob);
-
-          reader.onloadend = function () {
-            instance.imageData = reader.result;
-            instance.formData.append("product_image", blob, instance.currentFileName);
-            instance.formData.append("product_id", instance.productId);
-            instance.$cropperModal.modal('hide');
-            $.ajax({
-              type: 'POST',
-              url: config.apiEndpoint + 'api/update-product-images/',
-              data: instance.formData,
-              processData: false,
-              contentType: false
-            }).done(function () {
-              instance.getImages();
-            });
-          };
-        });
-      },
-      deleteImage: function deleteImage() {
-        var instance = this;
-        this.$confirmationModal.modal('hide');
-        this.$currentImageItem.fadeOut(350, function () {
-          $.post(config.apiEndpoint + 'api/delete-image-from-product/', {
-            image_url: instance.currentImageUrl,
-            page_id: instance.productId
-          }).done(function () {
-            instance.getImages();
-          });
-        });
-      },
-      getImages: function getImages() {
-        var instance = this;
-        $.get(config.apiEndpoint + 'api/get-product-images/?id=' + instance.productId).done(function (res) {
-          instance.images = res;
-          instance.$nextTick(function () {
-            instance.updateImagesCount();
-          });
-        });
-      }
-    };
-  };
-};
-
 var App = /*#__PURE__*/function () {
   function App() {
     _classCallCheck(this, App);
 
     this.init();
-    this.addListeners();
   }
 
   _createClass(App, [{
     key: "init",
     value: function init() {
-      // Taby
-      this.tabs = new KbfTabs('dashboard-edit-product');
-      this.$form = $('[name="dashboard-edit-product"]');
-      this.$submitButton = $('.submit-button'); // Wysiwyg
+      // Wysiwyg
       // TODO: Musi byc zmienione, ukryte pole musi byc niezalezne od kontekstu
-
       this.$descriptionFieldHidden = $('[name="product_description_hidden"]');
       this.wysiwyg = new KbfWysiwyg('.wysiwyg');
       var htmlToInsert = this.$descriptionFieldHidden.val();
       var editor = document.getElementsByClassName('ql-editor');
-      editor[0].innerHTML = htmlToInsert; // Preloader buttons
+      editor[0].innerHTML = htmlToInsert;
+      var component = this;
+      new KbfProductImagesAdd(); // Adding product
 
-      this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
-      this.backButton = new KbfPreloaderButton('.back-button'); // Editing images
+      window.addProduct = function () {
+        return {
+          init: function init() {
+            this.$form = $('[name="dashboard-add-product"]');
+            this.formData = new FormData();
+            this.validate = component.validate;
+            this.formIsValid = component.formIsValid;
+            this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
+            this.backButton = new KbfPreloaderButton('.back-button');
+            this.form = new KbfForm({
+              formName: 'dashboard-add-product'
+            }, 'pl');
+          },
+          addProduct: function addProduct() {
+            var instance = this;
+            this.form.validate();
 
-      new KbfProductImagesEdit();
+            if (window.imageNames.length === 0) {
+              console.log($('#product_images-error'));
+              $('#product_images-error').attr('style', 'display: block');
+            } else $('#product_images-error').attr('style', 'display: none');
+
+            if (this.form.formIsValid && window.imageNames.length > 0) {
+              this.preloaderButton.triggerStart($('.submit-button')[0]);
+              this.formData.append('company_id', this.$el.dataset.companyId);
+              this.formData.append('product_name', this.$form.find('input[name="product_name"]').val());
+              this.formData.append('product_price', this.$form.find('input[name="product_price"]').val());
+              this.formData.append('product_inventory', this.$form.find('input[name="product_inventory"]').val());
+              this.formData.append('product_description', this.$form.find('input[name="product_description"]').val());
+              this.formData.append('image_names', window.imageNames);
+              $.ajax(config.apiEndpoint + 'api/add-product/', {
+                type: 'POST',
+                data: instance.formData,
+                processData: false,
+                contentType: false
+              }).done(function (res) {
+                instance.$form.submit();
+              }).fail(function () {
+                console.log('Error');
+              });
+            }
+          }
+        };
+      };
+
       window.Alpine = module_default;
       module_default.start();
-    }
-  }, {
-    key: "addListeners",
-    value: function addListeners() {
-      var instance = this;
-      this.$submitButton.on('click', function (e) {
-        e.preventDefault();
-        instance.tabs.validateForm();
-
-        if (instance.tabs.formIsValid) {
-          instance.preloaderButton.triggerStart(this);
-          instance.$form.submit();
-        }
-      });
     }
   }]);
 
@@ -25335,4 +25291,4 @@ var App = /*#__PURE__*/function () {
     new App();
   });
 })(window.$);
-//# sourceMappingURL=dashboard-edit-product.js.map
+//# sourceMappingURL=dashboard-add-product.js.map

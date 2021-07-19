@@ -1,12 +1,12 @@
 import config from "../config/config";
 
-class KbfProductImagesEdit {
+class KbfProductImagesAdd {
 
     constructor() {
 
         let $ = window.$;
 
-        window.productImagesEdit = function () {
+        window.productImagesAdd = function () {
 
             return {
 
@@ -18,35 +18,36 @@ class KbfProductImagesEdit {
 
                     let instance = this;
 
+                    window.imageNames = [];
+
                     this.productId = this.$el.dataset.id;
                     this.$confirmationModal = $('#confirmation');
                     this.$cropperModal = $(this.$refs.cropperModal);
                     this.cropper = undefined;
                     this.formData = new FormData();
 
-                    this.$cropperModal.on('shown.bs.modal', function() {
+                    this.$cropperModal.on('shown.bs.modal', function () {
                         instance.cropper = new Cropper(instance.$refs.sampleImage, {
                             aspectRatio: 1,
                             viewMode: 2,
-                            preview:'.preview'
+                            preview: '.preview'
                         });
-                    }).on('hidden.bs.modal', function(){
+                    }).on('hidden.bs.modal', function () {
                         instance.cropper.destroy();
                         instance.cropper = null;
                     });
 
-                    this.getImages();
-
-                },
-
-                updateImagesCount() {
-                    this.imagesCount = this.images.length;
                 },
 
                 showModal() {
+
                     this.currentImageUrl = this.$el.dataset.imageSrc;
                     this.$currentImageItem = ($(this.$el).parent());
                     this.$confirmationModal.modal('show');
+
+                    this.currentIdx = this.$el.parentElement.dataset.idx;
+                    this.currentImageName = this.$el.parentElement.dataset.imageFileName;
+
                 },
 
                 showCropperModal() {
@@ -54,17 +55,17 @@ class KbfProductImagesEdit {
                     let instance = this;
                     let files = this.$el.files;
 
-                    let done = function(url) {
+                    let done = function (url) {
                         instance.$refs.sampleImage.src = url;
                         instance.$cropperModal.modal('show');
                     };
 
-                    if(files && files.length > 0) {
+                    if (files && files.length > 0) {
 
                         this.currentFileName = files[0].name;
 
                         let reader = new FileReader();
-                        reader.onload = function(event) {
+                        reader.onload = function (event) {
                             done(reader.result);
                         };
                         reader.readAsDataURL(files[0]);
@@ -83,61 +84,63 @@ class KbfProductImagesEdit {
                         height: 400
                     });
 
-                    canvas.toBlob(function(blob) {
-                        let reader = new FileReader();
-                        reader.readAsDataURL(blob);
-                        reader.onloadend = function(){
+                    if (canvas) {
+                        canvas.toBlob(function (blob) {
+                            let reader = new FileReader();
 
-                            instance.imageData = reader.result;
-                            instance.formData.append("product_image", blob, instance.currentFileName);
-                            instance.formData.append("product_id", instance.productId)
-                            instance.$cropperModal.modal('hide');
-
-                            $.ajax({
-                                type: 'POST',
-                                url: config.apiEndpoint + 'api/update-product-images/',
-                                data: instance.formData,
-                                processData: false,
-                                contentType: false
-                            }).done(function() {
-                                instance.getImages();
+                            reader.readAsDataURL(blob);
+                            instance.images.push({
+                                imageSrc: URL.createObjectURL(blob),
+                                imageName: instance.currentFileName
                             });
-                        };
-                    });
+
+                            reader.onloadend = function () {
+
+                                instance.imageData = reader.result;
+                                instance.formData.append("product_image", blob, instance.currentFileName);
+                                instance.$cropperModal.modal('hide');
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: config.apiEndpoint + 'api/upload-image/',
+                                    data: instance.formData,
+                                    processData: false,
+                                    contentType: false
+                                }).done(function () {
+                                    window.imageNames.push(instance.currentFileName);
+                                });
+
+
+                            };
+                        });
+                    }
+
+
                 },
 
                 deleteImage() {
 
                     let instance = this;
                     this.$confirmationModal.modal('hide');
+                    this.images.splice(this.currentIdx, 1);
+                    window.imageNames.splice(this.currentIdx, 1);
 
                     this.$currentImageItem.fadeOut(350, function () {
-                        $.post( config.apiEndpoint + 'api/delete-image-from-product/',
+                        $.post(config.apiEndpoint + 'api/delete-image/',
                             {
-                                image_url: instance.currentImageUrl,
-                                page_id: instance.productId
+                                imageName: instance.currentImageName,
                             }
                         ).done(function () {
-                            instance.getImages();
                         })
                     });
+
                 },
 
-                getImages() {
-
-                    let instance = this;
-
-                    $.get(config.apiEndpoint + 'api/get-product-images/?id=' + instance.productId)
-                        .done(function (res) {
-                            instance.images = res;
-                            instance.$nextTick(function () {
-                                instance.updateImagesCount();
-                            });
-                        });
-                }
             }
+
         }
+
     }
 }
 
-export default KbfProductImagesEdit;
+export default KbfProductImagesAdd;

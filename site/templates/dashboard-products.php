@@ -19,7 +19,13 @@ check_user($user);
 $company_page = $pages->get($session->company_page_id);
 check_user_company($company_page);
 
+// USUWANIE
+if ($input->post->action === 'delete-product') {
+    delete_page($sanitizer->int($input->post->product_id));
+}
+
 $products_group = $company_page->find("title=Produkty");
+
 if ($products_group->count()) {
     $products = $products_group[0]->children();
     $products_sold = $products_group[0]->children()->find('product_sold>0');
@@ -28,6 +34,7 @@ else {
     $products = array();
     $products_sold = array();
 }
+
 
 // Modal
 $modalMarkup = '
@@ -99,7 +106,6 @@ $modalMarkup = '
                             }
 
                             ?>
-
 
                             <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left pl-3">Lista produktów</h5>
 

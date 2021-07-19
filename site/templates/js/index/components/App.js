@@ -11,36 +11,62 @@ class App {
         window.areasGeoJSON = areasGeoJSON;
 
         this.init();
+        this.addListeners();
     }
 
     init() {
+
         new KbfAreaSwitcher('provinces', 'areas');
 
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+        this.$topSection = $('#top-section');
+        this.$industriesSidebar = $('#industriesSidebar');
+        this.$industriesSidebarOpenButton = $('#industriesSidebarOpenButton');
+        this.$industriesSidebarCloseButton = $("#industriesSidebarCloseButton");
+
+    }
+
+    addListeners() {
+
+        let instance = this;
+
         // First section industries sub-menu opening and closing
-        $("#industriesSidebarOpenButton").click(function() {
-            $("#top-section").removeClass('col-xl-12');
-            $("#top-section").addClass('col-xl-9');
+        this.$industriesSidebarOpenButton.click(function () {
+            instance.$topSection.removeClass('col-xl-12');
+            instance.$topSection.addClass('col-xl-9');
 
-            $("#industriesSidebar").addClass('d-xl-block');
+            instance.$industriesSidebar.addClass('d-xl-block');
 
-            $("#industriesSidebarOpenButton").removeClass('d-xl-block')
-            $("#industriesSidebarOpenButton").addClass('d-none')
+            instance.$industriesSidebarOpenButton.removeClass('d-xl-block')
+            instance.$industriesSidebarOpenButton.addClass('d-none')
 
-            $("#industriesSidebarCloseButton").addClass('d-xl-block');
+            instance.$industriesSidebarCloseButton.addClass('d-xl-block');
         });
 
-        $("#industriesSidebarCloseButton").click(function() {
-            $("#top-section").removeClass('col-xl-9');
-            $("#top-section").addClass('col-xl-12');
+        this.$industriesSidebarCloseButton.click(function () {
+            instance.$topSection.removeClass('col-xl-9');
+            instance.$topSection.addClass('col-xl-12');
 
-            $("#industriesSidebar").removeClass('d-xl-block');
-            $("#industriesSidebar").addClass('d-none');
+            instance.$industriesSidebar.removeClass('d-xl-block');
+            instance.$industriesSidebar.addClass('d-none');
 
-            $("#industriesSidebarCloseButton").removeClass('d-xl-block')
-            $("#industriesSidebarCloseButton").addClass('d-none')
+            instance.$industriesSidebarCloseButton.removeClass('d-xl-block')
+            instance.$industriesSidebarCloseButton.addClass('d-none')
 
-            $("#industriesSidebarOpenButton").addClass('d-xl-block');
+            instance.$industriesSidebarOpenButton.addClass('d-xl-block');
         });
+
+        this.$showFooterTop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            instance.$footerTop.toggleClass('show-footer-top');
+        });
+
+        $(window).scroll(function () {
+            instance.$footerTop.removeClass('show-footer-top');
+        });
+
     }
 
 }

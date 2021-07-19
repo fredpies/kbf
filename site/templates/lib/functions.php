@@ -977,6 +977,7 @@ function render_dashboard_product_inventory_list_item($product_data, $editUrl = 
             </div>
         
            <div class='text-center text-md-left col-12 col-sm-2 col-lg-1 p-xl-2 mt-3 mt-sm-0'>
+                <a href='{product_url}?action=preview' class='p-1' title='podglad'>Podgląd</a>
                 <a href='{edit_url}' class='p-1' title='edytuj'>Edytuj</a>
                 <a data-id='{product_id}' data-toggle='modal' href='#confirmation' class='p-1' title='usun'>Usuń</a>
             </div>
@@ -987,6 +988,7 @@ function render_dashboard_product_inventory_list_item($product_data, $editUrl = 
 
     return replacePlaceholders(array(
         "{product_id}" => $product_data["product_id"],
+        "{product_url}" => $product_data["product_url"],
         "{product_image}" => $product_image_url,
         "{product_name}" => $product_data["product_name"],
         "{product_inventory}" => $product_data["product_inventory"],
@@ -1989,6 +1991,26 @@ function add_job ($parent_page, $page_data, $template = "job", $ignore = ["name"
 
     $_page->name = $page_data["job_name"];
     $_page->title = $page_data["job_name"];
+
+    foreach ($page_data as $page_field => $value) {
+        if (!in_array($page_field, $ignore)) {
+            $_page->set($page_field, $value);
+        }
+    }
+
+    $_page->save();
+    $_page->of(true);
+
+    return $_page;
+
+}
+
+function add_product ($parent_page, $page_data, $template = "product", $ignore = ["product_sold", "product_blocked", "product_shipping_cost", "product_images"]) {
+
+    $_page = get_page_for_insert($parent_page, $template, $page_data, $ignore);
+
+    $_page->name = $page_data["product_name"];
+    $_page->title = $page_data["product_name"];
 
     foreach ($page_data as $page_field => $value) {
         if (!in_array($page_field, $ignore)) {

@@ -248,7 +248,7 @@ include_once "lib/functions.php";
         </div>
 
 
-        <div id="top-section" class="col-9">
+        <div id="top-section" class="col">
             <button id="industriesSidebarCloseButton"
                     class="d-none d-xl-block btn btn-round btn-warning mt-5 sidebarActionButton"><<
             </button>
@@ -709,7 +709,9 @@ include_once "lib/functions.php";
         </div>
     </div>
 
+
 </div>
+
 
 <!-- Footer -->
 <?php include_once "partials/_footer.php" ?>
