@@ -72,8 +72,8 @@ $modalMarkup = '
                 <!-- Content body -->
                 <div class="col-lg-8">
 
-                    <div class="pb-3 mb-3">
-                        <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
+                    <div class="pb-3 mb-3 h-100">
+                        <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5 h-100">
 
                             <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
 
