@@ -2,6 +2,7 @@ import KbfIndustryFilter from "../../components/KbfIndustryFilter";
 import KbfTag from "../../components/KbfTag";
 import KbfLikeCompany from "../../components/KbfLikeCompany";
 import Alpine from "alpinejs";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -41,6 +42,7 @@ class App {
         })
 
         new KbfLikeCompany();
+        new KbfFooterTop();
 
         window.Alpine = Alpine;
         Alpine.start();

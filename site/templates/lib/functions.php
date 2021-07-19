@@ -12,7 +12,8 @@ use GusApi\GusApi;
  * *************/
 
 // Zwraca branze z bazy
-function get_industries() {
+function get_industries()
+{
 
     $db = wire("db");
 
@@ -37,7 +38,8 @@ function get_industries() {
 }
 
 // Zwraca sub branze z bazy na podstawie nazwy branzy
-function get_sub_industries($industry) {
+function get_sub_industries($industry)
+{
 
     $database = wire("database");
     $db = wire("db");
@@ -69,7 +71,8 @@ function get_sub_industries($industry) {
 
 // Renderuje informacje o firmie
 // TODO: Wymaga refaktoryzacji
-function render_company_info($company_data = array()) {
+function render_company_info($company_data = array())
+{
 
     if (count($company_data) === 0) return;
     $pages = wire("pages");
@@ -89,7 +92,7 @@ function render_company_info($company_data = array()) {
     // Jezeli logo nie istnieje ustaw padding left
     $paddingLeft = "";
     if (empty($company_data["company_logo_url"])) $paddingLeft = "style=\"padding-left: 15px;\"";
-    echo $paddingLeft. "class=\"row no-gutters\">";
+    echo $paddingLeft . "class=\"row no-gutters\">";
 
     // Wyswietl logo firmy jezeli istnieje
     if (!empty($company_data["company_logo_url"])) {
@@ -104,7 +107,7 @@ function render_company_info($company_data = array()) {
     // Wyswietl regon jesli istnieje
     if (!empty($company_data["company_regon"])) echo "<div class=\"company-address mb-2 small\">REGON:" . $company_data["company_regon"] . "</div>";
 
-    echo "<div class=\"company-street\">" . $company_address ."</div>";
+    echo "<div class=\"company-street\">" . $company_address . "</div>";
     echo "<div class=\"company-zip-city mb-2\">";
     echo "<span class=\"company-zip\">" . $company_data["company_zip"] . " </span>";
     echo "<span class=\"company-city\">" . $company_city . "</span>";
@@ -134,17 +137,18 @@ function render_company_info($company_data = array()) {
     echo "<div class=\"company-industries\">";
     // Wyswietl branze
     if (!empty($company_data["industry"]))
-        echo "<a href=\"" . $company_list_page_url ."?industry=" . $company_data["industry"] . "\"><span class=\"company-industry badge badge-pill badge-primary mb-1 mt-3\">" . $company_data["industry"] . "</span></a>";
+        echo "<a href=\"" . $company_list_page_url . "?industry=" . $company_data["industry"] . "\"><span class=\"company-industry badge badge-pill badge-primary mb-1 mt-3\">" . $company_data["industry"] . "</span></a>";
     // Wyswietl sub-branze
     if (!empty($company_data["sub_industry"]))
-        echo "<a href=\"" .  $company_list_page_url . "?sub_industry=" .  $company_data["sub_industry"] ."\"><span class=\"company-industry badge badge-pill badge-warning mb-1 mt-1\">" . $company_data["sub_industry"] . "</span></a>";
+        echo "<a href=\"" . $company_list_page_url . "?sub_industry=" . $company_data["sub_industry"] . "\"><span class=\"company-industry badge badge-pill badge-warning mb-1 mt-1\">" . $company_data["sub_industry"] . "</span></a>";
 
     echo "</div></div></div>";
 
 }
 
 // Renderuje podsumowanie firmy
-function render_company_summary() {
+function render_company_summary()
+{
 
     return '<div class="container"><div class="row mt-3">
                     
@@ -195,7 +199,8 @@ function render_company_summary() {
 }
 
 // Renderuje panel ze skrocona informacja o ofercie pracy
-function render_job_info($job_data = array(), $device = "desktop") {
+function render_job_info($job_data = array(), $device = "desktop")
+{
 
     if (count($job_data) === 0) return;
     $urls = wire("urls");
@@ -207,7 +212,7 @@ function render_job_info($job_data = array(), $device = "desktop") {
         echo "<div class=\"col-md-6 col-lg-4\">";
         echo "<div class=\"company-job card text-white bg-viridian-100 border-0 shadow bg-image\" data-img-src=\"$job_excerpt_background_image\">";
         echo "<div class=\"company-job-title card-header font-weight-700 text-uppercase\">";
-        echo "<a href=\"#\" class=\"d-flex align-items-center text-white\"> <i class=\"fas fa-bahai fa-lg mr-2\"></i> <span class=\"mt-1\">" . $job_data["job_name"] . "</span></a>";
+        echo "<a href=\"" . $job_data["job_url"] . "\" class=\"d-flex align-items-center text-white\"> <i class=\"fas fa-bahai fa-lg mr-2\"></i> <span class=\"mt-1\">" . $job_data["job_name"] . "</span></a>";
         echo "</div>";
         echo "<div class=\"company-job-description card-body position-relative\">";
         echo "<p class=\"card-text\">Poszukujemy pracownika na stanowisko: <span class=\"d-block my-2 font-weight-600 text-warning\">" . $job_data["job_name"] . "</span>";
@@ -235,10 +240,13 @@ function render_job_info($job_data = array(), $device = "desktop") {
 
     }
 
-};
+}
+
+;
 
 // Renderuje repeater dla ofert pracy
-function render_job_repeater($items = array(), $fieldName = "field", $title = "") {
+function render_job_repeater($items = array(), $fieldName = "field", $title = "")
+{
 
     // TODO: Trzeba ustawic na realne dane
     $itemTemplate = '<li class="repeater-item d-flex list-group-item"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="repeater-delete-action d-inline-block ml-2">Usuń</a></div></li>';
@@ -301,7 +309,8 @@ function render_job_repeater($items = array(), $fieldName = "field", $title = ""
 }
 
 // Renderuje panel z informacjami o produkcie
-function render_product_info($product_data, $device="desktop") {
+function render_product_info($product_data, $device = "desktop")
+{
 
     if (count($product_data) === 0) return;
     $sanitizer = wire("sanitizer");
@@ -322,7 +331,7 @@ function render_product_info($product_data, $device="desktop") {
         echo "</div>";
 
         echo "<div class=\"company-product-info-details bg-white position-absolute text-center z-index-9\">";
-        echo "<h5 class=\"font-weight-700 mt-2\"><a href=\"" . $product_data["product_url"]  . "\" class=\"text-dark-gray\">" . $product_data["product_name"] . "</a></h5>";
+        echo "<h5 class=\"font-weight-700 mt-2\"><a href=\"" . $product_data["product_url"] . "\" class=\"text-dark-gray\">" . $product_data["product_name"] . "</a></h5>";
 
         echo "<p>" . $sanitizer->text(get_excerpt($product_data["product_description"], 145)) . "</p>";
         echo "<h6 class=\"font-weight-400 font-italic mb-2\"><span class=\"text-carrot\">" . $product_data["product_price"] . " PLN<br></span>
@@ -352,8 +361,8 @@ function render_product_info($product_data, $device="desktop") {
         echo "<h5 class=\"font-weight-700 mt-2\"><a href=\"#\" class=\"text-dark-gray\">" . $product_data["product_name"] . "</a></h5>";
         echo "<p>" . $sanitizer->text(get_excerpt($product_data["product_description"], 150)) . "</p>";
 
-        echo "<h6 class=\"font-weight-400 font-italic mb-2\"><span class=\"text-carrot\">" . $product_data["product_price"] ." PLN</span>
-                                <a href=\"" . $product_data["product_url"] .  "\" class=\"mx-auto mt-4 d-block btn btn-round btn-indigo ml-2\">Zobacz więcej</a></h6>";
+        echo "<h6 class=\"font-weight-400 font-italic mb-2\"><span class=\"text-carrot\">" . $product_data["product_price"] . " PLN</span>
+                                <a href=\"" . $product_data["product_url"] . "\" class=\"mx-auto mt-4 d-block btn btn-round btn-indigo ml-2\">Zobacz więcej</a></h6>";
 
         echo "<div class=\"header-shadow-wrapper\"></div>";
         echo "</div></div></div>";
@@ -363,7 +372,8 @@ function render_product_info($product_data, $device="desktop") {
 }
 
 // Renderuje panel z informacjami o usludze
-function render_service_info($service_data, $device="desktop") {
+function render_service_info($service_data, $device = "desktop")
+{
 
     if (count($service_data) === 0) return;
     $sanitizer = wire("sanitizer");
@@ -378,7 +388,7 @@ function render_service_info($service_data, $device="desktop") {
         echo "</div>";
 
         echo "<div class=\"company-service-info-details bg-white position-absolute text-center z-index-9\">";
-        echo "<h5 class=\"font-weight-700 mt-2\"><a href=\"" . $service_data["service_url"]  . "\" class=\"text-dark-gray\">" . $service_data["service_name"] . "</a></h5>";
+        echo "<h5 class=\"font-weight-700 mt-2\"><a href=\"" . $service_data["service_url"] . "\" class=\"text-dark-gray\">" . $service_data["service_name"] . "</a></h5>";
 
         echo "<p>" . $sanitizer->text(get_excerpt($service_data["service_description"], 145)) . "</p>";
         echo "<h6 class=\"font-weight-400 font-italic mb-2\"><span class=\"text-carrot\">" . $service_data["service_price"] . " PLN<br></span>
@@ -394,7 +404,7 @@ function render_service_info($service_data, $device="desktop") {
         echo "<div class=\"company-product-info bg-white mb-5 mb-lg-0 shadow\">";
         echo "<div class=\"company-product-info-images hover-flip-img hover-item\">";
 
-            echo "<figure class=\"img-front z-index-0\" style=\"background-image: url('" . $service_data["service_image"]->url . "');\"></figure>";
+        echo "<figure class=\"img-front z-index-0\" style=\"background-image: url('" . $service_data["service_image"]->url . "');\"></figure>";
 
         echo "</div>";
 
@@ -402,8 +412,8 @@ function render_service_info($service_data, $device="desktop") {
         echo "<h5 class=\"font-weight-700 mt-2\"><a href=\"#\" class=\"text-dark-gray\">" . $service_data["service_name"] . "</a></h5>";
         echo "<p>" . $sanitizer->text(get_excerpt($service_data["service_description"], 150)) . "</p>";
 
-        echo "<h6 class=\"font-weight-400 font-italic mb-2\"><span class=\"text-carrot\">" . $service_data["service_price"] ." PLN</span>
-                                <a href=\"" . $service_data["service_url"] .  "\" class=\"mx-auto mt-4 d-block btn btn-round btn-indigo ml-2\">Zobacz więcej</a></h6>";
+        echo "<h6 class=\"font-weight-400 font-italic mb-2\"><span class=\"text-carrot\">" . $service_data["service_price"] . " PLN</span>
+                                <a href=\"" . $service_data["service_url"] . "\" class=\"mx-auto mt-4 d-block btn btn-round btn-indigo ml-2\">Zobacz więcej</a></h6>";
 
         echo "<div class=\"header-shadow-wrapper\"></div>";
         echo "</div></div></div>";
@@ -413,11 +423,12 @@ function render_service_info($service_data, $device="desktop") {
 }
 
 // Renderuje element listy firm
-function render_company_list_item($company_data) {
+function render_company_list_item($company_data)
+{
 
     $user = wire('user');
 
-    if(count($company_data) === 0) return;
+    if (count($company_data) === 0) return;
 
     $urls = wire("urls");
     $pages = wire("pages");
@@ -446,14 +457,14 @@ function render_company_list_item($company_data) {
     if (!empty($company_data["company_fax"])) {
 
         $company_fax = filter_phone_fax_number($company_data["company_fax"]);
-        $fax_markup =  "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Numer FAX' href='fax:" . $company_fax . "'><i class='fas fa-fax mr-2'></i>" . $company_fax . "</a>";
+        $fax_markup = "<a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Numer FAX' href='fax:" . $company_fax . "'><i class='fas fa-fax mr-2'></i>" . $company_fax . "</a>";
     } else $fax_markup = "";
 
     // Czy istnieje e-mail
     if (!empty($company_data["company_email"]) && $user->isLoggedin()) {
         $email_markup = "
-            <a href='" . $message_url ."' class='d-inline-block d-sm-block text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='right' title='Wyślij wiadomość' data-original-title='Wyślij wiadomość'>
-                <img width='20' height='22' class='d-inline-block mx-auto' src='" . $urls->images ."email.svg' alt='email-image'>
+            <a href='" . $message_url . "' class='d-inline-block d-sm-block text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='right' title='Wyślij wiadomość' data-original-title='Wyślij wiadomość'>
+                <img width='20' height='22' class='d-inline-block mx-auto' src='" . $urls->images . "email.svg' alt='email-image'>
             </a>
         ";
     } else $email_markup = "";
@@ -489,13 +500,13 @@ function render_company_list_item($company_data) {
             </div>
             
             <div class='col-12 col-sm-5 col-xl-6 text-center text-sm-left'>
-                <a class='company-name text-dark d-block mt-3 mb-2 font-weight-500' href='" . $company_data["company_url"] ."'><span>" . $company_name ."</span></a>
-                <div class='company-street h6 font-weight-300'>" . $company_address ."</div>
-                <div class='company-zip-city mb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] ." </span><span class='company-city'>" . $company_city ."</span></div>
+                <a class='company-name text-dark d-block mt-3 mb-2 font-weight-500' href='" . $company_data["company_url"] . "'><span>" . $company_name . "</span></a>
+                <div class='company-street h6 font-weight-300'>" . $company_address . "</div>
+                <div class='company-zip-city mb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] . " </span><span class='company-city'>" . $company_city . "</span></div>
                 $company_www_markup
             </div>
             
-            <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left". $margin_left . "'>
+            <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left" . $margin_left . "'>
                     <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-3' title='Telefon kontaktowy' href='tel:" . $company_phone_1 . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_phone_1 . "</a>
                     $second_phone_markup
                     $fax_markup
@@ -514,9 +525,10 @@ function render_company_list_item($company_data) {
 }
 
 // Renderuje element listy ofert pracy
-function render_job_list_item($job_data) {
+function render_job_list_item($job_data)
+{
 
-    if(count($job_data) === 0) return;
+    if (count($job_data) === 0) return;
     $urls = wire("urls");
 
     $company_logo = $job_data["job_company"]->company_logo;
@@ -532,7 +544,7 @@ function render_job_list_item($job_data) {
             
             <div class='col-12 col-sm-5 col-xl-6 pt-sm-1 text-center text-lg-left'>
                 <a class='job-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $job_data["job_url"] . "'><span>" . $job_data["job_name"] . "</span></a>
-                <div class='job-description font-weight-300 text-sm-left'>" . get_excerpt($job_data["job_description"], 135). "</div>
+                <div class='job-description font-weight-300 text-sm-left'>" . get_excerpt($job_data["job_description"], 135) . "</div>
             </div>
             
             <div class='mt-3 mt-sm-0 col-12 col-sm-4 col-xl-3 text-left'>
@@ -567,15 +579,6 @@ function render_job_list_item($job_data) {
                         </div>
                     </div>
                 </div>
-            
-            
-            </div>
-            <div class='col-12 col-sm-1 p-xl-3'>
-                <a href='#' class='text-dark tooltip-btn p-1 mr-n1' data-toggle='tooltip'
-                   data-placement='right' title='Dodaj do ulubionych'>
-                    <img class='d-block d-inline-block mx-auto' src='" . $urls->images . "heart.svg' alt='heart-image'>
-                </a>
-            
             </div>
         
         </div>";
@@ -583,17 +586,18 @@ function render_job_list_item($job_data) {
 }
 
 // Renderuje element listy produktow
-function render_product_list_item($product_data) {
+function render_product_list_item($product_data)
+{
 
     $user = wire('user');
 
-    if(count($product_data) === 0) return;
+    if (count($product_data) === 0) return;
     $urls = wire("urls");
 
     // Pierwszy obraz produktu
     $product_image_url = $product_data["product_images"]->first()->url;
 
-    if($user->isLoggedin()) {
+    if ($user->isLoggedin()) {
         $like_markup = '
 
         <span x-data="KbfLikeProduct()">
@@ -604,8 +608,7 @@ function render_product_list_item($product_data) {
     ';
 
         $margin_left = '';
-    }
-    else {
+    } else {
         $like_markup = '';
         $margin_left = ' ml-5';
     }
@@ -638,14 +641,16 @@ function render_product_list_item($product_data) {
 }
 
 // Renderuje element listy uslug
-function render_service_list_item($service_data) {
+function render_service_list_item($service_data)
+{
 
-    if(count($service_data) === 0) return;
+    if (count($service_data) === 0) return;
 
     // Obraz uslugi
-    $service_image_url = wire('urls')->images."image-placeholder.jpg";
-    echo $service_data["service_image"];
-    if($service_data["service_image"] !== null) {$service_image_url = $service_data["service_image"]->url;}
+    $service_image_url = wire('urls')->images . "image-placeholder.jpg";
+    if ($service_data["service_image"] !== null) {
+        $service_image_url = $service_data["service_image"]->url;
+    }
 
     echo " 
         <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
@@ -668,7 +673,8 @@ function render_service_list_item($service_data) {
 }
 
 // Zamienia placeholdera w markupe
-function replacePlaceholders($placeholderMap, $markup) {
+function replacePlaceholders($placeholderMap, $markup)
+{
 
     if (!$placeholderMap) throw new WireException("replacePlaceholders: Placeholder map has not been provided.");
 
@@ -681,7 +687,8 @@ function replacePlaceholders($placeholderMap, $markup) {
 }
 
 // Zwraca markup paginacji
-function get_pagination($page_array) {
+function get_pagination($page_array)
+{
 
     if (!$page_array) return "";
 
@@ -699,7 +706,8 @@ function get_pagination($page_array) {
 }
 
 // Info tekst dla formularzy
-function render_info_message($msg, $classList="col-12 mb-3 ") {
+function render_info_message($msg, $classList = "col-12 mb-3 ")
+{
 
     $template = '<div class="{classList}">
                 <div class="form-info-message">
@@ -717,7 +725,8 @@ function render_info_message($msg, $classList="col-12 mb-3 ") {
 }
 
 // Modal
-function render_modal($id = "modal", $title="Modal", $contents = "", $size="md") {
+function render_modal($id = "modal", $title = "Modal", $contents = "", $size = "md")
+{
     $template = '
     
     <div class="modal fade" id="{id}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -765,7 +774,8 @@ function render_modal($id = "modal", $title="Modal", $contents = "", $size="md")
 
 }
 
-function render_confirmation_modal() {
+function render_confirmation_modal()
+{
     $modalContents = '
 
     <h5 class="text-center">Czy jesteś pewien, że chcesz usunąć wybraną pozycję ?</h5>
@@ -779,7 +789,8 @@ function render_confirmation_modal() {
 }
 
 // Alert
-function render_alert($message, $type="success", $close=true) {
+function render_alert($message, $type = "success", $close = true)
+{
 
     $closeMarkup = $close ? '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -792,8 +803,8 @@ function render_alert($message, $type="success", $close=true) {
 
     $template = '<div class="alert alert-{type} alert-dismissible fade show" role="alert">
                     <p class="mb-0 font-weight-600">{iconMarkup}{message}</p>'
-                 . $closeMarkup .
-                '</div>';
+        . $closeMarkup .
+        '</div>';
 
     return replacePlaceholders(array(
         "{type}" => $type,
@@ -807,7 +818,8 @@ function render_alert($message, $type="success", $close=true) {
  *   PANEL FIRMY
  * ***************/
 
-function render_dashboard_advertiser_list_item($register_date, $first_name, $last_name) {
+function render_dashboard_advertiser_list_item($register_date, $first_name, $last_name)
+{
 
     $template = '
     
@@ -839,7 +851,8 @@ function render_dashboard_advertiser_list_item($register_date, $first_name, $las
 
 }
 
-function render_dashboard_job_list_item($job_name, $job_type, $job_expire, $job_id) {
+function render_dashboard_job_list_item($job_name, $job_type, $job_expire, $job_id)
+{
 
     $pages = wire('pages');
     $editURL = $pages->get('template=dashboard-edit-job')->url . '?id=' . $job_id;
@@ -881,9 +894,10 @@ function render_dashboard_job_list_item($job_name, $job_type, $job_expire, $job_
 
 }
 
-function render_dashboard_product_list_item($product_data) {
+function render_dashboard_product_list_item($product_data)
+{
 
-    if(count($product_data) === 0) return;
+    if (count($product_data) === 0) return;
     $urls = wire("urls");
 
     // Pierwszy obraz produktu
@@ -913,9 +927,10 @@ function render_dashboard_product_list_item($product_data) {
 
 }
 
-function render_dashboard_product_sold_list_item($product_data) {
+function render_dashboard_product_sold_list_item($product_data)
+{
 
-    if(count($product_data) === 0) return;
+    if (count($product_data) === 0) return;
     $urls = wire("urls");
 
     // Pierwszy obraz produktu
@@ -951,9 +966,10 @@ function render_dashboard_product_sold_list_item($product_data) {
 
 }
 
-function render_dashboard_product_inventory_list_item($product_data, $editUrl = '') {
+function render_dashboard_product_inventory_list_item($product_data, $editUrl = '')
+{
 
-    if(count($product_data) === 0) return;
+    if (count($product_data) === 0) return;
     $urls = wire("urls");
 
     // Pierwszy obraz produktu
@@ -999,14 +1015,16 @@ function render_dashboard_product_inventory_list_item($product_data, $editUrl = 
 }
 
 // Sprawdza czy przekierowac na login
-function check_user($user) {
+function check_user($user)
+{
     $session = wire('session');
     $pages = wire('pages');
     if (!$user->isLoggedIn() || $user->activated === 0) $session->redirect($pages->get('template=login')->url);
 }
 
 // Sprawdza czy uzytkownik posiada firme
-function check_user_company($company_page) {
+function check_user_company($company_page)
+{
 
     $session = wire('session');
     $pages = wire('pages');
@@ -1016,7 +1034,8 @@ function check_user_company($company_page) {
 }
 
 // Pobiera strone firmy zalogowanego uzytkownika
-function get_user_company($user) {
+function get_user_company($user)
+{
 
     $pages = wire('pages');
 
@@ -1025,14 +1044,16 @@ function get_user_company($user) {
     }
 }
 
-function get_products_count($company_page) {
+function get_products_count($company_page)
+{
 
     if (!isset($company_page)) return;
     return $company_page->get('title=Produkty')->find('template=product')->count();
 
 }
 
-function get_products_all_count($company_page) {
+function get_products_all_count($company_page)
+{
 
     if (!isset($company_page)) return;
 
@@ -1049,7 +1070,8 @@ function get_products_all_count($company_page) {
 
 }
 
-function get_products_sold_all_count($company_page) {
+function get_products_sold_all_count($company_page)
+{
 
     if (!isset($company_page)) return;
 
@@ -1066,12 +1088,14 @@ function get_products_sold_all_count($company_page) {
 
 }
 
-function get_services_count($company_page) {
+function get_services_count($company_page)
+{
     if (!isset($company_page)) return;
     return $company_page->get('title=Usługi')->numChildren;
 }
 
-function get_jobs_count($company_page) {
+function get_jobs_count($company_page)
+{
     if (!isset($company_page)) return;
     return $company_page->get('title=Oferty Pracy')->numChildren;
 }
@@ -1081,7 +1105,8 @@ function get_jobs_count($company_page) {
  * *************/
 
 // Pobiera podstawowe informacje o firmie
-function sanitize_company_data($company_page) {
+function sanitize_company_data($company_page)
+{
 
     if (!isset($company_page)) return array();
     $sanitizer = wire("sanitizer");
@@ -1118,7 +1143,8 @@ function sanitize_company_data($company_page) {
 }
 
 // Pobiera informacje o ofercie pracy
-function sanitize_job_data($job_page) {
+function sanitize_job_data($job_page)
+{
 
     if (!isset($job_page)) return array();
     $sanitizer = wire("sanitizer");
@@ -1146,7 +1172,8 @@ function sanitize_job_data($job_page) {
 }
 
 // Pobiera informacje o produkcie
-function sanitize_product_data($product_page) {
+function sanitize_product_data($product_page)
+{
 
     if (!isset($product_page)) return array();
     $sanitizer = wire("sanitizer");
@@ -1172,7 +1199,8 @@ function sanitize_product_data($product_page) {
 }
 
 // Pobiera informacje o produkcie
-function sanitize_service_data($service_page) {
+function sanitize_service_data($service_page)
+{
 
     if (!isset($service_page)) return array();
     $sanitizer = wire("sanitizer");
@@ -1195,7 +1223,8 @@ function sanitize_service_data($service_page) {
  * *************/
 
 // Tworzy skrot opisu
-function get_excerpt($content, $length) {
+function get_excerpt($content, $length)
+{
     if (strlen($content) < $length) return $content;
     return substr($content, 0, $length - 4) . " ...";
 }
@@ -1233,7 +1262,8 @@ function get_addresses($query)
 }
 
 // Zwraca query string na podstawie tablicy sub branz
-function get_sub_industries_query($sub_industries) {
+function get_sub_industries_query($sub_industries)
+{
 
     $query = "";
     if (empty($sub_industries)) return $query;
@@ -1243,7 +1273,7 @@ function get_sub_industries_query($sub_industries) {
 
         $counter = 1;
         foreach ($sub_industries as $sub_industry) {
-            $query = $query . (($counter > 1 ) ? "&" : "") . "sub_industry" . urlencode("[]") . "=" . $sub_industry;
+            $query = $query . (($counter > 1) ? "&" : "") . "sub_industry" . urlencode("[]") . "=" . $sub_industry;
             $counter++;
         }
     }
@@ -1252,7 +1282,8 @@ function get_sub_industries_query($sub_industries) {
 }
 
 // Zwraca query dla filtra
-function get_filter_selector($input, $template_name) {
+function get_filter_selector($input, $template_name)
+{
 
     if (!isset($input) || !isset($template_name)) return;
     $database = wire("database");
@@ -1294,42 +1325,42 @@ function get_filter_selector($input, $template_name) {
         }
     }
 
-        // Przygotuj zapytanie
-        if (isset($industry) && !isset($sub_industry)) {
+    // Przygotuj zapytanie
+    if (isset($industry) && !isset($sub_industry)) {
 
-            $sub_industry = get_sub_industries(mb_strtoupper($industry, "utf-8"), $database, $db);
-            $industry = $sanitizer->selectorValue($industry);
-            $query = $query . ",industry=$industry";
+        $sub_industry = get_sub_industries(mb_strtoupper($industry, "utf-8"), $database, $db);
+        $industry = $sanitizer->selectorValue($industry);
+        $query = $query . ",industry=$industry";
 
+    }
+
+    if (!isset($industry) && isset($sub_industry)) {
+
+        if (is_string($sub_industry)) $sub_industry = explode(",", $sub_industry);
+        $sub_industry_count = count($sub_industry);
+
+        $industries_selector = "";
+
+        if ($sub_industry_count === 1) {
+            $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry[0]);
+            $query = $query . ",sub_industry=$sub_industry_name_sanitized";
         }
 
-        if (!isset($industry) && isset($sub_industry)) {
+        if ($sub_industry_count > 1) {
 
-            if (is_string($sub_industry)) $sub_industry = explode(",", $sub_industry);
-            $sub_industry_count = count($sub_industry);
+            $counter = 1;
 
-            $industries_selector = "";
-
-            if ($sub_industry_count === 1) {
-                $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry[0]);
-                $query = $query . ",sub_industry=$sub_industry_name_sanitized";
+            foreach ($sub_industry as $sub_industry_name) {
+                $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry_name);
+                if ($counter < $sub_industry_count) $industries_selector = $industries_selector . "$sub_industry_name_sanitized|";
+                if ($counter === $sub_industry_count) $industries_selector = $industries_selector . $sub_industry_name_sanitized;
+                $counter++;
             }
 
-            if ($sub_industry_count > 1) {
-
-                $counter = 1;
-
-                foreach ($sub_industry as $sub_industry_name) {
-                    $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry_name);
-                    if ($counter < $sub_industry_count) $industries_selector = $industries_selector . "$sub_industry_name_sanitized|";
-                    if ($counter === $sub_industry_count) $industries_selector = $industries_selector . $sub_industry_name_sanitized;
-                    $counter++;
-                }
-
-                $query = $query . ",sub_industry=$industries_selector";
-            }
-
+            $query = $query . ",sub_industry=$industries_selector";
         }
+
+    }
 
     if (isset($province_name)) {
         $province_name = $sanitizer->selectorValue($province_name);
@@ -1351,7 +1382,8 @@ function get_filter_selector($input, $template_name) {
 }
 
 // Konwertuje nazwe firmy, usuwa bledy w nazewnictwie
-function filter_company_name($company_data) {
+function filter_company_name($company_data)
+{
 
     if (!isset($company_data)) return array();
 
@@ -1385,24 +1417,25 @@ function filter_company_name($company_data) {
 }
 
 // Usuwa zera na poczatku numeru telefonu i faksu
-function filter_phone_fax_number($number) {
+function filter_phone_fax_number($number)
+{
 
     if (!isset($number)) return "";
 
-    $first_char =  substr($number, 0, 1);
+    $first_char = substr($number, 0, 1);
     if ($first_char === "0") {
 
         if (substr($number, 1, 1) === "-") return substr($number, 2);
         else return substr($number, 1);
-    }
-    else return $number;
+    } else return $number;
 
 }
 
 // Pobiera dane z rejestru regon
-function get_data_by_regon($regon) {
+function get_data_by_regon($regon)
+{
 
-    if(empty($regon)) return false;
+    if (empty($regon)) return false;
 
     // Sprawdz czy zarejestrowano firme o podanym numerze REGON
     $pages = wire('pages');
@@ -1429,7 +1462,7 @@ function get_data_by_regon($regon) {
         foreach ($gusReports as $gusReport) {
 
             $company_name = $gusReport->getName();
-            $company_address = str_replace("ul. ", "", $gusReport->getStreet()) ." ". $gusReport->getPropertyNumber();
+            $company_address = str_replace("ul. ", "", $gusReport->getStreet()) . " " . $gusReport->getPropertyNumber();
             $company_address = str_replace("_", "", $company_address);
             $company_nip = $gusReport->getNip();
             $company_zip = $gusReport->getZipCode();
@@ -1465,7 +1498,8 @@ function get_data_by_regon($regon) {
  *  FORMULARZE
  * *************/
 
-function getFormField($fieldName = "", $required = false, $disabled = false) {
+function getFormField($fieldName = "", $required = false, $disabled = false)
+{
 
     if (empty($fieldName)) return;
 
@@ -1552,118 +1586,118 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
         }
 
         case "company_regon_search":
-            {
-                $field = new FormFieldRegonSearch($disabled);
-                $field->label = "Numer REGON";
-                $field->name = $fieldName;
-                $field->description = "Wpisz numer REGON firmy w celu pobrania informacji o firmie z rejestru państwowego.";
+        {
+            $field = new FormFieldRegonSearch($disabled);
+            $field->label = "Numer REGON";
+            $field->name = $fieldName;
+            $field->description = "Wpisz numer REGON firmy w celu pobrania informacji o firmie z rejestru państwowego.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Pole z numerem REGON musi zostać wypełnione.";
-                }
-
-                $field->inputmask = "\d{7,9}";
-                $field->icon = "fa-info";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z numerem REGON musi zostać wypełnione.";
             }
+
+            $field->inputmask = "\d{7,9}";
+            $field->icon = "fa-info";
+            return $field;
+        }
 
         case "company_regon":
-            {
-                $field = new FormFieldText($disabled);
-                $field->label = "Numer REGON";
-                $field->name = $fieldName;
-                $field->description = "Zarejestrowany numer REGON.";
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Numer REGON";
+            $field->name = $fieldName;
+            $field->description = "Zarejestrowany numer REGON.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Pole z numerem REGON musi zostać wypełnione.";
-                }
-
-                $field->inputmask = "\d{7,9}";
-                $field->icon = "fa-info";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Pole z numerem REGON musi zostać wypełnione.";
             }
+
+            $field->inputmask = "\d{7,9}";
+            $field->icon = "fa-info";
+            return $field;
+        }
 
         case "company_phone_1":
-            {
-                $field = new FormFieldText($disabled);
-                $field->label = "Podstawowy numer telefonu";
-                $field->name = $fieldName;
-                $field->description = "Wpisz główny numer telefonu do firmy. Wypełnienie pola jest wymagane.";
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Podstawowy numer telefonu";
+            $field->name = $fieldName;
+            $field->description = "Wpisz główny numer telefonu do firmy. Wypełnienie pola jest wymagane.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
-                }
-
-                $field->icon = "fa-phone";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
             }
+
+            $field->icon = "fa-phone";
+            return $field;
+        }
 
         case "company_phone_2":
-            {
-                $field = new FormFieldText($disabled);
-                $field->label = "Drugi numer telefonu";
-                $field->name = $fieldName;
-                $field->description = "Wpisz dodatkowy numer telefonu do firmy.";
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Drugi numer telefonu";
+            $field->name = $fieldName;
+            $field->description = "Wpisz dodatkowy numer telefonu do firmy.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
-                }
-
-                $field->icon = "fa-phone";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z numerem telefonu jest wymagane.";
             }
+
+            $field->icon = "fa-phone";
+            return $field;
+        }
 
         case "company_fax":
-            {
-                $field = new FormFieldText($disabled);
-                $field->label = "Numer FAX";
-                $field->name = $fieldName;
-                $field->description = "Wpisz numer FAX do firmy.";
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Numer FAX";
+            $field->name = $fieldName;
+            $field->description = "Wpisz numer FAX do firmy.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Wypełnienie pola z numerem FAX jest wymagane.";
-                }
-
-                $field->icon = "fa-phone";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z numerem FAX jest wymagane.";
             }
+
+            $field->icon = "fa-phone";
+            return $field;
+        }
 
         case "company_email":
-            {
-                $field = new FormFieldEmail($disabled);
-                $field->label = "Adres e-mail";
-                $field->name = $fieldName;
-                $field->description = "Wpisz główny adres e-mail do firmy. Wypełnienie pola jest wymagane.";
+        {
+            $field = new FormFieldEmail($disabled);
+            $field->label = "Adres e-mail";
+            $field->name = $fieldName;
+            $field->description = "Wpisz główny adres e-mail do firmy. Wypełnienie pola jest wymagane.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Wypełnienie pola z adresem e-mail jest wymagane.";
-                }
-
-                $field->icon = "fa-envelope";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z adresem e-mail jest wymagane.";
             }
+
+            $field->icon = "fa-envelope";
+            return $field;
+        }
 
         case "company_www":
-            {
-                $field = new FormFieldText($disabled);
-                $field->label = "Adres witryny internetowej";
-                $field->name = $fieldName;
-                $field->description = "Podaj adres firmowej witryny internetowej.";
+        {
+            $field = new FormFieldText($disabled);
+            $field->label = "Adres witryny internetowej";
+            $field->name = $fieldName;
+            $field->description = "Podaj adres firmowej witryny internetowej.";
 
-                if ($required) {
-                    $field->required = true;
-                    $field->msgRequired = "Wypełnienie pola z adresem witryny internetowej jest wymagane.";
-                }
-
-                $field->icon = "fa-info";
-                return $field;
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z adresem witryny internetowej jest wymagane.";
             }
+
+            $field->icon = "fa-info";
+            return $field;
+        }
 
         case "company_nip":
         {
@@ -1839,7 +1873,8 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             return $field;
         }
 
-        case "pass": {
+        case "pass":
+        {
             {
                 $field = new FormFieldPassword($disabled);
                 $field->label = "Hasło";
@@ -1856,7 +1891,8 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
             }
         }
 
-        case "pass-repeat": {
+        case "pass-repeat":
+        {
             {
                 $field = new FormFieldPassword($disabled);
                 $field->label = "Hasło";
@@ -1932,7 +1968,8 @@ function getFormField($fieldName = "", $required = false, $disabled = false) {
  *  PROCESSWIRE
  * *************/
 
-function update_repeater_values($repeater_data = array()) {
+function update_repeater_values($repeater_data = array())
+{
 
     if (count($repeater_data) === 0) return;
 
@@ -1969,7 +2006,8 @@ function update_repeater_values($repeater_data = array()) {
 
 }
 
-function get_page_for_insert($parent_page, $template, $page_data, $ignore = array()) {
+function get_page_for_insert($parent_page, $template, $page_data, $ignore = array())
+{
 
     if (!isset($parent_page)) return;
     if (!isset($template)) return;
@@ -1985,7 +2023,8 @@ function get_page_for_insert($parent_page, $template, $page_data, $ignore = arra
 
 }
 
-function add_job ($parent_page, $page_data, $template = "job", $ignore = ["name", "title", "job_responsibilities", "job_requirements", "job_offers", "job_description_hidden"]) {
+function add_job($parent_page, $page_data, $template = "job", $ignore = ["name", "title", "job_responsibilities", "job_requirements", "job_offers", "job_description_hidden"])
+{
 
     $_page = get_page_for_insert($parent_page, $template, $page_data, $ignore);
 
@@ -2005,7 +2044,8 @@ function add_job ($parent_page, $page_data, $template = "job", $ignore = ["name"
 
 }
 
-function add_product ($parent_page, $page_data, $template = "product", $ignore = ["product_sold", "product_blocked", "product_shipping_cost", "product_images"]) {
+function add_product($parent_page, $page_data, $template = "product", $ignore = ["product_sold", "product_blocked", "product_shipping_cost", "product_images"])
+{
 
     $_page = get_page_for_insert($parent_page, $template, $page_data, $ignore);
 
@@ -2025,7 +2065,8 @@ function add_product ($parent_page, $page_data, $template = "product", $ignore =
 
 }
 
-function delete_page($page_id) {
+function delete_page($page_id)
+{
 
     if (!isset($page_id)) return;
 
@@ -2035,7 +2076,8 @@ function delete_page($page_id) {
 
 }
 
-function update_page($page_id, $page_data = array(), $ignore = array()) {
+function update_page($page_id, $page_data = array(), $ignore = array())
+{
 
     $pages = wire('pages');
     $sanitizer = wire('sanitizer');
@@ -2054,7 +2096,8 @@ function update_page($page_id, $page_data = array(), $ignore = array()) {
 
 }
 
-function mailTo($mailData, $fromName = 'KBF') {
+function mailTo($mailData, $fromName = 'KBF')
+{
 
     if (!isset($mailData)) return;
 

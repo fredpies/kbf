@@ -91656,6 +91656,38 @@
 
   KbfTag.badgeMarkup = '<span data-name="{content}" class="company-industry badge badge-pill badge-secondary mb-1 mt-1"><span class="badge-name">{content}</span><span class="badge-close">x</span></span>';
 
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          instance.$footerTop.toggleClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
+
   var App = /*#__PURE__*/function () {
     function App() {
       _classCallCheck(this, App);
@@ -91684,6 +91716,7 @@
         this.kbfTag.on('badge-remove', function (e) {
           instance.kbfIndustryFilter.uncheck(e.detail.name);
         });
+        new KbfFooterTop();
       }
     }]);
 

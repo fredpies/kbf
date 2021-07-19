@@ -2807,6 +2807,38 @@
     return KbfAreaSwitcher;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          instance.$footerTop.toggleClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
+
   var type$1 = "FeatureCollection";
   var features$1 = [
   	{
@@ -92052,8 +92084,7 @@
       key: "init",
       value: function init() {
         new KbfAreaSwitcher('provinces', 'areas');
-        this.$footerTop = $('.footer-top');
-        this.$showFooterTop = $('#showFooterTop');
+        new KbfFooterTop();
         this.$topSection = $('#top-section');
         this.$industriesSidebar = $('#industriesSidebar');
         this.$industriesSidebarOpenButton = $('#industriesSidebarOpenButton');
@@ -92080,14 +92111,6 @@
           instance.$industriesSidebarCloseButton.removeClass('d-xl-block');
           instance.$industriesSidebarCloseButton.addClass('d-none');
           instance.$industriesSidebarOpenButton.addClass('d-xl-block');
-        });
-        this.$showFooterTop.click(function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          instance.$footerTop.toggleClass('show-footer-top');
-        });
-        $(window).scroll(function () {
-          instance.$footerTop.removeClass('show-footer-top');
         });
       }
     }]);

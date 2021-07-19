@@ -176,23 +176,29 @@ $send_cv_page_url = $pages->get("template=send-cv")->url;
             </div>
             <!-- End of job details-->
 
+
+
             <!-- Send cv-->
             <div class="col-12 col-lg-4 mx-auto">
 
                     <form method="get" action="<?= $send_cv_page_url ?>">
 
-                        <div class="row justify-content-center" >
-                            <div class="col-12 col-xl-6">
-                                    <button type="submit" class="btn btn-primary btn-round  mb-4 mx-2 mx-lg-0 w-100">Wyślij cv</button>
+                        <div class="col-12 text-center text-md-right align-self-center mt-4">
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-5">
+                                    <button type="submit" class="send-cv btn btn-round btn-block shadow-none btn-primary mr-lg-4">Wyślij CV</button>
                                 </div>
-                                <div class="col-12 col-xl-6">
-                                    <button type="button" class="btn btn-round btn-secondary  mb-4 mx-2 mx-lg-0 w-100 kbf-back-button">Powrót</button>
+                                <div class="col-12 col-md-5">
+                                    <button type="button"
+                                            class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">
+                                        Powrót
+                                    </button>
                                 </div>
-
-                                <input name="company_id" value="<?= $company_data["company_id"] ?>" type="hidden">
-                                <input name="job_id" value="<?= $job_data["job_id"] ?>" type="hidden">
-
+                            </div>
                         </div>
+
+                        <input name="company_id" value="<?= $company_data["company_id"] ?>" type="hidden">
+                        <input name="job_id" value="<?= $job_data["job_id"] ?>" type="hidden">
 
                     </form>
 

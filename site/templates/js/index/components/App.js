@@ -1,4 +1,5 @@
 import KbfAreaSwitcher from "../../components/KbfAreaSwitcher";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 // Dane o wojewodztwach i powiatach
 import provincesGeoJSON from '../../map/provinces.json'
@@ -17,9 +18,8 @@ class App {
     init() {
 
         new KbfAreaSwitcher('provinces', 'areas');
+        new KbfFooterTop();
 
-        this.$footerTop = $('.footer-top');
-        this.$showFooterTop = $('#showFooterTop');
         this.$topSection = $('#top-section');
         this.$industriesSidebar = $('#industriesSidebar');
         this.$industriesSidebarOpenButton = $('#industriesSidebarOpenButton');
@@ -55,16 +55,6 @@ class App {
             instance.$industriesSidebarCloseButton.addClass('d-none')
 
             instance.$industriesSidebarOpenButton.addClass('d-xl-block');
-        });
-
-        this.$showFooterTop.click(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            instance.$footerTop.toggleClass('show-footer-top');
-        });
-
-        $(window).scroll(function () {
-            instance.$footerTop.removeClass('show-footer-top');
         });
 
     }

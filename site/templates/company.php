@@ -88,7 +88,7 @@ $message_url = $pages->get("template=message")->url . "?company_id=" . $sanitize
 
                 <?php } ?>
 
-                <div class="col-12">
+                <div class="col-12 mt-3">
 
                     <?php
 

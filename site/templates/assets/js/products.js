@@ -2658,6 +2658,12 @@
 
   var regenerator = runtime_1;
 
+  var config = {
+    env: 'dev',
+    url: 'https://webplanet.biz',
+    apiEndpoint: 'https://webplanet.biz/kbf/'
+  };
+
   function getAreaNames(areasGeoJSON) {
     var result = [];
     areasGeoJSON.features.forEach(function (feature) {
@@ -92495,7 +92501,7 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("http://localhost/kbf2/api/get-product/?product_id=".concat(e.target.parentElement.dataset.productId)).done(function (res) {
+            $.get("".concat(config.apiEndpoint, "api/get-product/?product_id=").concat(e.target.parentElement.dataset.productId)).done(function (res) {
               var favouriteProducts = localStorage.getItem('favourite-products');
               if (favouriteProducts) instance.currentFavouriteProducts = _toConsumableArray(JSON.parse(favouriteProducts));
               instance.currentFavouriteProducts.push({
@@ -96628,6 +96634,38 @@
 
   var module_default = src_default;
 
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          instance.$footerTop.toggleClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
+
   var App = /*#__PURE__*/function () {
     function App() {
       _classCallCheck(this, App);
@@ -96657,6 +96695,7 @@
           instance.kbfIndustryFilter.uncheck(e.detail.name);
         });
         new KbfLikeProduct();
+        new KbfFooterTop();
         window.Alpine = module_default;
         module_default.start();
       }

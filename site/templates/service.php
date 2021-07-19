@@ -88,7 +88,7 @@ $service_data = sanitize_service_data($page);
 
             <div class="row px-md-5 px-4 py-3">
                 <div class="col-12 text-center text-md-right align-self-center">
-                    <button type="button" class="kbf-back-button btn btn-round btn-secondary shadow-none mb-1">WRÓĆ</button>
+                    <button type="button" class="kbf-back-button btn btn-round btn-secondary shadow-none mb-1">POWRÓT</button>
                 </div>
             </div>
 
@@ -134,7 +134,7 @@ $service_data = sanitize_service_data($page);
 <script src="<?php echo $urls->js ?>vendor/leaflet-providers.js"></script>
 
 <!-- Main script -->
-<script src="<?php echo $urls->js ?>product.js"></script>
+<script src="<?php echo $urls->js ?>service.js"></script>
 <script>
 
     $(function () {

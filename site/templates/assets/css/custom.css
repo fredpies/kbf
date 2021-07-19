@@ -430,6 +430,11 @@
   display: none !important;
 }
 
+.company-job-description, .job-responsibilites, .job-requirements, .job-offer {
+  min-height: 480px !important;
+}
+
+
 /************************/
 /* 3.1 Oferta pracy     */
 /************************/
@@ -481,6 +486,7 @@
   overflow: hidden;
   width: 100%;
   height: 10rem;
+  z-index: 0;
 }
 
 @media (min-width: 1280px) {
@@ -553,6 +559,10 @@ input[name*="sub-industry"] + .error {
 
 .company-list-item .company-name, .job-list-item .job-name {
   font-size: 1rem;
+}
+
+.company-list-item .company-name:hover, .job-list-item .job-name:hover {
+  color: #2196f3 !important;
 }
 
 @media (min-width: 768px) {
@@ -1348,7 +1358,7 @@ footer {
 .footer-top {
   padding-top: 2rem;
   bottom: 0;
-  z-index: 0;
+  z-index: 100;
   opacity: 0;
   transform: translateY(100%);
   transition: transform 0.3s ease-out, opacity 0.8s ease;
