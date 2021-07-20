@@ -24,7 +24,7 @@ class App {
 
         let instance = this;
 
-
+        this.$form = $('form[name="register-company"]');
 
         this.companyInfo = $('.company-info')[0];
         this.companyDescription = $('.company-description')[0];
@@ -33,6 +33,13 @@ class App {
         this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
 
         this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button');
+
+        // Cropper
+        this.$modal = $('#modal');
+        this.image = document.getElementById('sample_image');
+        this.cropper = null;
+        this.$companyLogo = $('#company_logo');
+        this.$logoPlaceholder = $('.kbf-logo-uploader-image');
 
         // Przycisk wyszukiwania po numerze REGON
         this.$searchByREGONButton = $('.kbf-search-button');
@@ -101,13 +108,13 @@ class App {
             this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
             this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
             this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
-            this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
+            this.registerCompanyPreloader = new KbfPreloaderButton('.button-register.button-desktop button');
 
         } else {
             this.$prevButton = this.$kbfStepper.find('.button-prev');
             this.$nextButton = this.$kbfStepper.find('.button-next');
             this.$registerButton = this.$kbfStepper.find('.button-register');
-            this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
+            this.registerCompanyPreloader = new KbfPreloaderButton('.button-register button');
         }
 
         // Wybor branz
@@ -115,8 +122,71 @@ class App {
         this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper));
 
         // Wysiwyg
-        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
-        this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
+        // this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
+        // this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
+
+        // Cropper
+        this.$companyLogo.change(function(event) {
+            let files = event.target.files;
+
+            let done = function(url) {
+                instance.image.src = url;
+                instance.$modal.modal('show');
+            };
+
+            if(files && files.length > 0) {
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(files[0]);
+            }
+
+            instance.$companyLogo.val('');
+
+        });
+
+        this.$modal.on('shown.bs.modal', function() {
+            instance.cropper = new Cropper(instance.image, {
+                aspectRatio: 1,
+                viewMode: 2,
+                preview:'.preview'
+            });
+
+            $('#crop').click(function(){
+                let canvas = instance.cropper.getCroppedCanvas({
+                    width: 400,
+                    height: 400
+                });
+
+                canvas.toBlob(function(blob) {
+                    let url = URL.createObjectURL(blob);
+                    let reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function(){
+
+                        let base64data = reader.result;
+                        instance.$logoPlaceholder.attr('src', base64data);
+                        instance.$modal.modal('hide');
+
+                        let file = new File([blob], "company-logo.jpg",{type:"image/jpeg", lastModified:new Date().getTime()});
+                        let container = new DataTransfer();
+                        container.items.add(file);
+
+                        instance.$companyLogo[0].files = container.files;
+
+                    };
+                });
+            });
+
+
+        }).on('hidden.bs.modal', function() {
+            instance.cropper.destroy();
+            instance.cropper = null;
+        });
+
+
+
 
     }
 
@@ -289,8 +359,14 @@ class App {
     }
 
     // Potwierdza rejestracje
-    submitRegister() {
+    submitRegister(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
         this.$prevButton.find('button').attr('disabled', 'disabled').off('click'); // Wylacz prev button
+        this.$form.submit();
+
     }
 
     async getDataFromREGON(regon) {

@@ -675,7 +675,7 @@ input[name*="sub-industry"] + .error {
   }
 }
 
-.ql-editor, .kbf-keywords  {
+.ql-editor, .kbf-keywords, textarea  {
   border: 2px solid #e0e0e0 !important;
   border-radius: 1.6875rem !important;
   min-height: 4.5rem !important;
@@ -1451,3 +1451,6 @@ a.btn {
   bottom: 0;
 }
 
+textarea + #company_description_html-error {
+  bottom: -2rem !important;
+}

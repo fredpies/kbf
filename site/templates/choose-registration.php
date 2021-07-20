@@ -90,7 +90,7 @@ $pages = wire('pages');
 
         <div class="row justify-content-center">
             <div class="col-3">
-                <a href="<?= $pages->get(1)->url ?>" class="btn btn-round btn-secondary mb-4 mx-2 mx-lg-0 w-100 text-white">Powrót do KBF</a>
+                <a href="<?= $pages->get(1)->url ?>" class="btn btn-lg btn-round btn-secondary mb-4 mx-2 mx-lg-0 w-100 text-white">Powrót do KBF</a>
             </div>
         </div>
 

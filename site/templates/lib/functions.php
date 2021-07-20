@@ -1730,6 +1730,20 @@ function getFormField($fieldName = "", $required = false, $disabled = false)
             return $field;
         }
 
+        case "company_description_simple":
+        {
+            $field = new FormFieldTextAreaSimple($disabled);
+            $field->label = "Opis firmy";
+            $field->name = 'company_description_html';
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola opis firmy jest wymagane.";
+            }
+
+            return $field;
+        }
+
         case "company_keywords":
         {
             return new FormFieldKeywords();

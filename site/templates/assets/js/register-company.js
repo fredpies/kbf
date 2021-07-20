@@ -77,10 +77,6 @@
 
   var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-  function getDefaultExportFromCjs (x) {
-  	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-  }
-
   function createCommonjsModule(fn) {
     var module = { exports: {} };
   	return fn(module, module.exports), module.exports;
@@ -5240,9 +5236,9 @@
     }, {
       key: "nextPage",
       value: function nextPage(e) {
-        e.stopPropagation();
+        e.stopPropagation(); // if (this.validateCurrentPage()) { // Zmienia strone tylko w przypadku jej poprawnosci
 
-        if (this.validateCurrentPage()) {
+        {
           // Zmienia strone tylko w przypadku jej poprawnosci
           if (this.currentPageIdx === this.lastPageIdx) return;
           this.$stepsTop.eq(this.currentPageIdx).addClass('done');
@@ -5294,7 +5290,10 @@
       key: "validateCurrentPage",
       value: function validateCurrentPage() {
         if (!this.$errorStepper.hasClass('d-none')) this.$errorStepper.addClass('d-none');
-        var $currentPageInputs = $('.page').eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        var $pages = $('.page');
+        var $currentInputs = $pages.eq(this.currentPageIdx).find('.form-control').not('.kbf-keywords');
+        var $currentRepeaterInputs = $pages.eq(this.currentPageIdx).find('.repeater-hidden-input');
+        var $currentPageInputs = $currentInputs.add($currentRepeaterInputs);
         var fieldsAreValid = true;
 
         if ($currentPageInputs.length) {
@@ -5371,7 +5370,7 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
 
-  function _isNativeReflectConstruct$5() {
+  function _isNativeReflectConstruct$4() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -5385,7 +5384,7 @@
   }
 
   function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct$5()) {
+    if (_isNativeReflectConstruct$4()) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -5435,14 +5434,14 @@
     return _wrapNativeSuper(Class);
   }
 
-  function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfPreloaderButton, _EventTarget);
 
-    var _super = _createSuper$4(KbfPreloaderButton);
+    var _super = _createSuper$3(KbfPreloaderButton);
 
     function KbfPreloaderButton(selector) {
       var _this;
@@ -6847,14 +6846,14 @@
     }).join(' ');
   };
 
-  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfDropdown, _EventTarget);
 
-    var _super = _createSuper$3(KbfDropdown);
+    var _super = _createSuper$2(KbfDropdown);
 
     function KbfDropdown(selector) {
       var _this;
@@ -6894,7 +6893,9 @@
         this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
 
         var dataOptions = this.$dropdowns.data('options');
-        if (dataOptions) this.opts = dataOptions.split(',');
+        if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
+
+        this.startValue = this.$dropdowns.data('value');
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
@@ -6904,6 +6905,8 @@
 
         this.setOptions(this.opts);
         this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
+
+        if (this.startValue) this.setActive(this.startValue);
       } // Dodaje listenery
 
     }, {
@@ -6955,27 +6958,7 @@
             e.stopPropagation();
             enableScroll();
           });
-        } // Fix dla przyciskow steppera // TODO przeniesc do steppera
-        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', -1);
-        //     if ($buttons.length) $buttons.css('z-index', -1);
-        //
-        // });
-        //
-        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', '');
-        //     if ($buttons.length) $buttons.css('z-index', '');
-        //
-        // });
-        // Gdy klikniemy na dropdown item
+        } // Gdy klikniemy na dropdown item
 
 
         this.$dropdownItems.on('click', function (e) {
@@ -7387,18 +7370,18 @@
     return string;
   }
 
-  function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-  function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfIndustrySwitcher = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfIndustrySwitcher, _EventTarget);
 
-    var _super = _createSuper$2(KbfIndustrySwitcher);
+    var _super = _createSuper$1(KbfIndustrySwitcher);
 
     function KbfIndustrySwitcher(industriesId, subIndustriesId) {
       var _this;
@@ -7517,7 +7500,7 @@
                 case 4:
                   this.industries = _context2.sent;
                   // Przygotuj opcje dropdown branz jako obiekt opts
-                  opts = _objectSpread$1(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries, this.ellipsis)); // Inicjuj dropdowny
+                  opts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries, this.ellipsis)); // Inicjuj dropdowny
 
                   this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
 
@@ -7544,7 +7527,7 @@
     }, {
       key: "updateEllipsis",
       value: function updateEllipsis() {
-        var opts = _objectSpread$1(_defineProperty({}, this.firstOption, this.firstOption), getIndustriesOptions(this.subIndustries, this.ellipsis));
+        var opts = _objectSpread(_defineProperty({}, this.firstOption, this.firstOption), getIndustriesOptions(this.subIndustries, this.ellipsis));
 
         this.subIndustriesDropdown.updateOptions(opts);
         this.currentSubIndustry = this.firstOption;
@@ -7589,7 +7572,7 @@
     return KbfIndustrySwitcher;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-  var quill = createCommonjsModule(function (module, exports) {
+  createCommonjsModule(function (module, exports) {
     (function webpackUniversalModuleDefinition(root, factory) {
       module.exports = factory();
     })(typeof self !== 'undefined' ? self : commonjsGlobal, function () {
@@ -23010,106 +22993,6 @@
       );
     });
   });
-  var Quill = /*@__PURE__*/getDefaultExportFromCjs(quill);
-
-  function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-  function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-  var KbfWysiwyg = /*#__PURE__*/function (_EventTarget) {
-    _inherits(KbfWysiwyg, _EventTarget);
-
-    var _super = _createSuper$1(KbfWysiwyg);
-
-    function KbfWysiwyg(selector) {
-      var _this;
-
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      _classCallCheck(this, KbfWysiwyg);
-
-      _this = _super.call(this); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
-
-      if (!selector) throw errors.argumentNotFound("selector");
-      _this.selector = selector;
-      _this.$container = $(selector);
-      _this.options = _objectSpread({
-        modules: {
-          toolbar: [['bold', 'italic', 'underline', 'strike'], [{
-            'align': []
-          }], [{
-            'list': 'ordered'
-          }, {
-            'list': 'bullet'
-          }]]
-        },
-        theme: 'bubble'
-      }, options);
-
-      _this.init();
-
-      _this.addListeners();
-
-      return _this;
-    } // Dodaje listenery
-
-
-    _createClass(KbfWysiwyg, [{
-      key: "addListeners",
-      value: function addListeners() {
-        var instance = this; // Aktualizuj wartosc pola input
-
-        this.editor.on('editor-change', function () {
-          instance.setInputValue(instance.$contents.html());
-        }); // Ustaw focus na edytorze
-
-        $(window).on('click', function () {
-          instance.$contents.removeClass('focus');
-        });
-        this.$contents.on('click', function (e) {
-          e.stopPropagation();
-          instance.$contents.addClass('focus');
-        });
-      } // Inicjalizuje
-
-    }, {
-      key: "init",
-      value: function init() {
-        // Aliasy
-        this.on = this.addEventListener;
-        this.off = this.removeEventListener;
-        this.emit = this.dispatchEvent;
-        this.editor = new Quill(this.selector, this.options);
-        this.$contents = $('.ql-editor');
-        this.$wysiwygInput = $('.wysiwyg').next('input[type="hidden"]');
-        this.$wysiwygInput.html(this.$contents.html());
-      } //Ustawia wartosc pola input
-
-    }, {
-      key: "setInputValue",
-      value: function setInputValue(html) {
-        var instance = this;
-        if (html === '<p><br></p>' || html.length === 0) this.$wysiwygInput.attr('value', '');else this.$wysiwygInput.attr('value', html); // Emituj wartosc w polu edytora
-
-        this.emit(new CustomEvent('change', {
-          detail: instance.$wysiwygInput[0].value
-        }));
-      } // Ustawia wartosc poczatkowa dla edytora
-
-    }, {
-      key: "setInitialValue",
-      value: function setInitialValue(html) {
-        this.$contents.html(html);
-        this.setInputValue(html);
-      }
-    }]);
-
-    return KbfWysiwyg;
-  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
   function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
@@ -23180,6 +23063,7 @@
       key: "init",
       value: function init() {
         var instance = this;
+        this.$form = $('form[name="register-company"]');
         this.companyInfo = $('.company-info')[0];
         this.companyDescription = $('.company-description')[0];
         this.companyInfoContents = this.companyInfo.innerHTML; // Placeholder z informacjami o firmie
@@ -23187,7 +23071,13 @@
         this.companyDescriptionContents = this.companyDescription.innerHTML; // Placeholder z informacjami o firmie
 
         this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
-        this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button'); // Przycisk wyszukiwania po numerze REGON
+        this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button'); // Cropper
+
+        this.$modal = $('#modal');
+        this.image = document.getElementById('sample_image');
+        this.cropper = null;
+        this.$companyLogo = $('#company_logo');
+        this.$logoPlaceholder = $('.kbf-logo-uploader-image'); // Przycisk wyszukiwania po numerze REGON
 
         this.$searchByREGONButton = $('.kbf-search-button');
         this.$searchByREGONButton.attr('disabled', 'disabled'); //Tagify
@@ -23242,20 +23132,75 @@
           this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
           this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
           this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
-          this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
+          this.registerCompanyPreloader = new KbfPreloaderButton('.button-register.button-desktop button');
         } else {
           this.$prevButton = this.$kbfStepper.find('.button-prev');
           this.$nextButton = this.$kbfStepper.find('.button-next');
           this.$registerButton = this.$kbfStepper.find('.button-register');
-          this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
+          this.registerCompanyPreloader = new KbfPreloaderButton('.button-register button');
         } // Wybor branz
 
 
         this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', "Wybierz", window.innerWidth <= 768, false);
         this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper)); // Wysiwyg
+        // this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
+        // this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
+        // Cropper
 
-        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
-        this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper));
+        this.$companyLogo.change(function (event) {
+          var files = event.target.files;
+
+          var done = function done(url) {
+            instance.image.src = url;
+            instance.$modal.modal('show');
+          };
+
+          if (files && files.length > 0) {
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+              done(reader.result);
+            };
+
+            reader.readAsDataURL(files[0]);
+          }
+
+          instance.$companyLogo.val('');
+        });
+        this.$modal.on('shown.bs.modal', function () {
+          instance.cropper = new Cropper(instance.image, {
+            aspectRatio: 1,
+            viewMode: 2,
+            preview: '.preview'
+          });
+          $('#crop').click(function () {
+            var canvas = instance.cropper.getCroppedCanvas({
+              width: 400,
+              height: 400
+            });
+            canvas.toBlob(function (blob) {
+              URL.createObjectURL(blob);
+              var reader = new FileReader();
+              reader.readAsDataURL(blob);
+
+              reader.onloadend = function () {
+                var base64data = reader.result;
+                instance.$logoPlaceholder.attr('src', base64data);
+                instance.$modal.modal('hide');
+                var file = new File([blob], "company-logo.jpg", {
+                  type: "image/jpeg",
+                  lastModified: new Date().getTime()
+                });
+                var container = new DataTransfer();
+                container.items.add(file);
+                instance.$companyLogo[0].files = container.files;
+              };
+            });
+          });
+        }).on('hidden.bs.modal', function () {
+          instance.cropper.destroy();
+          instance.cropper = null;
+        });
       }
     }, {
       key: "addListeners",
@@ -23420,8 +23365,12 @@
 
     }, {
       key: "submitRegister",
-      value: function submitRegister() {
+      value: function submitRegister(e) {
+        e.preventDefault();
+        e.stopPropagation();
         this.$prevButton.find('button').attr('disabled', 'disabled').off('click'); // Wylacz prev button
+
+        this.$form.submit();
       }
     }, {
       key: "getDataFromREGON",
