@@ -7,6 +7,7 @@ include_once "lib/StepperRenderer.class.php";
 include_once "lib/Alert.class.php";
 
 $urls = wire("urls");
+$pages = wire("pages");
 
 $templates = wire("templates");
 $company_template = $templates->get("company");
@@ -16,16 +17,17 @@ $company_fields = $company_template->fields;
 $stepper = new StepperRenderer("kbf-stepper");
 $stepper->stepperName = "Rejestracja firmy";
 $stepper->actionName = "Zarejestruj";
+$stepper->action = $pages->get('template=choose-subscription')->url;
 $stepper->formName = 'register-company';
 
 // Logo
-$logoImage = $urls->images . "logo-placeholder.jpg";
-$company_logo_field = getFormField("company_logo");
-$company_logo_field->label = "Logo firmy";
-$company_logo_field->imagePlaceholder = $logoImage;
-$company_logo_field->name = "company_logo";
-$company_logo_field->msgRequired = "Logo firmy musi zostać dodane.";
-$company_logo_field->description = "Wybierz plik graficzny reprezentujący logo firmy.";
+//$logoImage = $urls->images . "logo-placeholder.jpg";
+//$company_logo_field = getFormField("company_logo");
+//$company_logo_field->label = "Logo firmy";
+//$company_logo_field->imagePlaceholder = $logoImage;
+//$company_logo_field->name = "company_logo";
+//$company_logo_field->msgRequired = "Logo firmy musi zostać dodane.";
+//$company_logo_field->description = "Wybierz plik graficzny reprezentujący logo firmy.";
 
 // Podsumowanie
 $company_summary = render_company_summary();
@@ -50,17 +52,12 @@ $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane
 $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
 
-$company_description_field = getFormField("company_description", true);
+$company_description_field = getFormField("company_description_simple", true);
 $company_description_field->className = "row col-12 mb-3";
 
-// Opis firmy pole ukryte - hack
-$company_description_hidden = getFormField('hidden');
-$company_description_hidden->name = 'company_description_hidden';
-
-$form_step_2->addMarkup($company_logo_field->render(), true);
+//$form_step_2->addMarkup($company_logo_field->render(), true);
 $form_step_2->addMarkup(getFormField("industries")->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
-$form_step_2->addMarkup($company_description_hidden->render(), true);
 $form_step_2->addMarkup($company_description_field->render(), true);
 $form_step_2->addMarkup(render_info_message('Opisz ogólny zakres działalności firmy. Szczegóły dotyczące świadoczonych usług i produktów będziesz mógł dodać poźniej w swoim panelu po zarejestrowaniu firmy w KBF.', 'col-12 mt-3'), true);
 
@@ -123,6 +120,8 @@ $stepperMarkup = $stepper->render();
     <!-- Tagify -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.3.0/tagify.min.css" integrity="sha512-ReP7vz5wsq3jOdrhlHFgSXFhlCfNSPj+pOOHd/LYVndKcKMZYam/1QboZsNFfQ1rrIOh9P592n3Dj0lvnJ6+8Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- crop images: Cropper CSS -->
+    <link rel="stylesheet" href="<?php echo $urls->css ?>cropper.css">
 
 </head>
 <body>
@@ -134,6 +133,35 @@ $stepperMarkup = $stepper->render();
 <div class="bg-image main-content pt-4 pb-0 mt-4" data-img-src="<?= $urls->images ?>upload/section-bg-shape-02.png" style="background-image: url('<?= $urls->images ?>upload/section-bg-shape-02.png');">
 
     <?= $stepperMarkup ?>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Przytnij obraz do wymaganych wymiarów przed przesłaniem.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="" id="sample_image" />
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <p>Podgląd przyciętego obrazu</p>
+                                <div class="preview mx-auto img-thumbnail"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Wróć</button>
+                    <button type="button" id="crop" class="btn btn-primary">Przytnij</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -145,6 +173,8 @@ $stepperMarkup = $stepper->render();
 
 <!-- Tagify -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.3.0/jQuery.tagify.min.js" integrity="sha512-gnDk4L63tz8neUm+84zemPzaZ51LgpYK5mx/75os5kOl6qtJTTijitfyxMRssTrg3r9xHy2NybqcVYZcC/cEEw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="<?php echo $urls->js ?>vendor/cropper.js"></script>
 
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>register-company.js"></script>

@@ -2,7 +2,6 @@ import KbfStepper from "../../components/KbfStepper";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import errors from "../../modules/Errors";
 import KbfIndustrySwitcher from "../../components/KbfIndustrySwitcher";
-import KbfWysiwyg from "../../components/KbfWysiwyg";
 import config from "../../config/config";
 import {replacePlaceholders} from "../../functions/library";
 import KbfTagify from "../../components/KbfTagify";
@@ -15,6 +14,9 @@ class App {
         this.regonFound = true; // Czy REGON istnieje w bazie KBF
         this.regonErrorVisible = false; // Czy wyswietlony jest blad regon
 
+        this.imageName = 'logo-placeholder.jpg';
+        this.imageType = 'image/jpg';
+
         this.init();
         this.addListeners();
 
@@ -24,7 +26,7 @@ class App {
 
         let instance = this;
 
-
+        this.$form = $('form[name="register-company"]');
 
         this.companyInfo = $('.company-info')[0];
         this.companyDescription = $('.company-description')[0];
@@ -33,6 +35,13 @@ class App {
         this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
 
         this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button');
+
+        // Cropper
+        this.$modal = $('#modal');
+        this.image = document.getElementById('sample_image');
+        this.cropper = null;
+        this.$companyLogo = $('#company_logo');
+        this.$logoPlaceholder = $('.kbf-logo-uploader-image');
 
         // Przycisk wyszukiwania po numerze REGON
         this.$searchByREGONButton = $('.kbf-search-button');
@@ -101,13 +110,13 @@ class App {
             this.$prevButton = this.$kbfStepper.find('.button-prev.button-desktop');
             this.$nextButton = this.$kbfStepper.find('.button-next.button-desktop');
             this.$registerButton = this.$kbfStepper.find('.button-register.button-desktop');
-            this.registerCompanyButton = new KbfPreloaderButton('.button-register.button-desktop button');
+            this.registerCompanyPreloader = new KbfPreloaderButton('.button-register.button-desktop button');
 
         } else {
             this.$prevButton = this.$kbfStepper.find('.button-prev');
             this.$nextButton = this.$kbfStepper.find('.button-next');
             this.$registerButton = this.$kbfStepper.find('.button-register');
-            this.registerCompanyButton = new KbfPreloaderButton('.button-register button');
+            this.registerCompanyPreloader = new KbfPreloaderButton('.button-register button');
         }
 
         // Wybor branz
@@ -115,8 +124,70 @@ class App {
         this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper));
 
         // Wysiwyg
-        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
-        this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
+        // this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
+        // this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
+
+        // Cropper
+        this.$companyLogo.change(function (event) {
+            let files = event.target.files;
+            instance.imageName = files[0].name;
+            instance.imageType = files[0].type
+
+            let done = function (url) {
+                instance.image.src = url;
+                instance.$modal.modal('show');
+            };
+
+            if (files && files.length > 0) {
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(files[0]);
+            }
+
+            instance.$companyLogo.val('');
+
+        });
+
+        this.$modal.on('shown.bs.modal', function () {
+            instance.cropper = new Cropper(instance.image, {
+                // aspectRatio: 3,
+                viewMode: 1,
+                preview: '.preview'
+            });
+
+            $('#crop').click(function () {
+                let canvas = instance.cropper.getCroppedCanvas({
+                    width: 400,
+                    height: 400
+                });
+
+                canvas.toBlob(function (blob) {
+
+                    let file = new File([blob], instance.imageName, {type: instance.imageType, lastModified: new Date().getTime()});
+                    let container = new DataTransfer();
+                    container.items.add(file);
+                    instance.$companyLogo[0].files = container.files;
+
+                    let reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function () {
+
+                        let base64data = reader.result;
+                        instance.$logoPlaceholder.attr('src', base64data);
+                        instance.$modal.modal('hide');
+
+                    };
+                });
+            });
+
+
+        }).on('hidden.bs.modal', function () {
+            instance.cropper.destroy();
+            instance.cropper = null;
+        });
+
 
     }
 
@@ -144,6 +215,9 @@ class App {
             instance.regonErrorVisible = false;
 
             let data = await instance.getDataFromREGON($regonField.val());
+
+            instance.stepper.validateCurrentPage();
+
             instance.searchByREGONButtonPreloader.stopPreloader();
 
             let $companyNameField = $('[name="company_name"]');
@@ -162,6 +236,7 @@ class App {
             $latField.val('');
             $lonField.val('');
 
+
             instance.regonFound = true;
             instance.regonNotExists = true;
 
@@ -177,15 +252,28 @@ class App {
 
                 // Ustaw wartosci dla pol
                 $companyNameField.val(data["company_name"]);
+                $companyNameField[0].removeAttribute('disabled');
+
                 $companyNipField.val(data["company_nip"]);
+                $companyNipField[0].removeAttribute('disabled');
+
                 $companyAddressField.val(data["company_address"]);
+                $companyAddressField[0].removeAttribute('disabled');
+
                 $companyZipField.val(data["company_zip"]);
+                $companyZipField[0].removeAttribute('disabled');
+
                 $companyCityField.val(data["company_city"]);
+                $companyCityField[0].removeAttribute('disabled');
+
+                // TODO: province_name, area_name
+                // TODO: getLocationData(address, zip, city) => { lat, lon, province_name, area_name }
+
                 $latField.val(data["lat"]);
                 $lonField.val(data["lon"]);
-            }
 
-            instance.stepper.validateCurrentPage();
+
+            }
 
         })
     }
@@ -259,16 +347,13 @@ class App {
 
 
         // Usun logo WWW jezel nie podano w formularzu
-        if ( !$('[name="company_www"]').val()) {
+        if (!$('[name="company_www"]').val()) {
 
-            let $companyWWW =  $('.company-www');
+            let $companyWWW = $('.company-www');
             $companyWWW.removeClass('d-block');
             $companyWWW.addClass('d-none')
-        }
-
-        else {
-            console.log('called2')
-            let $companyWWW =  $('.company-www');
+        } else {
+            let $companyWWW = $('.company-www');
             $companyWWW.addClass('d-block');
             $companyWWW.removeClass('d-none');
         }
@@ -289,8 +374,14 @@ class App {
     }
 
     // Potwierdza rejestracje
-    submitRegister() {
+    submitRegister(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
         this.$prevButton.find('button').attr('disabled', 'disabled').off('click'); // Wylacz prev button
+        this.$form.submit();
+
     }
 
     async getDataFromREGON(regon) {

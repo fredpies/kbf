@@ -1,5 +1,6 @@
 import KbfSendCv from "./KbfSendCv";
 import KbfBackButton from "../../components/KbfBackButton";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -11,6 +12,7 @@ class App {
 
         new KbfSendCv(); // Inicjuj formularz
         new KbfBackButton('.kbf-back-button');
+        new KbfFooterTop();
 
     }
 }

@@ -3,6 +3,7 @@ import KbfBackButton from "../../components/KbfBackButton";
 import KbfLikeCompany from "../../components/KbfLikeCompany";
 import KbfLikeProduct from "../../components/KbfLikeProduct";
 import Alpine from "alpinejs";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -20,6 +21,7 @@ class App {
 
         new KbfLikeCompany();
         new KbfLikeProduct();
+        new KbfFooterTop();
 
         window.Alpine = Alpine;
         Alpine.start();

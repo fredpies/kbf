@@ -37,7 +37,9 @@ if (Request::is('post')) {
 
             $product_page->product_images->delete($image_page);
             $product_page->save();
+
             $response = array("status" => "success");
+
 
         }
 

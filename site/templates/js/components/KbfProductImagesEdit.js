@@ -11,6 +11,7 @@ class KbfProductImagesEdit {
             return {
 
                 images: [],
+                imagesCount: 0,
                 imgs: [],
 
                 init() {
@@ -20,10 +21,26 @@ class KbfProductImagesEdit {
                     this.productId = this.$el.dataset.id;
                     this.$confirmationModal = $('#confirmation');
                     this.$cropperModal = $(this.$refs.cropperModal);
+                    this.cropper = undefined;
+                    this.formData = new FormData();
+
+                    this.$cropperModal.on('shown.bs.modal', function() {
+                        instance.cropper = new Cropper(instance.$refs.sampleImage, {
+                            aspectRatio: 1,
+                            viewMode: 2,
+                            preview:'.preview'
+                        });
+                    }).on('hidden.bs.modal', function(){
+                        instance.cropper.destroy();
+                        instance.cropper = null;
+                    });
 
                     this.getImages();
 
+                },
 
+                updateImagesCount() {
+                    this.imagesCount = this.images.length;
                 },
 
                 showModal() {
@@ -35,7 +52,6 @@ class KbfProductImagesEdit {
                 showCropperModal() {
 
                     let instance = this;
-                    let cropper;
                     let files = this.$el.files;
 
                     let done = function(url) {
@@ -44,6 +60,9 @@ class KbfProductImagesEdit {
                     };
 
                     if(files && files.length > 0) {
+
+                        this.currentFileName = files[0].name;
+
                         let reader = new FileReader();
                         reader.onload = function(event) {
                             done(reader.result);
@@ -51,32 +70,54 @@ class KbfProductImagesEdit {
                         reader.readAsDataURL(files[0]);
                     }
 
-                    this.$cropperModal.on('shown.bs.modal', function() {
-                        cropper = new Cropper(instance.$refs.sampleImage, {
-                            aspectRatio: 1,
-                            viewMode: 2,
-                            preview:'.preview'
-                        });
-                    }).on('hidden.bs.modal', function(){
-                        cropper.destroy();
-                        cropper = null;
+                    $(this.$el).val('');
+
+                },
+
+                cropImage() {
+
+                    let instance = this;
+
+                    let canvas = this.cropper.getCroppedCanvas({
+                        width: 400,
+                        height: 400
                     });
 
+                    canvas.toBlob(function(blob) {
+                        let reader = new FileReader();
+                        reader.readAsDataURL(blob);
+                        reader.onloadend = function(){
+
+                            instance.imageData = reader.result;
+                            instance.formData.append("product_image", blob, instance.currentFileName);
+                            instance.formData.append("product_id", instance.productId)
+                            instance.$cropperModal.modal('hide');
+
+                            $.ajax({
+                                type: 'POST',
+                                url: config.apiEndpoint + 'api/update-product-images/',
+                                data: instance.formData,
+                                processData: false,
+                                contentType: false
+                            }).done(function() {
+                                instance.getImages();
+                            });
+                        };
+                    });
                 },
 
                 deleteImage() {
 
                     let instance = this;
                     this.$confirmationModal.modal('hide');
-                    console.log('deleted');
 
                     this.$currentImageItem.fadeOut(350, function () {
-                        $.post('http://localhost/kbf2/api/delete-image-from-product/',
+                        $.post( config.apiEndpoint + 'api/delete-image-from-product/',
                             {
                                 image_url: instance.currentImageUrl,
                                 page_id: instance.productId
                             }
-                            ).done(function () {
+                        ).done(function () {
                             instance.getImages();
                         })
                     });
@@ -86,21 +127,16 @@ class KbfProductImagesEdit {
 
                     let instance = this;
 
-                    $.get('http://localhost/kbf2/api/get-product-images/?id=' + instance.productId)
+                    $.get(config.apiEndpoint + 'api/get-product-images/?id=' + instance.productId)
                         .done(function (res) {
                             instance.images = res;
                             instance.$nextTick(function () {
-                                // console.log($(instance.$el).find('.product-image').eq(0).attr('src'));
-
+                                instance.updateImagesCount();
                             });
-
-                        })
+                        });
                 }
-
             }
-
         }
-
     }
 }
 

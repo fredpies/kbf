@@ -1,4 +1,5 @@
-import KbfMiniMap from "../../components/KbfMiniMap";
+import KbfFooterTop from "../../components/KbfFooterTop";
+import KbfBackButton from "../../components/KbfBackButton";
 
 class App {
 
@@ -7,10 +8,10 @@ class App {
     }
 
     init() {
-        new KbfMiniMap('#kbf-minimap');
+        new KbfFooterTop();
+        new KbfBackButton('.kbf-back-button')
     }
 
-    addListeners() {}
 }
 
 export default App;

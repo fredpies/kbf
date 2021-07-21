@@ -391,6 +391,34 @@ class FormFieldTextArea extends FormField
 
 }
 
+class FormFieldTextAreaSimple extends FormField
+{
+
+    public static $template = '
+
+            <div class="{className}">
+               <div class="col-12 mx-lg-0 mx-auto px-0">
+                    <label class="text-uppercase px-3">{label}</label>
+                </div>
+               
+                <textarea rows="8" class="form-control" {required} {disabled} {msgRequired} type="hidden" name="{name}" value="{value}"></textarea>
+                
+            </div>
+
+    ';
+
+    public function __construct($disabled = false, $className = "")
+    {
+        parent::__construct($disabled, $className);
+    }
+
+    public function render()
+    {
+        return $this->renderMarkup(self::$template);
+    }
+
+}
+
 class FormFieldKeywords extends FormField
 {
 

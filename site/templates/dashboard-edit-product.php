@@ -115,18 +115,18 @@ $product_images = '
 
     <label class="text-uppercase px-3">Przesłane obrazy</label>
     
-    <div data-id="' . $product_page->id . '" x-data="productImagesEdit()" class="product-images">
+    <div data-id="' . $product_page->id . '" x-data="productImagesEdit()"  class="product-images">
         
         <div class="product-images-container d-flex flex-wrap justify-content-center">
     
             <template x-for="image in images" :key="image.imageSrc">
                 <div class="product-image-item">
                     <img :src="image.imageSrc" alt="product-image" class="product-image d-block mx-auto img-fluid mt-sm-0 img-thumbnail">
-                    <button :data-image-src="image.imageSrc" x-on:click.prevent.stop="showModal" class="delete-button btn btn-md btn-round btn-outline-danger border-0">Usuń obraz</button>
+                    <button x-show="imagesCount > 1" :data-image-src="image.imageSrc" x-on:click.prevent.stop="showModal" class="delete-button btn btn-md btn-round btn-outline-danger border-0">Usuń obraz</button>
                 </div>
             </template>
             
-            <label for="upload_image">
+            <label for="product_image">
                 <div class="product-image-add d-flex flex-column justify-content-center align-content-center text-center my-0">
                     <i class="product-image-add-icon d-inline-block mb-2 fas fa-file-upload"></i>
                     <span class="d-inline-block text-uppercase font-weight-600">Prześlij obraz</span>
@@ -142,6 +142,7 @@ $product_images = '
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
+                
                 <div class="modal-body">
                     <div class="img-container">
                         <div class="row">
@@ -155,15 +156,16 @@ $product_images = '
                         </div>
                     </div>
                 </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Wróć</button>
-                    <button type="button" id="crop" class="btn btn-primary">Przytnij</button>
+                    <button @click.prevent.stop="cropImage" type="button" id="crop" class="btn btn-primary">Przytnij</button>
                 </div>
             </div>
         </div>
             </div>
             
-            <input @change="showCropperModal" class="d-none" type="file" class="image" id="upload_image" accept="image/*"/>
+            <input @change="showCropperModal" class="d-none" type="file" class="image" id="product_image" accept="image/*"/>
             
     </div>' . render_modal("confirmation", "Potwierdzenie", $modalMarkup) . '</div>' .
 

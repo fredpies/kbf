@@ -1526,7 +1526,9 @@
         this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
 
         var dataOptions = this.$dropdowns.data('options');
-        if (dataOptions) this.opts = dataOptions.split(',');
+        if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
+
+        this.startValue = this.$dropdowns.data('value');
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
@@ -1536,6 +1538,8 @@
 
         this.setOptions(this.opts);
         this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
+
+        if (this.startValue) this.setActive(this.startValue);
       } // Dodaje listenery
 
     }, {
@@ -1587,27 +1591,7 @@
             e.stopPropagation();
             enableScroll();
           });
-        } // Fix dla przyciskow steppera // TODO przeniesc do steppera
-        // this.$dropdowns.on('shown.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', -1);
-        //     if ($buttons.length) $buttons.css('z-index', -1);
-        //
-        // });
-        //
-        // this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-        //
-        //     e.stopPropagation();
-        //     let $steps = $('.step');
-        //     let $buttons = $('.button-prev, .button-next, .button-register');
-        //     if ($steps.length) $steps.css('z-index', '');
-        //     if ($buttons.length) $buttons.css('z-index', '');
-        //
-        // });
-        // Gdy klikniemy na dropdown item
+        } // Gdy klikniemy na dropdown item
 
 
         this.$dropdownItems.on('click', function (e) {
@@ -2822,6 +2806,38 @@
 
     return KbfAreaSwitcher;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          instance.$footerTop.toggleClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
 
   var type$1 = "FeatureCollection";
   var features$1 = [
@@ -92061,29 +92077,40 @@
       window.provincesGeoJSON = provincesGeoJSON;
       window.areasGeoJSON = areasGeoJSON;
       this.init();
+      this.addListeners();
     }
 
     _createClass(App, [{
       key: "init",
       value: function init() {
-        new KbfAreaSwitcher('provinces', 'areas'); // First section industries sub-menu opening and closing
+        new KbfAreaSwitcher('provinces', 'areas');
+        new KbfFooterTop();
+        this.$topSection = $('#top-section');
+        this.$industriesSidebar = $('#industriesSidebar');
+        this.$industriesSidebarOpenButton = $('#industriesSidebarOpenButton');
+        this.$industriesSidebarCloseButton = $("#industriesSidebarCloseButton");
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this; // First section industries sub-menu opening and closing
 
-        $("#industriesSidebarOpenButton").click(function () {
-          $("#top-section").removeClass('col-xl-12');
-          $("#top-section").addClass('col-xl-9');
-          $("#industriesSidebar").addClass('d-xl-block');
-          $("#industriesSidebarOpenButton").removeClass('d-xl-block');
-          $("#industriesSidebarOpenButton").addClass('d-none');
-          $("#industriesSidebarCloseButton").addClass('d-xl-block');
+        this.$industriesSidebarOpenButton.click(function () {
+          instance.$topSection.removeClass('col-xl-12');
+          instance.$topSection.addClass('col-xl-9');
+          instance.$industriesSidebar.addClass('d-xl-block');
+          instance.$industriesSidebarOpenButton.removeClass('d-xl-block');
+          instance.$industriesSidebarOpenButton.addClass('d-none');
+          instance.$industriesSidebarCloseButton.addClass('d-xl-block');
         });
-        $("#industriesSidebarCloseButton").click(function () {
-          $("#top-section").removeClass('col-xl-9');
-          $("#top-section").addClass('col-xl-12');
-          $("#industriesSidebar").removeClass('d-xl-block');
-          $("#industriesSidebar").addClass('d-none');
-          $("#industriesSidebarCloseButton").removeClass('d-xl-block');
-          $("#industriesSidebarCloseButton").addClass('d-none');
-          $("#industriesSidebarOpenButton").addClass('d-xl-block');
+        this.$industriesSidebarCloseButton.click(function () {
+          instance.$topSection.removeClass('col-xl-9');
+          instance.$topSection.addClass('col-xl-12');
+          instance.$industriesSidebar.removeClass('d-xl-block');
+          instance.$industriesSidebar.addClass('d-none');
+          instance.$industriesSidebarCloseButton.removeClass('d-xl-block');
+          instance.$industriesSidebarCloseButton.addClass('d-none');
+          instance.$industriesSidebarOpenButton.addClass('d-xl-block');
         });
       }
     }]);

@@ -4534,9 +4534,7 @@
 
       this.$errorMessageElement = $('.kbf-error-message'); // Sprawdz czy walidator istnieje
 
-      if (!$.fn.validate) throw errors.noValidator(); // Konfiguracja walidatora
-
-      this.validatorConfig = formConfig.validator; // Domyslna konfiguracja walidatora
+      if (!$.fn.validate) throw errors.noValidator(); // Domyslna konfiguracja walidatora
 
       this.defaultValidatorConfig = {
         ignore: [],
@@ -4570,7 +4568,7 @@
     }, {
       key: "validate",
       value: function validate() {
-        this.$formElement.validate(_objectSpread(_objectSpread({}, this.defaultValidatorConfig), this.validatorConfig));
+        this.$formElement.validate(_objectSpread(_objectSpread({}, this.defaultValidatorConfig), this.formConfig));
         this.handleErrorMessage();
       } // Ustawia error message jezeli istnieje
 
@@ -4807,7 +4805,8 @@
           instance.hostname = window.location.hostname;
           instance.formData.append('subject', "Aplikacja na stanowisko: \"".concat(instance.$jobNameField.val(), "\""));
           instance.formData.append('to', instance.$companyEmailField.val());
-          instance.formData.append('from', 'administrator@webplanet.biz');
+          instance.formData.append('from', 'administrator@webplanet.biz'); //TODO: Zmiana wg configa
+
           instance.formData.append('name', instance.$nameField.val());
           instance.formData.append('phone', instance.$phoneField.val());
           instance.formData.append('email', instance.$emailField.val());
@@ -4868,6 +4867,38 @@
     return KbfBackButton;
   }();
 
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          instance.$footerTop.toggleClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
+
   var App = /*#__PURE__*/function () {
     function App() {
       _classCallCheck(this, App);
@@ -4881,6 +4912,7 @@
         new KbfSendCv(); // Inicjuj formularz
 
         new KbfBackButton('.kbf-back-button');
+        new KbfFooterTop();
       }
     }]);
 

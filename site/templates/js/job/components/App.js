@@ -1,4 +1,5 @@
 import KbfBackButton from "../../components/KbfBackButton";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -10,7 +11,8 @@ class App {
 
     init() {
 
-        new KbfBackButton('.kbf-back-button')
+        new KbfBackButton('.kbf-back-button');
+        new KbfFooterTop();
 
     }
 

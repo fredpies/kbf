@@ -25164,6 +25164,12 @@ var src_default = alpine_default; // packages/alpinejs/builds/module.js
 
 var module_default = src_default;
 
+var config = {
+  env: 'dev',
+  url: 'https://webplanet.biz',
+  apiEndpoint: 'https://webplanet.biz/kbf/'
+};
+
 var KbfProductImagesEdit = function KbfProductImagesEdit() {
   _classCallCheck(this, KbfProductImagesEdit);
 
@@ -25172,12 +25178,29 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
   window.productImagesEdit = function () {
     return {
       images: [],
+      imagesCount: 0,
       imgs: [],
       init: function init() {
+        var instance = this;
         this.productId = this.$el.dataset.id;
         this.$confirmationModal = $('#confirmation');
         this.$cropperModal = $(this.$refs.cropperModal);
+        this.cropper = undefined;
+        this.formData = new FormData();
+        this.$cropperModal.on('shown.bs.modal', function () {
+          instance.cropper = new Cropper(instance.$refs.sampleImage, {
+            aspectRatio: 1,
+            viewMode: 2,
+            preview: '.preview'
+          });
+        }).on('hidden.bs.modal', function () {
+          instance.cropper.destroy();
+          instance.cropper = null;
+        });
         this.getImages();
+      },
+      updateImagesCount: function updateImagesCount() {
+        this.imagesCount = this.images.length;
       },
       showModal: function showModal() {
         this.currentImageUrl = this.$el.dataset.imageSrc;
@@ -25186,7 +25209,6 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
       },
       showCropperModal: function showCropperModal() {
         var instance = this;
-        var cropper;
         var files = this.$el.files;
 
         var done = function done(url) {
@@ -25195,6 +25217,7 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
         };
 
         if (files && files.length > 0) {
+          this.currentFileName = files[0].name;
           var reader = new FileReader();
 
           reader.onload = function (event) {
@@ -25204,23 +25227,40 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
           reader.readAsDataURL(files[0]);
         }
 
-        this.$cropperModal.on('shown.bs.modal', function () {
-          cropper = new Cropper(instance.$refs.sampleImage, {
-            aspectRatio: 1,
-            viewMode: 2,
-            preview: '.preview'
-          });
-        }).on('hidden.bs.modal', function () {
-          cropper.destroy();
-          cropper = null;
+        $(this.$el).val('');
+      },
+      cropImage: function cropImage() {
+        var instance = this;
+        var canvas = this.cropper.getCroppedCanvas({
+          width: 400,
+          height: 400
+        });
+        canvas.toBlob(function (blob) {
+          var reader = new FileReader();
+          reader.readAsDataURL(blob);
+
+          reader.onloadend = function () {
+            instance.imageData = reader.result;
+            instance.formData.append("product_image", blob, instance.currentFileName);
+            instance.formData.append("product_id", instance.productId);
+            instance.$cropperModal.modal('hide');
+            $.ajax({
+              type: 'POST',
+              url: config.apiEndpoint + 'api/update-product-images/',
+              data: instance.formData,
+              processData: false,
+              contentType: false
+            }).done(function () {
+              instance.getImages();
+            });
+          };
         });
       },
       deleteImage: function deleteImage() {
         var instance = this;
         this.$confirmationModal.modal('hide');
-        console.log('deleted');
         this.$currentImageItem.fadeOut(350, function () {
-          $.post('http://localhost/kbf2/api/delete-image-from-product/', {
+          $.post(config.apiEndpoint + 'api/delete-image-from-product/', {
             image_url: instance.currentImageUrl,
             page_id: instance.productId
           }).done(function () {
@@ -25230,9 +25270,10 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
       },
       getImages: function getImages() {
         var instance = this;
-        $.get('http://localhost/kbf2/api/get-product-images/?id=' + instance.productId).done(function (res) {
+        $.get(config.apiEndpoint + 'api/get-product-images/?id=' + instance.productId).done(function (res) {
           instance.images = res;
-          instance.$nextTick(function () {// console.log($(instance.$el).find('.product-image').eq(0).attr('src'));
+          instance.$nextTick(function () {
+            instance.updateImagesCount();
           });
         });
       }

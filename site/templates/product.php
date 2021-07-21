@@ -4,6 +4,7 @@ include_once "partials/_init.php";
 include_once "lib/functions.php";
 
 $user = wire('user');
+$input = wire('input');
 $page = wire('page');
 $pages = wire('pages');
 $urls = wire('urls');
@@ -187,16 +188,30 @@ $message_url = $pages->get("template=message")->url . "?company_id=" . $company_
 
             <div class="row px-md-5 px-4 py-3">
                 <div class="col-12 text-center text-md-right align-self-center">
-                    <div class="input-group input-group-lg input-group-round d-block d-sm-inline-block w-auto" style="max-width: 200px; margin: auto;">
-                        <div class="input-group-inner">
-                            <input type="number" class="form-control form-control-lg" value="1">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-lg btn-round btn-primary shadow-none mb-0" type="button">KUP</button>
+
+                    <?php if (!$input->action) { ?>
+
+                        <div class="input-group input-group-lg input-group-round d-block d-sm-inline-block w-auto" style="max-width: 200px; margin: auto;">
+                            <div class="input-group-inner">
+                                <input type="number" class="form-control form-control-lg" value="1">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-lg btn-round btn-primary shadow-none mb-0" type="button">KUP</button>
+                                </div>
+                                <div class="input-focus-bg"></div>
                             </div>
-                            <div class="input-focus-bg"></div>
                         </div>
-                    </div>
-                    <button type="button" class="kbf-back-button btn btn-round btn-secondary shadow-none m-0 mt-3 ml-sm-3 mt-sm-0 mb-1">POWRÓT</button>
+                        <button type="button" class="kbf-back-button btn btn-round btn-secondary shadow-none m-0 mt-3 ml-sm-3 mt-sm-0 mb-1">POWRÓT</button>
+
+                    <?php } ?>
+
+                    <?php if ($input->action === 'preview' && $user->isLoggedin()) { ?>
+
+                        <button class="d-none kbf-back-button"></button>
+                        <a href="<?= $pages->get('template=dashboard-products')->url ?>" class="btn btn-round btn-secondary shadow-none m-0 mt-3 ml-sm-3 mt-sm-0 mb-1 text-white">POWRÓT</a>
+
+                    <?php } ?>
+
+
                 </div>
             </div>
 

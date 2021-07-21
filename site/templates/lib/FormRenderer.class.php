@@ -71,7 +71,8 @@ class FormRenderer
     private $templateFields;
     private $isHidden = false; // Czy renderowac ukryty formularz
 
-    public function __construct($name, $templateFields)
+    // TODO: Usunac $templateFields
+    public function __construct($name, $templateFields = array())
     {
 
         $this->name = $name;

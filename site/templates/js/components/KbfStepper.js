@@ -49,6 +49,7 @@ class KbfStepper {
         e.stopPropagation();
 
         if (this.validateCurrentPage()) { // Zmienia strone tylko w przypadku jej poprawnosci
+        // if (true) { // Zmienia strone tylko w przypadku jej poprawnosci
 
             if (this.currentPageIdx === this.lastPageIdx) return;
 

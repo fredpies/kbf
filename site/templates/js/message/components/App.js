@@ -3,6 +3,7 @@ import KbfSendMessage from "./KbfSendMessage";
 import KbfBackButton from "../../components/KbfBackButton";
 import KbfLikeCompany from "../../components/KbfLikeCompany";
 import Alpine from "alpinejs";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -19,6 +20,7 @@ class App {
         new KbfMiniMap('#kbf-minimap'); // Inicjalizuj minimape
         new KbfSendMessage(); // Inicjuj formularz
         new KbfBackButton('.kbf-back-button');
+        new KbfFooterTop();
 
         new KbfLikeCompany();
 

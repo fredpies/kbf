@@ -147,7 +147,7 @@
 @media (min-width: 960px) {
   #kbf-map-panel {
     top: 2rem;
-    left: 2rem;
+    right: 0;
     width: 35%;
   }
 }
@@ -430,6 +430,11 @@
   display: none !important;
 }
 
+.company-job-description, .job-responsibilites, .job-requirements, .job-offer {
+  min-height: 480px !important;
+}
+
+
 /************************/
 /* 3.1 Oferta pracy     */
 /************************/
@@ -481,6 +486,7 @@
   overflow: hidden;
   width: 100%;
   height: 10rem;
+  z-index: 0;
 }
 
 @media (min-width: 1280px) {
@@ -553,6 +559,10 @@ input[name*="sub-industry"] + .error {
 
 .company-list-item .company-name, .job-list-item .job-name {
   font-size: 1rem;
+}
+
+.company-list-item .company-name:hover, .job-list-item .job-name:hover {
+  color: #2196f3 !important;
 }
 
 @media (min-width: 768px) {
@@ -665,7 +675,7 @@ input[name*="sub-industry"] + .error {
   }
 }
 
-.ql-editor, .kbf-keywords  {
+.ql-editor, .kbf-keywords, textarea  {
   border: 2px solid #e0e0e0 !important;
   border-radius: 1.6875rem !important;
   min-height: 4.5rem !important;
@@ -675,11 +685,12 @@ input[name*="sub-industry"] + .error {
   transition: all .2s ease-in-out;
 }
 
+
 .ql-editor {
   height: 16rem !important;
 }
 
-.ql-editor.focus, .kbf-keywords.tagify.tagify--focus:focus {
+.ql-editor.focus, .kbf-keywords.tagify.tagify--focus:focus, textarea:focus {
   border: 2px solid #2196f3 !important;
   box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%) !important;
 }
@@ -929,7 +940,6 @@ input[name*="sub-industry"] + .error {
   margin: 1rem 0;
 }
 
-
 .product-image-item {
   position: relative;
   margin-right: 2rem;
@@ -939,6 +949,7 @@ input[name*="sub-industry"] + .error {
   font-size: .75rem;
   background: #ececec;
   cursor: pointer;
+  min-height: 160px;
   height: 100%;
   width: 10rem;
 
@@ -1297,6 +1308,75 @@ a.about-keywords:hover {
   border-left: 5px solid green !important;
 }
 
+/* Subskrypcje */
+
+.subscriptions-title {
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background-color: white !important;
+}
+
+.card-price-table .card-body, .subscriptions .container {
+  height: 548px !important;
+}
+
+.subscription-button {
+  bottom: 1rem;
+  left: 0;
+}
+
+.subscriptions {
+  padding-top: 135px !important;
+}
+
+@media (min-width: 1024px) {
+  .card-price-table .card-body,  .subscriptions .container {
+    height: 565px !important;
+  }
+  .subscription-button {
+    bottom: 0.5rem;
+    left: 0;
+  }
+
+  .subscriptions {
+    padding-top: 0 !important;
+  }
+
+  .subscriptions .container {
+    align-self: center;
+  }
+
+}
+
+/* Footer */
+
+footer {
+  z-index: 1000;
+  position: relative;
+}
+
+.footer-top {
+  padding-top: 2rem;
+  bottom: 0;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out, opacity 0.8s ease;
+}
+
+.footer-top.show-footer-top {
+  transform: translateY(-2rem);
+  opacity: 1;
+}
+
+footer a {
+  color: white !important;
+}
+
+footer a:hover {
+  color: #2196f3 !important;
+}
 
 /******************************/
 /* Fix                        */
@@ -1355,4 +1435,23 @@ body.modal-open {
 
 a.btn {
   cursor: pointer !important;
+}
+
+/* Product form fix */
+
+#product_price-error, #product_inventory-error {
+  left: 1rem;
+  bottom: -2rem;
+}
+
+#product_description-error {
+  bottom: -1rem;
+}
+
+#product_images-error {
+  bottom: 0;
+}
+
+textarea + #company_description_html-error {
+  bottom: -2rem !important;
 }
