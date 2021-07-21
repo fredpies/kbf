@@ -21,13 +21,13 @@ $stepper->action = $pages->get('template=choose-subscription')->url;
 $stepper->formName = 'register-company';
 
 // Logo
-$logoImage = $urls->images . "logo-placeholder.jpg";
-$company_logo_field = getFormField("company_logo");
-$company_logo_field->label = "Logo firmy";
-$company_logo_field->imagePlaceholder = $logoImage;
-$company_logo_field->name = "company_logo";
-$company_logo_field->msgRequired = "Logo firmy musi zostać dodane.";
-$company_logo_field->description = "Wybierz plik graficzny reprezentujący logo firmy.";
+//$logoImage = $urls->images . "logo-placeholder.jpg";
+//$company_logo_field = getFormField("company_logo");
+//$company_logo_field->label = "Logo firmy";
+//$company_logo_field->imagePlaceholder = $logoImage;
+//$company_logo_field->name = "company_logo";
+//$company_logo_field->msgRequired = "Logo firmy musi zostać dodane.";
+//$company_logo_field->description = "Wybierz plik graficzny reprezentujący logo firmy.";
 
 // Podsumowanie
 $company_summary = render_company_summary();
@@ -55,7 +55,7 @@ $form_step_2->onlyFields = true;
 $company_description_field = getFormField("company_description_simple", true);
 $company_description_field->className = "row col-12 mb-3";
 
-$form_step_2->addMarkup($company_logo_field->render(), true);
+//$form_step_2->addMarkup($company_logo_field->render(), true);
 $form_step_2->addMarkup(getFormField("industries")->render());
 $form_step_2->addMarkup(render_info_message('Wybierz branżę w jakiej działa firma i przypisz jej odpowiednią branżę szczegółowa (sub-branżę).'), true);
 $form_step_2->addMarkup($company_description_field->render(), true);

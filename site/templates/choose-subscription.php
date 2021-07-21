@@ -11,15 +11,40 @@ $sanitizer = wire('sanitizer');
 
 $subscribe_url = '';
 
+$session->remove('company_name');
+$session->remove('company_email');
+$session->remove('company_phone_1');
+$session->remove('company_nip');
+$session->remove('company_regon');
+$session->remove('province_name');
+$session->remove('area_name');
+$session->remove('industry');
+$session->remove('sub_industry');
+$session->remove('lat');
+$session->remove('lon');
+$session->remove('company_www');
+$session->remove('company_description_html');
+$session->remove('company_keywords');
+$session->remove('company_subscription');
+$session->remove('company_address');
+$session->remove('company_city');
+$session->remove('company_zip');
+
 if ($input->post) {
+
+    $subscribe_url = $pages->get('template=subscribe')->url;
 
     // Ustaw sesje
     foreach ($input->post as $post_variable => $value) {
         if (!empty($post_variable) && isset($post_variable)) $session->set($post_variable, $value);
     }
 
-    $subscribe_url = $pages->get('template=subscribe')->url;
-
+    // Przepisz slowa kluczowe
+    $keywords_array = array();
+    foreach (json_decode($session->company_keywords) as $keyword) {
+        array_push($keywords_array, $keyword->value);
+    }
+    $session->set('company_keywords', implode(',', $keywords_array));
 
 }
 
@@ -40,11 +65,11 @@ if ($input->post) {
 <?php include_once "partials/_preloader.php" ?>
 
 <!-- Content -->
-
-<div class="z-index-1 subscriptions-title position-fixed">
-    <h3 class="text-center font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">WYBIERZ RODZAJ
-        ABONAMENTU</h3>
-</div>
+<!---->
+<!--<div class="z-index-1 subscriptions-title position-fixed">-->
+<!--    <h3 class="text-center font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">WYBIERZ RODZAJ-->
+<!--        ABONAMENTU</h3>-->
+<!--</div>-->
 
 <div class="subscriptions main-content py-0 product d-flex align-content-center vh-100">
 

@@ -4,6 +4,11 @@ include_once "lib/functions.php";
 include_once "../../vendor/autoload.php";
 
 $pages = wire('pages');
+$session = wire('session');
+$input = wire('input');
+
+if ($input->post->subscription) $session->set('subscription', $input->post->subscription);
+
 $success_url = $pages->get('template=subscribe-success')->url;
 
 \Stripe\Stripe::setApiKey('sk_test_51JFGKzCzGrdUzhmPL3CvisXAWX90sMGzZmhR1OVDU627moWqmflERnipcrZ51NkMygpopZoBbprGBprbbQWuHzfX00RnQrW9A4');
@@ -24,6 +29,9 @@ $stripe_session = \Stripe\Checkout\Session::create([
         'quantity' => 1,
     ]],
 ]);
+
+$session->set('stripe_id', $stripe_session['id']);
+
 
 ?>
 

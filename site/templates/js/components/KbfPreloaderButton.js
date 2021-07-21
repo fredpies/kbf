@@ -37,9 +37,7 @@ class KbfPreloaderButton extends EventTarget {
         let $buttonElement = $(buttonElement);
         let bgColor;
 
-
         $buttonElement.on('click', function () {
-            console.log('not touch')
             bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
         })
 

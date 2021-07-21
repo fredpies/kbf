@@ -2,7 +2,6 @@ import KbfStepper from "../../components/KbfStepper";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import errors from "../../modules/Errors";
 import KbfIndustrySwitcher from "../../components/KbfIndustrySwitcher";
-import KbfWysiwyg from "../../components/KbfWysiwyg";
 import config from "../../config/config";
 import {replacePlaceholders} from "../../functions/library";
 import KbfTagify from "../../components/KbfTagify";
@@ -14,6 +13,9 @@ class App {
         this.regonNotExists = true; // Czy REGON istnieje w bazie KBF
         this.regonFound = true; // Czy REGON istnieje w bazie KBF
         this.regonErrorVisible = false; // Czy wyswietlony jest blad regon
+
+        this.imageName = 'logo-placeholder.jpg';
+        this.imageType = 'image/jpg';
 
         this.init();
         this.addListeners();
@@ -126,17 +128,19 @@ class App {
         // this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
 
         // Cropper
-        this.$companyLogo.change(function(event) {
+        this.$companyLogo.change(function (event) {
             let files = event.target.files;
+            instance.imageName = files[0].name;
+            instance.imageType = files[0].type
 
-            let done = function(url) {
+            let done = function (url) {
                 instance.image.src = url;
                 instance.$modal.modal('show');
             };
 
-            if(files && files.length > 0) {
+            if (files && files.length > 0) {
                 let reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     done(reader.result);
                 };
                 reader.readAsDataURL(files[0]);
@@ -146,46 +150,43 @@ class App {
 
         });
 
-        this.$modal.on('shown.bs.modal', function() {
+        this.$modal.on('shown.bs.modal', function () {
             instance.cropper = new Cropper(instance.image, {
-                aspectRatio: 1,
-                viewMode: 2,
-                preview:'.preview'
+                // aspectRatio: 3,
+                viewMode: 1,
+                preview: '.preview'
             });
 
-            $('#crop').click(function(){
+            $('#crop').click(function () {
                 let canvas = instance.cropper.getCroppedCanvas({
                     width: 400,
                     height: 400
                 });
 
-                canvas.toBlob(function(blob) {
-                    let url = URL.createObjectURL(blob);
+                canvas.toBlob(function (blob) {
+
+                    let file = new File([blob], instance.imageName, {type: instance.imageType, lastModified: new Date().getTime()});
+                    let container = new DataTransfer();
+                    container.items.add(file);
+                    instance.$companyLogo[0].files = container.files;
+
                     let reader = new FileReader();
                     reader.readAsDataURL(blob);
-                    reader.onloadend = function(){
+                    reader.onloadend = function () {
 
                         let base64data = reader.result;
                         instance.$logoPlaceholder.attr('src', base64data);
                         instance.$modal.modal('hide');
-
-                        let file = new File([blob], "company-logo.jpg",{type:"image/jpeg", lastModified:new Date().getTime()});
-                        let container = new DataTransfer();
-                        container.items.add(file);
-
-                        instance.$companyLogo[0].files = container.files;
 
                     };
                 });
             });
 
 
-        }).on('hidden.bs.modal', function() {
+        }).on('hidden.bs.modal', function () {
             instance.cropper.destroy();
             instance.cropper = null;
         });
-
-
 
 
     }
@@ -214,6 +215,9 @@ class App {
             instance.regonErrorVisible = false;
 
             let data = await instance.getDataFromREGON($regonField.val());
+
+            instance.stepper.validateCurrentPage();
+
             instance.searchByREGONButtonPreloader.stopPreloader();
 
             let $companyNameField = $('[name="company_name"]');
@@ -232,6 +236,7 @@ class App {
             $latField.val('');
             $lonField.val('');
 
+
             instance.regonFound = true;
             instance.regonNotExists = true;
 
@@ -247,15 +252,28 @@ class App {
 
                 // Ustaw wartosci dla pol
                 $companyNameField.val(data["company_name"]);
+                $companyNameField[0].removeAttribute('disabled');
+
                 $companyNipField.val(data["company_nip"]);
+                $companyNipField[0].removeAttribute('disabled');
+
                 $companyAddressField.val(data["company_address"]);
+                $companyAddressField[0].removeAttribute('disabled');
+
                 $companyZipField.val(data["company_zip"]);
+                $companyZipField[0].removeAttribute('disabled');
+
                 $companyCityField.val(data["company_city"]);
+                $companyCityField[0].removeAttribute('disabled');
+
+                // TODO: province_name, area_name
+                // TODO: getLocationData(address, zip, city) => { lat, lon, province_name, area_name }
+
                 $latField.val(data["lat"]);
                 $lonField.val(data["lon"]);
-            }
 
-            instance.stepper.validateCurrentPage();
+
+            }
 
         })
     }
@@ -329,16 +347,13 @@ class App {
 
 
         // Usun logo WWW jezel nie podano w formularzu
-        if ( !$('[name="company_www"]').val()) {
+        if (!$('[name="company_www"]').val()) {
 
-            let $companyWWW =  $('.company-www');
+            let $companyWWW = $('.company-www');
             $companyWWW.removeClass('d-block');
             $companyWWW.addClass('d-none')
-        }
-
-        else {
-            console.log('called2')
-            let $companyWWW =  $('.company-www');
+        } else {
+            let $companyWWW = $('.company-www');
             $companyWWW.addClass('d-block');
             $companyWWW.removeClass('d-none');
         }

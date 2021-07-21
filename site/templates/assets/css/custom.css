@@ -685,11 +685,12 @@ input[name*="sub-industry"] + .error {
   transition: all .2s ease-in-out;
 }
 
+
 .ql-editor {
   height: 16rem !important;
 }
 
-.ql-editor.focus, .kbf-keywords.tagify.tagify--focus:focus {
+.ql-editor.focus, .kbf-keywords.tagify.tagify--focus:focus, textarea:focus {
   border: 2px solid #2196f3 !important;
   box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%) !important;
 }
