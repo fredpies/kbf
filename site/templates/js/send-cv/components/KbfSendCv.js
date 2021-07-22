@@ -10,6 +10,7 @@ class KbfSendCv extends KbfForm {
 
     init() {
 
+<<<<<<< Updated upstream
         super.init();
 
         this.$jobNameField = $('input[name="job_name"]');
@@ -27,11 +28,15 @@ class KbfSendCv extends KbfForm {
         this.formData = new FormData();
 
         this.preloaderButton = new KbfPreloaderButton('button.send-cv[type="submit"]');
+=======
+        this.$submitButton = $('button.send-cv[type="submit"]');
+>>>>>>> Stashed changes
 
     }
 
     addListeners() {
 
+<<<<<<< Updated upstream
         let instance = this;
 
         this.$submitButton.on('click', function (e) {
@@ -79,6 +84,29 @@ class KbfSendCv extends KbfForm {
             }
         })
 
+=======
+        this.$submitButton.on('click', function (e) {
+
+            e.preventDefault();
+            $.post( "https://webplanet.biz/kbf/api/mail/",
+                {
+                    from: "administrator@webplanet.biz",
+                    to: "pkwiecien13@gmail.com",
+                    subject: "test",
+                    bodyHTML: "<p><b>test</b></p>"
+
+                })
+                .fail(function () {
+                    console.log('fail')
+                })
+                .done(function( data ) {
+                    console.log( "Data Loaded: " + JSON.stringify(data) );
+                });
+
+        })
+
+
+>>>>>>> Stashed changes
     }
 
 }
