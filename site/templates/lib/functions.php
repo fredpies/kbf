@@ -1449,7 +1449,8 @@ function get_data_by_regon($regon)
         );
     }
 
-    $gus = new GusApi('abcde12345abcde12345', 'dev');
+//    $gus = new GusApi('abcde12345abcde12345', 'dev');
+    $gus = new GusApi('ac1e7b33e74d4bc6b6d3', 'prod');
 
     $company_name = "";
 

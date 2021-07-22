@@ -45,6 +45,10 @@ $form_step_1->addMarkup(getFormField("company_nip", false, true)->render());
 $form_step_1->addMarkup(getFormField("company_address", false, true)->render());
 $form_step_1->addMarkup(getFormField("company_zip", false, true)->render());
 $form_step_1->addMarkup(getFormField("company_city", false, true)->render());
+$form_step_1->addMarkup('<input type="hidden" name="lat">');
+$form_step_1->addMarkup('<input type="hidden" name="lon">');
+$form_step_1->addMarkup('<input type="hidden" name="province_name">');
+$form_step_1->addMarkup('<input type="hidden" name="area_name">');
 $form_step_1->addMarkup(render_info_message('Sprawdź poprawność pobranych danych i wybierz następny krok. W przypadku wystąpienia błędów dokonaj odpowiednich modyfikacji.'), true);
 $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane będziesz mógł zmodyfikować również w panelu zarządzania.' ), true);
 
@@ -52,7 +56,7 @@ $form_step_1->addMarkup(render_info_message('Po zarejestrowaniu firmy w KBF dane
 $form_step_2 = new FormRenderer("register-company", $company_fields);
 $form_step_2->onlyFields = true;
 
-$company_description_field = getFormField("company_description_simple", true);
+$company_description_field = getFormField("company_description", true);
 $company_description_field->className = "row col-12 mb-3";
 
 //$form_step_2->addMarkup($company_logo_field->render(), true);
