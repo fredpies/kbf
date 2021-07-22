@@ -47,7 +47,8 @@
             processData: false,
             contentType: false
           }).done(function (data) {
-            console.log(data); //window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
+            console.log(data);
+            window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
           });
         });
         $(".banner-img-draggable").on('dragstart', function (event) {

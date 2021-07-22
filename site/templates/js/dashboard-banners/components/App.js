@@ -26,7 +26,7 @@ class App {
                 contentType: false
             }).done(function(data) {
                 console.log(data);
-                //window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
+                window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
             });
 
         });
