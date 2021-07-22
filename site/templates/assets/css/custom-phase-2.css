@@ -69,6 +69,12 @@
     max-width: 100%;
 }
 
+.add-banner .img-cropper img {
+    display: block;
+    max-width: 100%;
+    max-height: 140px;
+}
+
 .preview {
     overflow: hidden;
     width: 200px;
@@ -77,6 +83,20 @@
 
 .img-cropper .modal-lg {
     max-width: 1000px !important;
+}
+
+.add-banner .img-cropper .modal-lg {
+    max-width: 90% !important;
+}
+
+@media (min-width: 992px) {
+    .add-banner .modal-lg, .modal-xl {
+        max-width: 90%;
+    }
+}
+
+.add-banner .cropper-bg {
+    max-width: 100%;
 }
 
 .img-cropper .overlay {

@@ -11,8 +11,6 @@ class App {
         this.$deleteButtons = $('a[data-id]');
         this.$serviceIdField = $('input[name="service_id"]');
 
-        //new KbfBackButton('.kbf-back-button');
-
         let $modal = $('#modal');
         let image = document.getElementById('sample_image');
         let cropper = null;
