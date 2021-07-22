@@ -21,20 +21,26 @@ if ($session->stripe_id) {
     $company_page->company_phone_1 = $session->company_phone_1;
     $company_page->company_nip = $session->company_nip;
     $company_page->company_regon = $session->company_regon;
+
     $company_page->province_name = $session->province_name;
     $company_page->area_name = $session->area_name;
+
     $company_page->industry = $session->industry;
     $company_page->sub_industry = $session->get('sub-industry');
-    $company_page->lat = $session->lat;
-    $company_page->lon = $session->lon;
+
     $company_page->company_www = $session->company_www;
     $company_page->company_description_html = $session->company_description_html;
     $company_page->company_keywords = $session->company_keywords;
     $company_page->company_subscription = $session->subscription;
     $company_page->company_subscription_expire = date('Y-m-d', mktime(0,0,0, date('m'), date('d'), date('Y') + 1));
+
     $company_page->company_address = $session->company_address;
     $company_page->company_city = $session->company_city;
     $company_page->company_zip = $session->company_zip;
+
+    $company_page->lat = $session->lat;
+    $company_page->lon = $session->lon;
+
     $company_page->company_funds = 0;
 
     $company_page->save();
@@ -64,21 +70,21 @@ if ($session->stripe_id) {
     $jobs_container_page->save();
 
     // Wyslij mail
-    mailTo(array(
-
-        "to" => $session->company_email,
-        "from" => 'no-reply@webaplanet.biz', //TODO: Musi byc zmienione
-        "subject" => 'Dane logowania',
-        "bodyHTML" => '
-        
-            <h4>Firma została zarejestrowana w Katalogu Branżowym Firm</h4>
-            <h4>Dane logowania do panelu zarzadzania :</h4>
-            <p>Login : ' . $session->company_email . '</p>
-            <p>Hasło: CDEfdsh45fsd</p>
-        
-        '
-
-    ), 'Katalog Branżowy Firm');
+//    mailTo(array(
+//
+//        "to" => $session->company_email,
+//        "from" => 'no-reply@webaplanet.biz', //TODO: Musi byc zmienione
+//        "subject" => 'Dane logowania',
+//        "bodyHTML" => '
+//
+//            <h4>Firma została zarejestrowana w Katalogu Branżowym Firm</h4>
+//            <h4>Dane logowania do panelu zarzadzania :</h4>
+//            <p>Login : ' . $session->company_email . '</p>
+//            <p>Hasło: CDEfdsh45fsd</p>
+//
+//        '
+//
+//    ), 'Katalog Branżowy Firm');
 
     $login_url = $pages->get('template=login')->url;
 

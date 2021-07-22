@@ -1449,7 +1449,8 @@ function get_data_by_regon($regon)
         );
     }
 
-    $gus = new GusApi('abcde12345abcde12345', 'dev');
+//    $gus = new GusApi('abcde12345abcde12345', 'dev');
+    $gus = new GusApi('ac1e7b33e74d4bc6b6d3', 'prod');
 
     $company_name = "";
 
@@ -2110,12 +2111,17 @@ function update_page($page_id, $page_data = array(), $ignore = array())
 
 }
 
+<<<<<<< Updated upstream
 function mailTo($mailData, $fromName = 'KBF')
 {
+=======
+function mailTo($mailData) {
+>>>>>>> Stashed changes
 
     if (!isset($mailData)) return;
 
     $mail = new WireMail();
+<<<<<<< Updated upstream
     $mail->subject($mailData["subject"]);
     $mail->to($mailData["to"]);
     $mail->from($mailData["from"]);
@@ -2125,13 +2131,28 @@ function mailTo($mailData, $fromName = 'KBF')
 
     $c = $mail->send();
     if (isset($mailData["targetFile"]) && !empty($mailData["targetFile"])) unlink($mailData["targetFile"]);
+=======
+    $mail->to($mailData["to"]);
+    $mail->from($mailData["from"]);
+//    $mail->fromName($mailData["fromName"]);
+    $mail->bodyHTML('<html><body>' . $mailData["bodyHTML"] .'</body></html>');
+//    $mail->attachment('/path/to/file.ext');
+
+    $c = $mail->send();
+
+>>>>>>> Stashed changes
 
     return array(
         "status" => "sent",
         "mails" => $c,
         "from" => $mailData["from"],
         "to" => $mailData["to"],
+<<<<<<< Updated upstream
         "bodyHTML" => $mailData['bodyHTML']
+=======
+        "fromName" => $mailData["fromName"],
+        "bodyHTML" => $mailData["bodyHTML"],
+>>>>>>> Stashed changes
     );
 
 }

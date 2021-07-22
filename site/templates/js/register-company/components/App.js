@@ -5,6 +5,9 @@ import KbfIndustrySwitcher from "../../components/KbfIndustrySwitcher";
 import config from "../../config/config";
 import {replacePlaceholders} from "../../functions/library";
 import KbfTagify from "../../components/KbfTagify";
+import KbfWysiwyg from "../../components/KbfWysiwyg";
+import areas from "../../map/areas.json";
+import * as turf from '@turf/turf'
 
 class App {
 
@@ -26,6 +29,9 @@ class App {
 
         let instance = this;
 
+        this.areas = areas.features; // Dane o powiatach
+        this.turf = turf;
+
         this.$form = $('form[name="register-company"]');
 
         this.companyInfo = $('.company-info')[0];
@@ -33,7 +39,6 @@ class App {
         this.companyInfoContents = this.companyInfo.innerHTML; // Placeholder z informacjami o firmie
         this.companyDescriptionContents = this.companyDescription.innerHTML; // Placeholder z informacjami o firmie
         this.$kbfMiniMapContainer = $('#kbf-minimap').parent();
-
         this.searchByREGONButtonPreloader = new KbfPreloaderButton('.kbf-search-button');
 
         // Cropper
@@ -124,8 +129,8 @@ class App {
         this.industrySwitcher.on('industries-changed', this.stepper.validateCurrentPage.bind(this.stepper));
 
         // Wysiwyg
-        // this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
-        // this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
+        this.wysiwyg = new KbfWysiwyg('.wysiwyg', '[name="company_description_hidden"]');
+        this.wysiwyg.on('change', this.stepper.validateCurrentPage.bind(this.stepper))
 
         // Cropper
         this.$companyLogo.change(function (event) {
@@ -216,15 +221,12 @@ class App {
 
             let data = await instance.getDataFromREGON($regonField.val());
 
-            instance.stepper.validateCurrentPage();
-
-            instance.searchByREGONButtonPreloader.stopPreloader();
-
             let $companyNameField = $('[name="company_name"]');
             let $companyNipField = $('[name="company_nip"]');
             let $companyAddressField = $('[name="company_address"]');
             let $companyZipField = $('[name="company_zip"]');
             let $companyCityField = $('[name="company_city"]');
+
             let $latField = $('[name="lat"]');
             let $lonField = $('[name="lon"]');
 
@@ -233,9 +235,9 @@ class App {
             $companyAddressField.val('');
             $companyZipField.val('');
             $companyCityField.val('');
+
             $latField.val('');
             $lonField.val('');
-
 
             instance.regonFound = true;
             instance.regonNotExists = true;
@@ -266,11 +268,46 @@ class App {
                 $companyCityField.val(data["company_city"]);
                 $companyCityField[0].removeAttribute('disabled');
 
-                // TODO: province_name, area_name
-                // TODO: getLocationData(address, zip, city) => { lat, lon, province_name, area_name }
+                instance.searchByREGONButtonPreloader.stopPreloader();
 
-                $latField.val(data["lat"]);
-                $lonField.val(data["lon"]);
+                // Znajdz nazwe wojewodztwa, powiatu, lat, lon
+                $.ajax({
+                    url: config.apiEndpoint + `api/get-lat-lon/?company_address=${$companyAddressField.val()}&company_city=${$companyCityField.val()}`,
+                    success: function (res) {
+                        $latField.val(res.lat);
+                        $lonField.val(res.lon);
+
+                        let addressPoint = instance.turf.point([res.lon, res.lat]);
+                        let currentArea = instance.areas.filter(function (area) {
+
+                            let ret = false;
+
+                            area.geometry.coordinates.forEach(function (geometry) {
+
+                                let _set = new Set(geometry);
+                                let _geometry = [ ..._set ];
+                                if (_geometry.length === 1) _geometry = _geometry[0];
+
+                             ret = turf.booleanPointInPolygon(addressPoint, instance.turf.polygon([_geometry]))
+                            })
+
+                            return ret;
+                        })
+
+                        if (currentArea.length > 0) {
+                            let $companyProvince = $('[name="province_name"]');
+                            let $companyArea = $('[name="area_name"]');
+
+                            $companyProvince.val(currentArea[0].properties.province);
+                            $companyArea.val(currentArea[0].properties.name);
+                        }
+
+                    },
+
+                    complete: function () {
+                        instance.stepper.validateCurrentPage();
+                    }
+                });
 
 
             }
