@@ -156,7 +156,7 @@ $modalMarkup = '
 <?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light pt-0">
+<div class="main-content bg-light pb-3 pt-0">
 
     <div class="section">
         <div class="container">

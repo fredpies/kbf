@@ -1,4 +1,5 @@
 import KbfBackButton from "../../components/KbfBackButton";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -85,6 +86,9 @@ class App {
             });
 
         });
+
+        new KbfFooterTop();
+
     }
 
     addListeners() {

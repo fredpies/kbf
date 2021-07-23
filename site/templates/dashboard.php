@@ -28,7 +28,7 @@ $company_name = $filtered_company["company_name"];
 $company_address = $filtered_company["company_address"];
 $company_city = $filtered_company["company_city"];
 $company_description_html = $company_data["company_description_html"];
-$company_subscription_expire = date('d.m.Y', $sanitizer->date($company_page->company_subscription_expire));
+$company_subscription_expire = date('Y-m-d', $sanitizer->date($company_page->company_subscription_expire));
 
 // Usługi
 $services_count = get_services_count($company_page);
@@ -59,18 +59,10 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
 <?php include_once "partials/_menu.php" ?>
 
 <!-- Page title -->
-<div class="bg-light">
-    <div class="container">
-        <div class="row pt-5 pb-4">
-            <div class="col-12 col-lg-4 ">
-                <h5 class="font-weight-800 mb-0 text-center text-lg-left">MOJE KBF</h5>
-            </div>
-        </div>
-    </div>
-</div>
+<?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light pt-0">
+<div class="main-content bg-light pb-3 pt-0">
 
     <div class="section">
         <div class="container">
@@ -82,10 +74,9 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                 <!-- Content body -->
                 <div class="col-lg-8">
 
-                    <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5">
 
-                            <div class="row">
+                            <div class="row align-items-stretch">
                                 <div class="col-12 col-md-7">
                                     <h5 class="font-weight-700 mb-2 section-title-4 text-left"><?= $company_name ?></h5>
 
@@ -118,7 +109,7 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                 </div>
 
                                 <div class="col-12 col-md-5 text-left text-md-right mt-4 mt-md-0">
-                                    <span class="d-block">w KBF od <strong>07.08.2021</strong></span>
+                                    <span class="d-block">w KBF od <strong><?= date('Y-m-d', $company_page->created) ?></strong></span>
                                     <span class="d-block">abonament ważny do <strong><?= $company_subscription_expire ?></strong></span>
                                 </div>
                             </div>
@@ -140,16 +131,19 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                                 <span class="mt-1">PRODUKTY</span>
                                             </a>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>W ofercie (szt.)</span>
-                                                <span class="font-weight-bold"><?= get_products_all_count($company_page) ?></span>
+
+                                        <div class="card-body d-flex flex-column flex-wrap justify-content-between">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">W ofercie</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold"><?= get_products_all_count($company_page) ?></span>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Sprzedane (szt.)</span>
-                                                <span class="font-weight-bold"><?= get_products_sold_all_count($company_page) ?></span>
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">Sprzedane</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold"><?= get_products_sold_all_count($company_page) ?></span>
                                             </div>
+                                            <a href="<?= $pages->get('template=dashboard-add-product')->url ?>" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ PRODUKT</a>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -161,12 +155,14 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                                 <span class="mt-1">USŁUGI</span>
                                             </a>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>W ofercie</span>
-                                                <span class="font-weight-bold"><?= $services_count ?></span>
+                                        <div class="card-body d-flex flex-column flex-wrap justify-content-between">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">Zarejestrowane</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold">0</span>
                                             </div>
+                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ USŁUGĘ</button>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -178,15 +174,16 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                                 <span class="mt-1">OFERTY PRACY</span>
                                             </a>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Aktywne</span>
-                                                <span class="font-weight-bold"><?= $jobs_count ?></span>
+                                        <div class="card-body d-flex flex-column flex-wrap justify-content-between">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">Aktywne</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold"><?= $jobs_count ?></span>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Otrzymane CV</span>
-                                                <span class="font-weight-bold">6</span>
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">Otrzymane CV</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold">0</span>
                                             </div>
+                                            <a href="<?= $pages->get('template=dashboard-add-job')->url ?>" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ OFERTĘ</a>
                                         </div>
                                     </div>
                                 </div>
@@ -199,15 +196,16 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                                 <span class="mt-1">BANERY</span>
                                             </a>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Aktywne</span>
-                                                <span class="font-weight-bold">0</span>
+                                        <div class="card-body d-flex flex-column flex-wrap justify-content-between">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">Aktywne</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold">0</span>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Zapisane</span>
-                                                <span class="font-weight-bold">0</span>
-                                            </div>
+                                            <div class="d-flex w-100 justify-content-between">
+                                            <span class="d-inline-block">Zapisane</span>
+                                            <span class="d-inline-block ml-auto font-weight-bold">0</span>
+                                        </div>
+                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ BANER</button>
                                         </div>
                                     </div>
                                 </div>
@@ -220,11 +218,12 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                                 <span class="mt-1">POZYCJONERZY</span>
                                             </a>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span>Zarejestrowani</span>
-                                                <span class="font-weight-bold">0</span>
+                                        <div class="card-body d-flex flex-column flex-wrap justify-content-between">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <span class="d-inline-block">Zarejestrowani</span>
+                                                <span class="d-inline-block ml-auto font-weight-bold">0</span>
                                             </div>
+                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">ZAREJESTRUJ</button>
                                         </div>
                                     </div>
                                 </div>
@@ -239,8 +238,9 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                         </div>
                                         <div class="divider-1 divider-light-1 m-0"></div>
                                         <div class="card-body">
-                                            <h6 class="text-white text-center">150 PLN</h6>
-                                            <button type="button" class="w-100 btn btn-round btn-warning mt-3 mb-0">WYPŁATA</button>
+                                            <h6 class="text-white text-center"><?= $company_page->company_funds ?> PLN</h6>
+                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ ŚRODKI</button>
+                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-2 mb-0">WYPŁAĆ</button>
                                         </div>
                                     </div>
                                 </div>
@@ -248,7 +248,6 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                             </div>
 
                         </div>
-                    </div>
 
                 </div>
 

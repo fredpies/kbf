@@ -1,5 +1,6 @@
 import KbfForm from "../../components/KbfForm";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App extends KbfForm {
 
@@ -44,6 +45,7 @@ class App extends KbfForm {
         this.formElement = $('form[name="change-password"]');
         this.$submitButton = $('.submit-button');
         new KbfPreloaderButton('.back-button');
+        new KbfFooterTop();
 
     }
 

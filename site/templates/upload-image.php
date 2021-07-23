@@ -17,7 +17,7 @@ $response = array(); // Zbior wynikowy
 header($header);
 header('Access-Control-Allow-Origin: *');
 
-$target_dir = 'c:/xampp/htdocs/kbf2/site/templates/temp/'; // Katalog w ktorym ma zapisac obraz, trzeba ustawic osobno lokalnie i dla serwera inaczej w zaleznosci od hosta
+$target_dir = '/home/wplanet/public_html/webplanet.biz/kbf/site/templates/temp/'; // Katalog w ktorym ma zapisac obraz, trzeba ustawic osobno lokalnie i dla serwera inaczej w zaleznosci od hosta
 
 http_response_code($statuscode);
 

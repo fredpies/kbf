@@ -1455,3 +1455,7 @@ a.btn {
 textarea + #company_description_html-error {
   bottom: -2rem !important;
 }
+
+.bg-light {
+  background: #6c6c6c !important;
+}

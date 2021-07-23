@@ -3,6 +3,13 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$sanitizer = wire('sanitizer');
+$pages = wire('pages');
+$user = wire('user');
+$urls = wire('urls');
+$input = wire('input');
+$session = wire('session');
+
 // Strona glowna
 $home_page_url = $pages->get(1)->url;
 
@@ -174,8 +181,8 @@ if ($input->company_id) {
         </div>
 
         <div class="send-message-confirmation row justify-content-center d-none">
-            <div class="col-12 col-md-9">
-                <?= render_alert('Wiadomość do firmy została wysłana.', 'primary', false); ?>
+            <div class="col-12 col-md-9 mt-3">
+                <?= render_alert('Wiadomość do firmy została wysłana.', 'success', false); ?>
             </div>
             <div class="col-12 d-flex mt-3">
                 <button type="button" class="kbf-back-button d-inline-block mt-0 mx-auto btn btn-round shadow-none btn-secondary">Powrót</button>

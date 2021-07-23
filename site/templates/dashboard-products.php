@@ -35,7 +35,6 @@ else {
     $products_sold = array();
 }
 
-
 // Modal
 $modalMarkup = '
 
@@ -69,7 +68,7 @@ $modalMarkup = '
 <?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light pt-0 pb-5">
+<div class="main-content bg-light pt-0 pb-3">
 
     <div class="section">
         <div class="container">
@@ -116,7 +115,7 @@ $modalMarkup = '
                                 </div>
                             </nav>
 
-                            <form class="mt-5" method="get" action="">
+                            <form class="mt-3" method="get" action="">
                                 <div class="tab-content" id="nav-tabContent">
 
                                 <div class="tab-pane fade show active" id="registered" role="tabpanel" aria-labelledby="nav-first-tab">

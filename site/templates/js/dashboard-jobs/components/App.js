@@ -1,4 +1,5 @@
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -14,6 +15,9 @@ class App {
         this.$deleteButtons = $('a[data-id]');
         this.$jobIdField = $('input[name="job_id"]');
         this.preloaderButton = new KbfPreloaderButton('.back-button');
+
+        new KbfFooterTop();
+
 
     }
 

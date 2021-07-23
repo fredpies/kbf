@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -11,6 +12,8 @@ class App {
 
         window.Alpine = Alpine;
         Alpine.start();
+
+        new KbfFooterTop();
 
     }
 

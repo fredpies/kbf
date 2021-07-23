@@ -70,6 +70,9 @@ if ($session->stripe_id) {
     $jobs_container_page->save();
 
     $password = sha1(bin2hex(random_bytes(8)));
+    $confirmation_code = sha1(bin2hex(random_bytes(8)));
+    $proto = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
+    $confirmation_page_url = $pages->get('template=activation')->url;
 
     $new_user = new User();
     $new_user->of(false);
@@ -77,6 +80,8 @@ if ($session->stripe_id) {
     $new_user->email = $company_page->company_email;
     $new_user->pass = $password;
     $new_user->company_id = $company_page->company_id;
+    $new_user->confirmation_code = $confirmation_code;
+    $new_user->addRole('company');
     $new_user->save();
     $new_user->of(true);
 
@@ -92,6 +97,8 @@ if ($session->stripe_id) {
             <h4>Dane logowania do panelu zarzadzania :</h4>
             <p>Login : ' . $company_page->company_email . '</p>
             <p>Hasło : ' . $password . '</p>
+            <p>Kliknij na poniższym linku w celu aktywacji swojego konta.</p>
+            <p><a href="' . $proto . $_SERVER['HTTP_HOST'] . $confirmation_page_url . '?c='. $confirmation_code . '">' . $proto . $_SERVER['HTTP_HOST'] . $confirmation_page_url . '?c='. $confirmation_code . '</a></p>
 
         '
 
@@ -104,7 +111,7 @@ if ($session->stripe_id) {
     $alert->type = "success";
     $alert->hideIcon = true;
     $alert->heading = "Firma została zarejestrowana w Katalogu Branżowym Firm.";
-    $alert->contents = "<p>Na adres e-mail: <b>" . $session->company_email . "</b> został wysłany login i hasło umożliwiające zalogowanie się do panelu zarządzania. </b></p>";
+    $alert->contents = "<p>Na adres e-mail: <b>" . $company_page->company_email . "</b> został wysłany login i hasło oraz link aktywacyjny umożliwiający zalogowanie się do panelu zarządzania. </b></p>";
 
     $markup = '<h3 class="font-weight-800 mb-0 pt-lg-5 py-4 section-title-3 text-center text-uppercase">FIRMA ZOSTAŁA ZAREJESTROWANA</h3>'.
         $alert->render() .

@@ -3,6 +3,7 @@ import KbfWysiwyg from "../../components/KbfWysiwyg";
 import KbfTagify from "../../components/KbfTagify";
 import KbfAddressAutocomplete from "../../components/KbfAddressAutocomplete";
 import KbfTabs from "../../components/KbfTabs";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 
 class App {
@@ -44,6 +45,8 @@ class App {
 
         // Address autocomplete
         this.addressAutocomplete = new KbfAddressAutocomplete('[name="company_address"]');
+
+        new KbfFooterTop();
 
     }
 

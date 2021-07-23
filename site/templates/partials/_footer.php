@@ -6,7 +6,7 @@
         <div class="py-4 row">
             <div class="col-lg-6 col-xl-7 mb-lg-0">
                 <div class="pr-lg-5">
-                    <h5 class="h1 font-weight-800 line-height-sm mb-4 text-warning">Katalog Branżowy Firm</h5>
+                    <h2 class="font-weight-800 line-height-sm mb-4 text-warning">Katalog Branżowy Firm</h2>
                     <div data-height="5px"></div>
                     <p>Jesteśmy Serwisem Internetowym skierowanym do wszystkich podmiotów gospodarczych oraz instytucji, urzędów i stowarzyszeń.
                         Naszym celem jest przekazanie Państwu narzędzia marketingowego służącego prezentacji Państwa działalności,

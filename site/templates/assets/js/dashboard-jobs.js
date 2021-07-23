@@ -225,7 +225,6 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
       var $buttonElement = $(buttonElement);
       var bgColor;
       $buttonElement.on('click', function () {
-        console.log('not touch');
         bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
       });
       this.$preloaderButton.trigger({
@@ -277,6 +276,44 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
 
 KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
+var KbfFooterTop = /*#__PURE__*/function () {
+  function KbfFooterTop() {
+    _classCallCheck(this, KbfFooterTop);
+
+    this.init();
+    this.addListeners();
+  }
+
+  _createClass(KbfFooterTop, [{
+    key: "init",
+    value: function init() {
+      this.$footerTop = $('.footer-top');
+      this.$showFooterTop = $('#showFooterTop');
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var instance = this;
+      this.$showFooterTop.click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        instance.$footerTop.toggleClass('show-footer-top');
+      });
+      this.$footerTop.click(function (e) {
+        e.stopPropagation();
+      });
+      $(window).click(function () {
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+      $(window).scroll(function () {
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+    }
+  }]);
+
+  return KbfFooterTop;
+}();
+
 var App = /*#__PURE__*/function () {
   function App() {
     _classCallCheck(this, App);
@@ -291,6 +328,7 @@ var App = /*#__PURE__*/function () {
       this.$deleteButtons = $('a[data-id]');
       this.$jobIdField = $('input[name="job_id"]');
       this.preloaderButton = new KbfPreloaderButton('.back-button');
+      new KbfFooterTop();
     }
   }, {
     key: "addListeners",

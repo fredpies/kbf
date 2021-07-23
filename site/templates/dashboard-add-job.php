@@ -133,7 +133,7 @@ $stepperMarkup = $stepper->render();
 <?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light py-0 pb-5">
+<div class="main-content bg-light py-0 pb-3">
 
     <div class="section">
         <div class="container">

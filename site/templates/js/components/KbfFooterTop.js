@@ -23,6 +23,14 @@ class KbfFooterTop {
             instance.$footerTop.toggleClass('show-footer-top');
         });
 
+        this.$footerTop.click(function (e) {
+            e.stopPropagation();
+        })
+
+        $(window).click(function () {
+            instance.$footerTop.removeClass('show-footer-top');
+        })
+
         $(window).scroll(function () {
             instance.$footerTop.removeClass('show-footer-top');
         });

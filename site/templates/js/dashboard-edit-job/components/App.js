@@ -5,6 +5,7 @@ import KbfDropdown from "../../components/KbfDropdown";
 import KbfCityAutocomplete from "../../components/KbfCityAutocomplete";
 import KbfWysiwyg from "../../components/KbfWysiwyg";
 import KbfRepeater from "../../components/KbfRepeater";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -57,6 +58,8 @@ class App {
 
         // Repeater
         this.repeater = new KbfRepeater('.repeater-item');
+
+        new KbfFooterTop();
 
     }
 

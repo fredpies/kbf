@@ -211,20 +211,10 @@ $tabsPhone->addMarkup($product_images, "Obrazy produktu");
 <?php include_once "partials/_menu.php" ?>
 
 <!-- Page title -->
-<div class="bg-light">
-    <div class="container">
-        <div class="row pt-5 pb-4">
-
-            <div class="col-12 col-lg-4 ">
-                <h5 class="font-weight-800 mb-0 text-center text-lg-left">MOJE KBF</h5>
-            </div>
-
-        </div>
-    </div>
-</div>
+<?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light pt-0">
+<div class="main-content bg-light pb-3 pt-0">
 
     <div class="section">
         <div class="container">

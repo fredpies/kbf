@@ -225,7 +225,6 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
       var $buttonElement = $(buttonElement);
       var bgColor;
       $buttonElement.on('click', function () {
-        console.log('not touch');
         bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
       });
       this.$preloaderButton.trigger({
@@ -11236,14 +11235,11 @@ var KbfForm = /*#__PURE__*/function () {
     this.lang = lang || 'pl'; // Sprawdz czy formularz o podanej nazwie istnieje
 
     if (!this.formElement) throw errors.formNotFound(this.formName);
-    this.$formElement = $(this.formElement); // this.$submitButton = this.$formElement.find('button[type="submit"]');
-    // Error message
+    this.$formElement = $(this.formElement); // Error message
 
     this.$errorMessageElement = $('.kbf-error-message'); // Sprawdz czy walidator istnieje
 
-    if (!$.fn.validate) throw errors.noValidator(); // Konfiguracja walidatora
-
-    this.validatorConfig = formConfig.validator; // Domyslna konfiguracja walidatora
+    if (!$.fn.validate) throw errors.noValidator(); // Domyslna konfiguracja walidatora
 
     this.defaultValidatorConfig = {
       ignore: [],
@@ -11264,9 +11260,11 @@ var KbfForm = /*#__PURE__*/function () {
   _createClass(KbfForm, [{
     key: "init",
     value: function init() {
-      // Ustaw maski
+      var instance = this;
+      this.inputmask = new Inputmask$1(); // Ustaw maski
+
       Array.from(this.formElement.elements).forEach(function (formElement) {
-        new Inputmask$1().mask(formElement);
+        instance.inputmask.mask(formElement);
       });
     }
   }, {
@@ -11275,7 +11273,7 @@ var KbfForm = /*#__PURE__*/function () {
   }, {
     key: "validate",
     value: function validate() {
-      this.$formElement.validate(_objectSpread$2(_objectSpread$2({}, this.defaultValidatorConfig), this.validatorConfig));
+      this.$formElement.validate(_objectSpread$2(_objectSpread$2({}, this.defaultValidatorConfig), this.formConfig));
       this.handleErrorMessage();
     } // Ustawia error message jezeli istnieje
 
@@ -29260,6 +29258,44 @@ var KbfRepeater = /*#__PURE__*/function (_EventTarget) {
 
 KbfRepeater.itemTemplate = '<li style="opacity: 0; bottom: -8px" class="repeater-item position-relative list-group-item d-flex"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
 
+var KbfFooterTop = /*#__PURE__*/function () {
+  function KbfFooterTop() {
+    _classCallCheck(this, KbfFooterTop);
+
+    this.init();
+    this.addListeners();
+  }
+
+  _createClass(KbfFooterTop, [{
+    key: "init",
+    value: function init() {
+      this.$footerTop = $('.footer-top');
+      this.$showFooterTop = $('#showFooterTop');
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var instance = this;
+      this.$showFooterTop.click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        instance.$footerTop.toggleClass('show-footer-top');
+      });
+      this.$footerTop.click(function (e) {
+        e.stopPropagation();
+      });
+      $(window).click(function () {
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+      $(window).scroll(function () {
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+    }
+  }]);
+
+  return KbfFooterTop;
+}();
+
 var App = /*#__PURE__*/function () {
   function App() {
     _classCallCheck(this, App);
@@ -29299,6 +29335,7 @@ var App = /*#__PURE__*/function () {
       this.backButton = new KbfPreloaderButton('.back-button'); // Repeater
 
       this.repeater = new KbfRepeater('.repeater-item');
+      new KbfFooterTop();
     }
   }, {
     key: "addListeners",

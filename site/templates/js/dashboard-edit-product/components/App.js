@@ -3,6 +3,7 @@ import KbfWysiwyg from "../../components/KbfWysiwyg";
 import KbfTabs from "../../components/KbfTabs";
 import Alpine from "alpinejs";
 import KbfProductImagesEdit from "../../components/KbfProductImagesEdit";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -39,6 +40,8 @@ class App {
         new KbfProductImagesEdit();
         window.Alpine = Alpine;
         Alpine.start();
+
+        new KbfFooterTop();
     }
 
     addListeners() {

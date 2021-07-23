@@ -4477,6 +4477,7 @@
 
         if (this.validateCurrentPage()) {
           // Zmienia strone tylko w przypadku jej poprawnosci
+          // if (true) { // Zmienia strone tylko w przypadku jej poprawnosci
           if (this.currentPageIdx === this.lastPageIdx) return;
           this.$stepsTop.eq(this.currentPageIdx).addClass('done');
           this.$stepsTop.eq(this.currentPageIdx).removeClass('active');
@@ -4718,7 +4719,6 @@
         var $buttonElement = $(buttonElement);
         var bgColor;
         $buttonElement.on('click', function () {
-          console.log('not touch');
           bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
         });
         this.$preloaderButton.trigger({
@@ -29259,6 +29259,44 @@
 
   KbfRepeater.itemTemplate = '<li style="opacity: 0; bottom: -8px" class="repeater-item position-relative list-group-item d-flex"><span spellcheck="false" contenteditable="true" class="col-10">{itemName}</span><div class="repeater-actions d-inline-block d-md-flex justify-content-end col-3"><a class="d-inline-block ml-2" href="#">Usuń</a></div></li>';
 
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerTop = $('.footer-top');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          instance.$footerTop.toggleClass('show-footer-top');
+        });
+        this.$footerTop.click(function (e) {
+          e.stopPropagation();
+        });
+        $(window).click(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
+
   var App = /*#__PURE__*/function () {
     function App() {
       _classCallCheck(this, App);
@@ -29321,6 +29359,7 @@
         editor[0].innerHTML = htmlToInsert; // Repeater
 
         this.repeater = new KbfRepeater('.repeater-item');
+        new KbfFooterTop();
       }
     }, {
       key: "addListeners",

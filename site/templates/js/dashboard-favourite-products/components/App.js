@@ -2,6 +2,7 @@ import Alpine from "alpinejs";
 import KbfFavouriteProducts from "../../components/KbfFavouriteProducts";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import KbfFavouriteCounters from "../../components/KbfFavouriteCounters";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -17,6 +18,7 @@ class App {
         new KbfFavouriteProducts();
         new KbfFavouriteCounters();
         new KbfPreloaderButton('.preloader-button')
+        new KbfFooterTop();
 
         window.Alpine = Alpine;
         Alpine.start();

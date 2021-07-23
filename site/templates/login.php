@@ -21,6 +21,8 @@ $pass = '';
 $status = '';
 $errorMessage = '';
 
+$session->remove('company_page_id');
+
 // Przetwarzanie logowania
 if ($input->post->action) {
 

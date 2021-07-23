@@ -1,3 +1,5 @@
+import KbfFooterTop from "../../components/KbfFooterTop";
+
 class App {
 
     constructor() {
@@ -82,6 +84,9 @@ class App {
             });
 
         });
+
+        new KbfFooterTop();
+
     }
 
     addListeners() {

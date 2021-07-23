@@ -1,4 +1,5 @@
 import KbfBackButton from "../../components/KbfBackButton";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -68,6 +69,9 @@ class App {
             let id = event.originalEvent.dataTransfer.getData("bannerId");
             window.location.href = location.protocol + '//' + location.host + "/kbf/panel/ustaw-baner/?id=" + id + "&type=JOB";
         });
+
+        new KbfFooterTop();
+
     }
 
     initBannerCropper(formData) {

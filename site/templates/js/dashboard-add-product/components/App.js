@@ -4,6 +4,7 @@ import KbfForm from "../../components/KbfForm";
 import KbfProductImagesAdd from "../../components/KbfProductImagesAdd";
 import Alpine from "alpinejs";
 import config from "../../config/config";
+import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
 
@@ -42,6 +43,8 @@ class App {
                     this.preloaderButton = new KbfPreloaderButton('.submit-button', false);
                     this.backButton = new KbfPreloaderButton('.back-button');
                     this.form = new KbfForm({formName: 'dashboard-add-product'}, 'pl');
+
+                    new KbfFooterTop();
 
                 },
 

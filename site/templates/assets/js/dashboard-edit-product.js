@@ -225,7 +225,6 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
       var $buttonElement = $(buttonElement);
       var bgColor;
       $buttonElement.on('click', function () {
-        console.log('not touch');
         bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
       });
       this.$preloaderButton.trigger({
@@ -926,7 +925,23 @@ var quill = createCommonjsModule(function (module, exports) {
         Delta.prototype.compose = function (other) {
           var thisIter = op.iterator(this.ops);
           var otherIter = op.iterator(other.ops);
-          var delta = new Delta();
+          var ops = [];
+          var firstOther = otherIter.peek();
+
+          if (firstOther != null && typeof firstOther.retain === 'number' && firstOther.attributes == null) {
+            var firstLeft = firstOther.retain;
+
+            while (thisIter.peekType() === 'insert' && thisIter.peekLength() <= firstLeft) {
+              firstLeft -= thisIter.peekLength();
+              ops.push(thisIter.next());
+            }
+
+            if (firstOther.retain - firstLeft > 0) {
+              otherIter.next(firstOther.retain - firstLeft);
+            }
+          }
+
+          var delta = new Delta(ops);
 
           while (thisIter.hasNext() || otherIter.hasNext()) {
             if (otherIter.peekType() === 'insert') {
@@ -950,8 +965,14 @@ var quill = createCommonjsModule(function (module, exports) {
 
                 var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === 'number');
                 if (attributes) newOp.attributes = attributes;
-                delta.push(newOp); // Other op should be delete, we could be an insert or retain
+                delta.push(newOp); // Optimization if rest of other is just retain
+
+                if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
+                  var rest = new Delta(thisIter.rest());
+                  return delta.concat(rest).chop();
+                } // Other op should be delete, we could be an insert or retain
                 // Insert + delete cancels out
+
               } else if (typeof otherOp['delete'] === 'number' && typeof thisOp.retain === 'number') {
                 delta.push(otherOp);
               }
@@ -1129,6 +1150,8 @@ var quill = createCommonjsModule(function (module, exports) {
 
         var hasOwn = Object.prototype.hasOwnProperty;
         var toStr = Object.prototype.toString;
+        var defineProperty = Object.defineProperty;
+        var gOPD = Object.getOwnPropertyDescriptor;
 
         var isArray = function isArray(arr) {
           if (typeof Array.isArray === 'function') {
@@ -1159,6 +1182,35 @@ var quill = createCommonjsModule(function (module, exports) {
           }
 
           return typeof key === 'undefined' || hasOwn.call(obj, key);
+        }; // If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+
+
+        var setProperty = function setProperty(target, options) {
+          if (defineProperty && options.name === '__proto__') {
+            defineProperty(target, options.name, {
+              enumerable: true,
+              configurable: true,
+              value: options.newValue,
+              writable: true
+            });
+          } else {
+            target[options.name] = options.newValue;
+          }
+        }; // Return undefined instead of __proto__ if '__proto__' is not an own property
+
+
+        var getProperty = function getProperty(obj, name) {
+          if (name === '__proto__') {
+            if (!hasOwn.call(obj, name)) {
+              return void 0;
+            } else if (gOPD) {
+              // In early versions of node, obj['__proto__'] is buggy when obj has
+              // __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+              return gOPD(obj, name).value;
+            }
+          }
+
+          return obj[name];
         };
 
         module.exports = function extend() {
@@ -1185,8 +1237,8 @@ var quill = createCommonjsModule(function (module, exports) {
             if (options != null) {
               // Extend the base object
               for (name in options) {
-                src = target[name];
-                copy = options[name]; // Prevent never-ending loop
+                src = getProperty(target, name);
+                copy = getProperty(options, name); // Prevent never-ending loop
 
                 if (target !== copy) {
                   // Recurse if we're merging plain objects or arrays
@@ -1199,9 +1251,15 @@ var quill = createCommonjsModule(function (module, exports) {
                     } // Never move original objects, clone them
 
 
-                    target[name] = extend(deep, clone, copy); // Don't bring in undefined values
+                    setProperty(target, {
+                      name: name,
+                      newValue: extend(deep, clone, copy)
+                    }); // Don't bring in undefined values
                   } else if (typeof copy !== 'undefined') {
-                    target[name] = copy;
+                    setProperty(target, {
+                      name: name,
+                      newValue: copy
+                    });
                   }
                 }
               }
@@ -2217,7 +2275,7 @@ var quill = createCommonjsModule(function (module, exports) {
         Quill.events = _emitter4.default.events;
         Quill.sources = _emitter4.default.sources; // eslint-disable-next-line no-undef
 
-        Quill.version = "1.3.6";
+        Quill.version = "1.3.7";
         Quill.imports = {
           'delta': _quillDelta2.default,
           'parchment': _parchment2.default,
@@ -5101,9 +5159,9 @@ var quill = createCommonjsModule(function (module, exports) {
           };
 
           LeafBlot.prototype.value = function () {
-            return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
-
             var _a;
+
+            return _a = {}, _a[this.statics.blotName] = this.statics.value(this.domNode) || true, _a;
           };
 
           LeafBlot.scope = Registry.Scope.INLINE_BLOT;
@@ -5267,6 +5325,22 @@ var quill = createCommonjsModule(function (module, exports) {
           return 'retain';
         };
 
+        Iterator.prototype.rest = function () {
+          if (!this.hasNext()) {
+            return [];
+          } else if (this.offset === 0) {
+            return this.ops.slice(this.index);
+          } else {
+            var offset = this.offset;
+            var index = this.index;
+            var next = this.next();
+            var rest = this.ops.slice(this.index);
+            this.offset = offset;
+            this.index = index;
+            return [next].concat(rest);
+          }
+        };
+
         module.exports = lib;
         /***/
       },
@@ -5375,7 +5449,14 @@ var quill = createCommonjsModule(function (module, exports) {
               } else if (clone.__isDate(parent)) {
                 child = new Date(parent.getTime());
               } else if (useBuffer && Buffer.isBuffer(parent)) {
-                child = new Buffer(parent.length);
+                if (Buffer.allocUnsafe) {
+                  // Node.js >= 4.5.0
+                  child = Buffer.allocUnsafe(parent.length);
+                } else {
+                  // Older Node.js versions
+                  child = new Buffer(parent.length);
+                }
+
                 parent.copy(child);
                 return child;
               } else if (_instanceof(parent, Error)) {
@@ -7352,6 +7433,7 @@ var quill = createCommonjsModule(function (module, exports) {
 
               value = this.sanitize(value);
               node.setAttribute('href', value);
+              node.setAttribute('rel', 'noopener noreferrer');
               node.setAttribute('target', '_blank');
               return node;
             }
@@ -13353,7 +13435,7 @@ var quill = createCommonjsModule(function (module, exports) {
           return SnowTooltip;
         }(_base.BaseTooltip);
 
-        SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
+        SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join('');
         exports.default = SnowTheme;
         /***/
       },
@@ -22522,7 +22604,9 @@ var require_reactivity_cjs = __commonJS(function (exports) {
   }
 
   var RefImpl = /*#__PURE__*/function () {
-    function RefImpl(_rawValue, _shallow) {
+    function RefImpl(_rawValue) {
+      var _shallow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
       _classCallCheck(this, RefImpl);
 
       this._rawValue = _rawValue;
@@ -23779,7 +23863,7 @@ var Alpine = {
     return raw;
   },
 
-  version: "3.2.0",
+  version: "3.2.2",
   disableEffectScheduling: disableEffectScheduling,
   setReactivityEngine: setReactivityEngine,
   addRootSelector: addRootSelector,
@@ -23980,10 +24064,12 @@ function once(callback) {
 } // packages/alpinejs/src/directives/x-transition.js
 
 
-directive("transition", function (el, _ref29) {
+directive("transition", function (el, _ref29, _ref30) {
   var value = _ref29.value,
       modifiers = _ref29.modifiers,
       expression = _ref29.expression;
+  var evaluate2 = _ref30.evaluate;
+  if (typeof expression === "function") expression = evaluate2(expression);
 
   if (!expression) {
     registerTransitionsFromHelper(el, modifiers, value);
@@ -24151,9 +24237,9 @@ window.Element.prototype._x_toggleAndCascadeWithTransitions = function (el, valu
     } else {
       queueMicrotask(function () {
         var hideAfterChildren = function hideAfterChildren(el2) {
-          var carry = Promise.all([el2._x_hidePromise].concat(_toConsumableArray((el2._x_hideChildren || []).map(hideAfterChildren)))).then(function (_ref30) {
-            var _ref31 = _slicedToArray(_ref30, 1),
-                i = _ref31[0];
+          var carry = Promise.all([el2._x_hidePromise].concat(_toConsumableArray((el2._x_hideChildren || []).map(hideAfterChildren)))).then(function (_ref31) {
+            var _ref32 = _slicedToArray(_ref31, 1),
+                i = _ref32[0];
 
             return i();
           });
@@ -24177,11 +24263,11 @@ function closestHide(el) {
 }
 
 function transition(el, setFunction) {
-  var _ref32 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-      _during = _ref32.during,
-      start2 = _ref32.start,
-      _end = _ref32.end,
-      entering = _ref32.entering;
+  var _ref33 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _during = _ref33.during,
+      start2 = _ref33.start,
+      _end = _ref33.end,
+      entering = _ref33.entering;
 
   var before = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
   var after = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {};
@@ -24297,9 +24383,9 @@ function modifierValue(modifiers, key, fallback) {
 
 var handler = function handler() {};
 
-handler.inline = function (el, _ref33, _ref34) {
-  var modifiers = _ref33.modifiers;
-  var cleanup = _ref34.cleanup;
+handler.inline = function (el, _ref34, _ref35) {
+  var modifiers = _ref34.modifiers;
+  var cleanup = _ref35.cleanup;
   modifiers.includes("self") ? el._x_ignoreSelf = true : el._x_ignore = true;
   cleanup(function () {
     modifiers.includes("self") ? delete el._x_ignoreSelf : delete el._x_ignore;
@@ -24308,9 +24394,9 @@ handler.inline = function (el, _ref33, _ref34) {
 
 directive("ignore", handler); // packages/alpinejs/src/directives/x-effect.js
 
-directive("effect", function (el, _ref35, _ref36) {
-  var expression = _ref35.expression;
-  var effect3 = _ref36.effect;
+directive("effect", function (el, _ref36, _ref37) {
+  var expression = _ref36.expression;
+  var effect3 = _ref37.effect;
   return effect3(evaluateLater(el, expression));
 }); // packages/alpinejs/src/utils/bind.js
 
@@ -24600,11 +24686,11 @@ function keyToModifier(key) {
 } // packages/alpinejs/src/directives/x-model.js
 
 
-directive("model", function (el, _ref37, _ref38) {
-  var modifiers = _ref37.modifiers,
-      expression = _ref37.expression;
-  var effect3 = _ref38.effect,
-      cleanup = _ref38.cleanup;
+directive("model", function (el, _ref38, _ref39) {
+  var modifiers = _ref38.modifiers,
+      expression = _ref38.expression;
+  var effect3 = _ref39.effect,
+      cleanup = _ref39.cleanup;
   var evaluate2 = evaluateLater(el, expression);
   var assignmentExpression = "".concat(expression, " = rightSideOfExpression($event, ").concat(expression, ")");
   var evaluateAssignment = evaluateLater(el, assignmentExpression);
@@ -24700,15 +24786,15 @@ directive("cloak", function (el) {
 addInitSelector(function () {
   return "[".concat(prefix("init"), "]");
 });
-directive("init", skipDuringClone(function (el, _ref39) {
-  var expression = _ref39.expression;
+directive("init", skipDuringClone(function (el, _ref40) {
+  var expression = _ref40.expression;
   return evaluate(el, expression, {}, false);
 })); // packages/alpinejs/src/directives/x-text.js
 
-directive("text", function (el, _ref40, _ref41) {
-  var expression = _ref40.expression;
-  var effect3 = _ref41.effect,
-      evaluateLater2 = _ref41.evaluateLater;
+directive("text", function (el, _ref41, _ref42) {
+  var expression = _ref41.expression;
+  var effect3 = _ref42.effect,
+      evaluateLater2 = _ref42.evaluateLater;
   var evaluate2 = evaluateLater2(expression);
   effect3(function () {
     evaluate2(function (value) {
@@ -24719,10 +24805,10 @@ directive("text", function (el, _ref40, _ref41) {
   });
 }); // packages/alpinejs/src/directives/x-html.js
 
-directive("html", function (el, _ref42, _ref43) {
-  var expression = _ref42.expression;
-  var effect3 = _ref43.effect,
-      evaluateLater2 = _ref43.evaluateLater;
+directive("html", function (el, _ref43, _ref44) {
+  var expression = _ref43.expression;
+  var effect3 = _ref44.effect,
+      evaluateLater2 = _ref44.evaluateLater;
   var evaluate2 = evaluateLater2(expression);
   effect3(function () {
     evaluate2(function (value) {
@@ -24732,12 +24818,12 @@ directive("html", function (el, _ref42, _ref43) {
 }); // packages/alpinejs/src/directives/x-bind.js
 
 mapAttributes(startingWith(":", into(prefix("bind:"))));
-directive("bind", function (el, _ref44, _ref45) {
-  var value = _ref44.value,
-      modifiers = _ref44.modifiers,
-      expression = _ref44.expression,
-      original = _ref44.original;
-  var effect3 = _ref45.effect;
+directive("bind", function (el, _ref45, _ref46) {
+  var value = _ref45.value,
+      modifiers = _ref45.modifiers,
+      expression = _ref45.expression,
+      original = _ref45.original;
+  var effect3 = _ref46.effect;
   if (!value) return applyBindingsObject(el, expression, original, effect3);
   if (value === "key") return storeKeyForXFor(el, expression);
   var evaluate2 = evaluateLater(el, expression);
@@ -24760,10 +24846,10 @@ function applyBindingsObject(el, expression, original, effect3) {
     }
 
     getBindings(function (bindings) {
-      var attributes = Object.entries(bindings).map(function (_ref46) {
-        var _ref47 = _slicedToArray(_ref46, 2),
-            name = _ref47[0],
-            value = _ref47[1];
+      var attributes = Object.entries(bindings).map(function (_ref47) {
+        var _ref48 = _slicedToArray(_ref47, 2),
+            name = _ref48[0],
+            value = _ref48[1];
 
         return {
           name: name,
@@ -24786,9 +24872,9 @@ function storeKeyForXFor(el, expression) {
 addRootSelector(function () {
   return "[".concat(prefix("data"), "]");
 });
-directive("data", skipDuringClone(function (el, _ref48, _ref49) {
-  var expression = _ref48.expression;
-  var cleanup = _ref49.cleanup;
+directive("data", skipDuringClone(function (el, _ref49, _ref50) {
+  var expression = _ref49.expression;
+  var cleanup = _ref50.cleanup;
   expression = expression === "" ? "{}" : expression;
   var magicContext = {};
   injectMagics(magicContext, el);
@@ -24808,10 +24894,10 @@ directive("data", skipDuringClone(function (el, _ref48, _ref49) {
   });
 })); // packages/alpinejs/src/directives/x-show.js
 
-directive("show", function (el, _ref50, _ref51) {
-  var modifiers = _ref50.modifiers,
-      expression = _ref50.expression;
-  var effect3 = _ref51.effect;
+directive("show", function (el, _ref51, _ref52) {
+  var modifiers = _ref51.modifiers,
+      expression = _ref51.expression;
+  var effect3 = _ref52.effect;
   var evaluate2 = evaluateLater(el, expression);
 
   var hide = function hide() {
@@ -24859,10 +24945,10 @@ directive("show", function (el, _ref50, _ref51) {
   });
 }); // packages/alpinejs/src/directives/x-for.js
 
-directive("for", function (el, _ref52, _ref53) {
-  var expression = _ref52.expression;
-  var effect3 = _ref53.effect,
-      cleanup = _ref53.cleanup;
+directive("for", function (el, _ref53, _ref54) {
+  var expression = _ref53.expression;
+  var effect3 = _ref54.effect,
+      cleanup = _ref54.cleanup;
   var iteratorNames = parseForExpression(expression);
   var evaluateItems = evaluateLater(el, iteratorNames.items);
   var evaluateKey = evaluateLater(el, el._x_keyExpression || "index");
@@ -24899,10 +24985,10 @@ function loop(el, iteratorNames, evaluateItems, evaluateKey) {
     var keys = [];
 
     if (isObject(items)) {
-      items = Object.entries(items).map(function (_ref54) {
-        var _ref55 = _slicedToArray(_ref54, 2),
-            key = _ref55[0],
-            value = _ref55[1];
+      items = Object.entries(items).map(function (_ref55) {
+        var _ref56 = _slicedToArray(_ref55, 2),
+            key = _ref56[0],
+            value = _ref56[1];
 
         var scope = getIterationScopeVariables(iteratorNames, value, key, items);
         evaluateKey(function (value2) {
@@ -25078,9 +25164,9 @@ function isNumeric3(subject) {
 
 function handler2() {}
 
-handler2.inline = function (el, _ref56, _ref57) {
-  var expression = _ref56.expression;
-  var cleanup = _ref57.cleanup;
+handler2.inline = function (el, _ref57, _ref58) {
+  var expression = _ref57.expression;
+  var cleanup = _ref58.cleanup;
   var root = closestRoot(el);
   if (!root._x_refs) root._x_refs = {};
   root._x_refs[expression] = el;
@@ -25091,10 +25177,10 @@ handler2.inline = function (el, _ref56, _ref57) {
 
 directive("ref", handler2); // packages/alpinejs/src/directives/x-if.js
 
-directive("if", function (el, _ref58, _ref59) {
-  var expression = _ref58.expression;
-  var effect3 = _ref59.effect,
-      cleanup = _ref59.cleanup;
+directive("if", function (el, _ref59, _ref60) {
+  var expression = _ref59.expression;
+  var effect3 = _ref60.effect,
+      cleanup = _ref60.cleanup;
   var evaluate2 = evaluateLater(el, expression);
 
   var show = function show() {
@@ -25134,11 +25220,11 @@ directive("if", function (el, _ref58, _ref59) {
 }); // packages/alpinejs/src/directives/x-on.js
 
 mapAttributes(startingWith("@", into(prefix("on:"))));
-directive("on", skipDuringClone(function (el, _ref60, _ref61) {
-  var value = _ref60.value,
-      modifiers = _ref60.modifiers,
-      expression = _ref60.expression;
-  var cleanup = _ref61.cleanup;
+directive("on", skipDuringClone(function (el, _ref61, _ref62) {
+  var value = _ref61.value,
+      modifiers = _ref61.modifiers,
+      expression = _ref61.expression;
+  var cleanup = _ref62.cleanup;
   var evaluate2 = expression ? evaluateLater(el, expression) : function () {};
   var removeListener = on(el, value, modifiers, function (e) {
     evaluate2(function () {}, {
@@ -25281,6 +25367,44 @@ var KbfProductImagesEdit = function KbfProductImagesEdit() {
   };
 };
 
+var KbfFooterTop = /*#__PURE__*/function () {
+  function KbfFooterTop() {
+    _classCallCheck(this, KbfFooterTop);
+
+    this.init();
+    this.addListeners();
+  }
+
+  _createClass(KbfFooterTop, [{
+    key: "init",
+    value: function init() {
+      this.$footerTop = $('.footer-top');
+      this.$showFooterTop = $('#showFooterTop');
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var instance = this;
+      this.$showFooterTop.click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        instance.$footerTop.toggleClass('show-footer-top');
+      });
+      this.$footerTop.click(function (e) {
+        e.stopPropagation();
+      });
+      $(window).click(function () {
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+      $(window).scroll(function () {
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+    }
+  }]);
+
+  return KbfFooterTop;
+}();
+
 var App = /*#__PURE__*/function () {
   function App() {
     _classCallCheck(this, App);
@@ -25310,6 +25434,7 @@ var App = /*#__PURE__*/function () {
       new KbfProductImagesEdit();
       window.Alpine = module_default;
       module_default.start();
+      new KbfFooterTop();
     }
   }, {
     key: "addListeners",

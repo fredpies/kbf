@@ -42,7 +42,7 @@ $modalMarkup = '
 <?php include_once "partials/_panel-page-title.php" ?>
 
 <!-- Content -->
-<div class="main-content bg-light pt-0">
+<div class="main-content bg-light pb-3 pt-0">
 
     <div class="section">
         <div class="container">
@@ -123,7 +123,7 @@ $modalMarkup = '
                                 </template>
 
                                 <div x-show="favouriteCompanies.length === 0">
-                                    <?= render_info_message('Nie posiadasz aktualanie firm dodanych do listy ulubionych.<div style="height: 0" class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mb-3'); ?>
+                                    <?= render_info_message('Nie posiadasz aktualanie firm dodanych do listy ulubionych.<div style="height: 0" class="header-shadow-wrapper position-static z-index-0 mt-2"></div>', 'col-12 mt-5 mb-3'); ?>
                                 </div>
 
                                 <?= render_modal("confirmation", "Potwierdzenie", $modalMarkup) ?>
