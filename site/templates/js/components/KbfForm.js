@@ -59,10 +59,7 @@ class KbfForm {
     }
 
     addListeners() {
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     }
 
     validate() {

@@ -14,11 +14,8 @@
     ],
     "require": {
         "gusapi/gusapi": "^5.3",
-<<<<<<< Updated upstream
         "ext-json": "*",
         "stripe/stripe-php": "^7.89"
-=======
-        "ext-json": "*"
->>>>>>> Stashed changes
+
     }
 }

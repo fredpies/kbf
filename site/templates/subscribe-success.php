@@ -69,22 +69,33 @@ if ($session->stripe_id) {
     $jobs_container_page->title = 'Oferty Pracy';
     $jobs_container_page->save();
 
+    $password = sha1(bin2hex(random_bytes(8)));
+
+    $new_user = new User();
+    $new_user->of(false);
+    $new_user->name = $company_page->company_email;
+    $new_user->email = $company_page->company_email;
+    $new_user->pass = $password;
+    $new_user->company_id = $company_page->company_id;
+    $new_user->save();
+    $new_user->of(true);
+
     // Wyslij mail
-//    mailTo(array(
-//
-//        "to" => $session->company_email,
-//        "from" => 'no-reply@webaplanet.biz', //TODO: Musi byc zmienione
-//        "subject" => 'Dane logowania',
-//        "bodyHTML" => '
-//
-//            <h4>Firma została zarejestrowana w Katalogu Branżowym Firm</h4>
-//            <h4>Dane logowania do panelu zarzadzania :</h4>
-//            <p>Login : ' . $session->company_email . '</p>
-//            <p>Hasło: CDEfdsh45fsd</p>
-//
-//        '
-//
-//    ), 'Katalog Branżowy Firm');
+    mailTo(array(
+
+        "to" => $session->company_email,
+        "from" => 'no-reply@webaplanet.biz', //TODO: Musi byc zmienione
+        "subject" => 'Dane logowania',
+        "bodyHTML" => '
+
+            <h4>Firma została zarejestrowana w Katalogu Branżowym Firm</h4>
+            <h4>Dane logowania do panelu zarzadzania :</h4>
+            <p>Login : ' . $company_page->company_email . '</p>
+            <p>Hasło : ' . $password . '</p>
+
+        '
+
+    ), 'Katalog Branżowy Firm');
 
     $login_url = $pages->get('template=login')->url;
 
