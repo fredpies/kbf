@@ -174,6 +174,7 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
                                     </p>
                                 </div>
 
+
                                 <div class="col-12 text-center text-md-right align-self-center mt-4">
                                     <div class="row justify-content-center">
                                         <div class="col-12 col-md-5">
@@ -185,7 +186,6 @@ $job_data = sanitize_job_data($pages->get("template=job,id=$job_id"))
                                                 Powrót
                                             </button>
                                         </div>
-
                                     </div>
                                 </div>
 

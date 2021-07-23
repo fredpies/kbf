@@ -10,6 +10,7 @@ include_once ("./partials/_init.php");
 $statuscode = 200;
 $header = Header::mimeType('json'); // Format wyjsciowy
 $response = array(); // Zbior wynikowy
+
 $input = wire('input');
 $sanitizer = wire('sanitizer');
 
@@ -22,25 +23,24 @@ http_response_code($statuscode);
 
 // Sprawdz czy istnieja parametry
 
-if (Request::is('post')) {
+    if (Request::is('post')) {
 
-    $mailData = array(
-        "to" => $input->post->to,
-        "from" => $input->post->from,
-        "subject" => $input->post->subject,
-        "bodyHTML" => $input->post->bodyHTML
-    );
+        $mailData = array(
+            "to" => $input->post->to,
+            "from" => $input->post->from,
+            "subject" => $input->post->subject,
+            "bodyHTML" => $input->post->bodyHTML
+        );
 
-    if ($input->post->fromName) {
-        $fromName = $sanitizer->text($input->post->fromName);
-        $response = mailTo($mailData, $fromName);
-    } else  $response = mailTo($mailData);
+        if ($input->post->fromName) {
+            $fromName = $sanitizer->text($input->post->fromName);
+            $response = mailTo($mailData, $fromName);
+        } else  $response = mailTo($mailData);
 
-}
+    }
 
-if ($response === false) echo json_encode($notSent);
-echo json_encode($response);
-
+    if ($response === false) echo json_encode($notSent);
+    echo json_encode($response);
 
 
 
