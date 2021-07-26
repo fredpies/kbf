@@ -1359,14 +1359,14 @@ footer {
 .footer-top {
   padding-top: 2rem;
   bottom: 0;
-  z-index: 100;
+  z-index: 1500;
   opacity: 0;
   transform: translateY(100%);
   transition: transform 0.3s ease-out, opacity 0.8s ease;
 }
 
 .footer-top.show-footer-top {
-  transform: translateY(-2rem);
+  transform: translateY(-5.8rem);
   opacity: 1;
 }
 
@@ -1456,6 +1456,68 @@ textarea + #company_description_html-error {
   bottom: -2rem !important;
 }
 
-.bg-light {
-  background: #6c6c6c !important;
+#industriesSidebar {
+  position: absolute;
+  height: 100%;
+  z-index: 1000;
+
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-out;
+
 }
+
+#industriesSidebar.show {
+  transform: translateX(0);
+}
+
+#industriesSidebarButton {
+  position: absolute;
+  top: -2rem;
+  left: 105%;
+  z-index: 1000;
+}
+
+#home-top-section {
+  position: relative;
+}
+
+.on-img-button {
+  transform: translate(-50%, -100%);
+}
+
+.home-title {
+  display: none;
+}
+
+.home-sub-title {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  body#home {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+
+
+}
+
+@media (max-height: 1000px) {
+  .home-home-image {
+    position: relative;
+    width: 80%;
+    bottom: 8rem;
+  }
+}
+
+@media (min-height: 1000px) {
+  .home-title {
+    display: block;
+  }
+
+  .home-sub-title {
+    display: block;
+  }
+}
+

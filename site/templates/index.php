@@ -3,6 +3,9 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$pages = wire('pages');
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,12 +36,12 @@ include_once "lib/functions.php";
                                     <div class="row">
                                         <div class="col">
                                             <p style="color: white; font-size: 1rem;" class="text-left w-100">Szukana fraza</p>
-                                            <div class="input-group input-group-lg input-group-round mb-4 mt-3">
+                                            <div class="input-group input-group-md input-group-round mb-4 mt-3">
                                                 <div class="input-group-inner">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text input-group-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
                                                     </div>
-                                                    <input id="search" autocomplete="off" type="text" name="keywords" class="form-control form-control-lg">
+                                                    <input id="search" autocomplete="off" type="text" name="keywords" class="form-control form-control-md">
                                                     <div class="bg-white input-focus-bg"></div>
                                                 </div>
                                             </div>
