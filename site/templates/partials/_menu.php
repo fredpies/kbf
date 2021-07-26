@@ -75,7 +75,7 @@ if ($input->post('action', 'text'))
                             ?>
 
                         </li>
-                        <li>
+                         <li>
                             <a href="#">Firmy wg branży</a>
                             <ul>
                                 <li>
@@ -129,6 +129,28 @@ if ($input->post('action', 'text'))
                                     <a href="<?php echo $company_list_page_url . "?industry=ŻYWNOŚĆ, ROLNICTWO, EKOLOGIA, LEŚNICTWO, OGRODNICTWO" ?>">ŻYWNOŚĆ,
                                         ROLNICTWO, EKOLOGIA, LEŚNICTWO, OGRODNICTWO</a>
                                 </li>
+                            </ul>
+                        </li>
+                         <li>
+                            <a href="#">Kategorie</a>
+                            <ul>
+                                <li>
+                                    <a href="<?php echo $company_list_page_url . "?industry=ADMINISTRACJA, URZĘDY I FUNDACJE" ?>">ADMINISTRACJA,
+                                        URZĘDY I FUNDACJE</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $company_list_page_url . "?industry=BIURO I DOM" ?>">BIURO I
+                                        DOM</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $company_list_page_url . "?industry=BUDOWNICTWO I WYPOSAŻENIE" ?>">BUDOWNICTWO
+                                        I WYPOSAŻENIE</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $company_list_page_url . "?industry=EDUKACJA, NAUKA, KULTURA, SZTUKA" ?>">EDUKACJA,
+                                        NAUKA, KULTURA, SZTUKA</a>
+                                </li>
+
                             </ul>
                         </li>
 

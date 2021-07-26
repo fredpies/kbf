@@ -203,28 +203,105 @@
   position: relative;
 }
 
+.home-image {
+  position: relative;
+  right: 0.5rem;
+}
+
 .on-img-button {
-  position: absolute;
-  top: 50%;
-  left: 53%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
+  position: relative;
+  bottom: 2rem;
+  z-index: 1000;
   background-color: #555;
   color: white;
-  font-size: 16px;
+  font-size: 0.6rem;
   padding: 12px 24px;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  max-width: 65%;
+  width: 45%;
+  height: 2.2rem;
 }
 
-@media (max-width: 1199.98px) {
-  .on-img-button{
-    top: 42%;
-    font-size: 14px;
+
+@media (min-width: 321px) {
+
+  .on-img-button {
+    font-size: 0.7rem;
+    height: 2.5rem;
   }
 }
+
+@media (min-width: 768px) {
+
+  .home-image {
+    width: 55%;
+    right: 0.55rem;
+  }
+
+  .on-img-button {
+    width: 30%;
+  }
+
+}
+
+@media (min-width: 1200px) {
+
+  .home-image {
+    width: 60%;
+    right: 0.56rem;
+  }
+
+  .on-img-button {
+    width: 30%;
+  }
+
+}
+
+@media (min-width: 1600px) {
+
+  .home-image {
+    width: 75%;
+    right: 1.15rem;
+  }
+
+  .on-img-button {
+    width: 40%;
+  }
+
+}
+
+@media (min-width: 1900px) {
+
+  .home-image {
+    width: 70%;
+    right: 1rem;
+  }
+
+  .on-img-button {
+    width: 40%;
+    bottom: 5rem;
+  }
+
+}
+
+body#home {
+  position: relative;
+}
+
+.button-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.desktop-footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
 
 /******************************/
 /* 2.1 Menu glowne            */
@@ -1357,16 +1434,15 @@ footer {
 }
 
 .footer-top {
-  padding-top: 2rem;
+  padding-top: 1.2rem;
   bottom: 0;
   z-index: 1500;
   opacity: 0;
-  transform: translateY(100%);
+  /*transform: translateY(100%);*/
   transition: transform 0.3s ease-out, opacity 0.8s ease;
 }
 
 .footer-top.show-footer-top {
-  transform: translateY(-5.8rem);
   opacity: 1;
 }
 
@@ -1473,16 +1549,12 @@ textarea + #company_description_html-error {
 #industriesSidebarButton {
   position: absolute;
   top: -2rem;
-  left: 105%;
+  left: calc(100% + 1rem);
   z-index: 1000;
 }
 
 #home-top-section {
   position: relative;
-}
-
-.on-img-button {
-  transform: translate(-50%, -100%);
 }
 
 .home-title {
@@ -1499,19 +1571,10 @@ textarea + #company_description_html-error {
     overflow: hidden;
   }
 
-
-
 }
 
-@media (max-height: 1000px) {
-  .home-home-image {
-    position: relative;
-    width: 80%;
-    bottom: 8rem;
-  }
-}
 
-@media (min-height: 1000px) {
+@media (min-height: 900px) {
   .home-title {
     display: block;
   }

@@ -12,6 +12,12 @@ include_once "lib/functions.php";
     <link rel="stylesheet" href="<?php echo $urls->css ?>perfect-scrollbar.css">
 </head>
 <body id="home">
+
+<!-- Footer for desktop -->
+<div class="desktop-footer d-none d-md-block">
+    <?php include_once "partials/_footer.php" ?>
+</div>
+
 <!-- Preloader -->
 <?php include_once "partials/_preloader.php" ?>
 
@@ -26,9 +32,11 @@ include_once "lib/functions.php";
 
     <div class="row">
 
-        <div id="industriesSidebar" class="col-4 d-none d-xl-block bg-light text-dark-gray pt-4">
+        <div id="industriesSidebar" class="col-3 d-none d-xl-block bg-light text-dark-gray pt-4">
 
-            <div class="row">
+            <h5 class="text-center">Wybierze branżę</h5>
+
+            <div class="row px-3">
                 <div class="col-lg-6 col-xl-4">
                     <div class="icon-info-5 text-center mt-2 mb-2">
                         <a class="icon-info-link"
@@ -39,7 +47,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">ADMINISTRACJA, URZĘDY I FUNDACJE</h6>
+                                <h6 class="font-weight-700">ADMINISTRACJA, URZĘDY I FUNDACJE</h6>
                             </div>
                         </a>
                     </div>
@@ -55,7 +63,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">BIURO I DOM</h6>
+                                <h6 class="font-weight-700">BIURO I DOM</h6>
                             </div>
                         </a>
                     </div>
@@ -71,7 +79,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">BUDOWNICTWO I WYPOSAŻENIE</h6>
+                                <h6 class="font-weight-700">BUDOWNICTWO I WYPOSAŻENIE</h6>
                             </div>
                         </a>
                     </div>
@@ -86,7 +94,7 @@ include_once "lib/functions.php";
                                 <img src="<?php echo $urls->svg ?>upload/pen-info.svg" alt="icon" class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">EDUKACJA, NAUKA, KULTURA, SZTUKA</h6>
+                                <h6 class="font-weight-700">EDUKACJA, NAUKA, KULTURA, SZTUKA</h6>
                             </div>
                         </a>
                     </div>
@@ -102,7 +110,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">MEDIA, KOMPUTERY, INTERNET I REKLAMA</h6>
+                                <h6 class="font-weight-700">MEDIA, KOMPUTERY, INTERNET I REKLAMA</h6>
                             </div>
                         </a>
                     </div>
@@ -118,7 +126,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">MEDYCYNA, ZDROWIE I URODA</h6>
+                                <h6 class="font-weight-700">MEDYCYNA, ZDROWIE I URODA</h6>
                             </div>
                         </a>
                     </div>
@@ -134,7 +142,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">MOTORYZACJA, TRANSPORT, KOMUNIKACJA</h6>
+                                <h6 class="font-weight-700">MOTORYZACJA, TRANSPORT, KOMUNIKACJA</h6>
                             </div>
                         </a>
                     </div>
@@ -150,7 +158,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">PRACA</h6>
+                                <h6 class="font-weight-700">PRACA</h6>
                             </div>
                         </a>
                     </div>
@@ -166,7 +174,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">PRAWO, FINANSE, TŁUMACZENIA</h6>
+                                <h6 class="font-weight-700">PRAWO, FINANSE, TŁUMACZENIA</h6>
                             </div>
                         </a>
                     </div>
@@ -185,7 +193,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">PRZEMYSŁ, AUTOMATYKA</h6>
+                                <h6 class="font-weight-700">PRZEMYSŁ, AUTOMATYKA</h6>
                             </div>
                         </a>
                     </div>
@@ -201,7 +209,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">TURYSTYKA, SPORT, REKREACJA, HOTELE</h6>
+                                <h6 class="font-weight-700">TURYSTYKA, SPORT, REKREACJA, HOTELE</h6>
                             </div>
                         </a>
                     </div>
@@ -217,7 +225,7 @@ include_once "lib/functions.php";
                                      class="img-fluid">
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">WŁÓKIENNICTWO, ODZIEŻ, OBUWIE</h6>
+                                <h6 class="font-weight-700">WŁÓKIENNICTWO, ODZIEŻ, OBUWIE</h6>
                             </div>
                         </a>
                     </div>
@@ -236,7 +244,7 @@ include_once "lib/functions.php";
                                      class="img-fluid"industriesSidebar>
                             </div>
                             <div class="icon-info-text text-center">
-                                <h6 class="font-weight-700 mb-3">ŻYWNOŚĆ, ROLNICTWO, EKOLOGIA, LEŚNICTWO,
+                                <h6 class="font-weight-700">ŻYWNOŚĆ, ROLNICTWO, EKOLOGIA, LEŚNICTWO,
                                     OGRODNICTWO</h6>
                             </div>
                         </a>
@@ -336,10 +344,10 @@ include_once "lib/functions.php";
                             </div>
 
                             <div class="lead-sm text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie,
-                                wybierz “WYSZUKAJ NA MAPIE”.
+                                wybierz “SZUKAJ NA MAPIE”.
                             </div>
                             <a href="<?php echo $pages->get("template=map")->url; ?>"
-                               class="d-none d-md-block text-warning px-2 mx-2 ml-md-0 mr-md-3 mb-md-3">WYSZUKAJ NA
+                               class="d-none d-md-block text-warning px-2 mx-2 ml-md-0 mr-md-3 mb-md-3">SZUKAJ NA
                                 MAPIE</a>
 
                         </div>
@@ -347,19 +355,27 @@ include_once "lib/functions.php";
 
                     </div>
 
-                    <div class="col-12 d-lg-none d-xl-flex col-xl-6 order-xl-2 px-md-4">
-                        <div class="position-relative align-self-end w-100 px-5">
-                            <div class="px-md-4 mt-md-5 img-container">
-                                <img src="<?php echo $urls->images ?>phone-map-hand.png" alt="image"
-                                     class="home-home-image img-fluid">
-                                <a href="<?php echo $pages->get("template=map")->url; ?>"
-                                   class="btn btn-round btn-lg btn-primary mb-2 on-img-button">Wyszukaj na mapie</a>
+                    <div class="home-phone-image-container col-12 d-lg-none d-xl-flex col-xl-6 order-xl-2 px-0">
+
+                        <div class="button-container d-flex justify-content-center">
+                            <a href="<?php echo $pages->get("template=map")->url; ?>"
+                               class="btn btn-round btn-lg btn-primary on-img-button mb-0 d-inline-block align-self-center">Szukaj na mapie</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center position-relative align-self-end w-100 px-5">
+
+                            <img src="<?php echo $urls->images ?>phone-map-hand.png" alt="image"
+                                 class="home-image img-fluid">
+
+
                             </div>
                         </div>
                     </div>
 
                 </div>
             </div>
+
+
 
         </div>
     </div>
@@ -404,7 +420,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">ADMINISTRACJA, URZĘDY I FUNDACJE</h6>
+                                <h6 class="font-weight-700">ADMINISTRACJA, URZĘDY I FUNDACJE</h6>
                             </div>
                         </a>
                     </div>
@@ -420,7 +436,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">BIURO I DOM</h6>
+                                <h6 class="font-weight-700">BIURO I DOM</h6>
                             </div>
                         </a>
                     </div>
@@ -436,7 +452,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">BUDOWNICTWO I WYPOSAŻENIE</h6>
+                                <h6 class="font-weight-700">BUDOWNICTWO I WYPOSAŻENIE</h6>
                             </div>
                         </a>
                     </div>
@@ -452,7 +468,7 @@ include_once "lib/functions.php";
                                      data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">EDUKACJA, NAUKA, KULTURA, SZTUKA</h6>
+                                <h6 class="font-weight-700">EDUKACJA, NAUKA, KULTURA, SZTUKA</h6>
                             </div>
                         </a>
                     </div>
@@ -468,7 +484,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">MEDIA, KOMPUTERY, INTERNET I REKLAMA</h6>
+                                <h6 class="font-weight-700">MEDIA, KOMPUTERY, INTERNET I REKLAMA</h6>
                             </div>
                         </a>
                     </div>
@@ -486,7 +502,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">MEDYCYNA, ZDROWIE I URODA</h6>
+                                <h6 class="font-weight-700">MEDYCYNA, ZDROWIE I URODA</h6>
                             </div>
                         </a>
                     </div>
@@ -501,7 +517,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">MOTORYZACJA, TRANSPORT, KOMUNIKACJA</h6>
+                                <h6 class="font-weight-700">MOTORYZACJA, TRANSPORT, KOMUNIKACJA</h6>
                             </div>
                         </a>
                     </div>
@@ -516,7 +532,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">PRACA</h6>
+                                <h6 class="font-weight-700">PRACA</h6>
                             </div>
                         </a>
                     </div>
@@ -531,7 +547,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">PRAWO, FINANSE, TŁUMACZENIA</h6>
+                                <h6 class="font-weight-700">PRAWO, FINANSE, TŁUMACZENIA</h6>
                             </div>
                         </a>
                     </div>
@@ -546,7 +562,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">PRZEMYSŁ, AUTOMATYKA</h6>
+                                <h6 class="font-weight-700">PRZEMYSŁ, AUTOMATYKA</h6>
                             </div>
                         </a>
                     </div>
@@ -565,7 +581,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">TURYSTYKA, SPORT, REKREACJA, HOTELE</h6>
+                                <h6 class="font-weight-700">TURYSTYKA, SPORT, REKREACJA, HOTELE</h6>
                             </div>
                         </a>
                     </div>
@@ -580,7 +596,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">WŁÓKIENNICTWO, ODZIEŻ, OBUWIE</h6>
+                                <h6 class="font-weight-700">WŁÓKIENNICTWO, ODZIEŻ, OBUWIE</h6>
                             </div>
                         </a>
                     </div>
@@ -595,7 +611,7 @@ include_once "lib/functions.php";
                                      class="img-fluid" data-width="48px" data-height="48px">
                             </div>
                             <div class="icon-info-text px-4 pt-3">
-                                <h6 class="font-weight-700 mb-3">ŻYWNOŚĆ, ROLNICTWO, EKOLOGIA, LEŚNICTWO,
+                                <h6 class="font-weight-700">ŻYWNOŚĆ, ROLNICTWO, EKOLOGIA, LEŚNICTWO,
                                     OGRODNICTWO</h6>
                             </div>
                         </a>

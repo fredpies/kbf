@@ -125,7 +125,7 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
 
-  function _isNativeReflectConstruct$2() {
+  function _isNativeReflectConstruct$3() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -139,7 +139,7 @@
   }
 
   function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct$2()) {
+    if (_isNativeReflectConstruct$3()) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -217,8 +217,8 @@
   };
 
   /*!
-   * perfect-scrollbar v1.5.2
-   * Copyright 2021 Hyunje Jun, MDBootstrap and Contributors
+   * perfect-scrollbar v1.5.0
+   * Copyright 2020 Hyunje Jun, MDBootstrap and Contributors
    * Licensed under MIT
    */
   function get(element) {
@@ -512,8 +512,8 @@
     var element = i.element;
     var roundedScrollTop = Math.floor(element.scrollTop);
     var rect = element.getBoundingClientRect();
-    i.containerWidth = Math.round(rect.width);
-    i.containerHeight = Math.round(rect.height);
+    i.containerWidth = Math.ceil(rect.width);
+    i.containerHeight = Math.ceil(rect.height);
     i.contentWidth = element.scrollWidth;
     i.contentHeight = element.scrollHeight;
 
@@ -943,10 +943,10 @@
       if (deltaX !== deltaX && deltaY !== deltaY
       /* NaN checks */
       ) {
-        // IE in some mouse drivers
-        deltaX = 0;
-        deltaY = e.wheelDelta;
-      }
+          // IE in some mouse drivers
+          deltaX = 0;
+          deltaY = e.wheelDelta;
+        }
 
       if (e.shiftKey) {
         // reverse axis with shift key
@@ -1227,11 +1227,6 @@
             return;
           }
 
-          if (!i.element) {
-            clearInterval(easingLoop);
-            return;
-          }
-
           applyTouchMove(speed.x * 30, speed.y * 30);
           speed.x *= 0.8;
           speed.y *= 0.8;
@@ -1484,14 +1479,14 @@
     }).join(' ');
   };
 
-  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfDropdown, _EventTarget);
 
-    var _super = _createSuper$1(KbfDropdown);
+    var _super = _createSuper$2(KbfDropdown);
 
     function KbfDropdown(selector) {
       var _this;
@@ -1952,9 +1947,11 @@
 
 
       var IteratorPrototype = {};
-      define(IteratorPrototype, iteratorSymbol, function () {
+
+      IteratorPrototype[iteratorSymbol] = function () {
         return this;
-      });
+      };
+
       var getProto = Object.getPrototypeOf;
       var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
 
@@ -1965,9 +1962,8 @@
       }
 
       var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-      GeneratorFunction.prototype = GeneratorFunctionPrototype;
-      define(Gp, "constructor", GeneratorFunctionPrototype);
-      define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
+      GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+      GeneratorFunctionPrototype.constructor = GeneratorFunction;
       GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"); // Helper for defining the .next, .throw, and .return methods of the
       // Iterator interface in terms of a single ._invoke method.
 
@@ -2072,9 +2068,11 @@
       }
 
       defineIteratorMethods(AsyncIterator.prototype);
-      define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+
+      AsyncIterator.prototype[asyncIteratorSymbol] = function () {
         return this;
-      });
+      };
+
       exports.AsyncIterator = AsyncIterator; // Note that simple async functions are implemented on top of
       // AsyncIterator objects; they just return a Promise for the value of
       // the final result produced by the iterator.
@@ -2251,12 +2249,13 @@
       // object to not be returned from this call. This ensures that doesn't happen.
       // See https://github.com/facebook/regenerator/issues/274 for more details.
 
-      define(Gp, iteratorSymbol, function () {
+      Gp[iteratorSymbol] = function () {
         return this;
-      });
-      define(Gp, "toString", function () {
+      };
+
+      Gp.toString = function () {
         return "[object Generator]";
-      });
+      };
 
       function pushTryEntry(locs) {
         var entry = {
@@ -2568,19 +2567,14 @@
     } catch (accidentalStrictMode) {
       // This module should not be running in strict mode, so the above
       // assignment should always work unless something is misconfigured. Just
-      // in case runtime.js accidentally runs in strict mode, in modern engines
-      // we can explicitly access globalThis. In older engines we can escape
+      // in case runtime.js accidentally runs in strict mode, we can escape
       // strict mode using a global Function call. This could conceivably fail
       // if a Content Security Policy forbids using Function, but in that case
       // the proper solution is to fix the accidental strict mode problem. If
       // you've misconfigured your bundler to force strict mode and applied a
       // CSP to forbid Function, and you're not willing to fix either of those
       // problems, please detail your unique predicament in a GitHub issue.
-      if ((typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object") {
-        globalThis.regeneratorRuntime = runtime;
-      } else {
-        Function("r", "regeneratorRuntime = r")(runtime);
-      }
+      Function("r", "regeneratorRuntime = r")(runtime);
     }
   });
 
@@ -2615,14 +2609,14 @@
     return result;
   } // Konwertuje nazwe branzy
 
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfAreaSwitcher = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfAreaSwitcher, _EventTarget);
 
-    var _super = _createSuper(KbfAreaSwitcher);
+    var _super = _createSuper$1(KbfAreaSwitcher);
 
     function KbfAreaSwitcher(provincesId, areasId) {
       var _this;
@@ -2824,7 +2818,9 @@
     _createClass(KbfFooterTop, [{
       key: "init",
       value: function init() {
+        this.$footerBottom = $('.footer-bottom');
         this.$footerTop = $('.footer-top');
+        this.$footerTop.css('transform', 'translateY(100%)');
         this.$showFooterTop = $('#showFooterTop');
       }
     }, {
@@ -2834,15 +2830,25 @@
         this.$showFooterTop.click(function (e) {
           e.preventDefault();
           e.stopPropagation();
+          var $industriesSidebar = $('#industriesSidebar');
+          if ($industriesSidebar.length > 0) $industriesSidebar.removeClass('show');
+          instance.isSmall = window.innerWidth <= 1026;
           instance.$footerTop.toggleClass('show-footer-top');
+          if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height) + (instance.isSmall ? 16 : 0), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
         });
         this.$footerTop.click(function (e) {
           e.stopPropagation();
         });
         $(window).click(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
           instance.$footerTop.removeClass('show-footer-top');
         });
         $(window).scroll(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+        $(window).resize(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
           instance.$footerTop.removeClass('show-footer-top');
         });
       }
@@ -2850,6 +2856,105 @@
 
     return KbfFooterTop;
   }();
+
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+  var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
+    _inherits(KbfPreloaderButton, _EventTarget);
+
+    var _super = _createSuper(KbfPreloaderButton);
+
+    function KbfPreloaderButton(selector) {
+      var _this;
+
+      var auto = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+      _classCallCheck(this, KbfPreloaderButton);
+
+      _this = _super.call(this);
+      var $ = window.$;
+      _this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
+
+      if (!selector || _this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
+      _this.auto = auto; // Czy automatycznie dodawac listener
+
+      _this.init();
+
+      _this.addListeners();
+
+      return _this;
+    }
+
+    _createClass(KbfPreloaderButton, [{
+      key: "init",
+      value: function init() {
+        // Aliasy
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.emit = this.dispatchEvent;
+        this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
+      }
+    }, {
+      key: "triggerStart",
+      value: function triggerStart(buttonElement) {
+        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
+
+        var $buttonElement = $(buttonElement);
+        var bgColor;
+        $buttonElement.on('click', function () {
+          bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        });
+        this.$preloaderButton.trigger({
+          type: 'start-preloader',
+          buttonGeometry: buttonGeometry,
+          bgColor: bgColor
+        });
+        this.emit(new CustomEvent('click'));
+      } // Startuje preloader
+
+    }, {
+      key: "startPreloader",
+      value: function startPreloader(buttonElement, buttonGeometry, bgColor) {
+        var $ = window.$;
+        var $buttonElement = $(buttonElement);
+        $buttonElement.attr('disabled', 'disabled');
+        $buttonElement.css('width', buttonGeometry.width + 'px');
+        $buttonElement.css('height', buttonGeometry.height + 'px');
+        $buttonElement.css('padding', 0);
+        $buttonElement.css('background-color', bgColor);
+        $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+        this.emit(new CustomEvent('click'));
+      } // Zatrzymuje preloader
+
+    }, {
+      key: "stopPreloader",
+      value: function stopPreloader() {
+        this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
+        this.$preloaderButton.removeAttr('disabled');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this; // Rejestruj handler warunkowo
+
+        if (this.auto) {
+          this.$preloaderButton.on('click', function () {
+            instance.triggerStart(this);
+          });
+        }
+
+        this.$preloaderButton.on('start-preloader', function (e) {
+          instance.startPreloader(this, e.buttonGeometry, e.bgColor);
+        });
+      }
+    }]);
+
+    return KbfPreloaderButton;
+  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
+  KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
   var type$1 = "FeatureCollection";
   var features$1 = [
@@ -92099,6 +92204,10 @@
         new KbfFooterTop();
         this.$industriesSidebar = $('#industriesSidebar');
         this.$industriesSidebarButton = $('#industriesSidebarButton');
+        this.$kbfSearch = $('.kbf-search');
+        this.$form = $('form');
+        this.adjustHeight();
+        new KbfPreloaderButton('.kbf-search');
       }
     }, {
       key: "addListeners",
@@ -92110,11 +92219,43 @@
 
         this.$industriesSidebarButton.click(function (e) {
           e.stopPropagation();
+          $('.footer-top').removeClass('show-footer-top');
           instance.$industriesSidebar.toggleClass('show');
+          instance.scrollbar = new PerfectScrollbar(instance.$industriesSidebar[0], {
+            minScrollbarLength: 20
+          });
         });
         $(window).click(function () {
           instance.$industriesSidebar.removeClass('show');
+          if (instance.scrollbar) instance.scrollbar.destroy();
         });
+        $(window).on('resize', this.adjustHeight);
+        this.$kbfSearch.on('click', function () {
+          instance.$form.submit();
+        });
+      }
+    }, {
+      key: "adjustHeight",
+      value: function adjustHeight() {
+        this.$topSection = $('#top-section');
+        this.$navikHeader = $('.navik-header');
+        this.$banner = $('.kbf-banner-index');
+        this.$footerBottom = $('.footer-bottom');
+        this.$phoneImageContainer = $('.home-phone-image-container');
+
+        if (window.innerWidth >= 1200) {
+          this.headerHeight = parseInt(getComputedStyle(this.$navikHeader[0]).height);
+          this.bannerHeight = parseInt(getComputedStyle(this.$banner[0]).height);
+          this.footerBottomHeight = parseInt(getComputedStyle(this.$footerBottom[0]).height);
+          this.containerHeight = window.innerHeight - (this.headerHeight + this.bannerHeight + this.footerBottomHeight);
+          this.$topSection.css('height', this.containerHeight);
+          this.$industriesSidebar.css('height', this.containerHeight);
+          this.$phoneImageContainer.css('height', this.containerHeight);
+        } else {
+          this.$topSection.css('height', 'auto');
+          this.$industriesSidebar.css('height', 'auto');
+          this.$phoneImageContainer.css('height', 'auto');
+        }
       }
     }]);
 

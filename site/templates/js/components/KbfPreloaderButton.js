@@ -65,6 +65,8 @@ class KbfPreloaderButton extends EventTarget {
         $buttonElement.css('background-color', bgColor);
         $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
 
+        this.emit(new CustomEvent('click'));
+
     }
 
     // Zatrzymuje preloader
