@@ -42,10 +42,11 @@ class App extends KbfForm {
 
     init() {
 
+        new KbfFooterTop();
         this.formElement = $('form[name="change-password"]');
         this.$submitButton = $('.submit-button');
         new KbfPreloaderButton('.back-button');
-        new KbfFooterTop();
+
 
     }
 
@@ -61,7 +62,6 @@ class App extends KbfForm {
             if (instance.formIsValid) {
              instance.formElement.submit();
             }
-
 
         })
     }

@@ -34,6 +34,8 @@ if ($input->post('action')) {
         // Branza sub-branza
         $input_data["industry"] =  $sanitizer->text($company_page->industry);
         $input_data["sub_industry"] =  $sanitizer->text($company_page->sub_industry);
+        $input_data["province_name"] =  $sanitizer->text($company_page->province_name);
+        $input_data["area_name"] =  $sanitizer->text($company_page->area_name);
 
     }
 }

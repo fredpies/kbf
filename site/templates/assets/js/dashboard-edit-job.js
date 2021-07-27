@@ -246,6 +246,7 @@ var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
       $buttonElement.css('padding', 0);
       $buttonElement.css('background-color', bgColor);
       $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+      this.emit(new CustomEvent('click'));
     } // Zatrzymuje preloader
 
   }, {
@@ -13469,7 +13470,8 @@ var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
 var config = {
   env: 'dev',
   url: 'https://webplanet.biz',
-  apiEndpoint: 'https://webplanet.biz/kbf/'
+  apiEndpoint: 'https://webplanet.biz/kbf/' // apiEndpoint: 'http://localhost/kbf2/'
+
 };
 
 function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -29269,7 +29271,9 @@ var KbfFooterTop = /*#__PURE__*/function () {
   _createClass(KbfFooterTop, [{
     key: "init",
     value: function init() {
+      this.$footerBottom = $('.footer-bottom');
       this.$footerTop = $('.footer-top');
+      this.$footerTop.css('transform', 'translateY(100%)');
       this.$showFooterTop = $('#showFooterTop');
     }
   }, {
@@ -29279,15 +29283,25 @@ var KbfFooterTop = /*#__PURE__*/function () {
       this.$showFooterTop.click(function (e) {
         e.preventDefault();
         e.stopPropagation();
+        var $industriesSidebar = $('#industriesSidebar');
+        if ($industriesSidebar.length > 0) $industriesSidebar.removeClass('show');
+        instance.isSmall = window.innerWidth <= 1026;
         instance.$footerTop.toggleClass('show-footer-top');
+        if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height) + (instance.isSmall ? 16 : 0), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
       });
       this.$footerTop.click(function (e) {
         e.stopPropagation();
       });
       $(window).click(function () {
+        instance.$footerTop.css('transform', 'translateY(100%)');
         instance.$footerTop.removeClass('show-footer-top');
       });
       $(window).scroll(function () {
+        instance.$footerTop.css('transform', 'translateY(100%)');
+        instance.$footerTop.removeClass('show-footer-top');
+      });
+      $(window).resize(function () {
+        instance.$footerTop.css('transform', 'translateY(100%)');
         instance.$footerTop.removeClass('show-footer-top');
       });
     }

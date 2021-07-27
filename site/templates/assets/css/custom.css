@@ -248,7 +248,7 @@
 @media (min-width: 1200px) {
 
   .home-image {
-    width: 60%;
+    width: 75%;
     right: 0.56rem;
   }
 
@@ -258,10 +258,19 @@
 
 }
 
+@media (min-width: 1300px) {
+
+  .home-image {
+    width: 90%;
+    right: 0.56rem;
+  }
+
+}
+
 @media (min-width: 1600px) {
 
   .home-image {
-    width: 75%;
+    width: 95%;
     right: 1.15rem;
   }
 
@@ -274,7 +283,7 @@
 @media (min-width: 1900px) {
 
   .home-image {
-    width: 70%;
+    width: 95%;
     right: 1rem;
   }
 

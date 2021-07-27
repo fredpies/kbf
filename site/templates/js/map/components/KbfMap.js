@@ -143,8 +143,8 @@ class KbfMap extends EventTarget {
             this.map = undefined;
         }
         this.map = L.map(this.mapElement, {
-            zoomSnap: 0.45,
-            minZoom: 5,
+            // zoomSnap: 0.45,
+            zoom: 6,
             zoomControl: false,
             tap: !L.Browser.mobile // Wylacz tap events dla urzadzen mobilnych, fix !
 
@@ -232,7 +232,7 @@ class KbfMap extends EventTarget {
         if (this.map.hasLayer(KbfMap.polandProvincesTiles)) this.map.removeLayer(KbfMap.polandProvincesTiles);
 
         // Skaluj i pozycjonuj mape
-        this.map.setView([52, 20]); // Centrum Polski
+        this.map.setView([52, 20], 6); // Centrum Polski
 
         // Ustaw skale poczatkowa
         this.map.once('zoom', function () {
@@ -240,7 +240,7 @@ class KbfMap extends EventTarget {
         });
 
         this.provincesLayer.addTo(this.map); // Pokaz wojewodztwa
-        this.map.fitBounds(this.provincesLayer.getBounds()); // Ustaw widok
+        // this.map.fitBounds(this.provincesLayer.getBounds()); // Ustaw widok
 
         KbfMap.polandProvincesTiles.addTo(this.map); // Dodaj map tile wojewodztw
         KbfMap.polandLabels.addTo(this.map).bringToFront(); // Dodaj map tile wojewodztw
@@ -567,7 +567,13 @@ class KbfMap extends EventTarget {
 }
 
 KbfMap.polandBoundary = [[47.027, 13.074], [56.851, 25.029]]; // Zasieg Polski
-KbfMap.polandDetailMap = L.tileLayer.provider('OpenStreetMap.Mapnik'); // Tile Map szczegolowy
+KbfMap.polandDetailMap = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minZoom: 0,
+    maxZoom: 22,
+    subdomains: 'abcd',
+    accessToken: 'eljBnUH85ssfvAfx9wqZvjcWTGsk5WEXgoQmR33uMmIotZ5v01nQZG3bL5gh4c1K'
+});
 KbfMap.polandProvincesTiles = L.tileLayer.provider('USGS.USTopo'); // Tile Map dla wojewodztw
 KbfMap.polandLabels = L.tileLayer.provider('Stamen.TonerLabels'); // Tile Map etykiet
 

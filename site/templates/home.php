@@ -32,7 +32,7 @@ include_once "lib/functions.php";
 
     <div class="row">
 
-        <div id="industriesSidebar" class="col-3 d-none d-xl-block bg-light text-dark-gray pt-4">
+        <div id="industriesSidebar" class="col-3 d-none d-xl-block bg-light text-dark-gray pt-3">
 
             <h5 class="text-center">Wybierze branżę</h5>
 
@@ -265,11 +265,11 @@ include_once "lib/functions.php";
             <div class="container d-flex flex-column">
                 <div class="row page-header-block-height mt-3">
 
-                    <div class="col-lg-6 d-flex d-xl-block">
+                    <div class="col-lg-7 d-flex d-xl-block">
                         <div class="align-self-center align-self-xl-start w-100 px-md-5 mt-2 mt-lg-5 mb-3">
                             <div class="text-center text-lg-left add-animate slide-animate" data-animated="fadeInRight">
 
-                                <form action="<?php echo $pages->get("template=companies")->url; ?>" type="GET">
+                                <form action="<?= $pages->get("template=companies")->url; ?>" type="GET">
                                     <div class="row">
                                         <div class="col">
                                             <p style="color: white; font-size: 1rem;" class="text-left w-100">Szukana
@@ -332,7 +332,7 @@ include_once "lib/functions.php";
 
                     </div>
 
-                    <div class="col-lg-6 d-flex d-xl-none px-md-5">
+                    <div class="col-lg-5 d-flex d-xl-none px-md-5">
 
                         <div class="align-self-end align-self-xl-start my-lg-5">
                             <h2 class="display-7 font-weight-800 text-white mb-3 mb-lg-5 mt-3 px-2">Znajdź firmę<br>gdziekolwiek
@@ -355,7 +355,7 @@ include_once "lib/functions.php";
 
                     </div>
 
-                    <div class="home-phone-image-container col-12 d-lg-none d-xl-flex col-xl-6 order-xl-2 px-0">
+                    <div class="home-phone-image-container col-12 d-lg-none d-xl-flex col-xl-5 order-xl-2 px-0">
 
                         <div class="button-container d-flex justify-content-center">
                             <a href="<?php echo $pages->get("template=map")->url; ?>"
@@ -625,101 +625,6 @@ include_once "lib/functions.php";
         </div>
         <hr>
     </div>
-
-    <!-- Categories section -->
-<!--    <div class="section bg-light py-5">-->
-<!--        <div class="container">-->
-<!---->
-<!--            <div class="row my-5">-->
-<!--                <div class="col-lg-8 offset-lg-2">-->
-<!--                    <div class="text-center">-->
-<!---->
-<!--                        <h5 class="font-weight-400">Przeglądaj według kategorii</h5>-->
-<!---->
-<!--                        <div data-height="3px"></div>-->
-<!--                        <div class="title-divider-round"></div>-->
-<!---->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!---->
-<!--            <div class="row mb-5">-->
-<!---->
-<!--                <div class="col-md-6 col-lg-3">-->
-<!--                    <a href="--><?php //echo $pages->get("template=companies")->url; ?><!--" class="text-reset">-->
-<!--                        <div class="bg-white text-center rounded-xl shadow-sm p-4">-->
-<!--                            <div class="py-4 mt-2">-->
-<!--                                <img src="--><?php //echo $urls->svg ?><!--upload/directory-cate-icon-02.svg" alt="icon"-->
-<!--                                     class="add-animate faster" data-animated="zoomIn" data-width="64px"-->
-<!--                                     data-height="64px">-->
-<!--                            </div>-->
-<!--                            <h5 class="font-weight-700">Firmy</h5>-->
-<!--                            <div class="pb-2">-->
-<!--                                <p>--><?php //echo $pages->count("template=company"); ?><!--</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                    <div data-height="30px"></div>-->
-<!--                </div>-->
-<!---->
-<!--                <div class="col-md-6 col-lg-3">-->
-<!--                    <a href="--><?php //echo $pages->get("template=products")->url; ?><!--" class="text-reset add-animate"-->
-<!--                       data-animated="rotateIn">-->
-<!--                        <div class="bg-white text-center rounded-xl shadow-sm p-4">-->
-<!--                            <div class="py-4 mt-2">-->
-<!--                                <img src="--><?php //echo $urls->svg ?><!--upload/directory-benefits-icon-02.svg" alt="icon"-->
-<!--                                     class="add-animate faster" data-animated="zoomIn" data-width="64px"-->
-<!--                                     data-height="64px">-->
-<!--                            </div>-->
-<!--                            <h5 class="font-weight-700">Produkty</h5>-->
-<!--                            <div class="pb-2">-->
-<!--                                <p>--><?php //echo $pages->count("template=product"); ?><!--</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                    <div data-height="30px"></div>-->
-<!--                </div>-->
-<!---->
-<!--                <div class="col-md-6 col-lg-3">-->
-<!--                    <a href="--><?php //echo $pages->get("template=services")->url; ?><!--" class="text-reset">-->
-<!--                        <div class="bg-white text-center rounded-xl shadow-sm p-4">-->
-<!--                            <div class="py-4 mt-2">-->
-<!--                                <img src="--><?php //echo $urls->svg ?><!--upload/directory-cate-icon-04.svg" alt="icon"-->
-<!--                                     class="add-animate faster" data-animated="zoomIn" data-width="64px"-->
-<!--                                     data-height="64px">-->
-<!--                            </div>-->
-<!--                            <h5 class="font-weight-700">Usługi</h5>-->
-<!--                            <div class="pb-2">-->
-<!--                                <p>--><?php //echo $pages->count("template=service"); ?><!--</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                    <div data-height="30px"></div>-->
-<!--                </div>-->
-<!---->
-<!--                <div class="col-md-6 col-lg-3">-->
-<!--                    <a href="--><?php //echo $pages->get("template=jobs")->url; ?><!--" class="text-reset">-->
-<!--                        <div class="bg-white text-center rounded-xl shadow-sm p-4">-->
-<!--                            <div class="py-4 mt-2">-->
-<!--                                <img src="--><?php //echo $urls->svg ?><!--upload/directory-cate-icon-08.svg" alt="icon"-->
-<!--                                     class="add-animate faster" data-animated="zoomIn" data-width="64px"-->
-<!--                                     data-height="64px">-->
-<!--                            </div>-->
-<!--                            <h5 class="font-weight-700">Praca</h5>-->
-<!--                            <div class="pb-2">-->
-<!--                                <p>--><?php //echo $pages->count("template=job"); ?><!--</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </a>-->
-<!--                    <div data-height="30px"></div>-->
-<!--                </div>-->
-<!---->
-<!---->
-<!--            </div>-->
-<!---->
-<!--        </div>-->
-<!--    </div>-->
-
 
 </div>
 

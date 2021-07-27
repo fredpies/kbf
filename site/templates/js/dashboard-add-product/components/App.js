@@ -55,7 +55,6 @@ class App {
                     this.form.validate();
                     if (window.imageNames.length === 0 ) {
 
-                        console.log($('#product_images-error'));
                         $('#product_images-error').attr('style', 'display: block')
                     }
                     else $('#product_images-error').attr('style', 'display: none')
@@ -76,7 +75,7 @@ class App {
                             processData: false,
                             contentType: false,
 
-                        }).done(function (res) {
+                        }).done(function () {
                             instance.$form.submit();
                         }).fail(function () {
                             console.log('Error');

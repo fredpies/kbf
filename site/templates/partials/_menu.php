@@ -135,20 +135,16 @@ if ($input->post('action', 'text'))
                             <a href="#">Kategorie</a>
                             <ul>
                                 <li>
-                                    <a href="<?php echo $company_list_page_url . "?industry=ADMINISTRACJA, URZĘDY I FUNDACJE" ?>">ADMINISTRACJA,
-                                        URZĘDY I FUNDACJE</a>
+                                    <a href="<?= $pages->get("template=companies")->url; ?>">LISTA FIRM</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $company_list_page_url . "?industry=BIURO I DOM" ?>">BIURO I
-                                        DOM</a>
+                                    <a href="<?= $pages->get("template=products")->url; ?>" ?>PRODUKTY NA SPRZEDAŻ</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $company_list_page_url . "?industry=BUDOWNICTWO I WYPOSAŻENIE" ?>">BUDOWNICTWO
-                                        I WYPOSAŻENIE</a>
+                                    <a href="<?= $pages->get("template=services")->url; ?>">OFEROWANE USŁUGI</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $company_list_page_url . "?industry=EDUKACJA, NAUKA, KULTURA, SZTUKA" ?>">EDUKACJA,
-                                        NAUKA, KULTURA, SZTUKA</a>
+                                    <a href="<?= $pages->get("template=jobs")->url; ?>">OFERTY PRACY</a>
                                 </li>
 
                             </ul>

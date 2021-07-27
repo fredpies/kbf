@@ -1,8 +1,8 @@
 import KbfIndustryFilter from "../../components/KbfIndustryFilter";
 import KbfTag from "../../components/KbfTag";
 import KbfLikeCompany from "../../components/KbfLikeCompany";
-import Alpine from "alpinejs";
 import KbfFooterTop from "../../components/KbfFooterTop";
+import Alpine from "alpinejs";
 
 class App {
 
@@ -12,7 +12,6 @@ class App {
     }
 
     init() {
-
 
         let instance = this;
 
@@ -24,6 +23,10 @@ class App {
         });
 
         this.kbfTag.on('refresh-filter', function () {
+            instance.kbfIndustryFilter.$searchButton.trigger('click');
+        });
+
+        this.kbfIndustryFilter.on('filter', function () {
             instance.kbfIndustryFilter.$searchButton.trigger('click');
         });
 

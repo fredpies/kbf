@@ -4694,6 +4694,7 @@
         $buttonElement.css('padding', 0);
         $buttonElement.css('background-color', bgColor);
         $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+        this.emit(new CustomEvent('click'));
       } // Zatrzymuje preloader
 
     }, {
@@ -4735,7 +4736,9 @@
     _createClass(KbfFooterTop, [{
       key: "init",
       value: function init() {
+        this.$footerBottom = $('.footer-bottom');
         this.$footerTop = $('.footer-top');
+        this.$footerTop.css('transform', 'translateY(100%)');
         this.$showFooterTop = $('#showFooterTop');
       }
     }, {
@@ -4745,15 +4748,25 @@
         this.$showFooterTop.click(function (e) {
           e.preventDefault();
           e.stopPropagation();
+          var $industriesSidebar = $('#industriesSidebar');
+          if ($industriesSidebar.length > 0) $industriesSidebar.removeClass('show');
+          instance.isSmall = window.innerWidth <= 1026;
           instance.$footerTop.toggleClass('show-footer-top');
+          if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height) + (instance.isSmall ? 16 : 0), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
         });
         this.$footerTop.click(function (e) {
           e.stopPropagation();
         });
         $(window).click(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
           instance.$footerTop.removeClass('show-footer-top');
         });
         $(window).scroll(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+        $(window).resize(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
           instance.$footerTop.removeClass('show-footer-top');
         });
       }
@@ -4814,10 +4827,10 @@
     _createClass(App, [{
       key: "init",
       value: function init() {
+        new KbfFooterTop();
         this.formElement = $('form[name="change-password"]');
         this.$submitButton = $('.submit-button');
         new KbfPreloaderButton('.back-button');
-        new KbfFooterTop();
       }
     }, {
       key: "addListeners",

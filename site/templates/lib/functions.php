@@ -1290,7 +1290,7 @@ function get_filter_selector($input, $template_name)
     $db = wire("db");
     $sanitizer = wire("sanitizer");
 
-    $query = "template=$template_name, limit=10";
+    $query = "template=$template_name, limit=7";
 
 // Ustaw dane z get
     if (count($input->get()) > 0) {

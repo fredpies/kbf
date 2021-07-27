@@ -17,7 +17,8 @@ $response = array(); // Zbior wynikowy
 header($header);
 header('Access-Control-Allow-Origin: *');
 
-$target_dir = 'c:/xampp/htdocs/kbf2/site/templates/temp/'; // Katalog w ktorym ma zapisac obraz, trzeba ustawic osobno lokalnie i dla serwera inaczej w zaleznosci od hosta
+$target_dir = '/home/wplanet/public_html/webplanet.biz/kbf/site/templates/temp/'; // Katalog w ktorym ma zapisac obraz, trzeba ustawic osobno lokalnie i dla serwera inaczej w zaleznosci od hosta
+//$target_dir = 'c:/xampp/htdocs/kbf2/site/templates/temp/'; // Katalog w ktorym ma zapisac obraz, trzeba ustawic osobno lokalnie i dla serwera inaczej w zaleznosci od hosta
 
 http_response_code($statuscode);
 
@@ -41,7 +42,7 @@ if (Request::is('post')) {
             $input_data["industry"] = $sanitizer->text($company_page->industry);
             $input_data["sub_industry"] = $sanitizer->text($company_page->sub_industry);
             $input_data["province_name"] = $sanitizer->text($company_page->province_name);
-            $input_data["sub_industry"] = $sanitizer->text($company_page->area_name);
+            $input_data["area_name"] = $sanitizer->text($company_page->area_name);
 
         }
     }

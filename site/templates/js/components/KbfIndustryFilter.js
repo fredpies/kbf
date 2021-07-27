@@ -35,7 +35,9 @@ class KbfIndustryFilter extends EventTarget {
         this.areaSwitcher = new KbfAreaSwitcher('provinces', 'areas');
         this.$resetButton = $('.kbf-reset-button');
         this.$searchButton = $('.kbf-search-button');
+        this.$filterButton = $('.kbf-filter-button');
         this.$checkBoxes = $('input[type=checkbox]');
+        this.$form = $('form');
 
     }
 
@@ -44,9 +46,7 @@ class KbfIndustryFilter extends EventTarget {
         let instance = this;
         let $ = window.$;
 
-        this.$resetButton.on('click', function () {
-            instance.resetFilter();
-        });
+
 
         // Emituj zmiane checkboxa
         this.$checkBoxes.on('change', function () {
@@ -61,6 +61,25 @@ class KbfIndustryFilter extends EventTarget {
 
         })
 
+        this.$searchButton.click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            instance.$form.eq(1).submit();
+        })
+
+        this.$filterButton.click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            instance.emit(new CustomEvent('filter'));
+        })
+
+        this.$resetButton.on('click', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            instance.resetFilter();
+            instance.$form.eq(2).submit();
+
+        });
     }
 
     // Zaznacza checkbox

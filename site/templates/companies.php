@@ -3,7 +3,10 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-$sub_industry = array();
+$input = wire('input');
+$urls = wire('urls');
+$pages = wire('pages');
+
 
 // Pobierz tablice sub branz jezeli podano branze
 if ($input->industry) {
@@ -12,7 +15,7 @@ if ($input->industry) {
 
 // Pobierz sub branze jezeli wystepuja
 if ($input->sub_industry) {
-    $sub_industry[] = $sanitizer->text($input->sub_industry);
+    $sub_industry = $input->sub_industry;
 }
 
 // Pobierz dane o firmach na podstawie filtra
@@ -98,7 +101,7 @@ $home_page_url = $pages->get(1)->url;
                     <div class="pb-3 mb-3">
                         <div class="bg-white rounded-xl shadow-sm py-5">
 
-                            <form autocomplete="off" action="<?php echo $page->url ?>">
+                            <form autocomplete="off" method="get" role="form" action="<?= $pages->get("template=companies")->url; ?>">
 
                                 <div class="px-4 px-md-5 px-lg-4 px-xl-5">
                                     <div class="input-group input-group-lg input-group-round w-100">
@@ -903,7 +906,7 @@ $home_page_url = $pages->get(1)->url;
                                         <div class="kbf-index-area-switcher row">
                                             <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 WOJEWÓDZTWO</h6>
-                                            <div data-start-value="<?php if (isset($province_name)) echo $province_name ?>" data-name="province_name" id="provinces"
+                                            <div data-start-value="<?php if (isset($input->province_name) && $input->province_name !== 'Wszystkie') echo $input->province_name ?>" data-name="province_name" id="provinces"
                                                  class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 <button class="btn btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle w-100"
                                                         type="button"
@@ -912,7 +915,7 @@ $home_page_url = $pages->get(1)->url;
                                             </div>
 
                                             <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">POWIAT</h6>
-                                            <div data-start-value="<?php if (isset($area_name)) echo $area_name ?>" data-name="area_name" id="areas"
+                                            <div data-start-value="<?php if (isset($input->area_name) && $input->area_name !== 'Wszystkie') echo $input->area_name ?>" data-name="area_name" id="areas"
                                                  class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 <button class="btn btn-round btn-primary px-3 mx-0 mb-0 dropdown-toggle w-100"
                                                         type="button" id="areas-button" data-toggle="dropdown"
@@ -928,7 +931,7 @@ $home_page_url = $pages->get(1)->url;
 
                             </form>
 
-                            <form action="<?php echo $page->url ?>" role="form">
+                            <form method="get" action="<?= $pages->get("template=companies")->url; ?>" role="form">
                                 <div class="text-center px-4 px-md-5 px-lg-4 px-xl-5 pt-2 mt-4 mb-0">
                                     <button type="submit" style="width: 50%" class="kbf-reset-button btn btn-round btn-danger">Wyczyść</button>
                                 </div>

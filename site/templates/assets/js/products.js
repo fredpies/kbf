@@ -2661,7 +2661,8 @@
   var config = {
     env: 'dev',
     url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf/'
+    apiEndpoint: 'https://webplanet.biz/kbf/' // apiEndpoint: 'http://localhost/kbf2/'
+
   };
 
   function getAreaNames(areasGeoJSON) {
@@ -2940,7 +2941,6 @@
         var $buttonElement = $(buttonElement);
         var bgColor;
         $buttonElement.on('click', function () {
-          console.log('not touch');
           bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
         });
         this.$preloaderButton.trigger({
@@ -2962,6 +2962,7 @@
         $buttonElement.css('padding', 0);
         $buttonElement.css('background-color', bgColor);
         $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+        this.emit(new CustomEvent('click'));
       } // Zatrzymuje preloader
 
     }, {
@@ -92262,16 +92263,15 @@
         this.areaSwitcher = new KbfAreaSwitcher('provinces', 'areas');
         this.$resetButton = $('.kbf-reset-button');
         this.$searchButton = $('.kbf-search-button');
+        this.$filterButton = $('.kbf-filter-button');
         this.$checkBoxes = $('input[type=checkbox]');
+        this.$form = $('form');
       }
     }, {
       key: "addListeners",
       value: function addListeners() {
         var instance = this;
-        var $ = window.$;
-        this.$resetButton.on('click', function () {
-          instance.resetFilter();
-        }); // Emituj zmiane checkboxa
+        var $ = window.$; // Emituj zmiane checkboxa
 
         this.$checkBoxes.on('change', function () {
           var wasChecked = !($(this).prop('checked') === true); //Czy checkbox byl zaznaczony
@@ -92283,6 +92283,22 @@
           instance.emit(new CustomEvent('checkbox-change', {
             detail: eventData
           }));
+        });
+        this.$searchButton.click(function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          instance.$form.eq(1).submit();
+        });
+        this.$filterButton.click(function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          instance.emit(new CustomEvent('filter'));
+        });
+        this.$resetButton.on('click', function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          instance.resetFilter();
+          instance.$form.eq(2).submit();
         });
       } // Zaznacza checkbox
 
@@ -92468,23 +92484,23 @@
 
   KbfTag.badgeMarkup = '<span data-name="{content}" class="company-industry badge badge-pill badge-secondary mb-1 mt-1"><span class="badge-name">{content}</span><span class="badge-close">x</span></span>';
 
-  var KbfLikeProduct = function KbfLikeProduct() {
-    _classCallCheck(this, KbfLikeProduct);
+  var KbfLikeCompany = function KbfLikeCompany() {
+    _classCallCheck(this, KbfLikeCompany);
 
     var $ = window.$;
 
-    window.KbfLikeProduct = function () {
+    window.KbfLikeCompany = function () {
       return {
         disabled: false,
-        currentFavouriteProducts: [],
+        currentFavouriteCompanies: [],
         init: function init() {
-          var favouriteProducts = localStorage.getItem('favourite-products');
-          if (favouriteProducts) this.currentFavouriteProducts = _toConsumableArray(JSON.parse(favouriteProducts));
-          var ids = this.currentFavouriteProducts.map(function (productData) {
-            return productData.product_id;
+          var favouriteCompanies = localStorage.getItem('favourite-companies');
+          if (favouriteCompanies) this.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
+          var ids = this.currentFavouriteCompanies.map(function (companyData) {
+            return companyData.company_id;
           });
 
-          if (ids.indexOf(Number(this.$refs.anchor.dataset.productId)) >= 0) {
+          if (ids.indexOf(Number(this.$refs.anchor.dataset.companyId)) >= 0) {
             this.disabled = true;
             $(this.$refs.anchor).tooltip('hide');
             $(this.$refs.anchor).tooltip('disable');
@@ -92501,18 +92517,22 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("".concat(config.apiEndpoint, "api/get-product/?product_id=").concat(e.target.parentElement.dataset.productId)).done(function (res) {
-              var favouriteProducts = localStorage.getItem('favourite-products');
-              if (favouriteProducts) instance.currentFavouriteProducts = _toConsumableArray(JSON.parse(favouriteProducts));
-              instance.currentFavouriteProducts.push({
-                product_id: res.product_id,
-                product_url: location.protocol + '//' + location.hostname + res.product_url,
-                product_first_image_url: location.protocol + '//' + location.hostname + res.product_first_image_url,
-                product_name: res.product_name,
-                product_description: res.product_description,
-                product_price: res.product_price
+            $.get("".concat(config.apiEndpoint, "api/get-company/?company_id=").concat(e.target.parentElement.dataset.companyId)).done(function (res) {
+              var favouriteCompanies = localStorage.getItem('favourite-companies');
+              if (favouriteCompanies) instance.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
+              instance.currentFavouriteCompanies.push({
+                company_id: res.company_id,
+                company_url: location.protocol + '//' + location.hostname + res.company_url,
+                company_logo_url: location.protocol + '//' + location.hostname + res.company_logo_url,
+                company_name: instance.capitalize(res.company_name.toLowerCase()),
+                company_address: instance.capitalize(res.company_address.toLowerCase()),
+                company_zip: res.company_zip,
+                company_city: res.company_city.charAt(0) + res.company_city.slice(1).toLowerCase(),
+                company_phone_1: res.company_phone_1.replace('0-', ''),
+                company_phone_2: res.company_phone_2.replace('0-', ''),
+                company_fax: res.company_fax.replace('0-', '')
               });
-              localStorage.setItem('favourite-products', JSON.stringify(instance.currentFavouriteProducts));
+              localStorage.setItem('favourite-companies', JSON.stringify(instance.currentFavouriteCompanies));
               instance.disabled = true;
               $(e.target.parentElement).tooltip('hide');
               $(e.target.parentElement).tooltip('disable');
@@ -92522,6 +92542,56 @@
       };
     };
   };
+
+  var KbfFooterTop = /*#__PURE__*/function () {
+    function KbfFooterTop() {
+      _classCallCheck(this, KbfFooterTop);
+
+      this.init();
+      this.addListeners();
+    }
+
+    _createClass(KbfFooterTop, [{
+      key: "init",
+      value: function init() {
+        this.$footerBottom = $('.footer-bottom');
+        this.$footerTop = $('.footer-top');
+        this.$footerTop.css('transform', 'translateY(100%)');
+        this.$showFooterTop = $('#showFooterTop');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this;
+        this.$showFooterTop.click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var $industriesSidebar = $('#industriesSidebar');
+          if ($industriesSidebar.length > 0) $industriesSidebar.removeClass('show');
+          instance.isSmall = window.innerWidth <= 1026;
+          instance.$footerTop.toggleClass('show-footer-top');
+          if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height) + (instance.isSmall ? 16 : 0), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
+        });
+        this.$footerTop.click(function (e) {
+          e.stopPropagation();
+        });
+        $(window).click(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+        $(window).scroll(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+        $(window).resize(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+      }
+    }]);
+
+    return KbfFooterTop;
+  }();
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -93992,7 +94062,9 @@
     }
 
     var RefImpl = /*#__PURE__*/function () {
-      function RefImpl(_rawValue, _shallow) {
+      function RefImpl(_rawValue) {
+        var _shallow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
         _classCallCheck(this, RefImpl);
 
         this._rawValue = _rawValue;
@@ -95249,7 +95321,7 @@
       return raw;
     },
 
-    version: "3.2.0",
+    version: "3.2.2",
     disableEffectScheduling: disableEffectScheduling,
     setReactivityEngine: setReactivityEngine,
     addRootSelector: addRootSelector,
@@ -95450,10 +95522,12 @@
   } // packages/alpinejs/src/directives/x-transition.js
 
 
-  directive("transition", function (el, _ref29) {
+  directive("transition", function (el, _ref29, _ref30) {
     var value = _ref29.value,
         modifiers = _ref29.modifiers,
         expression = _ref29.expression;
+    var evaluate2 = _ref30.evaluate;
+    if (typeof expression === "function") expression = evaluate2(expression);
 
     if (!expression) {
       registerTransitionsFromHelper(el, modifiers, value);
@@ -95621,9 +95695,9 @@
       } else {
         queueMicrotask(function () {
           var hideAfterChildren = function hideAfterChildren(el2) {
-            var carry = Promise.all([el2._x_hidePromise].concat(_toConsumableArray((el2._x_hideChildren || []).map(hideAfterChildren)))).then(function (_ref30) {
-              var _ref31 = _slicedToArray(_ref30, 1),
-                  i = _ref31[0];
+            var carry = Promise.all([el2._x_hidePromise].concat(_toConsumableArray((el2._x_hideChildren || []).map(hideAfterChildren)))).then(function (_ref31) {
+              var _ref32 = _slicedToArray(_ref31, 1),
+                  i = _ref32[0];
 
               return i();
             });
@@ -95647,11 +95721,11 @@
   }
 
   function transition(el, setFunction) {
-    var _ref32 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-        _during = _ref32.during,
-        start2 = _ref32.start,
-        _end = _ref32.end,
-        entering = _ref32.entering;
+    var _ref33 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+        _during = _ref33.during,
+        start2 = _ref33.start,
+        _end = _ref33.end,
+        entering = _ref33.entering;
 
     var before = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
     var after = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {};
@@ -95767,9 +95841,9 @@
 
   var handler = function handler() {};
 
-  handler.inline = function (el, _ref33, _ref34) {
-    var modifiers = _ref33.modifiers;
-    var cleanup = _ref34.cleanup;
+  handler.inline = function (el, _ref34, _ref35) {
+    var modifiers = _ref34.modifiers;
+    var cleanup = _ref35.cleanup;
     modifiers.includes("self") ? el._x_ignoreSelf = true : el._x_ignore = true;
     cleanup(function () {
       modifiers.includes("self") ? delete el._x_ignoreSelf : delete el._x_ignore;
@@ -95778,9 +95852,9 @@
 
   directive("ignore", handler); // packages/alpinejs/src/directives/x-effect.js
 
-  directive("effect", function (el, _ref35, _ref36) {
-    var expression = _ref35.expression;
-    var effect3 = _ref36.effect;
+  directive("effect", function (el, _ref36, _ref37) {
+    var expression = _ref36.expression;
+    var effect3 = _ref37.effect;
     return effect3(evaluateLater(el, expression));
   }); // packages/alpinejs/src/utils/bind.js
 
@@ -96070,11 +96144,11 @@
   } // packages/alpinejs/src/directives/x-model.js
 
 
-  directive("model", function (el, _ref37, _ref38) {
-    var modifiers = _ref37.modifiers,
-        expression = _ref37.expression;
-    var effect3 = _ref38.effect,
-        cleanup = _ref38.cleanup;
+  directive("model", function (el, _ref38, _ref39) {
+    var modifiers = _ref38.modifiers,
+        expression = _ref38.expression;
+    var effect3 = _ref39.effect,
+        cleanup = _ref39.cleanup;
     var evaluate2 = evaluateLater(el, expression);
     var assignmentExpression = "".concat(expression, " = rightSideOfExpression($event, ").concat(expression, ")");
     var evaluateAssignment = evaluateLater(el, assignmentExpression);
@@ -96170,15 +96244,15 @@
   addInitSelector(function () {
     return "[".concat(prefix("init"), "]");
   });
-  directive("init", skipDuringClone(function (el, _ref39) {
-    var expression = _ref39.expression;
+  directive("init", skipDuringClone(function (el, _ref40) {
+    var expression = _ref40.expression;
     return evaluate(el, expression, {}, false);
   })); // packages/alpinejs/src/directives/x-text.js
 
-  directive("text", function (el, _ref40, _ref41) {
-    var expression = _ref40.expression;
-    var effect3 = _ref41.effect,
-        evaluateLater2 = _ref41.evaluateLater;
+  directive("text", function (el, _ref41, _ref42) {
+    var expression = _ref41.expression;
+    var effect3 = _ref42.effect,
+        evaluateLater2 = _ref42.evaluateLater;
     var evaluate2 = evaluateLater2(expression);
     effect3(function () {
       evaluate2(function (value) {
@@ -96189,10 +96263,10 @@
     });
   }); // packages/alpinejs/src/directives/x-html.js
 
-  directive("html", function (el, _ref42, _ref43) {
-    var expression = _ref42.expression;
-    var effect3 = _ref43.effect,
-        evaluateLater2 = _ref43.evaluateLater;
+  directive("html", function (el, _ref43, _ref44) {
+    var expression = _ref43.expression;
+    var effect3 = _ref44.effect,
+        evaluateLater2 = _ref44.evaluateLater;
     var evaluate2 = evaluateLater2(expression);
     effect3(function () {
       evaluate2(function (value) {
@@ -96202,12 +96276,12 @@
   }); // packages/alpinejs/src/directives/x-bind.js
 
   mapAttributes(startingWith(":", into(prefix("bind:"))));
-  directive("bind", function (el, _ref44, _ref45) {
-    var value = _ref44.value,
-        modifiers = _ref44.modifiers,
-        expression = _ref44.expression,
-        original = _ref44.original;
-    var effect3 = _ref45.effect;
+  directive("bind", function (el, _ref45, _ref46) {
+    var value = _ref45.value,
+        modifiers = _ref45.modifiers,
+        expression = _ref45.expression,
+        original = _ref45.original;
+    var effect3 = _ref46.effect;
     if (!value) return applyBindingsObject(el, expression, original, effect3);
     if (value === "key") return storeKeyForXFor(el, expression);
     var evaluate2 = evaluateLater(el, expression);
@@ -96230,10 +96304,10 @@
       }
 
       getBindings(function (bindings) {
-        var attributes = Object.entries(bindings).map(function (_ref46) {
-          var _ref47 = _slicedToArray(_ref46, 2),
-              name = _ref47[0],
-              value = _ref47[1];
+        var attributes = Object.entries(bindings).map(function (_ref47) {
+          var _ref48 = _slicedToArray(_ref47, 2),
+              name = _ref48[0],
+              value = _ref48[1];
 
           return {
             name: name,
@@ -96256,9 +96330,9 @@
   addRootSelector(function () {
     return "[".concat(prefix("data"), "]");
   });
-  directive("data", skipDuringClone(function (el, _ref48, _ref49) {
-    var expression = _ref48.expression;
-    var cleanup = _ref49.cleanup;
+  directive("data", skipDuringClone(function (el, _ref49, _ref50) {
+    var expression = _ref49.expression;
+    var cleanup = _ref50.cleanup;
     expression = expression === "" ? "{}" : expression;
     var magicContext = {};
     injectMagics(magicContext, el);
@@ -96278,10 +96352,10 @@
     });
   })); // packages/alpinejs/src/directives/x-show.js
 
-  directive("show", function (el, _ref50, _ref51) {
-    var modifiers = _ref50.modifiers,
-        expression = _ref50.expression;
-    var effect3 = _ref51.effect;
+  directive("show", function (el, _ref51, _ref52) {
+    var modifiers = _ref51.modifiers,
+        expression = _ref51.expression;
+    var effect3 = _ref52.effect;
     var evaluate2 = evaluateLater(el, expression);
 
     var hide = function hide() {
@@ -96329,10 +96403,10 @@
     });
   }); // packages/alpinejs/src/directives/x-for.js
 
-  directive("for", function (el, _ref52, _ref53) {
-    var expression = _ref52.expression;
-    var effect3 = _ref53.effect,
-        cleanup = _ref53.cleanup;
+  directive("for", function (el, _ref53, _ref54) {
+    var expression = _ref53.expression;
+    var effect3 = _ref54.effect,
+        cleanup = _ref54.cleanup;
     var iteratorNames = parseForExpression(expression);
     var evaluateItems = evaluateLater(el, iteratorNames.items);
     var evaluateKey = evaluateLater(el, el._x_keyExpression || "index");
@@ -96369,10 +96443,10 @@
       var keys = [];
 
       if (isObject(items)) {
-        items = Object.entries(items).map(function (_ref54) {
-          var _ref55 = _slicedToArray(_ref54, 2),
-              key = _ref55[0],
-              value = _ref55[1];
+        items = Object.entries(items).map(function (_ref55) {
+          var _ref56 = _slicedToArray(_ref55, 2),
+              key = _ref56[0],
+              value = _ref56[1];
 
           var scope = getIterationScopeVariables(iteratorNames, value, key, items);
           evaluateKey(function (value2) {
@@ -96548,9 +96622,9 @@
 
   function handler2() {}
 
-  handler2.inline = function (el, _ref56, _ref57) {
-    var expression = _ref56.expression;
-    var cleanup = _ref57.cleanup;
+  handler2.inline = function (el, _ref57, _ref58) {
+    var expression = _ref57.expression;
+    var cleanup = _ref58.cleanup;
     var root = closestRoot(el);
     if (!root._x_refs) root._x_refs = {};
     root._x_refs[expression] = el;
@@ -96561,10 +96635,10 @@
 
   directive("ref", handler2); // packages/alpinejs/src/directives/x-if.js
 
-  directive("if", function (el, _ref58, _ref59) {
-    var expression = _ref58.expression;
-    var effect3 = _ref59.effect,
-        cleanup = _ref59.cleanup;
+  directive("if", function (el, _ref59, _ref60) {
+    var expression = _ref59.expression;
+    var effect3 = _ref60.effect,
+        cleanup = _ref60.cleanup;
     var evaluate2 = evaluateLater(el, expression);
 
     var show = function show() {
@@ -96604,11 +96678,11 @@
   }); // packages/alpinejs/src/directives/x-on.js
 
   mapAttributes(startingWith("@", into(prefix("on:"))));
-  directive("on", skipDuringClone(function (el, _ref60, _ref61) {
-    var value = _ref60.value,
-        modifiers = _ref60.modifiers,
-        expression = _ref60.expression;
-    var cleanup = _ref61.cleanup;
+  directive("on", skipDuringClone(function (el, _ref61, _ref62) {
+    var value = _ref61.value,
+        modifiers = _ref61.modifiers,
+        expression = _ref61.expression;
+    var cleanup = _ref62.cleanup;
     var evaluate2 = expression ? evaluateLater(el, expression) : function () {};
     var removeListener = on(el, value, modifiers, function (e) {
       evaluate2(function () {}, {
@@ -96634,38 +96708,6 @@
 
   var module_default = src_default;
 
-  var KbfFooterTop = /*#__PURE__*/function () {
-    function KbfFooterTop() {
-      _classCallCheck(this, KbfFooterTop);
-
-      this.init();
-      this.addListeners();
-    }
-
-    _createClass(KbfFooterTop, [{
-      key: "init",
-      value: function init() {
-        this.$footerTop = $('.footer-top');
-        this.$showFooterTop = $('#showFooterTop');
-      }
-    }, {
-      key: "addListeners",
-      value: function addListeners() {
-        var instance = this;
-        this.$showFooterTop.click(function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          instance.$footerTop.toggleClass('show-footer-top');
-        });
-        $(window).scroll(function () {
-          instance.$footerTop.removeClass('show-footer-top');
-        });
-      }
-    }]);
-
-    return KbfFooterTop;
-  }();
-
   var App = /*#__PURE__*/function () {
     function App() {
       _classCallCheck(this, App);
@@ -96685,6 +96727,9 @@
         this.kbfTag.on('refresh-filter', function () {
           instance.kbfIndustryFilter.$searchButton.trigger('click');
         });
+        this.kbfIndustryFilter.on('filter', function () {
+          instance.kbfIndustryFilter.$searchButton.trigger('click');
+        });
         this.kbfIndustryFilter.on('checkbox-change', function (e) {
           var wasChecked = e.detail.wasChecked;
           var name = e.detail.name;
@@ -96694,7 +96739,7 @@
         this.kbfTag.on('badge-remove', function (e) {
           instance.kbfIndustryFilter.uncheck(e.detail.name);
         });
-        new KbfLikeProduct();
+        new KbfLikeCompany();
         new KbfFooterTop();
         window.Alpine = module_default;
         module_default.start();

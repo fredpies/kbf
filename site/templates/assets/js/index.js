@@ -92222,7 +92222,8 @@
           $('.footer-top').removeClass('show-footer-top');
           instance.$industriesSidebar.toggleClass('show');
           instance.scrollbar = new PerfectScrollbar(instance.$industriesSidebar[0], {
-            minScrollbarLength: 20
+            minScrollbarLength: 20,
+            suppressScrollX: true
           });
         });
         $(window).click(function () {

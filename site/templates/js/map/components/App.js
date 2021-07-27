@@ -1,6 +1,7 @@
 import KbfMap from "./KbfMap";
 import KbfMapPanel from './KbfMapPanel'
 import KbfMapPanelIndustrySwitcher from "./KbfMapPanelIndustrySwitcher";
+import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import {getCompanyMarkersData} from "../../functions/library";
 
 // Dane o wojewodztwach i powiatach
@@ -27,6 +28,9 @@ class App {
         this.kbfMapPanel = new KbfMapPanel(); // Panel kontrolny
         this.kbfMapIndustrySwitcher = new KbfMapPanelIndustrySwitcher('#kbf-map-panel.industries'); // Wybor branz
         this.$displayCompaniesButton = $('.kbf-map-show-companies'); // Pokaz liste firm
+
+        new KbfPreloaderButton('.kbf-map-show-companies > button');
+
         this.$showAll = $('.kbf-map-panel-show-all');// Przycisk pokaz wszystko
 
         this.$mapMiniPreloader = $('.kbf-mini-preloader').hide(); // Ukry mini preloader

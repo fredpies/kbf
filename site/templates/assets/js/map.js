@@ -851,7 +851,7 @@
     return Function.toString.call(fn).indexOf("[native code]") !== -1;
   }
 
-  function _isNativeReflectConstruct$6() {
+  function _isNativeReflectConstruct$7() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -865,7 +865,7 @@
   }
 
   function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct$6()) {
+    if (_isNativeReflectConstruct$7()) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -945,7 +945,8 @@
   var config = {
     env: 'dev',
     url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf'
+    apiEndpoint: 'https://webplanet.biz/kbf/' // apiEndpoint: 'http://localhost/kbf2/'
+
   };
 
   function _arrayLikeToArray(arr, len) {
@@ -958,14 +959,6 @@
     return arr2;
   }
 
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-  }
-
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-  }
-
   function _unsupportedIterableToArray(o, minLen) {
     if (!o) return;
     if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -973,6 +966,14 @@
     if (n === "Object" && o.constructor) n = o.constructor.name;
     if (n === "Map" || n === "Set") return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+  }
+
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _nonIterableSpread() {
@@ -1034,10 +1035,11 @@
   } // Przygotowuje opcje dla dropdown branz
 
   function getIndustriesOptions(industries) {
+    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     // Utworz tablice branz
     var capitalizedIndustries = [];
     industries.forEach(function (industry) {
-      capitalizedIndustries.push(capitalizeIndustry(getEllipsis(industry, 34)));
+      if (ellipsis) capitalizedIndustries.push(capitalizeIndustry(getEllipsis(industry, 34)));else capitalizedIndustries.push(capitalizeIndustry(industry));
     }); // Utworz opcje
 
     var opts = {};
@@ -1107,7 +1109,7 @@
 
   function getCompanyMarkersData(_x2) {
     return _getCompanyMarkersData.apply(this, arguments);
-  }
+  } // Zamienia placeholders w stringu
 
   function _getCompanyMarkersData() {
     _getCompanyMarkersData = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(requestData) {
@@ -1142,16 +1144,16 @@
     return _getCompanyMarkersData.apply(this, arguments);
   }
 
-  function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$6(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$6(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$6() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
   var url = config.url;
   var apiEndpoint = config.apiEndpoint;
 
   var KbfMap = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfMap, _EventTarget);
 
-    var _super = _createSuper$5(KbfMap);
+    var _super = _createSuper$6(KbfMap);
 
     function KbfMap(selector) {
       var _this;
@@ -1289,8 +1291,8 @@
         }
 
         this.map = L.map(this.mapElement, {
-          zoomSnap: 0.45,
-          minZoom: 5,
+          // zoomSnap: 0.45,
+          zoom: 6,
           zoomControl: false,
           tap: !L.Browser.mobile // Wylacz tap events dla urzadzen mobilnych, fix !
 
@@ -1372,15 +1374,14 @@
 
         if (this.map.hasLayer(KbfMap.polandProvincesTiles)) this.map.removeLayer(KbfMap.polandProvincesTiles); // Skaluj i pozycjonuj mape
 
-        this.map.setView([52, 20]); // Centrum Polski
+        this.map.setView([52, 20], 6); // Centrum Polski
         // Ustaw skale poczatkowa
 
         this.map.once('zoom', function () {
           instance.startingZoom = instance.map.getZoom();
         });
         this.provincesLayer.addTo(this.map); // Pokaz wojewodztwa
-
-        this.map.fitBounds(this.provincesLayer.getBounds()); // Ustaw widok
+        // this.map.fitBounds(this.provincesLayer.getBounds()); // Ustaw widok
 
         KbfMap.polandProvincesTiles.addTo(this.map); // Dodaj map tile wojewodztw
 
@@ -1702,8 +1703,13 @@
 
   KbfMap.polandBoundary = [[47.027, 13.074], [56.851, 25.029]]; // Zasieg Polski
 
-  KbfMap.polandDetailMap = L.tileLayer.provider('OpenStreetMap.Mapnik'); // Tile Map szczegolowy
-
+  KbfMap.polandDetailMap = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minZoom: 0,
+    maxZoom: 22,
+    subdomains: 'abcd',
+    accessToken: 'eljBnUH85ssfvAfx9wqZvjcWTGsk5WEXgoQmR33uMmIotZ5v01nQZG3bL5gh4c1K'
+  });
   KbfMap.polandProvincesTiles = L.tileLayer.provider('USGS.USTopo'); // Tile Map dla wojewodztw
 
   KbfMap.polandLabels = L.tileLayer.provider('Stamen.TonerLabels'); // Tile Map etykiet
@@ -3015,26 +3021,29 @@
     }).join(' ');
   };
 
-  function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$5(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$5(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$5() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfDropdown = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfDropdown, _EventTarget);
 
-    var _super = _createSuper$4(KbfDropdown);
+    var _super = _createSuper$5(KbfDropdown);
 
-    function KbfDropdown(selector, opts) {
+    function KbfDropdown(selector) {
       var _this;
+
+      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+      var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
       _classCallCheck(this, KbfDropdown);
 
       _this = _super.call(this);
 
       if (selector === undefined) throw errors.argumentNotFound('selector');
-      if (opts === undefined) throw errors.argumentNotFound('opts');
       _this.selector = selector;
       _this.opts = opts;
+      _this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
 
       _this.init(); // Inicjalizuj
 
@@ -3056,16 +3065,23 @@
         this.on = this.addEventListener;
         this.off = this.removeEventListener;
         this.emit = this.dispatchEvent;
-        this.$dropdowns = $(this.selector);
+        this.$dropdowns = $(this.selector); // Ustaw opcje z atrybuty data-options
+
+        var dataOptions = this.$dropdowns.data('options');
+        if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
+
+        this.startValue = this.$dropdowns.data('value');
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
 
-        this.$dropdowns.append($('<input type="hidden">'));
+        this.$dropdowns.append($('<input class="form-control" type="hidden">'));
         this.$hiddenInputs = this.$dropdowns.find('input[type="hidden"]'); // Ustaw opcje
 
         this.setOptions(this.opts);
         this.$dropdownItems = this.$dropdowns.find('.dropdown-item'); // Elementy menu
+
+        if (this.startValue) this.setActive(this.startValue);
       } // Dodaje listenery
 
     }, {
@@ -3105,17 +3121,20 @@
           window.removeEventListener('touchmove', preventDefault, {
             passive: false
           });
-        } // Blokowanie scrollingu body kiedy dropdown jest widoczny
+        }
 
+        if (this.scrollBlock) {
+          // Blokowanie scrollingu body kiedy dropdown jest widoczny
+          this.$dropdowns.on('shown.bs.dropdown', function (e) {
+            e.stopPropagation();
+            disableScroll();
+          });
+          this.$dropdowns.on('hidden.bs.dropdown', function (e) {
+            e.stopPropagation();
+            enableScroll();
+          });
+        } // Gdy klikniemy na dropdown item
 
-        this.$dropdowns.on('shown.bs.dropdown', function (e) {
-          e.stopPropagation();
-          disableScroll();
-        });
-        this.$dropdowns.on('hidden.bs.dropdown', function (e) {
-          e.stopPropagation();
-          enableScroll();
-        }); // Gdy klikniemy na dropdown item
 
         this.$dropdownItems.on('click', function (e) {
           e.preventDefault();
@@ -3326,33 +3345,40 @@
       key: "initScrollBar",
       value: function initScrollBar() {
         var instance = this;
-        this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
-        this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]');
         if (this.scrollbar) this.scrollbar.destroy(); // Inicjuj scrollbar
 
         this.scrollbar = new PerfectScrollbar(this.$dropdownMenu[0], {
           minScrollbarLength: 20
-        }); // Wylacz pan mapy gdy kursor znajduje sie na scrollbar i mapa istnieje
+        });
+        this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
+        this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]'); // Wylacz pan mapy gdy kursor znajduje sie na scrollbar i mapa istnieje
 
         this.$psRail.on('mouseenter', function () {
           if (window.map) window.map.dragging.disable();
         });
-        this.$dropdownMenu.on('mouseenter', function () {
+        this.$dropdownMenu.on('mouseenter', function (e) {
+          e.stopPropagation();
           instance.scrollbar.update();
 
           if (window.map) {
-            window.map.scrollWheelZoom.disable();
-            window.map.dragging.disable();
+            if (window.map.scrollWheelZoom && window.map.dragging) {
+              window.map.scrollWheelZoom.disable();
+              window.map.dragging.disable();
+            }
           }
         }); // Wlacz pan mapy gdy kursor opuszcza dropdown i mapa istnieje
 
         this.$psRail.on('mouseleave', function () {
-          if (window.map) window.map.dragging.enable();
+          if (window.map) {
+            if (window.map.dragging) window.map.dragging.enable();
+          }
         });
         this.$dropdownMenu.on('mouseleave', function () {
           if (window.map) {
-            window.map.scrollWheelZoom.enable();
-            window.map.dragging.enable();
+            if (window.map.scrollWheelZoom && window.map.dragging) {
+              window.map.scrollWheelZoom.enable();
+              window.map.dragging.enable();
+            }
           }
         });
         this.$psRail.on('mousedown mouseup click', function (e) {
@@ -3371,17 +3397,19 @@
     return KbfDropdown;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfAreaSwitcher = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfAreaSwitcher, _EventTarget);
 
-    var _super = _createSuper$3(KbfAreaSwitcher);
+    var _super = _createSuper$4(KbfAreaSwitcher);
 
     function KbfAreaSwitcher(provincesId, areasId) {
       var _this;
+
+      var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
       _classCallCheck(this, KbfAreaSwitcher);
 
@@ -3391,6 +3419,8 @@
       _this = _super.call(this);
       _this.provincesId = provincesId;
       _this.areasId = areasId;
+      _this.scrollBlock = scrollBlock; // Czy blokowac scroll
+
       _this.areasDictionary = {}; // Slownik wojewodztwo - powiaty
 
       _this.provinces = []; // Nazwy wojewodztw
@@ -3464,9 +3494,9 @@
         this.areasDictionary = getProvinceAreaDict(areasGeoJSON);
         this.provinces = getProvinceNames(this.areasDictionary); // Inicjalizuj dropdown wojewodztw
 
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie'].concat(_toConsumableArray(this.provinces))); // Inicjalizuj dropdown powiatow
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie'].concat(_toConsumableArray(this.provinces)), this.scrollBlock); // Inicjalizuj dropdown powiatow
 
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie'].concat(_toConsumableArray(this.areas))); // Element dropdown powiatow
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie'].concat(_toConsumableArray(this.areas)), this.scrollBlock); // Element dropdown powiatow
 
         this.$areasDropdown = $('#' + this.areasId).find('button');
         this.$areasDropdown.attr('disabled', 'true'); // Pobierz dane poczatkowe dla dropdown'ow
@@ -3565,14 +3595,14 @@
     return KbfAreaSwitcher;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfMapPanel = /*#__PURE__*/function (_KbfAreaSwitcher) {
     _inherits(KbfMapPanel, _KbfAreaSwitcher);
 
-    var _super = _createSuper$2(KbfMapPanel);
+    var _super = _createSuper$3(KbfMapPanel);
 
     function KbfMapPanel() {
       var _this;
@@ -3649,24 +3679,34 @@
 
   function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfIndustrySwitcher = /*#__PURE__*/function (_EventTarget) {
     _inherits(KbfIndustrySwitcher, _EventTarget);
 
-    var _super = _createSuper$1(KbfIndustrySwitcher);
+    var _super = _createSuper$2(KbfIndustrySwitcher);
 
     function KbfIndustrySwitcher(industriesId, subIndustriesId) {
       var _this;
+
+      var firstOption = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Wszystkie';
+      var ellipsis = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+      var scrollBlock = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
 
       _classCallCheck(this, KbfIndustrySwitcher);
 
       // Sprawdz czy podano argumenty
       if (!industriesId) throw errors.argumentNotFound(industriesId);
       if (!subIndustriesId) throw errors.argumentNotFound(subIndustriesId);
-      _this = _super.call(this); // Aliasy
+      _this = _super.call(this);
+      _this.firstOption = firstOption; // Pierwsza opcja
+
+      _this.scrollBlock = scrollBlock; // Czy blokowac scroll
+
+      _this.ellipsis = ellipsis; // Czy stosowac skroty
+      // Aliasy
 
       _this.on = _this.addEventListener;
       _this.off = _this.removeEventListener;
@@ -3681,9 +3721,9 @@
 
       _this.subIndustries = []; // Aktualna lista sub branz
 
-      _this.currentIndustry = 'Wszystkie'; // Aktualnie wybrana branza
+      _this.currentIndustry = _this.firstOption; // Aktualnie wybrana branza
 
-      _this.currentSubIndustry = 'Wszystkie'; // Aktualnie wybrana sub branza
+      _this.currentSubIndustry = _this.firstOption; // Aktualnie wybrana sub branza
       // Inicjalizuj
 
       _this.init().then(function () {
@@ -3700,15 +3740,15 @@
         var instance = this;
         this.industriesDropdown.on('change', /*#__PURE__*/function () {
           var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(e) {
-            var opts, subIndustriesResult;
+            var subIndustriesResult;
             return regenerator.wrap(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
                   case 0:
                     instance.currentIndustry = e.detail;
 
-                    if (!(instance.currentIndustry !== 'Wszystkie')) {
-                      _context.next = 9;
+                    if (!(instance.currentIndustry !== instance.firstOption)) {
+                      _context.next = 7;
                       break;
                     }
 
@@ -3719,20 +3759,16 @@
                     subIndustriesResult = _context.sent;
                     instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
 
-                    opts = _objectSpread({
-                      Wszystkie: 'Wszystkie'
-                    }, getIndustriesOptions(instance.subIndustries));
-                    instance.subIndustriesDropdown.updateOptions(opts);
-                    instance.currentSubIndustry = 'Wszystkie';
+                    instance.updateEllipsis(); // Aktualizuj skroty
 
-                  case 9:
-                    if (instance.currentIndustry === 'Wszystkie') {
-                      instance.subIndustriesDropdown.updateOptions(['Wszystkie']);
+                  case 7:
+                    if (instance.currentIndustry === instance.firstOption) {
+                      instance.subIndustriesDropdown.updateOptions([instance.firstOption]);
                     }
 
                     instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
 
-                  case 11:
+                  case 9:
                   case "end":
                     return _context.stop();
                 }
@@ -3769,13 +3805,11 @@
                 case 4:
                   this.industries = _context2.sent;
                   // Przygotuj opcje dropdown branz jako obiekt opts
-                  opts = _objectSpread({
-                    Wszystkie: 'Wszystkie'
-                  }, getIndustriesOptions(this.industries)); // Inicjuj dropdowny
+                  opts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries, this.ellipsis)); // Inicjuj dropdowny
 
-                  this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts); // Inicjalizuj dropdown z nazwami branz
+                  this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
 
-                  this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, ['Wszystkie']); // Inicjalizuj dropdown dla sub branz
+                  this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
                   // Ustaw responsywnosc dropdown'ow
 
                   $(window).off('resize', instance.resetDropdowns);
@@ -3794,7 +3828,15 @@
         }
 
         return init;
-      }() // Emituje aktualne ustawienie branz
+      }()
+    }, {
+      key: "updateEllipsis",
+      value: function updateEllipsis() {
+        var opts = _objectSpread(_defineProperty({}, this.firstOption, this.firstOption), getIndustriesOptions(this.subIndustries, this.ellipsis));
+
+        this.subIndustriesDropdown.updateOptions(opts);
+        this.currentSubIndustry = this.firstOption;
+      } // Emituje aktualne ustawienie branz
 
     }, {
       key: "emitCurrentIndustries",
@@ -3811,10 +3853,10 @@
     }, {
       key: "resetDropdowns",
       value: function resetDropdowns() {
-        this.industriesDropdown.setActive('Wszystkie');
+        this.industriesDropdown.setActive(this.firstOption);
         this.subIndustries = [];
-        this.subIndustriesDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(this.subIndustries)));
-        this.subIndustriesDropdown.setActive('Wszystkie');
+        this.subIndustriesDropdown.updateOptions([this.firstOption].concat(_toConsumableArray(this.subIndustries)));
+        this.subIndustriesDropdown.setActive(this.firstOption);
       } // Usuwa komponent
 
     }, {
@@ -3835,14 +3877,14 @@
     return KbfIndustrySwitcher;
   }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
 
-  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+  function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+  function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
   var KbfMapPanelIndustrySwitcher = /*#__PURE__*/function (_KbfIndustrySwitcher) {
     _inherits(KbfMapPanelIndustrySwitcher, _KbfIndustrySwitcher);
 
-    var _super = _createSuper(KbfMapPanelIndustrySwitcher);
+    var _super = _createSuper$1(KbfMapPanelIndustrySwitcher);
 
     function KbfMapPanelIndustrySwitcher(selector) {
       var _this;
@@ -3879,6 +3921,105 @@
 
     return KbfMapPanelIndustrySwitcher;
   }(KbfIndustrySwitcher);
+
+  function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+  function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+  var KbfPreloaderButton = /*#__PURE__*/function (_EventTarget) {
+    _inherits(KbfPreloaderButton, _EventTarget);
+
+    var _super = _createSuper(KbfPreloaderButton);
+
+    function KbfPreloaderButton(selector) {
+      var _this;
+
+      var auto = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+      _classCallCheck(this, KbfPreloaderButton);
+
+      _this = _super.call(this);
+      var $ = window.$;
+      _this.$preloaderButton = $(selector); // Emituj wyjatek gdy nie podano selektora albo element nie zostal znaleziony
+
+      if (!selector || _this.$preloaderButton.length === 0) throw errors.elementNotFound(selector);
+      _this.auto = auto; // Czy automatycznie dodawac listener
+
+      _this.init();
+
+      _this.addListeners();
+
+      return _this;
+    }
+
+    _createClass(KbfPreloaderButton, [{
+      key: "init",
+      value: function init() {
+        // Aliasy
+        this.on = this.addEventListener;
+        this.off = this.removeEventListener;
+        this.emit = this.dispatchEvent;
+        this.buttonCurrentContents = this.$preloaderButton.html(); // Aktualna zawartosc
+      }
+    }, {
+      key: "triggerStart",
+      value: function triggerStart(buttonElement) {
+        var buttonGeometry = buttonElement.getBoundingClientRect(); // Aktualna geometria
+
+        var $buttonElement = $(buttonElement);
+        var bgColor;
+        $buttonElement.on('click', function () {
+          bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
+        });
+        this.$preloaderButton.trigger({
+          type: 'start-preloader',
+          buttonGeometry: buttonGeometry,
+          bgColor: bgColor
+        });
+        this.emit(new CustomEvent('click'));
+      } // Startuje preloader
+
+    }, {
+      key: "startPreloader",
+      value: function startPreloader(buttonElement, buttonGeometry, bgColor) {
+        var $ = window.$;
+        var $buttonElement = $(buttonElement);
+        $buttonElement.attr('disabled', 'disabled');
+        $buttonElement.css('width', buttonGeometry.width + 'px');
+        $buttonElement.css('height', buttonGeometry.height + 'px');
+        $buttonElement.css('padding', 0);
+        $buttonElement.css('background-color', bgColor);
+        $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+        this.emit(new CustomEvent('click'));
+      } // Zatrzymuje preloader
+
+    }, {
+      key: "stopPreloader",
+      value: function stopPreloader() {
+        this.$preloaderButton.html(this.buttonCurrentContents).attr('style', '');
+        this.$preloaderButton.removeAttr('disabled');
+      }
+    }, {
+      key: "addListeners",
+      value: function addListeners() {
+        var instance = this; // Rejestruj handler warunkowo
+
+        if (this.auto) {
+          this.$preloaderButton.on('click', function () {
+            instance.triggerStart(this);
+          });
+        }
+
+        this.$preloaderButton.on('start-preloader', function (e) {
+          instance.startPreloader(this, e.buttonGeometry, e.bgColor);
+        });
+      }
+    }]);
+
+    return KbfPreloaderButton;
+  }( /*#__PURE__*/_wrapNativeSuper(EventTarget));
+
+  KbfPreloaderButton.preloaderMarkup = '<div class="kbf-button-preloader"><div id="dots"><span></span><span></span><span></span></div></div>';
 
   var type$1 = "FeatureCollection";
   var features$1 = [
@@ -93133,6 +93274,7 @@
 
         this.$displayCompaniesButton = $('.kbf-map-show-companies'); // Pokaz liste firm
 
+        new KbfPreloaderButton('.kbf-map-show-companies > button');
         this.$showAll = $('.kbf-map-panel-show-all'); // Przycisk pokaz wszystko
 
         this.$mapMiniPreloader = $('.kbf-mini-preloader').hide(); // Ukry mini preloader
