@@ -1582,7 +1582,6 @@ textarea + #company_description_html-error {
 
 }
 
-
 @media (min-height: 900px) {
   .home-title {
     display: block;
@@ -1592,4 +1591,34 @@ textarea + #company_description_html-error {
     display: block;
   }
 }
+
+
+#service_name-error {
+  bottom: -1.8rem;
+}
+
+#service_description-error {
+  bottom: -2rem;
+}
+
+#upload-error {
+  left: 1rem;
+  bottom: -1rem;
+}
+
+
+@media (min-width: 480px) {
+  #service_description-error {
+    bottom: -1rem;
+  }
+
+  #service_name-error {
+    bottom: -2rem;
+  }
+
+}
+
+
+
+
 

@@ -325,7 +325,7 @@ include_once "lib/functions.php";
                             </div>
 
                             <div class="home-sub-title lead-sm text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie,
-                                wybierz “WYSZUKAJ NA MAPIE”.
+                                wybierz “SZUKAJ NA MAPIE”.
                             </div>
 
                         </div>

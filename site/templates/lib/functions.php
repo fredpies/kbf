@@ -1958,6 +1958,22 @@ function getFormField($fieldName = "", $required = false, $disabled = false)
             return $field;
         }
 
+        // USŁUGI
+
+        case "service_description":
+        {
+            $field = new FormFieldTextArea($disabled);
+            $field->label = "Opis usługi";
+            $field->name = 'service_description';
+
+            if ($required) {
+                $field->required = true;
+                $field->msgRequired = "Wypełnienie pola z opisem usługi jest wymagane.";
+            }
+
+            return $field;
+        }
+
         // INNE
 
         case "number":

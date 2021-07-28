@@ -64,19 +64,19 @@
                     <div class="col-lg-9 col-xl-8 text-center text-lg-right">
                         <div class="row no-gutters">
 
-                            <div class="col-3">
+                            <div class="col-6 col-md-3 mb-2">
                                 <a class="text-center d-block" id="showFooterTop" href="#" class="text-white-50 text-hover-primary mr-4">Katalog Branżowy Firm</a>
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-6 col-md-3 mb-2">
                                 <a class="text-center d-block" href="#" class="text-white-50 text-hover-primary mr-4">Regulamin</a>
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-6 col-md-3">
                                 <a class="text-center d-block" href="#" class="text-white-50 text-hover-primary mr-4">Polityka Prywatności</a>
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-6 col-md-3">
                                 <a class="text-center d-block" href="#" class="text-white-50 text-hover-primary mr-2">RODO</a>
                             </div>
 

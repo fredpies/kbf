@@ -257,7 +257,6 @@
         var $buttonElement = $(buttonElement);
         var bgColor;
         $buttonElement.on('click', function () {
-          console.log('not touch');
           bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
         });
         this.$preloaderButton.trigger({
@@ -279,6 +278,7 @@
         $buttonElement.css('padding', 0);
         $buttonElement.css('background-color', bgColor);
         $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+        this.emit(new CustomEvent('click'));
       } // Zatrzymuje preloader
 
     }, {

@@ -126,7 +126,7 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                 <div class="col-lg-6 col-xl-4 mb-4">
                                     <div class="card h-100 mb-0 text-white bg-indigo border-0 shadow">
                                         <div class="card-header font-weight-700 text-uppercase text-center">
-                                            <a href="<?php echo $pages->get(1)->url ?>panel/produkty" class="text-white">
+                                            <a href="<?php echo $pages->get('template=dashboard-products')->url ?>" class="text-white">
                                                 <i class="fas fa-shopping-basket fa-lg mr-2"></i>
                                                 <span class="mt-1">PRODUKTY</span>
                                             </a>
@@ -160,7 +160,7 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                                 <span class="d-inline-block">Zarejestrowane</span>
                                                 <span class="d-inline-block ml-auto font-weight-bold">0</span>
                                             </div>
-                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ USŁUGĘ</button>
+                                            <a href="<?= $pages->get('template=dashboard-services')->url ?>" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">ZARZĄDZAJ</a>
                                         </div>
 
                                     </div>
@@ -205,7 +205,7 @@ if ($jobs->count()) $jobs_count = $jobs[0]->children()->count();
                                             <span class="d-inline-block">Zapisane</span>
                                             <span class="d-inline-block ml-auto font-weight-bold">0</span>
                                         </div>
-                                            <button type="button" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">DODAJ BANER</button>
+                                            <a href="<?= $pages->get('template=dashboard-banners')->url ?>" class="d-block w-100 btn btn-sm btn-round btn-outline-light mt-4 mb-0">ZARZĄDZAJ</a>
                                         </div>
                                     </div>
                                 </div>

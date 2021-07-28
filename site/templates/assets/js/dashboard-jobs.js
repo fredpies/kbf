@@ -302,9 +302,8 @@ var KbfFooterTop = /*#__PURE__*/function () {
         e.stopPropagation();
         var $industriesSidebar = $('#industriesSidebar');
         if ($industriesSidebar.length > 0) $industriesSidebar.removeClass('show');
-        instance.isSmall = window.innerWidth <= 1026;
         instance.$footerTop.toggleClass('show-footer-top');
-        if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height) + (instance.isSmall ? 16 : 0), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
+        if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
       });
       this.$footerTop.click(function (e) {
         e.stopPropagation();

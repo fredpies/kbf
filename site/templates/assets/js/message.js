@@ -184,7 +184,8 @@
   var config = {
     env: 'dev',
     url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf/'
+    apiEndpoint: 'https://webplanet.biz/kbf/' // apiEndpoint: 'http://localhost/kbf2/'
+
   };
 
   function _arrayWithHoles(arr) {
@@ -1176,8 +1177,8 @@
         }
 
         this.map = L.map(this.mapElement, {
-          zoomSnap: 0.45,
-          minZoom: 5,
+          // zoomSnap: 0.45,
+          zoom: 6,
           zoomControl: false,
           tap: !L.Browser.mobile // Wylacz tap events dla urzadzen mobilnych, fix !
 
@@ -1259,15 +1260,14 @@
 
         if (this.map.hasLayer(KbfMap.polandProvincesTiles)) this.map.removeLayer(KbfMap.polandProvincesTiles); // Skaluj i pozycjonuj mape
 
-        this.map.setView([52, 20]); // Centrum Polski
+        this.map.setView([52, 20], 6); // Centrum Polski
         // Ustaw skale poczatkowa
 
         this.map.once('zoom', function () {
           instance.startingZoom = instance.map.getZoom();
         });
         this.provincesLayer.addTo(this.map); // Pokaz wojewodztwa
-
-        this.map.fitBounds(this.provincesLayer.getBounds()); // Ustaw widok
+        // this.map.fitBounds(this.provincesLayer.getBounds()); // Ustaw widok
 
         KbfMap.polandProvincesTiles.addTo(this.map); // Dodaj map tile wojewodztw
 
@@ -1589,8 +1589,13 @@
 
   KbfMap.polandBoundary = [[47.027, 13.074], [56.851, 25.029]]; // Zasieg Polski
 
-  KbfMap.polandDetailMap = L.tileLayer.provider('OpenStreetMap.Mapnik'); // Tile Map szczegolowy
-
+  KbfMap.polandDetailMap = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minZoom: 0,
+    maxZoom: 22,
+    subdomains: 'abcd',
+    accessToken: 'eljBnUH85ssfvAfx9wqZvjcWTGsk5WEXgoQmR33uMmIotZ5v01nQZG3bL5gh4c1K'
+  });
   KbfMap.polandProvincesTiles = L.tileLayer.provider('USGS.USTopo'); // Tile Map dla wojewodztw
 
   KbfMap.polandLabels = L.tileLayer.provider('Stamen.TonerLabels'); // Tile Map etykiet
@@ -6183,7 +6188,6 @@
         var $buttonElement = $(buttonElement);
         var bgColor;
         $buttonElement.on('click', function () {
-          console.log('not touch');
           bgColor = getComputedStyle(buttonElement, ':hover').backgroundColor;
         });
         this.$preloaderButton.trigger({
@@ -6205,6 +6209,7 @@
         $buttonElement.css('padding', 0);
         $buttonElement.css('background-color', bgColor);
         $buttonElement.html(KbfPreloaderButton.preloaderMarkup);
+        this.emit(new CustomEvent('click'));
       } // Zatrzymuje preloader
 
     }, {
@@ -7855,7 +7860,9 @@
     }
 
     var RefImpl = /*#__PURE__*/function () {
-      function RefImpl(_rawValue, _shallow) {
+      function RefImpl(_rawValue) {
+        var _shallow = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
         _classCallCheck(this, RefImpl);
 
         this._rawValue = _rawValue;
@@ -9112,7 +9119,7 @@
       return raw;
     },
 
-    version: "3.2.0",
+    version: "3.2.2",
     disableEffectScheduling: disableEffectScheduling,
     setReactivityEngine: setReactivityEngine,
     addRootSelector: addRootSelector,
@@ -9313,10 +9320,12 @@
   } // packages/alpinejs/src/directives/x-transition.js
 
 
-  directive("transition", function (el, _ref29) {
+  directive("transition", function (el, _ref29, _ref30) {
     var value = _ref29.value,
         modifiers = _ref29.modifiers,
         expression = _ref29.expression;
+    var evaluate2 = _ref30.evaluate;
+    if (typeof expression === "function") expression = evaluate2(expression);
 
     if (!expression) {
       registerTransitionsFromHelper(el, modifiers, value);
@@ -9484,9 +9493,9 @@
       } else {
         queueMicrotask(function () {
           var hideAfterChildren = function hideAfterChildren(el2) {
-            var carry = Promise.all([el2._x_hidePromise].concat(_toConsumableArray((el2._x_hideChildren || []).map(hideAfterChildren)))).then(function (_ref30) {
-              var _ref31 = _slicedToArray(_ref30, 1),
-                  i = _ref31[0];
+            var carry = Promise.all([el2._x_hidePromise].concat(_toConsumableArray((el2._x_hideChildren || []).map(hideAfterChildren)))).then(function (_ref31) {
+              var _ref32 = _slicedToArray(_ref31, 1),
+                  i = _ref32[0];
 
               return i();
             });
@@ -9510,11 +9519,11 @@
   }
 
   function transition(el, setFunction) {
-    var _ref32 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-        _during = _ref32.during,
-        start2 = _ref32.start,
-        _end = _ref32.end,
-        entering = _ref32.entering;
+    var _ref33 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+        _during = _ref33.during,
+        start2 = _ref33.start,
+        _end = _ref33.end,
+        entering = _ref33.entering;
 
     var before = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
     var after = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : function () {};
@@ -9630,9 +9639,9 @@
 
   var handler = function handler() {};
 
-  handler.inline = function (el, _ref33, _ref34) {
-    var modifiers = _ref33.modifiers;
-    var cleanup = _ref34.cleanup;
+  handler.inline = function (el, _ref34, _ref35) {
+    var modifiers = _ref34.modifiers;
+    var cleanup = _ref35.cleanup;
     modifiers.includes("self") ? el._x_ignoreSelf = true : el._x_ignore = true;
     cleanup(function () {
       modifiers.includes("self") ? delete el._x_ignoreSelf : delete el._x_ignore;
@@ -9641,9 +9650,9 @@
 
   directive("ignore", handler); // packages/alpinejs/src/directives/x-effect.js
 
-  directive("effect", function (el, _ref35, _ref36) {
-    var expression = _ref35.expression;
-    var effect3 = _ref36.effect;
+  directive("effect", function (el, _ref36, _ref37) {
+    var expression = _ref36.expression;
+    var effect3 = _ref37.effect;
     return effect3(evaluateLater(el, expression));
   }); // packages/alpinejs/src/utils/bind.js
 
@@ -9933,11 +9942,11 @@
   } // packages/alpinejs/src/directives/x-model.js
 
 
-  directive("model", function (el, _ref37, _ref38) {
-    var modifiers = _ref37.modifiers,
-        expression = _ref37.expression;
-    var effect3 = _ref38.effect,
-        cleanup = _ref38.cleanup;
+  directive("model", function (el, _ref38, _ref39) {
+    var modifiers = _ref38.modifiers,
+        expression = _ref38.expression;
+    var effect3 = _ref39.effect,
+        cleanup = _ref39.cleanup;
     var evaluate2 = evaluateLater(el, expression);
     var assignmentExpression = "".concat(expression, " = rightSideOfExpression($event, ").concat(expression, ")");
     var evaluateAssignment = evaluateLater(el, assignmentExpression);
@@ -10033,15 +10042,15 @@
   addInitSelector(function () {
     return "[".concat(prefix("init"), "]");
   });
-  directive("init", skipDuringClone(function (el, _ref39) {
-    var expression = _ref39.expression;
+  directive("init", skipDuringClone(function (el, _ref40) {
+    var expression = _ref40.expression;
     return evaluate(el, expression, {}, false);
   })); // packages/alpinejs/src/directives/x-text.js
 
-  directive("text", function (el, _ref40, _ref41) {
-    var expression = _ref40.expression;
-    var effect3 = _ref41.effect,
-        evaluateLater2 = _ref41.evaluateLater;
+  directive("text", function (el, _ref41, _ref42) {
+    var expression = _ref41.expression;
+    var effect3 = _ref42.effect,
+        evaluateLater2 = _ref42.evaluateLater;
     var evaluate2 = evaluateLater2(expression);
     effect3(function () {
       evaluate2(function (value) {
@@ -10052,10 +10061,10 @@
     });
   }); // packages/alpinejs/src/directives/x-html.js
 
-  directive("html", function (el, _ref42, _ref43) {
-    var expression = _ref42.expression;
-    var effect3 = _ref43.effect,
-        evaluateLater2 = _ref43.evaluateLater;
+  directive("html", function (el, _ref43, _ref44) {
+    var expression = _ref43.expression;
+    var effect3 = _ref44.effect,
+        evaluateLater2 = _ref44.evaluateLater;
     var evaluate2 = evaluateLater2(expression);
     effect3(function () {
       evaluate2(function (value) {
@@ -10065,12 +10074,12 @@
   }); // packages/alpinejs/src/directives/x-bind.js
 
   mapAttributes(startingWith(":", into(prefix("bind:"))));
-  directive("bind", function (el, _ref44, _ref45) {
-    var value = _ref44.value,
-        modifiers = _ref44.modifiers,
-        expression = _ref44.expression,
-        original = _ref44.original;
-    var effect3 = _ref45.effect;
+  directive("bind", function (el, _ref45, _ref46) {
+    var value = _ref45.value,
+        modifiers = _ref45.modifiers,
+        expression = _ref45.expression,
+        original = _ref45.original;
+    var effect3 = _ref46.effect;
     if (!value) return applyBindingsObject(el, expression, original, effect3);
     if (value === "key") return storeKeyForXFor(el, expression);
     var evaluate2 = evaluateLater(el, expression);
@@ -10093,10 +10102,10 @@
       }
 
       getBindings(function (bindings) {
-        var attributes = Object.entries(bindings).map(function (_ref46) {
-          var _ref47 = _slicedToArray(_ref46, 2),
-              name = _ref47[0],
-              value = _ref47[1];
+        var attributes = Object.entries(bindings).map(function (_ref47) {
+          var _ref48 = _slicedToArray(_ref47, 2),
+              name = _ref48[0],
+              value = _ref48[1];
 
           return {
             name: name,
@@ -10119,9 +10128,9 @@
   addRootSelector(function () {
     return "[".concat(prefix("data"), "]");
   });
-  directive("data", skipDuringClone(function (el, _ref48, _ref49) {
-    var expression = _ref48.expression;
-    var cleanup = _ref49.cleanup;
+  directive("data", skipDuringClone(function (el, _ref49, _ref50) {
+    var expression = _ref49.expression;
+    var cleanup = _ref50.cleanup;
     expression = expression === "" ? "{}" : expression;
     var magicContext = {};
     injectMagics(magicContext, el);
@@ -10141,10 +10150,10 @@
     });
   })); // packages/alpinejs/src/directives/x-show.js
 
-  directive("show", function (el, _ref50, _ref51) {
-    var modifiers = _ref50.modifiers,
-        expression = _ref50.expression;
-    var effect3 = _ref51.effect;
+  directive("show", function (el, _ref51, _ref52) {
+    var modifiers = _ref51.modifiers,
+        expression = _ref51.expression;
+    var effect3 = _ref52.effect;
     var evaluate2 = evaluateLater(el, expression);
 
     var hide = function hide() {
@@ -10192,10 +10201,10 @@
     });
   }); // packages/alpinejs/src/directives/x-for.js
 
-  directive("for", function (el, _ref52, _ref53) {
-    var expression = _ref52.expression;
-    var effect3 = _ref53.effect,
-        cleanup = _ref53.cleanup;
+  directive("for", function (el, _ref53, _ref54) {
+    var expression = _ref53.expression;
+    var effect3 = _ref54.effect,
+        cleanup = _ref54.cleanup;
     var iteratorNames = parseForExpression(expression);
     var evaluateItems = evaluateLater(el, iteratorNames.items);
     var evaluateKey = evaluateLater(el, el._x_keyExpression || "index");
@@ -10232,10 +10241,10 @@
       var keys = [];
 
       if (isObject(items)) {
-        items = Object.entries(items).map(function (_ref54) {
-          var _ref55 = _slicedToArray(_ref54, 2),
-              key = _ref55[0],
-              value = _ref55[1];
+        items = Object.entries(items).map(function (_ref55) {
+          var _ref56 = _slicedToArray(_ref55, 2),
+              key = _ref56[0],
+              value = _ref56[1];
 
           var scope = getIterationScopeVariables(iteratorNames, value, key, items);
           evaluateKey(function (value2) {
@@ -10411,9 +10420,9 @@
 
   function handler2() {}
 
-  handler2.inline = function (el, _ref56, _ref57) {
-    var expression = _ref56.expression;
-    var cleanup = _ref57.cleanup;
+  handler2.inline = function (el, _ref57, _ref58) {
+    var expression = _ref57.expression;
+    var cleanup = _ref58.cleanup;
     var root = closestRoot(el);
     if (!root._x_refs) root._x_refs = {};
     root._x_refs[expression] = el;
@@ -10424,10 +10433,10 @@
 
   directive("ref", handler2); // packages/alpinejs/src/directives/x-if.js
 
-  directive("if", function (el, _ref58, _ref59) {
-    var expression = _ref58.expression;
-    var effect3 = _ref59.effect,
-        cleanup = _ref59.cleanup;
+  directive("if", function (el, _ref59, _ref60) {
+    var expression = _ref59.expression;
+    var effect3 = _ref60.effect,
+        cleanup = _ref60.cleanup;
     var evaluate2 = evaluateLater(el, expression);
 
     var show = function show() {
@@ -10467,11 +10476,11 @@
   }); // packages/alpinejs/src/directives/x-on.js
 
   mapAttributes(startingWith("@", into(prefix("on:"))));
-  directive("on", skipDuringClone(function (el, _ref60, _ref61) {
-    var value = _ref60.value,
-        modifiers = _ref60.modifiers,
-        expression = _ref60.expression;
-    var cleanup = _ref61.cleanup;
+  directive("on", skipDuringClone(function (el, _ref61, _ref62) {
+    var value = _ref61.value,
+        modifiers = _ref61.modifiers,
+        expression = _ref61.expression;
+    var cleanup = _ref62.cleanup;
     var evaluate2 = expression ? evaluateLater(el, expression) : function () {};
     var removeListener = on(el, value, modifiers, function (e) {
       evaluate2(function () {}, {
@@ -10508,7 +10517,9 @@
     _createClass(KbfFooterTop, [{
       key: "init",
       value: function init() {
+        this.$footerBottom = $('.footer-bottom');
         this.$footerTop = $('.footer-top');
+        this.$footerTop.css('transform', 'translateY(100%)');
         this.$showFooterTop = $('#showFooterTop');
       }
     }, {
@@ -10518,9 +10529,24 @@
         this.$showFooterTop.click(function (e) {
           e.preventDefault();
           e.stopPropagation();
+          var $industriesSidebar = $('#industriesSidebar');
+          if ($industriesSidebar.length > 0) $industriesSidebar.removeClass('show');
           instance.$footerTop.toggleClass('show-footer-top');
+          if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
+        });
+        this.$footerTop.click(function (e) {
+          e.stopPropagation();
+        });
+        $(window).click(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
         });
         $(window).scroll(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
+          instance.$footerTop.removeClass('show-footer-top');
+        });
+        $(window).resize(function () {
+          instance.$footerTop.css('transform', 'translateY(100%)');
           instance.$footerTop.removeClass('show-footer-top');
         });
       }
