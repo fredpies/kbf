@@ -29,8 +29,8 @@ class KbfProductImagesAdd {
                     this.$cropperModal.on('shown.bs.modal', function () {
                         instance.cropper = new Cropper(instance.$refs.sampleImage, {
                             aspectRatio: 1,
-                            viewMode: 2,
-                            preview: '.preview'
+                            viewMode: 3,
+                            zoom: 0.8
                         });
                     }).on('hidden.bs.modal', function () {
                         instance.cropper.destroy();

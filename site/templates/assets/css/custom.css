@@ -1020,20 +1020,25 @@ input[name*="sub-industry"] + .error {
 }
 
 .product-image-item  {
+  position: relative;
   height: 100%;
   width: 10rem;
   cursor: pointer;
   margin: 1rem 0;
 }
 
-.product-image-item {
-  position: relative;
-  margin-right: 2rem;
+
+@media (min-width: 768px) {
+  .product-image-item {
+
+    margin-right: 2rem;
+  }
 }
+
 
 .product-image-add {
   font-size: .75rem;
-  background: #ececec;
+  /*background: #ececec;*/
   cursor: pointer;
   min-height: 160px;
   height: 100%;
