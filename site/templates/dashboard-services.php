@@ -207,7 +207,7 @@ $service_price_field_phone->msgRequired = "Pole z ceną usługi musi być wypeł
                                     </div>
 
                                 </div>
-                                <div class="tab-pane fade d-none d-sm-block" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
+                                <div class="tab-pane fade" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
 
                                     <form novalidate="novalidate" enctype="multipart/form-data" method="post" id="add-service" name="add-service" class="img-cropper">
                                         <div class="row justify-content-center">

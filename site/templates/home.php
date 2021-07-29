@@ -3,6 +3,9 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
+$urls = wire('urls');
+$pages = wire('pages');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +37,7 @@ include_once "lib/functions.php";
 
         <div id="industriesSidebar" class="col-3 d-none d-xl-block bg-light text-dark-gray pt-3">
 
-            <h5 class="text-center">Wybierze branżę</h5>
+            <p class="text-center mb-1">Wybierze branżę</p>
 
             <div class="row px-3">
                 <div class="col-lg-6 col-xl-4">
@@ -241,7 +244,7 @@ include_once "lib/functions.php";
                             <div class="icon-element d-flex align-items-center justify-content-center mb-2 bg-scarlet add-animate faster"
                                  data-animated="zoomIn">
                                 <img src="<?php echo $urls->svg ?>upload/hero-banner-3-icon-03.svg" alt="icon"
-                                     class="img-fluid"industriesSidebar>
+                                     class="img-fluid" industriesSidebar>
                             </div>
                             <div class="icon-info-text text-center">
                                 <h6 class="font-weight-700">ŻYWNOŚĆ, ROLNICTWO, EKOLOGIA, LEŚNICTWO,
@@ -254,127 +257,97 @@ include_once "lib/functions.php";
             </div>
 
             <button id="industriesSidebarButton"
-                    class="d-none d-xl-block btn btn-round btn-warning mt-5 sidebarActionButton">Branże
+                    class="d-none d-xl-block btn btn-sm btn-round btn-warning mt-5 sidebarActionButton">Branże
             </button>
 
         </div>
 
+        <div id="top-section" class="w-100">
 
-        <div id="top-section" class="col">
+            <div class="container pt-5 pt-lg-0 h-100">
 
-            <div class="container d-flex flex-column">
-                <div class="row page-header-block-height mt-3">
+                <div class="row no-gutters justify-content-center h-100">
 
-                    <div class="col-lg-7 d-flex d-xl-block">
-                        <div class="align-self-center align-self-xl-start w-100 px-md-5 mt-2 mt-lg-5 mb-3">
-                            <div class="text-center text-lg-left add-animate slide-animate" data-animated="fadeInRight">
+                    <div class="col-12 col-lg-6 col-lg-4 col-xl-5 px-4 d-flex">
 
-                                <form action="<?= $pages->get("template=companies")->url; ?>" type="GET">
-                                    <div class="row">
-                                        <div class="col">
-                                            <p style="color: white; font-size: 1rem;" class="text-left w-100">Szukana
-                                                fraza</p>
-                                            <div class="input-group input-group-md input-group-round mb-3 mt-3">
-                                                <div class="input-group-inner">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text input-group-icon"><i
-                                                                    class="fa fa-search" aria-hidden="true"></i></span>
+                        <div class="align-self-center w-100">
+                            <div class="align-self-center align-self-xl-start w-100 px-md-5 mt-2 mt-lg-3 mb-3">
+                                <div class="text-center text-lg-left add-animate slide-animate" data-animated="fadeInRight">
+
+                                    <form action="<?= $pages->get("template=companies")->url; ?>" type="GET">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p style="color: white; font-size: 0.8rem !important;" class="text-left w-100 mb-1">Szukana
+                                                    fraza</p>
+                                                <div class="input-group input-group-sm input-group-round mb-3">
+                                                    <div class="input-group-inner">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text input-group-icon"><i
+                                                                        class="fa fa-search" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <input id="search" autocomplete="off" type="text" name="keywords"
+                                                               class="form-control form-control-sm">
+                                                        <div class="bg-white input-focus-bg"></div>
                                                     </div>
-                                                    <input id="search" autocomplete="off" type="text" name="keywords"
-                                                           class="form-control form-control-md">
-                                                    <div class="bg-white input-focus-bg"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Provinces area switcher-->
-                                    <div class="kbf-index-area-switcher row">
-                                        <div data-name="province_name" id="provinces"
-                                             class="dropdown col-12 col-xl-6 mb-3">
-                                            <label class="text-left w-100" for="provinces-button">Województwo</label>
-                                            <button class="btn btn-md btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle w-full"
-                                                    type="button"
-                                                    id="provinces-button" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false"></button>
+                                        <!--  Provinces area switcher-->
+                                        <div class="kbf-index-area-switcher row no-gutters justify-content-between">
+                                            <div data-name="province_name" id="provinces"
+                                                 class="dropdown col-12 col-xl-6 mb-2">
+                                                <label style="font-size: 0.8rem !important;" class="text-left w-100 mb-1" for="provinces-button">Województwo</label>
+                                                <button style="font-size: 0.65rem !important;" class="btn btn-sm btn-round btn-primary px-2 mx-0 mb-3 mb-md-0 dropdown-toggle w-full"
+                                                        type="button"
+                                                        id="provinces-button" data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false"></button>
+                                            </div>
+
+                                            <div data-name="area_name" id="areas" class="dropdown col-12 col-xl-6">
+                                                <label style="font-size: 0.8rem !important;" class="text-left w-100 mb-1" for="areas-button">Powiat</label>
+                                                <button style="font-size: 0.65rem !important;" class="btn btn-sm btn-round btn-primary px-2 mx-0 mb-0 dropdown-toggle w-full"
+                                                        type="button" id="areas-button" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false"></button>
+                                            </div>
                                         </div>
+                                        <button type="submit"
+                                                class="kbf-search w-100 btn btn-round btn-sm btn-warning mt-5 mt-lg-3">Znajdź firmę
+                                        </button>
+                                    </form>
 
-                                        <div data-name="area_name" id="areas" class="dropdown col-12 col-xl-6">
-                                            <label class="text-left w-100" for="areas-button">Powiat</label>
-                                            <button class="btn btn-md btn-round btn-primary px-3 mx-0 mb-0 dropdown-toggle w-full"
-                                                    type="button" id="areas-button" data-toggle="dropdown"
-                                                    aria-haspopup="true" aria-expanded="false"></button>
-                                        </div>
-                                    </div>
-                                    <button type="submit"
-                                            class="kbf-search w-100 btn btn-round btn-md btn-warning mt-3">Znajdź firmę
-                                    </button>
-                                </form>
 
+                                </div>
+                            </div>
+                            <div style="font-size: 0.8rem !important;" class="d-none d-lg-block align-self-end align-self-xl-start px-5 my-5 mt-xl-0">
+                                <h2 style="font-size: 1.5rem !important;" class="font-weight-800 text-white mb-3 mt-5 mb-3 mt-0 px-2">Znajdź firmę<br>gdziekolwiek
+                                    jesteś</h2>
+
+                                <div class="text-white-75 pb-3 px-2">KBF to ogólnopolski Katalog Branżowy Firm,
+                                    baza firm, instytucji i urzędów. Wpisz w polu wyszukiwania frazę, określ rejon i wciśnij
+                                    “ZNAJDŻ FIRMĘ”.
+                                </div>
+
+                                <div class="text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie,
+                                    wybierz “SZUKAJ NA MAPIE”.
+                                </div>
 
                             </div>
-                        </div>
-
-                        <div class="d-none d-xl-block align-self-end align-self-xl-start px-5 my-5 mt-xl-0">
-                            <h2 class="home-title display-7 font-weight-800 text-white mb-3 mb-4 mt-0 px-2">Znajdź firmę<br>gdziekolwiek
-                                jesteś</h2>
-
-                            <div class="lead-sm text-white-75 pb-3 px-2">KBF to ogólnopolski Katalog Branżowy Firm,
-                                baza firm, instytucji i urzędów. Wpisz w polu wyszukiwania frazę, określ rejon i wciśnij
-                                “ZNAJDŻ FIRMĘ”.
-                            </div>
-
-                            <div class="home-sub-title lead-sm text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie,
-                                wybierz “SZUKAJ NA MAPIE”.
-                            </div>
-
                         </div>
 
                     </div>
-
-                    <div class="col-lg-5 d-flex d-xl-none px-md-5">
-
-                        <div class="align-self-end align-self-xl-start my-lg-5">
-                            <h2 class="display-7 font-weight-800 text-white mb-3 mb-lg-5 mt-3 px-2">Znajdź firmę<br>gdziekolwiek
-                                jesteś</h2>
-
-                            <div class="lead-sm text-white-75 pb-2 pb-xl-3 mb-3 mb-lg-5 px-2">KBF to ogólnopolski
-                                Katalog Branżowy Firm, baza firm, instytucji i urzędów. Wpisz w polu wyszukiwania frazę,
-                                określ rejon i wciśnij “ZNAJDŻ FIRMĘ”.
-                            </div>
-
-                            <div class="lead-sm text-white-75 pb-1 mb-4 px-2">Jeśli chcesz zlokalizować firmę na mapie,
-                                wybierz “SZUKAJ NA MAPIE”.
-                            </div>
-                            <a href="<?php echo $pages->get("template=map")->url; ?>"
-                               class="d-none d-md-block text-warning px-2 mx-2 ml-md-0 mr-md-3 mb-md-3">SZUKAJ NA
-                                MAPIE</a>
-
-                        </div>
-
-
-                    </div>
-
-                    <div class="home-phone-image-container col-12 d-lg-none d-xl-flex col-xl-5 order-xl-2 px-0">
-
+                    <div style="max-height: 100%" class="position-relative col-12 col-md-6 col-lg-5 px-0 d-flex justify-content-center">
+                        <img class="align-self-end img-fluid" style="transform: translateX(-3%); max-width: 100%; max-height: 90%" src="<?= $urls->images ?>phone-map-hand.png" alt="image">
                         <div class="button-container d-flex justify-content-center">
-                            <a href="<?php echo $pages->get("template=map")->url; ?>"
-                               class="btn btn-round btn-lg btn-primary on-img-button mb-0 d-inline-block align-self-center">Szukaj na mapie</a>
-                        </div>
-
-                        <div class="d-flex justify-content-center position-relative align-self-end w-100 px-5">
-
-                            <img src="<?php echo $urls->images ?>phone-map-hand.png" alt="image"
-                                 class="home-image img-fluid">
-
-
-                            </div>
+                            <a href="/kbf/mapa/" class="btn btn-round btn-sm btn-primary on-img-button mb-0 d-inline-block align-self-center">Szukaj na mapie</a>
                         </div>
                     </div>
+
 
                 </div>
-            </div>
 
+
+            </div>
 
 
         </div>

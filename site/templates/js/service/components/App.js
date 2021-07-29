@@ -1,5 +1,6 @@
 import KbfFooterTop from "../../components/KbfFooterTop";
 import KbfBackButton from "../../components/KbfBackButton";
+import KbfMiniMap from "../../components/KbfMiniMap";
 
 class App {
 
@@ -8,6 +9,7 @@ class App {
     }
 
     init() {
+        new KbfMiniMap('#kbf-minimap');
         new KbfFooterTop();
         new KbfBackButton('.kbf-back-button')
     }

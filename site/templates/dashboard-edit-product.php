@@ -133,39 +133,32 @@ $product_images = '
                 </div>
             </label>
             
-            <div x-ref="cropperModal" class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Przytnij obraz do wymaganych wymiarów przed przesłaniem.</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                
-                <div class="modal-body">
-                    <div class="img-container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <img x-ref="sampleImage" src="" id="sample_image" />
-                            </div>
-                            <div class="col-md-6 text-center">
-                                <p>Podgląd przyciętego obrazu</p>
-                                <div class="preview mx-auto img-thumbnail"></div>
-                            </div>
+           <div x-ref="cropperModal" style="max-height: 97.5vh; overflow: hidden" class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center">Przytnij obraz do wymaganych wymiarów przed przesłaniem.</h5>
+                        
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <p class="text-center my-2"> Kliknij dwukrotnie myszką, aby przesunąć obraz jeżeli nie mieści się na ekranie.</p>
+                    <div class="col-12 py-0 modal-body">
+                        <div >
+                            <img style="display: block; max-height: 75vh; max-width: 100%" x-ref="sampleImage" src="" id="sample_image" class="img-fluid" />
+                        </div>
+                    </div>
+                    <div class="modal-footer row justify-content-center">
+                        <div class="col-8">
+                            <button @click.prevent.stop="cropImage" type="button" id="crop" class="btn btn-block btn-primary btn-round">Przytnij</button>
                         </div>
                     </div>
                 </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Wróć</button>
-                    <button @click.prevent.stop="cropImage" type="button" id="crop" class="btn btn-primary">Przytnij</button>
+            </div>
                 </div>
-            </div>
-        </div>
-            </div>
-            
-            <input @change="showCropperModal" class="d-none" type="file" class="image" id="product_image" accept="image/*"/>
+                
+                <input @change="showCropperModal" class="d-none" type="file" class="image" id="product_image" accept="image/*"/>
             
     </div>' . render_modal("confirmation", "Potwierdzenie", $modalMarkup) . '</div>' .
 

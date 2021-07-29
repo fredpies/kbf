@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-6 col-xl-7 mb-lg-0">
                 <div class="pr-lg-5">
-                    <h3 class="font-weight-800 line-height-sm mb-4 text-warning">Katalog Branżowy Firm</h3>
+                    <h5 class="font-weight-800 line-height-sm mb-3 text-warning">Katalog Branżowy Firm</h5>
                     <div data-height="5px"></div>
                     <p>Jesteśmy Serwisem Internetowym skierowanym do wszystkich podmiotów gospodarczych oraz instytucji, urzędów i stowarzyszeń.
                         Naszym celem jest przekazanie Państwu narzędzia marketingowego służącego prezentacji Państwa działalności,
@@ -55,7 +55,7 @@
 
     <div class="bg-viridian-500 text-white-50">
 
-        <div class="footer-bottom py-3">
+        <div class="footer-bottom py-2">
             <div class="container footer-bottom-container">
                 <div class="row">
                     <div class="col-lg-3 col-xl-4 text-center text-lg-left mb-2 mb-lg-0">
@@ -64,20 +64,20 @@
                     <div class="col-lg-9 col-xl-8 text-center text-lg-right">
                         <div class="row no-gutters">
 
-                            <div class="col-6 col-md-3 mb-2">
-                                <a class="text-center d-block" id="showFooterTop" href="#" class="text-white-50 text-hover-primary mr-4">Katalog Branżowy Firm</a>
+                            <div class="d-flex col-6 col-md-3 justify-content-center">
+                                <a style="font-size: 0.8rem !important;" class="text-center d-block align-self-center" id="showFooterTop" href="#" class="text-white-50 text-hover-primary mr-4">Katalog Branżowy Firm</a>
                             </div>
 
-                            <div class="col-6 col-md-3 mb-2">
-                                <a class="text-center d-block" href="#" class="text-white-50 text-hover-primary mr-4">Regulamin</a>
+                            <div class="d-flex col-6 col-md-3 justify-content-center">
+                                <a style="font-size: 0.8rem !important;" class="text-center d-block align-self-center" href="#" class="text-white-50 text-hover-primary mr-4">Regulamin</a>
                             </div>
 
-                            <div class="col-6 col-md-3">
-                                <a class="text-center d-block" href="#" class="text-white-50 text-hover-primary mr-4">Polityka Prywatności</a>
+                            <div class="d-flex col-6 col-md-3 justify-content-center">
+                                <a style="font-size: 0.8rem !important;" class="text-center d-block align-self-center" href="#" class="text-white-50 text-hover-primary mr-4">Polityka Prywatności</a>
                             </div>
 
-                            <div class="col-6 col-md-3">
-                                <a class="text-center d-block" href="#" class="text-white-50 text-hover-primary mr-2">RODO</a>
+                            <div class="d-flex col-6 col-md-3 justify-content-center">
+                                <a style="font-size: 0.8rem !important;" class="text-center d-block align-self-center" href="#" class="text-white-50 text-hover-primary mr-2">RODO</a>
                             </div>
 
                         </div>

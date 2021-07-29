@@ -132,7 +132,7 @@ if ($input->post('action', 'text'))
                             </ul>
                         </li>
                          <li>
-                            <a href="#">Kategorie</a>
+                            <a class="pr-0" href="#">Kategorie</a>
                             <ul>
                                 <li>
                                     <a href="<?= $pages->get("template=companies")->url; ?>">LISTA FIRM</a>
@@ -155,12 +155,12 @@ if ($input->post('action', 'text'))
 
                         <li class="ml-5 kbf-menu-item">
                             <button type="submit"
-                                    class="btn btn-round btn-outline-dark"><?= $user->isLoggedin() ? 'WYLOGUJ' : 'MOJE KBF' ?></button>
+                                    class="btn btn-sm btn-round btn-outline-dark mb-2"><?= $user->isLoggedin() ? 'WYLOGUJ' : 'MOJE KBF' ?></button>
                         </li>
 
                         <li class="kbf-menu-item-mobile">
                             <button type="submit"
-                                    style="border: 0;" class="btn btn-outline-dark px-3"><?= $user->isLoggedin() ? 'WYLOGUJ' : 'MOJE KBF' ?></button>
+                                    style="border: 0; font-size: 0.8rem !important;" class="btn btn-sm btn-outline-dark px-3 mb-2"><?= $user->isLoggedin() ? 'WYLOGUJ' : 'MOJE KBF' ?></button>
                         </li>
 
                         <?php
