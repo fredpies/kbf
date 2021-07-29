@@ -26,15 +26,19 @@ $bannerId = $input->get('id');
 $bannerType = $input->get('type');
 $newBanner = $pages->get($bannerId);
 $message = "";
+$bannerPrice = 0;
 
 if($bannerType === 'INDEX') {
+    $bannerPrice = 140;
     $message = "Nowy baner reklamowy na stronie głównej.";
 }
 if($bannerType === 'INDUSTRY') {
     $message = "Nowy baner reklamowy na stronie firm.";
+    $bannerPrice = 120;
 }
 if($bannerType === 'JOB') {
     $message = "Nowy baner reklamowy na stronie ofert pracy.";
+    $bannerPrice = 100;
 }
 
 $bannerIndex = $banners_container->get('template=banner, banner_location_index=1');
@@ -80,10 +84,14 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                             <p>Proszę potwierdzić ustawienie nowego banera reklamowego.</p>
 
                             <p>Stan konta firmy zostanie pomniejszony o kwotę zakupu baneru w przypadku gdy baner nie jest aktywny/zakupiony.</p>
-                            <p class="mb-5">(Gdy firma nie posiada wymaganej kwoty, nastąpi przekierowanie na stronę z możliwością zapłaty/doładowania konta.)</p>
 
                             <h6 class="font-weight-700 mb-4 section-title-4 text-center"><?= $message ?></h6>
                             <img src="<?php echo $newBanner->banner_image->url ?>" alt="" class="img-fluid border rounded mb-5" style="height: 100px; object-fit: cover;" />
+                            <!--
+                            <div class="text-center">
+                                <span class="badge badge-pill badge-danger h6"><?= $bannerPrice ?>&nbsp;PLN</span>
+                            </div>
+                            -->
 
                             <div class="row">
                                 <div class="col-12 col-lg-6 text-center text-md-right align-self-center mt-4 mx-auto">
@@ -91,6 +99,7 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                                         <input type="hidden" name="action" value="set-banner">
                                         <input type="hidden" name="id" value="<?= $bannerId ?>">
                                         <input type="hidden" name="type" value="<?= $bannerType ?>">
+                                        <input type="hidden" name="type" value="<?= $bannerPrice ?>">
                                         <div class="row justify-content-center">
                                             <div class="col-12 col-md-6">
                                                 <button type="button" onclick="window.history.back()" class="kbf-back-button mt-0 btn btn-round btn-block shadow-none btn-secondary">

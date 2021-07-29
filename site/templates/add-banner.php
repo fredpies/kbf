@@ -61,7 +61,6 @@ if (Request::is('post')) {
             $banner_page->banner_name = $sanitizer->text($input->post->banner_name);
             $banner_page->banner_target_url = $sanitizer->textarea($input->post->banner_target_url);
 
-            //TODO: move to set banner index, industres, jobs
             $banner_page->banner_expire = $sanitizer->datetime(date('Y-m-d', strtotime('+1 year')));
             //TODO: dodac opcje dla miesiaca
 

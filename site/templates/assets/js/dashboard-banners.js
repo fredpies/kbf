@@ -96,8 +96,12 @@
             processData: false,
             contentType: false
           }).done(function (data) {
-            console.log(data);
-            window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
+            if ("error" in data) {
+              $("#error_msg").text(data["error"]);
+              $("#banner_error").show();
+            } else {
+              window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
+            }
           });
         });
         $(".banner-img-draggable").on('dragstart', function (event) {

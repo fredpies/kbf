@@ -21,7 +21,6 @@ if ($input->post('action') && $input->post->action === 'set-banner') {
         $banners_container = $company_page->get('name=banery');
 
         if($input->post->type === "INDEX") {
-            //TODO: zmniejszenie account company balance? przekierowanie na strone doładowania? ustawienie kwoty w zaleznosci od rodzaju banera
             $prevBanner = $banners_container->get('template=banner, banner_location_index=1');
 
             if($prevBanner && $prevBanner->banner_image !== null) {
@@ -67,7 +66,7 @@ if ($input->post('action') && $input->post->action === 'set-banner') {
 
                 $bannerPage->banner_expire = $prevBanner->banner_expire;
             } else {
-                //TODO: dla miesiaca, wybory opcji
+                //TODO: dla miesiaca?
                 $bannerPage->banner_expire = $sanitizer->datetime(date('Y-m-d', strtotime('+1 year')));
             }
             $bannerPage->banner_location_job = true;
@@ -125,7 +124,7 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                     <div class="pb-3 mb-3 h-100">
                         <div class="bg-white rounded-xl shadow-sm px-4 py-5 p-md-5 h-100">
                             <h5 class="font-weight-700 mb-4 section-title-4 text-center text-lg-left"><?= $page_title ?></h5>
-                            <p>Przeciągnij zapisany baner na pole wybranego banera reklamowego aby go zmienić lub wykupić.</p>
+                            <p>Przeciągnij zapisany baner na pole wybranego banera reklamowego aby go wykupić lub zmienić.</p>
 
                             <div class="row">
 
@@ -145,7 +144,7 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                                                     if($bannerIndex !== null && $bannerIndex->banner_image !== null) {
                                                 ?>
                                                     <span class="d-block">aktywny do:</span>
-                                                    <span class="d-block"><?php echo date('d.m.Y', $bannerIndex->banner_expired) ?></span>
+                                                    <span class="d-block"><?php echo $bannerIndex->banner_expire ?></span>
                                                 <?php
                                                     } else {
                                                 ?>
@@ -174,7 +173,7 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                                                 if($bannerIndustries !== null && $bannerIndustries->banner_image !== null) {
                                                     ?>
                                                     <span class="d-block">aktywny do:</span>
-                                                    <span class="d-block"><?php echo date('d.m.Y', $bannerIndustries->banner_expired) ?></span>
+                                                    <span class="d-block"><?php echo $bannerIndustries->banner_expire ?></span>
                                                     <?php
                                                 } else {
                                                     ?>
@@ -203,7 +202,7 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                                                 if($bannerJobs !== null && $bannerJobs->banner_image !== null) {
                                                     ?>
                                                     <span class="d-block">aktywny do:</span>
-                                                    <span class="d-block"><?php echo date('d.m.Y', $bannerJobs->banner_expired) ?></span>
+                                                    <span class="d-block"><?php $bannerJobs->banner_expire ?></span>
                                                     <?php
                                                 } else {
                                                     ?>
@@ -267,6 +266,12 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                                 </div>
 
                                 <div class="add-banner tab-pane fade" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab">
+
+                                    <div id="banner_error" class="alert alert-danger alert-icon collapse mb-5" role="alert">
+                                        <i class="far fa-times-circle"></i>
+                                        <div id="error_msg"></div>
+                                    </div>
+
                                     <form enctype="multipart/form-data" method="post" id="add-banner" name="add-banner" class="img-cropper">
                                         <div class="row justify-content-center">
 

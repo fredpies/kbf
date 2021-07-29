@@ -1,4 +1,3 @@
-import KbfBackButton from "../../components/KbfBackButton";
 import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
@@ -26,8 +25,12 @@ class App {
                 processData: false,
                 contentType: false
             }).done(function(data) {
-                console.log(data);
-                window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
+                if("error" in data) {
+                    $("#error_msg").text(data["error"]);
+                    $("#banner_error").show();
+                } else {
+                    window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=banner-added";
+                }
             });
 
         });
