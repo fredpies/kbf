@@ -1,3 +1,4 @@
+import Alpine from "alpinejs";
 import KbfForm from "../../components/KbfForm";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import KbfFooterTop from "../../components/KbfFooterTop";
@@ -36,17 +37,20 @@ class App extends KbfForm {
 
 
         }, 'pl');
+
         this.init();
         this.addListeners();
     }
 
     init() {
 
-        new KbfFooterTop();
         this.formElement = $('form[name="change-password"]');
         this.$submitButton = $('.submit-button');
         new KbfPreloaderButton('.back-button');
+        new KbfFooterTop();
 
+        window.Alpine = Alpine;
+        Alpine.start();
 
     }
 
@@ -64,10 +68,6 @@ class App extends KbfForm {
             }
 
         })
-    }
-
-    sendConfirmationLink() {
-
     }
 
 

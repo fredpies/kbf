@@ -1,3 +1,4 @@
+import Alpine from "alpinejs";
 import KbfBackButton from "../../components/KbfBackButton";
 import KbfFooterTop from "../../components/KbfFooterTop";
 import KbfForm from "../../components/KbfForm";
@@ -122,11 +123,15 @@ class App {
             //     window.location.href = location.protocol + '//' + location.host + location.pathname + "?action=service-added";
             // });
 
+
+
         });
 
         new KbfFooterTop();
         new KbfBackButton('.kbf-back-button');
 
+        window.Alpine = Alpine;
+        Alpine.start();
     }
 
     addListeners() {

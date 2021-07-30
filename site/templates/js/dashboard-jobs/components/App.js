@@ -1,3 +1,4 @@
+import Alpine from "alpinejs";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import KbfFooterTop from "../../components/KbfFooterTop";
 
@@ -17,10 +18,10 @@ class App {
         this.preloaderButton = new KbfPreloaderButton('.back-button');
 
         new KbfFooterTop();
-
+        window.Alpine = Alpine;
+        Alpine.start();
 
     }
-
 
     addListeners() {
 

@@ -92484,23 +92484,23 @@
 
   KbfTag.badgeMarkup = '<span data-name="{content}" class="company-industry badge badge-pill badge-secondary mb-1 mt-1"><span class="badge-name">{content}</span><span class="badge-close">x</span></span>';
 
-  var KbfLikeCompany = function KbfLikeCompany() {
-    _classCallCheck(this, KbfLikeCompany);
+  var KbfLikeProduct = function KbfLikeProduct() {
+    _classCallCheck(this, KbfLikeProduct);
 
     var $ = window.$;
 
-    window.KbfLikeCompany = function () {
+    window.KbfLikeProduct = function () {
       return {
         disabled: false,
-        currentFavouriteCompanies: [],
+        currentFavouriteProducts: [],
         init: function init() {
-          var favouriteCompanies = localStorage.getItem('favourite-companies');
-          if (favouriteCompanies) this.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
-          var ids = this.currentFavouriteCompanies.map(function (companyData) {
-            return companyData.company_id;
+          var favouriteProducts = localStorage.getItem('favourite-products');
+          if (favouriteProducts) this.currentFavouriteProducts = _toConsumableArray(JSON.parse(favouriteProducts));
+          var ids = this.currentFavouriteProducts.map(function (productData) {
+            return productData.product_id;
           });
 
-          if (ids.indexOf(Number(this.$refs.anchor.dataset.companyId)) >= 0) {
+          if (ids.indexOf(Number(this.$refs.anchor.dataset.productId)) >= 0) {
             this.disabled = true;
             $(this.$refs.anchor).tooltip('hide');
             $(this.$refs.anchor).tooltip('disable');
@@ -92517,22 +92517,18 @@
           var instance = this;
 
           if (!this.disabled) {
-            $.get("".concat(config.apiEndpoint, "api/get-company/?company_id=").concat(e.target.parentElement.dataset.companyId)).done(function (res) {
-              var favouriteCompanies = localStorage.getItem('favourite-companies');
-              if (favouriteCompanies) instance.currentFavouriteCompanies = _toConsumableArray(JSON.parse(favouriteCompanies));
-              instance.currentFavouriteCompanies.push({
-                company_id: res.company_id,
-                company_url: location.protocol + '//' + location.hostname + res.company_url,
-                company_logo_url: location.protocol + '//' + location.hostname + res.company_logo_url,
-                company_name: instance.capitalize(res.company_name.toLowerCase()),
-                company_address: instance.capitalize(res.company_address.toLowerCase()),
-                company_zip: res.company_zip,
-                company_city: res.company_city.charAt(0) + res.company_city.slice(1).toLowerCase(),
-                company_phone_1: res.company_phone_1.replace('0-', ''),
-                company_phone_2: res.company_phone_2.replace('0-', ''),
-                company_fax: res.company_fax.replace('0-', '')
+            $.get("".concat(config.apiEndpoint, "api/get-product/?product_id=").concat(e.target.parentElement.dataset.productId)).done(function (res) {
+              var favouriteProducts = localStorage.getItem('favourite-products');
+              if (favouriteProducts) instance.currentFavouriteProducts = _toConsumableArray(JSON.parse(favouriteProducts));
+              instance.currentFavouriteProducts.push({
+                product_id: res.product_id,
+                product_url: location.protocol + '//' + location.hostname + res.product_url,
+                product_first_image_url: location.protocol + '//' + location.hostname + res.product_first_image_url,
+                product_name: res.product_name,
+                product_description: res.product_description,
+                product_price: res.product_price
               });
-              localStorage.setItem('favourite-companies', JSON.stringify(instance.currentFavouriteCompanies));
+              localStorage.setItem('favourite-products', JSON.stringify(instance.currentFavouriteProducts));
               instance.disabled = true;
               $(e.target.parentElement).tooltip('hide');
               $(e.target.parentElement).tooltip('disable');
@@ -92563,7 +92559,7 @@
       key: "addListeners",
       value: function addListeners() {
         var instance = this;
-        this.$showFooterTop.click(function (e) {
+        this.$showFooterTop.unbind().click(function (e) {
           e.preventDefault();
           e.stopPropagation();
           var $industriesSidebar = $('#industriesSidebar');
@@ -92572,6 +92568,9 @@
           if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
         });
         this.$footerTop.click(function (e) {
+          e.stopPropagation();
+        });
+        this.$footerBottom.click(function (e) {
           e.stopPropagation();
         });
         $(window).click(function () {
@@ -96738,7 +96737,7 @@
         this.kbfTag.on('badge-remove', function (e) {
           instance.kbfIndustryFilter.uncheck(e.detail.name);
         });
-        new KbfLikeCompany();
+        new KbfLikeProduct();
         new KbfFooterTop();
         window.Alpine = module_default;
         module_default.start();

@@ -1,6 +1,6 @@
 import KbfIndustryFilter from "../../components/KbfIndustryFilter";
 import KbfTag from "../../components/KbfTag";
-import KbfLikeCompany from "../../components/KbfLikeCompany";
+import KbfLikeProduct from "../../components/KbfLikeProduct";
 import KbfFooterTop from "../../components/KbfFooterTop";
 import Alpine from "alpinejs";
 
@@ -44,7 +44,7 @@ class App {
             instance.kbfIndustryFilter.uncheck(e.detail.name);
         })
 
-        new KbfLikeCompany();
+        new KbfLikeProduct();
         new KbfFooterTop();
 
         window.Alpine = Alpine;

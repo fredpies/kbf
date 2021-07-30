@@ -10,7 +10,6 @@ class App {
 
         this.init();
 
-
     }
 
     init() {

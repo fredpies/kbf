@@ -20,7 +20,8 @@ class KbfFooterTop {
 
         let instance = this;
 
-        this.$showFooterTop.click(function (e) {
+        this.$showFooterTop.unbind().click(function (e) {
+
             e.preventDefault();
             e.stopPropagation();
 
@@ -37,7 +38,12 @@ class KbfFooterTop {
             e.stopPropagation();
         })
 
+        this.$footerBottom.click(function (e) {
+            e.stopPropagation();
+        })
+
         $(window).click(function () {
+
             instance.$footerTop.css('transform', 'translateY(100%)');
             instance.$footerTop.removeClass('show-footer-top');
         })

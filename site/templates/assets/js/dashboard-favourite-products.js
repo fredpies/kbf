@@ -5012,7 +5012,7 @@ var KbfFavouriteProducts = function KbfFavouriteProducts() {
 
         if (e.target.classList.contains('confirm-button')) {
           var $modal = $('.modal');
-          $modal.on('hidden.bs.modal', function () {
+          $modal.unbind().on('hidden.bs.modal', function () {
             $(instance.elementToFadeOut).fadeOut(400, function () {
               var favoriteIndexToDelete = instance.favouriteProducts.findIndex(function (favourite) {
                 return favourite.product_id === instance.companyToDelete;
@@ -5284,6 +5284,7 @@ var KbfFavouriteCounters = function KbfFavouriteCounters() {
         }
 
         this.counterValue = this.favouriteCompanies.length;
+        console.log('favourite companies');
       }
     };
   };
@@ -5299,6 +5300,7 @@ var KbfFavouriteCounters = function KbfFavouriteCounters() {
         }
 
         this.counterValue = this.favouriteProducts.length;
+        console.log('favourite products');
       }
     };
   };
@@ -5324,7 +5326,7 @@ var KbfFooterTop = /*#__PURE__*/function () {
     key: "addListeners",
     value: function addListeners() {
       var instance = this;
-      this.$showFooterTop.click(function (e) {
+      this.$showFooterTop.unbind().click(function (e) {
         e.preventDefault();
         e.stopPropagation();
         var $industriesSidebar = $('#industriesSidebar');
@@ -5333,6 +5335,9 @@ var KbfFooterTop = /*#__PURE__*/function () {
         if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
       });
       this.$footerTop.click(function (e) {
+        e.stopPropagation();
+      });
+      this.$footerBottom.click(function (e) {
         e.stopPropagation();
       });
       $(window).click(function () {

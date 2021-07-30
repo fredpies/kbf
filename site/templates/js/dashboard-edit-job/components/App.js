@@ -1,3 +1,4 @@
+import Alpine from "alpinejs";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import KbfDatepicker from "../../components/KbfDatePicker";
 import KbfTabs from "../../components/KbfTabs";
@@ -60,6 +61,9 @@ class App {
         this.repeater = new KbfRepeater('.repeater-item');
 
         new KbfFooterTop();
+
+        window.Alpine = Alpine;
+        Alpine.start();
 
     }
 

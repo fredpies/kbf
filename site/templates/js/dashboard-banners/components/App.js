@@ -1,3 +1,5 @@
+import Alpine from "alpinejs";
+import KbfBackButton from "../../components/KbfBackButton";
 import KbfFooterTop from "../../components/KbfFooterTop";
 
 class App {
@@ -74,6 +76,9 @@ class App {
         });
 
         new KbfFooterTop();
+
+        window.Alpine = Alpine;
+        Alpine.start();
 
     }
 

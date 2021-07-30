@@ -1,3 +1,4 @@
+import Alpine from "alpinejs";
 import errors from "../../modules/Errors";
 import KbfStepper from "../../components/KbfStepper";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
@@ -87,6 +88,9 @@ class App {
         this.repeater = new KbfRepeater('.repeater-item');
 
         new KbfFooterTop();
+
+        window.Alpine = Alpine;
+        Alpine.start();
 
     }
 

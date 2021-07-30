@@ -1,3 +1,4 @@
+import Alpine from "alpinejs";
 import KbfPreloaderButton from "../../components/KbfPreloaderButton";
 import KbfWysiwyg from "../../components/KbfWysiwyg";
 import KbfTagify from "../../components/KbfTagify";
@@ -47,6 +48,9 @@ class App {
         this.addressAutocomplete = new KbfAddressAutocomplete('[name="company_address"]');
 
         new KbfFooterTop();
+
+        window.Alpine = Alpine;
+        Alpine.start();
 
     }
 

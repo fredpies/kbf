@@ -32,7 +32,7 @@ class KbfFavouriteProducts {
 
                         let $modal = $('.modal')
 
-                        $modal.on('hidden.bs.modal', function () {
+                        $modal.unbind().on('hidden.bs.modal', function () {
 
                             $(instance.elementToFadeOut).fadeOut(400, function () {
                                 let favoriteIndexToDelete = instance.favouriteProducts.findIndex(function (favourite) {
