@@ -1,3 +1,4 @@
+import KbfIndustrySwitcher from "../components/KbfIndustrySwitcher";
 import KbfAreaSwitcher from "./KbfAreaSwitcher";
 import KbfPreloaderButton from "./KbfPreloaderButton";
 
@@ -32,11 +33,12 @@ class KbfIndustryFilter extends EventTarget {
         new KbfPreloaderButton('.kbf-search-button');
         new KbfPreloaderButton('.kbf-reset-button');
 
+        new KbfIndustrySwitcher('industries', 'sub-industries', 'sub-sub-industries');
+
         this.areaSwitcher = new KbfAreaSwitcher('provinces', 'areas');
         this.$resetButton = $('.kbf-reset-button');
         this.$searchButton = $('.kbf-search-button');
         this.$filterButton = $('.kbf-filter-button');
-        this.$checkBoxes = $('input[type=checkbox]');
         this.$form = $('form');
 
     }
@@ -45,21 +47,6 @@ class KbfIndustryFilter extends EventTarget {
 
         let instance = this;
         let $ = window.$;
-
-
-
-        // Emituj zmiane checkboxa
-        this.$checkBoxes.on('change', function () {
-
-            let wasChecked = !($(this).prop('checked') === true); //Czy checkbox byl zaznaczony
-            let eventData = {
-                wasChecked,
-                name: this.value
-            };
-
-            instance.emit(new CustomEvent('checkbox-change', { detail: eventData }));
-
-        })
 
         this.$searchButton.click(function (e) {
             e.stopPropagation();
@@ -82,41 +69,10 @@ class KbfIndustryFilter extends EventTarget {
         });
     }
 
-    // Zaznacza checkbox
-    check(checkboxValue) {
-
-        let $ = window.$;
-
-        this.$checkBoxes.each(function () {
-            let $this = $(this);
-            if ($this.val() === checkboxValue) {
-                $this.prop('checked', 'checked');
-            }
-        })
-    }
-
-    // Odznacza checkbox
-    uncheck(checkboxValue) {
-
-        let $ = window.$;
-
-        this.$checkBoxes.each(function () {
-            let $this = $(this);
-            if ($this.val() === checkboxValue) {
-                $this.prop('checked', '');
-            }
-        })
-    }
 
     resetFilter() {
 
         let $ = window.$;
-
-        // Wyczysc checkboxy
-        let $checkedCheckboxes = $(":checkbox:checked");
-        $checkedCheckboxes.each(function () {
-            this.removeAttribute('checked');
-        })
 
         // Wyczysc pole wyszukiwania
         $('.kbf-search-input').val('');

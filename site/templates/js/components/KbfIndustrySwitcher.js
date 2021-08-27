@@ -32,9 +32,9 @@ class KbfIndustrySwitcher extends EventTarget {
         this.currentSubIndustry = this.firstOption; // Aktualnie wybrana sub branza
 
         // Inicjalizuj
-        // this.init().then(function () {
-        //     instance.addListeners(); // Dodaj listenery
-        // });
+        this.init().then(function () {
+            instance.addListeners(); // Dodaj listenery
+        });
 
     }
 
