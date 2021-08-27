@@ -65,6 +65,33 @@ function get_sub_industries($industry)
 
 }
 
+// Zwraca sub-sub branze z bazy na podstawie nazwy sub-branzy
+function get_sub_sub_industries($sub_industry)
+{
+
+    $database = wire("database");
+    $db = wire("db");
+
+    $sub_sub_industries = array(); // Sub branze
+    if (!isset($sub_industry)) return $sub_sub_industries;
+
+    // Przygotuj zapytanie
+    $sub_industry = $database->quote($sub_industry);
+    $sql = "SELECT sub_sub_industry FROM industries_map WHERE sub_industry=$sub_industry";
+
+    $sub_sub_industries_result = $db->query($sql);
+
+    if ($sub_sub_industries_result->num_rows > 0) {
+        while ($sub_sub_industry = $sub_sub_industries_result->fetch_array()) {
+            array_push($sub_sub_industries, $sub_sub_industry[0]);
+        }
+    } else return array();
+
+    return $sub_sub_industries;
+
+}
+
+
 /****************
  *    MARKUP
  * *************/
@@ -243,6 +270,7 @@ function render_job_info($job_data = array(), $device = "desktop")
 }
 
 ;
+
 
 // Renderuje repeater dla ofert pracy
 function render_job_repeater($items = array(), $fieldName = "field", $title = "")
@@ -813,7 +841,6 @@ function render_alert($message, $type = "success", $close = true)
     ), $template);
 }
 
-
 /******************
  *   PANEL FIRMY
  * ***************/
@@ -1274,6 +1301,26 @@ function get_sub_industries_query($sub_industries)
         $counter = 1;
         foreach ($sub_industries as $sub_industry) {
             $query = $query . (($counter > 1) ? "&" : "") . "sub_industry" . urlencode("[]") . "=" . $sub_industry;
+            $counter++;
+        }
+    }
+
+    return $query;
+}
+
+// Zwraca query string na podstawie tablicy sub branz
+function get_sub_sub_industries_query($sub_sub_industries)
+{
+
+    $query = "";
+    if (empty($sub_sub_industries)) return $query;
+
+    if (count($sub_sub_industries) === 1) $query = $query . "sub_sub_industry" . urlencode("[]") . "=" . $sub_sub_industries[0];
+    else {
+
+        $counter = 1;
+        foreach ($sub_sub_industries as $sub_sub_industry) {
+            $query = $query . (($counter > 1) ? "&" : "") . "sub_sub_industry" . urlencode("[]") . "=" . $sub_sub_industry;
             $counter++;
         }
     }

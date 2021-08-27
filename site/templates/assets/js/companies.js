@@ -2676,8 +2676,8 @@
   var config = {
     env: 'dev',
     url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf/' // apiEndpoint: 'http://localhost/kbf2/'
-
+    // apiEndpoint: 'https://webplanet.biz/kbf/'
+    apiEndpoint: 'http://localhost/kbf2/'
   };
 
   var apiEndpoint = config.apiEndpoint; // Sprawdza czy urzadzenie jest dotykowe
@@ -2773,7 +2773,7 @@
 
   function getSubIndustries(_x) {
     return _getSubIndustries.apply(this, arguments);
-  } // Pobiera dane do markerow dla mapy
+  } // Pobiera nazwy sub-sub branz z rest api dla danej sub-branzy
 
   function _getSubIndustries() {
     _getSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(industryName) {
@@ -2799,6 +2799,34 @@
     return _getSubIndustries.apply(this, arguments);
   }
 
+  function getSubSubIndustries(_x2) {
+    return _getSubSubIndustries.apply(this, arguments);
+  } // Pobiera dane do markerow dla mapy
+
+  function _getSubSubIndustries() {
+    _getSubSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(subIndustryName) {
+      var $;
+      return regenerator.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              $ = window.$;
+              _context3.next = 3;
+              return $.get("".concat(apiEndpoint, "/api/sub-sub-industries/?sub-industry=").concat(subIndustryName));
+
+            case 3:
+              return _context3.abrupt("return", _context3.sent);
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+    return _getSubSubIndustries.apply(this, arguments);
+  }
+
   function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
   function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2812,24 +2840,22 @@
 
     var _super = _createSuper$3(KbfIndustrySwitcher);
 
-    function KbfIndustrySwitcher(industriesId, subIndustriesId) {
+    function KbfIndustrySwitcher(industriesId, subIndustriesId, subSubIndustriesId) {
       var _this;
 
-      var firstOption = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Wszystkie';
-      var ellipsis = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-      var scrollBlock = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+      var firstOption = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'Wszystkie';
+      var scrollBlock = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : true;
 
       _classCallCheck(this, KbfIndustrySwitcher);
 
       // Sprawdz czy podano argumenty
       if (!industriesId) throw errors.argumentNotFound(industriesId);
       if (!subIndustriesId) throw errors.argumentNotFound(subIndustriesId);
+      if (!subSubIndustriesId) throw errors.argumentNotFound(subSubIndustriesId);
       _this = _super.call(this);
       _this.firstOption = firstOption; // Pierwsza opcja
 
       _this.scrollBlock = scrollBlock; // Czy blokowac scroll
-
-      _this.ellipsis = ellipsis; // Czy stosowac skroty
       // Aliasy
 
       _this.on = _this.addEventListener;
@@ -2841,13 +2867,18 @@
 
       _this.industriesId = industriesId;
       _this.subIndustriesId = subIndustriesId;
+      _this.subSubIndustriesId = subSubIndustriesId;
       _this.industries = []; // Lista branz
 
       _this.subIndustries = []; // Aktualna lista sub branz
 
+      _this.subSubIndustries = []; // Aktualna lista sub-sub branz
+
       _this.currentIndustry = _this.firstOption; // Aktualnie wybrana branza
 
       _this.currentSubIndustry = _this.firstOption; // Aktualnie wybrana sub branza
+
+      _this.currentSubSubIndustry = _this.firstOption; // Aktualnie wybrana sub-sub branza
       // Inicjalizuj
 
       _this.init().then(function () {
@@ -2864,7 +2895,7 @@
         var instance = this;
         this.industriesDropdown.on('change', /*#__PURE__*/function () {
           var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(e) {
-            var subIndustriesResult;
+            var subIndustriesResult, subIndustriesopts;
             return regenerator.wrap(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
@@ -2872,7 +2903,7 @@
                     instance.currentIndustry = e.detail;
 
                     if (!(instance.currentIndustry !== instance.firstOption)) {
-                      _context.next = 7;
+                      _context.next = 8;
                       break;
                     }
 
@@ -2883,16 +2914,17 @@
                     subIndustriesResult = _context.sent;
                     instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
 
-                    instance.updateEllipsis(); // Aktualizuj skroty
+                    subIndustriesopts = _objectSpread$1(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(instance.subIndustries));
+                    instance.subIndustriesDropdown.updateOptions(subIndustriesopts);
 
-                  case 7:
+                  case 8:
                     if (instance.currentIndustry === instance.firstOption) {
                       instance.subIndustriesDropdown.updateOptions([instance.firstOption]);
                     }
 
                     instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
 
-                  case 9:
+                  case 10:
                   case "end":
                     return _context.stop();
                 }
@@ -2904,47 +2936,91 @@
             return _ref.apply(this, arguments);
           };
         }());
-        this.subIndustriesDropdown.on('change', function (e) {
-          instance.currentSubIndustry = e.detail;
-          instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
-        });
+        this.subIndustriesDropdown.on('change', /*#__PURE__*/function () {
+          var _ref2 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(e) {
+            var subSubIndustriesResult, subSubIndustriesopts;
+            return regenerator.wrap(function _callee2$(_context2) {
+              while (1) {
+                switch (_context2.prev = _context2.next) {
+                  case 0:
+                    instance.currentSubIndustry = e.detail;
+
+                    if (!(instance.currentSubIndustry !== instance.firstOption)) {
+                      _context2.next = 8;
+                      break;
+                    }
+
+                    _context2.next = 4;
+                    return getSubSubIndustries(instance.currentSubIndustry);
+
+                  case 4:
+                    subSubIndustriesResult = _context2.sent;
+                    instance.subSubIndustries = subSubIndustriesResult.sub_sub_industries; // Pobierz liste sub-branz
+
+                    subSubIndustriesopts = _objectSpread$1(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(instance.subSubIndustries));
+                    instance.subSubIndustriesDropdown.updateOptions(subSubIndustriesopts);
+
+                  case 8:
+                    if (instance.currentSubIndustry === instance.firstOption) {
+                      instance.subSubIndustriesDropdown.updateOptions([instance.firstOption]);
+                    }
+
+                    instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
+
+                  case 10:
+                  case "end":
+                    return _context2.stop();
+                }
+              }
+            }, _callee2);
+          }));
+
+          return function (_x2) {
+            return _ref2.apply(this, arguments);
+          };
+        }()); // this.subSubIndustriesDropdown.on('change', function (e) {
+        //     instance.currentSubSubIndustry = e.detail;
+        //     instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
+        // })
       } // Inicjalizuje
 
     }, {
       key: "init",
       value: function () {
-        var _init = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2() {
+        var _init = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3() {
           var instance, $, opts;
-          return regenerator.wrap(function _callee2$(_context2) {
+          return regenerator.wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
                   instance = this; // Ustaw kontekst
 
                   $ = window.$; // Pobierz nazwy branz z rest api a nastepnie inicjuj dropdown z nazwami branz
 
-                  _context2.next = 4;
+                  _context3.next = 4;
                   return getIndustries();
 
                 case 4:
-                  this.industries = _context2.sent;
+                  this.industries = _context3.sent;
                   // Przygotuj opcje dropdown branz jako obiekt opts
-                  opts = _objectSpread$1(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries, this.ellipsis)); // Inicjuj dropdowny
+                  opts = _objectSpread$1(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries)); // Inicjuj dropdowny
 
                   this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
 
                   this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
+
+                  this.subSubIndustriesDropdown = new KbfDropdown('#' + this.subSubIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
                   // Ustaw responsywnosc dropdown'ow
 
                   $(window).off('resize', instance.resetDropdowns);
                   $(window).on('resize', instance.resetDropdowns.bind(instance));
 
-                case 10:
+                case 11:
                 case "end":
-                  return _context2.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee3, this);
         }));
 
         function init() {
@@ -2952,15 +3028,7 @@
         }
 
         return init;
-      }()
-    }, {
-      key: "updateEllipsis",
-      value: function updateEllipsis() {
-        var opts = _objectSpread$1(_defineProperty({}, this.firstOption, this.firstOption), getIndustriesOptions(this.subIndustries, this.ellipsis));
-
-        this.subIndustriesDropdown.updateOptions(opts);
-        this.currentSubIndustry = this.firstOption;
-      } // Emituje aktualne ustawienie branz
+      }() // Emituje aktualne ustawienie branz
 
     }, {
       key: "emitCurrentIndustries",
@@ -2969,7 +3037,8 @@
         this.emit(new CustomEvent('industries-changed', {
           detail: {
             industry: instance.currentIndustry,
-            'sub-industry': instance.currentSubIndustry
+            'sub-industry': instance.currentSubIndustry,
+            'sub-sub-industry': instance.currentSubSubIndustry
           }
         }));
       } // Resetuje dropdown'y
@@ -2979,8 +3048,11 @@
       value: function resetDropdowns() {
         this.industriesDropdown.setActive(this.firstOption);
         this.subIndustries = [];
+        this.subsubIndustries = [];
         this.subIndustriesDropdown.updateOptions([this.firstOption].concat(_toConsumableArray(this.subIndustries)));
         this.subIndustriesDropdown.setActive(this.firstOption);
+        this.subSubIndustriesDropdown.updateOptions([this.firstOption].concat(_toConsumableArray(this.subIndustries)));
+        this.subSubIndustriesDropdown.setActive(this.firstOption);
       } // Usuwa komponent
 
     }, {
@@ -2994,6 +3066,11 @@
         if (this.subIndustriesDropdown) {
           this.subIndustriesDropdown.destroy();
           this.subIndustriesDropdown = undefined;
+        }
+
+        if (this.subSubIndustriesDropdown) {
+          this.subSubIndustriesDropdown.destroy();
+          this.subSubIndustriesDropdown = undefined;
         }
       }
     }]);

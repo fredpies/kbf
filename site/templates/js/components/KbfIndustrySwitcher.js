@@ -1,20 +1,20 @@
 import KbfDropdown from "./KbfDropdown";
-import {getIndustriesOptions, getIndustries, getSubIndustries } from "../functions/library";
+import {getIndustriesOptions, getIndustries, getSubIndustries, getSubSubIndustries } from "../functions/library";
 import errors from "../modules/Errors";
 
 class KbfIndustrySwitcher extends EventTarget {
 
-    constructor(industriesId, subIndustriesId, firstOption = 'Wszystkie', ellipsis = true,  scrollBlock = true) {
+    constructor(industriesId, subIndustriesId, subSubIndustriesId, firstOption = 'Wszystkie', ellipsis = true,  scrollBlock = true) {
 
         // Sprawdz czy podano argumenty
         if (!industriesId) throw errors.argumentNotFound(industriesId);
         if (!subIndustriesId) throw errors.argumentNotFound(subIndustriesId);
+        if (!subSubIndustriesId) throw errors.argumentNotFound(subSubIndustriesId);
 
         super();
 
         this.firstOption = firstOption; // Pierwsza opcja
         this.scrollBlock = scrollBlock; // Czy blokowac scroll
-        this.ellipsis = ellipsis; // Czy stosowac skroty
 
         // Aliasy
         this.on = this.addEventListener;
@@ -25,11 +25,14 @@ class KbfIndustrySwitcher extends EventTarget {
 
         this.industriesId = industriesId;
         this.subIndustriesId = subIndustriesId;
+        this.subSubIndustriesId = subSubIndustriesId;
 
         this.industries = []; // Lista branz
         this.subIndustries = []; // Aktualna lista sub branz
+        this.subSubIndustries = []; // Aktualna lista sub-sub branz
         this.currentIndustry = this.firstOption; // Aktualnie wybrana branza
         this.currentSubIndustry = this.firstOption; // Aktualnie wybrana sub branza
+        this.currentSubSubIndustry = this.firstOption; // Aktualnie wybrana sub-sub branza
 
         // Inicjalizuj
         this.init().then(function () {
@@ -51,7 +54,9 @@ class KbfIndustrySwitcher extends EventTarget {
 
                 let subIndustriesResult = await getSubIndustries(instance.currentIndustry);
                 instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
-                instance.updateEllipsis(); // Aktualizuj skroty
+
+                let subIndustriesopts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(instance.subIndustries) };
+                instance.subIndustriesDropdown.updateOptions(subIndustriesopts);
 
             }
 
@@ -63,10 +68,32 @@ class KbfIndustrySwitcher extends EventTarget {
 
         })
 
-        this.subIndustriesDropdown.on('change', function (e) {
+        this.subIndustriesDropdown.on('change', async function (e) {
+
             instance.currentSubIndustry = e.detail;
+
+            if (instance.currentSubIndustry !== instance.firstOption) {
+
+                let subSubIndustriesResult = await getSubSubIndustries(instance.currentSubIndustry);
+                instance.subSubIndustries = subSubIndustriesResult.sub_sub_industries; // Pobierz liste sub-branz
+
+                let subSubIndustriesopts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(instance.subSubIndustries) };
+                instance.subSubIndustriesDropdown.updateOptions(subSubIndustriesopts);
+
+            }
+
+            if (instance.currentSubIndustry === instance.firstOption) {
+                instance.subSubIndustriesDropdown.updateOptions([instance.firstOption]);
+            }
+
             instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
+
         })
+
+        // this.subSubIndustriesDropdown.on('change', function (e) {
+        //     instance.currentSubSubIndustry = e.detail;
+        //     instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
+        // })
 
     }
 
@@ -80,29 +107,27 @@ class KbfIndustrySwitcher extends EventTarget {
         this.industries = await getIndustries();
 
         // Przygotuj opcje dropdown branz jako obiekt opts
-        let opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(this.industries, this.ellipsis) };
+        let opts = { [instance.firstOption]: instance.firstOption, ...getIndustriesOptions(this.industries) };
 
         // Inicjuj dropdowny
         this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
         this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
+        this.subSubIndustriesDropdown = new KbfDropdown('#' + this.subSubIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
+
 
         // Ustaw responsywnosc dropdown'ow
         $(window).off('resize', instance.resetDropdowns);
         $(window).on('resize', instance.resetDropdowns.bind(instance));
 
-    }
 
-    updateEllipsis() {
-        let opts = { [this.firstOption]: this.firstOption, ...getIndustriesOptions(this.subIndustries, this.ellipsis) };
-        this.subIndustriesDropdown.updateOptions(opts);
-        this.currentSubIndustry = this.firstOption;
+
     }
 
     // Emituje aktualne ustawienie branz
     emitCurrentIndustries() {
         let instance = this;
         this.emit(new CustomEvent('industries-changed', {
-            detail: {industry: instance.currentIndustry, 'sub-industry': instance.currentSubIndustry}
+            detail: {industry: instance.currentIndustry, 'sub-industry': instance.currentSubIndustry, 'sub-sub-industry': instance.currentSubSubIndustry}
         }));
     }
 
@@ -110,8 +135,12 @@ class KbfIndustrySwitcher extends EventTarget {
     resetDropdowns() {
         this.industriesDropdown.setActive(this.firstOption);
         this.subIndustries = [];
+        this.subsubIndustries = [];
+
         this.subIndustriesDropdown.updateOptions([this.firstOption, ...this.subIndustries])
         this.subIndustriesDropdown.setActive(this.firstOption);
+        this.subSubIndustriesDropdown.updateOptions([this.firstOption, ...this.subIndustries])
+        this.subSubIndustriesDropdown.setActive(this.firstOption);
 
     }
 
@@ -125,6 +154,11 @@ class KbfIndustrySwitcher extends EventTarget {
         if (this.subIndustriesDropdown) {
             this.subIndustriesDropdown.destroy();
             this.subIndustriesDropdown = undefined;
+        }
+
+        if (this.subSubIndustriesDropdown) {
+            this.subSubIndustriesDropdown.destroy();
+            this.subSubIndustriesDropdown = undefined;
         }
 
     }
