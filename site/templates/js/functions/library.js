@@ -97,6 +97,12 @@ export async function getSubIndustries(industryName) {
     return await $.get(`${apiEndpoint}/api/sub-industries/?industry=${industryName}`);
 }
 
+// Pobiera nazwy sub-sub branz z rest api dla danej sub-branzy
+export async function getSubSubIndustries(subIndustryName) {
+    let $ = window.$;
+    return await $.get(`${apiEndpoint}/api/sub-sub-industries/?sub-industry=${subIndustryName}`);
+}
+
 // Pobiera dane do markerow dla mapy
 export async function getCompanyMarkersData(requestData) {
 
