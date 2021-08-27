@@ -18,7 +18,6 @@ class App {
             instance.kbfIndustryFilter.$searchButton.trigger('click');
         });
 
-
         new KbfFooterTop();
 
 
