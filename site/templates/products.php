@@ -7,18 +7,8 @@ $input = wire('input');
 $urls = wire('urls');
 $pages = wire('pages');
 
-// Pobierz tablice sub branz jezeli podano branze
-if ($input->industry) {
-    $sub_industry = get_sub_industries($input->industry);
-}
-
-// Pobierz sub branze jezeli wystepuja
-if ($input->sub_industry) {
-    $sub_industry = $input->sub_industry;
-}
-
 // Pobierz dane o produktach na podstawie filtra
-$products = $pages->find(get_filter_selector($input, 'product'));
+$products = $pages->find(get_filter($input, 'product', false));
 
 // Paginacja listy produktow
 $pagination = get_pagination($products);
@@ -89,7 +79,7 @@ $home_page_url = $pages->get(1)->url;
                                 <div class="px-4 px-md-5 px-lg-4 px-xl-5">
                                     <div class="input-group input-group-lg input-group-round w-100">
                                         <div class="input-group-inner">
-                                            <input name="keywords" type="text" style="font-size: 0.83rem" class="form-control form-control-md" value="<?php if (isset($keywords)) echo $keywords ?>">
+                                            <input name="keywords" type="text" style="font-size: 0.83rem" class="form-control form-control-md" value="<?php if (isset($input->keywords)) echo $input->keywords ?>">
                                             <div class="input-group-append">
                                                 <button class="kbf-search-button btn btn-round btn-primary shadow-none mb-0"
                                                         type="submit">Szukaj
@@ -123,14 +113,13 @@ $home_page_url = $pages->get(1)->url;
                                     Użyj powyższego przycisku filtrowania w celu ograniczenia liczby wyników według zadanych kryteriów.
                                 </div>
 
-
                                 <div id="sidebarMenu" class="d-lg-block collapse">
 
                                     <!-- Industries switcher-->
                                     <div class="row">
                                         <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">BRANŻA</h6>
 
-                                        <div data-name="industry" id="industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
+                                        <div data-start-value="<?php if (isset($input->industry) && $input->industry !== 'Wszystkie') echo $input->industry ?>" data-name="industry" id="industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                             <button class="btn btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle btn-block"
                                                     type="button"
                                                     id="industries-button" data-toggle="dropdown" aria-haspopup="true"
@@ -138,7 +127,7 @@ $home_page_url = $pages->get(1)->url;
                                             </button>
                                         </div>
 
-                                        <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
+                                        <div data-start-value="<?php if ($input->get('sub-industry') !== null && $input->get('sub-industry') !== 'Wszystkie') echo $input->get('sub-industry') ?>" data-name="sub-industry" id="sub-industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                             <button class="btn btn-round btn-primary px-3 mx-0 mb-2 dropdown-toggle btn-block"
                                                     type="button"
                                                     id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
@@ -146,7 +135,7 @@ $home_page_url = $pages->get(1)->url;
                                             </button>
                                         </div>
 
-                                        <div data-name="sub-sub-industry" id="sub-sub-industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
+                                        <div data-start-value="<?php if ($input->get('sub-sub-industry') !== null && $input->get('sub-sub-industry') !== 'Wszystkie') echo $input->get('sub-sub-industry') ?>" data-name="sub-sub-industry" id="sub-sub-industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                             <button class="btn btn-round btn-primary px-3 mx-0 mb-2 dropdown-toggle btn-block"
                                                     type="button"
                                                     id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"

@@ -33,9 +33,9 @@ class KbfIndustryFilter extends EventTarget {
         new KbfPreloaderButton('.kbf-search-button');
         new KbfPreloaderButton('.kbf-reset-button');
 
-        new KbfIndustrySwitcher('industries', 'sub-industries', 'sub-sub-industries');
-
+        this.industrySwitcher = new KbfIndustrySwitcher('industries', 'sub-industries', 'sub-sub-industries');
         this.areaSwitcher = new KbfAreaSwitcher('provinces', 'areas');
+
         this.$resetButton = $('.kbf-reset-button');
         this.$searchButton = $('.kbf-search-button');
         this.$filterButton = $('.kbf-filter-button');
@@ -57,14 +57,13 @@ class KbfIndustryFilter extends EventTarget {
         this.$filterButton.click(function (e) {
             e.stopPropagation();
             e.preventDefault();
-            instance.emit(new CustomEvent('filter'));
+            instance.$form.eq(1).submit();
         })
 
         this.$resetButton.on('click', function (e) {
             e.stopPropagation();
             e.preventDefault();
             instance.resetFilter();
-            instance.$form.eq(2).submit();
 
         });
     }
@@ -80,7 +79,15 @@ class KbfIndustryFilter extends EventTarget {
         // Wyczysc dropdown'y
         this.areaSwitcher.provincesDropdown.setActive('Wszystkie');
         this.areaSwitcher.areasDropdown.setActive('Wszystkie');
+        this.industrySwitcher.industriesDropdown.setActive('Wszystkie');
+        this.industrySwitcher.subIndustriesDropdown.setActive('Wszystkie');
+        this.industrySwitcher.subSubIndustriesDropdown.setActive('Wszystkie');
+
         this.areaSwitcher.areasDropdown.$dropdownButtons.attr('disabled', 'disabled');
+        this.industrySwitcher.subIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+        this.industrySwitcher.subSubIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+
+        this.$form.eq(1).submit();
 
     }
 

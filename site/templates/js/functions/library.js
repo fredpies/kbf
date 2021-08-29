@@ -65,7 +65,7 @@ export function getEllipsis(string, length) {
 }
 
 // Przygotowuje opcje dla dropdown branz
-export function getIndustriesOptions(industries, ellipsis = true) {
+export function getIndustriesOptions(industries, ellipsis = false) {
 
     // Utworz tablice branz
     let capitalizedIndustries = [];

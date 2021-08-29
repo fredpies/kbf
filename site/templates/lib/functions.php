@@ -167,7 +167,10 @@ function render_company_info($company_data = array())
         echo "<a href=\"" . $company_list_page_url . "?industry=" . $company_data["industry"] . "\"><span class=\"company-industry badge badge-pill badge-primary mb-1 mt-3\">" . $company_data["industry"] . "</span></a>";
     // Wyswietl sub-branze
     if (!empty($company_data["sub_industry"]))
-        echo "<a href=\"" . $company_list_page_url . "?sub_industry=" . $company_data["sub_industry"] . "\"><span class=\"company-industry badge badge-pill badge-warning mb-1 mt-1\">" . $company_data["sub_industry"] . "</span></a>";
+        echo "<a href=\"" . $company_list_page_url . "?industry=" . $company_data["industry"] . "&sub-industry=" . $company_data["sub_industry"] . "\"><span class=\"company-industry badge badge-pill badge-warning mb-1 mt-1\">" . $company_data["sub_industry"] . "</span></a>";
+    // Wyswietl sub-sub-branze
+    if (!empty($company_data["sub_sub_industry"]))
+        echo "<a href=\"" . $company_list_page_url . "?industry=" . $company_data["industry"] . "&sub-industry=" . $company_data["sub_industry"] . "&sub-sub-industry=" . $company_data["sub_sub_industry"] . "\"><span class=\"company-industry badge badge-pill badge-orchid mb-1 mt-1\">" . $company_data["sub_sub_industry"] . "</span></a>";
 
     echo "</div></div></div>";
 
@@ -1162,6 +1165,7 @@ function sanitize_company_data($company_page)
         "company_keywords" => $sanitizer->text($company_page->company_keywords),
         "industry" => $sanitizer->text($company_page->industry),
         "sub_industry" => $sanitizer->text($company_page->sub_industry),
+        "sub_sub_industry" => $sanitizer->text($company_page->sub_sub_industry),
         "lat" => $sanitizer->text($company_page->lat),
         "lon" => $sanitizer->text($company_page->lon)
     );
@@ -1329,29 +1333,34 @@ function get_sub_sub_industries_query($sub_sub_industries)
 }
 
 // Zwraca query dla filtra
-function get_filter_selector($input, $template_name)
+function get_filter($input = null, $template = "company", $pagination = true)
 {
 
-    if (!isset($input) || !isset($template_name)) return;
     $database = wire("database");
     $db = wire("db");
     $sanitizer = wire("sanitizer");
 
-    $query = "template=$template_name, limit=7";
+    $query = "template=" . $template;
+    if ($pagination) $query = $query . ", limit=7";
 
 // Ustaw dane z get
-    if (count($input->get()) > 0) {
+    if ($input) {
 
         // Branza i sub branza
-        if ($input->industry) {
+        if ($input->industry && $input->industry !=='Wszystkie') {
             $industry = $input->industry;
             $input->whitelist("industry", $industry);
 
         }
 
-        if ($input->sub_industry) {
-            $sub_industry = $input->sub_industry;
-            $input->whitelist("sub_industry", $sub_industry);
+        if ($input->get('sub-industry') && $input->get('sub-industry') !== 'Wszystkie' ) {
+            $sub_industry = $input->get('sub-industry');
+            $input->whitelist("sub-industry", $sub_industry);
+        }
+
+        if ($input->get('sub-sub-industry') && $input->get('sub-sub-industry') !== 'Wszystkie') {
+            $sub_sub_industry = $input->get('sub-sub-industry');
+            $input->whitelist("sub-sub-industry", $sub_industry);
         }
 
         if ($input->keywords) {
@@ -1373,41 +1382,18 @@ function get_filter_selector($input, $template_name)
     }
 
     // Przygotuj zapytanie
-    if (isset($industry) && !isset($sub_industry)) {
+    if (isset($industry) && !isset($sub_industry) && !isset($sub_sub_industry)) {
 
         $sub_industry = get_sub_industries(mb_strtoupper($industry, "utf-8"), $database, $db);
         $industry = $sanitizer->selectorValue($industry);
         $query = $query . ",industry=$industry";
 
+    } else {
+        if (isset($industry)) $query = $query . ",industry=" . $sanitizer->selectorValue($industry);
+        if (isset($sub_industry)) $query = $query . ",sub_industry=" . $sanitizer->selectorValue($sub_industry);
+        if (isset($sub_sub_industry)) $query = $query . ",sub_sub_industry=" . $sanitizer->selectorValue($sub_sub_industry);
     }
 
-    if (!isset($industry) && isset($sub_industry)) {
-
-        if (is_string($sub_industry)) $sub_industry = explode(",", $sub_industry);
-        $sub_industry_count = count($sub_industry);
-
-        $industries_selector = "";
-
-        if ($sub_industry_count === 1) {
-            $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry[0]);
-            $query = $query . ",sub_industry=$sub_industry_name_sanitized";
-        }
-
-        if ($sub_industry_count > 1) {
-
-            $counter = 1;
-
-            foreach ($sub_industry as $sub_industry_name) {
-                $sub_industry_name_sanitized = $sanitizer->selectorValue($sub_industry_name);
-                if ($counter < $sub_industry_count) $industries_selector = $industries_selector . "$sub_industry_name_sanitized|";
-                if ($counter === $sub_industry_count) $industries_selector = $industries_selector . $sub_industry_name_sanitized;
-                $counter++;
-            }
-
-            $query = $query . ",sub_industry=$industries_selector";
-        }
-
-    }
 
     if (isset($province_name)) {
         $province_name = $sanitizer->selectorValue($province_name);
@@ -1421,7 +1407,14 @@ function get_filter_selector($input, $template_name)
 
     if (isset($keywords)) {
         $keywords = $sanitizer->selectorValue($keywords);
-        $query = $query . ",company_keywords|company_address|company_city|company_name|company_nip|company_regon|province_name|area_name|company_description_html~=$keywords";
+
+        $keywords_fields = ",company_keywords|company_name|company_nip|company_regon|company_description_html";
+
+        if ($template === 'product') $keywords_fields = ",product_name|product_description";
+        if ($template === 'service') $keywords_fields = ",service_name|service_description";
+        if ($template === 'job') $keywords_fields = ",job_name|job_description";
+
+        $query = $query . $keywords_fields . "~=$keywords";
     }
 
     return $query;

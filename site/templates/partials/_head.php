@@ -3,6 +3,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <?php
+
+
     // Wyswietl slowa kluczowe firmy jesli istnieja
     if (isset($company_keywords) && !empty($company_keywords)) echo "<meta name=\"keywords\" content=\"$company_keywords\""; ?>
 
@@ -13,7 +15,7 @@
     <!-- Animate CSS -->
     <link rel="stylesheet" href="<?php echo $urls->css ?>animate.min.css">
     <!-- Fancybox CSS -->
-    <link rel="stylesheet" href="<?php echo $urls->css ?>jquery.fancybox.min.css">
+<!--    <link rel="stylesheet" href="--><?php //echo $urls->css ?><!--jquery.fancybox.min.css">-->
     <!-- OWL carousel CSS -->
     <link rel="stylesheet" href="<?php echo $urls->css ?>owl.carousel.min.css">
     <link rel="stylesheet" href="<?php echo $urls->css ?>owl.theme.default.min.css">
