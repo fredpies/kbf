@@ -40,12 +40,12 @@ $home_page_url = $pages->get(1)->url;
 <!-- Navigation menu -->
 <?php include_once "partials/_menu.php" ?>
 
-<!-- Banner -->
-<?php include_once "partials/banner-companies.php" ?>
-
 <!-- Page title -->
 <div class="bg-light">
     <div class="container">
+        <!-- Banner -->
+        <?php include_once "partials/banner-index.php" ?>
+
         <div class="row pt-5 pb-2">
 
             <div class="col-12 col-lg-4 ">
