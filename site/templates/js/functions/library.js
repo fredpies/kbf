@@ -65,7 +65,7 @@ export function getEllipsis(string, length) {
 }
 
 // Przygotowuje opcje dla dropdown branz
-export function getIndustriesOptions(industries, ellipsis = true) {
+export function getIndustriesOptions(industries, ellipsis = false) {
 
     // Utworz tablice branz
     let capitalizedIndustries = [];
@@ -95,6 +95,12 @@ export async function getIndustries() {
 export async function getSubIndustries(industryName) {
     let $ = window.$;
     return await $.get(`${apiEndpoint}/api/sub-industries/?industry=${industryName}`);
+}
+
+// Pobiera nazwy sub-sub branz z rest api dla danej sub-branzy
+export async function getSubSubIndustries(subIndustryName) {
+    let $ = window.$;
+    return await $.get(`${apiEndpoint}/api/sub-sub-industries/?sub-industry=${subIndustryName}`);
 }
 
 // Pobiera dane do markerow dla mapy

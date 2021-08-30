@@ -3,7 +3,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 
 class KbfDropdown extends EventTarget {
 
-    constructor(selector, opts = [], scrollBlock = true) {
+    constructor(selector, opts = [], scrollBlock = true, areas = false) {
 
         super();
 
@@ -14,6 +14,7 @@ class KbfDropdown extends EventTarget {
 
         this.selector = selector;
         this.opts = opts;
+        this.areas = areas;
 
         this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
 
@@ -39,7 +40,12 @@ class KbfDropdown extends EventTarget {
         if (dataOptions) this.opts = dataOptions.split(',');
 
         // Wartosc poczatkowa
-        this.startValue = this.$dropdowns.data('value');
+        this.startValue = this.$dropdowns.data('start-value');
+
+        if (this.startValue && !this.areas) {
+            this.startValue = this.startValue.toLowerCase();
+            this.startValue = this.startValue.substr(0, 1).toUpperCase() + this.startValue.substr(1);
+        }
 
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
 
@@ -295,7 +301,7 @@ class KbfDropdown extends EventTarget {
         if (Array.isArray(this.opts) === false && typeof this.opts === 'object') {
 
             // Sprawdz czy opcja istnieje
-            if ((optionName in this.opts) === false) throw new Error(`Option ${optionName} does not exist`);
+            if (!(optionName in this.opts)) throw new Error(`Option ${optionName} does not exist`);
 
             // Ustaw stan
             this.displayed = optionName;

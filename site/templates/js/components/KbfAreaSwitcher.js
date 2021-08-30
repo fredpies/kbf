@@ -88,10 +88,10 @@ class KbfAreaSwitcher extends EventTarget {
         this.provinces = getProvinceNames(this.areasDictionary);
 
         // Inicjalizuj dropdown wojewodztw
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie', ...this.provinces], this.scrollBlock);
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie', ...this.provinces], this.scrollBlock, true);
 
         // Inicjalizuj dropdown powiatow
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie', ...this.areas], this.scrollBlock);
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie', ...this.areas], this.scrollBlock, true);
 
         // Element dropdown powiatow
         this.$areasDropdown = $('#' + this.areasId).find('button');
