@@ -2827,7 +2827,7 @@
       key: "addListeners",
       value: function addListeners() {
         var instance = this;
-        this.$showFooterTop.click(function (e) {
+        this.$showFooterTop.unbind().click(function (e) {
           e.preventDefault();
           e.stopPropagation();
           var $industriesSidebar = $('#industriesSidebar');
@@ -2836,6 +2836,9 @@
           if (instance.$footerTop.hasClass('show-footer-top')) instance.$footerTop.css('transform', "translateY(-".concat(parseInt(getComputedStyle($('.footer-bottom')[0]).height), "px)"));else instance.$footerTop.css('transform', 'translateY(100%)');
         });
         this.$footerTop.click(function (e) {
+          e.stopPropagation();
+        });
+        this.$footerBottom.click(function (e) {
           e.stopPropagation();
         });
         $(window).click(function () {
@@ -92200,62 +92203,36 @@
       key: "init",
       value: function init() {
         new KbfAreaSwitcher('provinces', 'areas');
-        new KbfFooterTop();
-        this.$industriesSidebar = $('#industriesSidebar');
-        this.$industriesSidebarButton = $('#industriesSidebarButton');
+        new KbfFooterTop(); // First section industries sub-menu opening and closing
+
+        $("#industriesSidebarOpenButton").click(function () {
+          $("#top-section").removeClass('col-xl-12');
+          $("#top-section").addClass('col-xl-9');
+          $("#industriesSidebar").addClass('d-xl-block');
+          $("#industriesSidebarOpenButton").removeClass('d-xl-block');
+          $("#industriesSidebarOpenButton").addClass('d-none');
+          $("#industriesSidebarCloseButton").addClass('d-xl-block');
+        });
+        $("#industriesSidebarCloseButton").click(function () {
+          $("#top-section").removeClass('col-xl-9');
+          $("#top-section").addClass('col-xl-12');
+          $("#industriesSidebar").removeClass('d-xl-block');
+          $("#industriesSidebar").addClass('d-none');
+          $("#industriesSidebarCloseButton").removeClass('d-xl-block');
+          $("#industriesSidebarCloseButton").addClass('d-none');
+          $("#industriesSidebarOpenButton").addClass('d-xl-block');
+        });
         this.$kbfSearch = $('.kbf-search');
         this.$form = $('form');
-        this.adjustHeight();
         new KbfPreloaderButton('.kbf-search');
       }
     }, {
       key: "addListeners",
       value: function addListeners() {
         var instance = this;
-        this.$industriesSidebar.click(function (e) {
-          e.stopPropagation();
-        }); // First section industries sub-menu opening and closing
-
-        this.$industriesSidebarButton.click(function (e) {
-          e.stopPropagation();
-          $('.footer-top').removeClass('show-footer-top');
-          instance.$industriesSidebar.toggleClass('show');
-          instance.scrollbar = new PerfectScrollbar(instance.$industriesSidebar[0], {
-            minScrollbarLength: 20,
-            suppressScrollX: true
-          });
-        });
-        $(window).click(function () {
-          instance.$industriesSidebar.removeClass('show');
-          if (instance.scrollbar) instance.scrollbar.destroy();
-        });
-        $(window).on('resize', this.adjustHeight);
         this.$kbfSearch.on('click', function () {
           instance.$form.submit();
         });
-      }
-    }, {
-      key: "adjustHeight",
-      value: function adjustHeight() {
-        this.$topSection = $('#top-section');
-        this.$navikHeader = $('.navik-header');
-        this.$banner = $('.kbf-banner-index');
-        this.$footerBottom = $('.footer-bottom');
-        this.$phoneImageContainer = $('.home-phone-image-container');
-
-        if (window.innerWidth >= 1200) {
-          this.headerHeight = parseInt(getComputedStyle(this.$navikHeader[0]).height);
-          this.bannerHeight = parseInt(getComputedStyle(this.$banner[0]).height);
-          this.footerBottomHeight = parseInt(getComputedStyle(this.$footerBottom[0]).height);
-          this.containerHeight = window.innerHeight - (this.headerHeight + this.bannerHeight + this.footerBottomHeight);
-          this.$topSection.css('height', this.containerHeight);
-          this.$industriesSidebar.css('height', this.containerHeight);
-          this.$phoneImageContainer.css('height', this.containerHeight);
-        } else {
-          this.$topSection.css('height', 'auto');
-          this.$industriesSidebar.css('height', 'auto');
-          this.$phoneImageContainer.css('height', 'auto');
-        }
       }
     }]);
 

@@ -1,10 +1,10 @@
 <?php namespace ProcessWire;
 include_once "lib/functions.php";
 ?>
-<div class="kbf-banner-index">
+<div class="kbf-banner-index m-2 my-4">
     <div class="banner-slides-wrapper arrow-nav-overflow bg-white" data-dots="false" data-nav="true">
 
-        <div class="banner-slides-container owl-carousel" data-height="140px">
+        <div class="banner-slides-container owl-carousel" data-height="100px">
 
                     <!-- php find 100 random banners-->
                     <?php
@@ -16,14 +16,14 @@ include_once "lib/functions.php";
 
                     <!-- Slide item -->
                     <a target="_blank" href="http://<?php echo $banner->banner_target_url; ?>">
-                        <div class="d-flex flex-column" data-height="140px">
-                            <div class="d-flex align-items-center bg-white" data-height="140px">
+                        <div class="d-flex flex-column" data-height="100px">
+                            <div class="d-flex align-items-center bg-white" data-height="100px">
                                 <div class="container px-4">
                                     <div class="row">
-                                        <div class="col-12 col-md-6 text-center text-lg-left align-self-center">
+                                        <div class="col-12 col-md-8 text-center text-lg-left align-self-center">
                                             <div class="align-items-center">
-                                                <h4 class="font-weight-800 text-dark-gray mb-0 mb-md-1 add-animate slide-animate d-none d-md-block" data-animated="fadeInRight"><?php echo $company["company_name"]; ?></h4>
-                                                <h5 class="font-weight-800 text-dark-gray mb-0 mb-md-1 add-animate slide-animate d-md-none" data-animated="fadeInRight"><?php echo $company["company_name"]; ?></h5>
+                                                <h5 class="font-weight-700 text-dark-gray mb-0 mb-md-1 add-animate slide-animate d-none d-md-block" data-animated="fadeInRight"><?php echo $company["company_name"]; ?></h5>
+                                                <h6 class="font-weight-700 text-dark-gray mb-0 mb-md-1 add-animate slide-animate d-md-none" data-animated="fadeInRight"><?php echo $company["company_name"]; ?></h6>
                                                 <?php if(strlen($company["company_name"]) <= 50) {
                                                     ?>
                                                     <div class="add-animate slide-animate d-none d-lg-block" data-animated="fadeInLeft">
@@ -34,9 +34,9 @@ include_once "lib/functions.php";
                                                 <?php }; ?>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6 text-center align-self-center">
-                                            <div class="align-items-center text-center">
-                                                <div class="add-animate slide-animate" data-animated="zoomIn">
+                                        <div class="col-12 col-md-4 text-right">
+                                            <div class="text-center text-lg-right">
+                                                <div class="add-animate slide-animate text-center text-lg-right" data-animated="zoomIn">
                                                     <img class="img-fluid img-kbf-banner-old" src="<?php echo $banner->banner_image->url ?>"/>
                                                 </div>
                                             </div>
@@ -50,7 +50,7 @@ include_once "lib/functions.php";
                     ?>
                     <!-- Slide item -->
                     <a target="_blank" href="http://<?php echo $banner->banner_target_url; ?>">
-                        <div class="d-flex flex-column" data-height="140px">
+                        <div class="d-flex flex-column" data-height="100px">
                             <div class="add-animate slide-animate" data-animated="fadeInDown">
                                 <img class="kbf-img-cover" src="<?php echo $banner->banner_image->url ?>"/>
                             </div>
@@ -60,7 +60,7 @@ include_once "lib/functions.php";
             ?>
         </div>
 
-        <!-- Navigation -->
+        <!-- Navigation
         <div class="carousel-custom-nav carousel-nav-lg d-none d-xl-block">
             <a class="carousel-control-prev" href="#" data-width="9%">
                 <span class="carousel-control-prev-icon dark" aria-hidden="true"></span>
@@ -71,6 +71,6 @@ include_once "lib/functions.php";
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
+        -->
     </div>
 </div>

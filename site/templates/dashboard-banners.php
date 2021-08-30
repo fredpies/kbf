@@ -142,10 +142,12 @@ $bannerJobs = $banners_container->get('template=banner, banner_location_job=1');
                                             <div class="text-white font-weight-bold">
                                                 <?php
                                                     if($bannerIndex !== null && $bannerIndex->banner_image !== null) {
+                                                        $bannerIndex->of(false);
                                                 ?>
                                                     <span class="d-block">aktywny do:</span>
-                                                    <span class="d-block"><?php echo $bannerIndex->banner_expire ?></span>
+                                                    <span class="d-block"><?php echo date('Y-m-d', $sanitizer->date($bannerIndex->banner_expire)); ?></span>
                                                 <?php
+                                                        $bannerIndex->of(true);
                                                     } else {
                                                 ?>
                                                     <span class="d-block"></span>

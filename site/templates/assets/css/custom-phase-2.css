@@ -4,7 +4,7 @@
 .sidebarActionButton {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    margin-left: -15px;
+    margin-left: -25px;
 }
 
 #industriesSidebar {
@@ -19,19 +19,17 @@
 }
 
 #industriesSidebar h6 {
-    font-size: 0.5rem;
-    max-width: 80px;
-    margin: auto;
+    font-size: 0.8rem;
 }
 
 #industriesSidebar div.icon-info-text {
     padding: 0;
+    vertical-align: middle;
 }
 
 @media (min-width: 1440px) {
     #industriesSidebar h6 {
-        font-size: 0.6rem;
-        max-width: 100px;
+        font-size: 0.9rem;
     }
 }
 
@@ -49,8 +47,8 @@
 }
 
 #industriesSidebar .icon-element {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
 }
 
 #industriesSidebar .icon-element img {
@@ -126,4 +124,38 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
+}
+
+/* INDEX v3 */
+.h6, h6 {
+    font-size: 0.8rem;
+}
+
+html.home, html.home > body {
+    min-height: 100%;
+}
+
+html.home > body > .bg-image {
+    min-height: -moz-calc(100% - (129px));
+    min-height: -webkit-calc(100% - (129px));
+    min-height: calc(100% - (129px));
+}
+
+@media (min-width: 1680px) {
+    #top-section {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+}
+
+@media (min-width: 1921px) {
+    html.home, html.home > body {
+        height: 100%;
+    }
+
+    html.home > body > .bg-image {
+        height: -moz-calc(100% - (129px));
+        height: -webkit-calc(100% - (129px));
+        height: calc(100% - (129px));
+    }
 }
