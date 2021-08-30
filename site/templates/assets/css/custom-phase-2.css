@@ -142,20 +142,48 @@ html.home > body > .bg-image {
 }
 
 @media (min-width: 1680px) {
+    html.home, html.home > body {
+        height: 100%;
+    }
+    html.home > body > .bg-image {
+        height: -moz-calc(100% - (129px));
+        height: -webkit-calc(100% - (129px));
+        height: calc(100% - (129px));
+    }
     #top-section {
         margin-top: auto;
         margin-bottom: auto;
     }
 }
 
-@media (min-width: 1921px) {
+@media (min-width: 1920px) {
+    #top-section {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+    html.home, html.home > body {
+        height: auto;
+        min-height: 100%;
+    }
+    html.home > body > .bg-image {
+        height: auto;
+        min-height: -moz-calc(100% - (129px));
+        min-height: -webkit-calc(100% - (129px));
+        min-height: calc(100% - (129px));
+    }
+}
+
+@media (min-width: 2000px) {
     html.home, html.home > body {
         height: 100%;
     }
-
     html.home > body > .bg-image {
         height: -moz-calc(100% - (129px));
         height: -webkit-calc(100% - (129px));
         height: calc(100% - (129px));
+    }
+    #top-section {
+        margin-top: auto;
+        margin-bottom: auto;
     }
 }

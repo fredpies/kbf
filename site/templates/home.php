@@ -359,7 +359,10 @@ include_once "lib/functions.php";
 
                         </div>
 
-                        <img src="<?php echo $urls->images ?>responsive.png" alt="Szukaj na mapie" class="img-fluid" style="width: 60px; position:relative; bottom: 0px; left: 90%;">
+                        <a href="#" class='d-none d-xl-block text-dark tooltip-btn' data-toggle='tooltip' data-placement='right' title='Używaj na dowolnym urządzeniu' data-original-title='Używaj na dowolnym urządzeniu' style="width: 60px; position:relative; bottom: 0px; left: 90%;">
+                            <img src="<?php echo $urls->images ?>responsive.png" alt="" class="img-fluid" style="width: 60px;">
+                        </a>
+
                         <!-- Banner Google-->
                         <?php include "partials/banner-google.php" ?>
                     </div>
@@ -388,6 +391,18 @@ include_once "lib/functions.php";
 
 <!-- Index js -->
 <script src="<?php echo $urls->js ?>index.js"></script>
+<script>
 
+    $(function () {
+
+        // Ustaw tooltips
+        $('.tooltip-btn').tooltip()
+        $('.tooltip-btn-light').tooltip({
+            template: '<div class="tooltip tooltip-light" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+        })
+
+    })
+
+</script>
 </body>
 </html>
