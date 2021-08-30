@@ -21,8 +21,8 @@ class KbfAreaSwitcher extends EventTarget {
         this.provinces = []; // Nazwy wojewodztw
         this.areas = []; // Nazwy powiatow
 
-        this.currentProvince = 'Wszystkie'; // Aktualnie wybrane wojewodztwo
-        this.currentArea = 'Wszystkie'; // Aktualnie wybrany powiat
+        this.currentProvince = 'Województwo'; // Aktualnie wybrane wojewodztwo
+        this.currentArea = 'Powiat'; // Aktualnie wybrany powiat
 
         this.init(); // Inicjalizuj
         this.addListeners(); // Dodaj listenery
@@ -40,12 +40,12 @@ class KbfAreaSwitcher extends EventTarget {
                 let detail = e.detail;
 
                 // Jesli wybrano wszystkie ustaw liste powiatow na wszystkie i wylacz dropdown powiatow
-                if (detail === 'Wszystkie') {
-                    instance.areasDropdown.updateOptions(['Wszystkie', ...instance.areas]);
-                    instance.currentArea = 'Wszystkie';
+                if (detail === 'Województwo') {
+                    instance.areasDropdown.updateOptions(['Powiat', ...instance.areas]);
+                    instance.currentArea = 'Powiat';
                     instance.$areasDropdown.attr('disabled', 'true');
                 } else {
-                    instance.areasDropdown.updateOptions(['Wszystkie', ...instance.findAreas(detail)]); // Wyswietl liste powiatow dla wojewodztwa
+                    instance.areasDropdown.updateOptions(['Powiat', ...instance.findAreas(detail)]); // Wyswietl liste powiatow dla wojewodztwa
                     instance.$areasDropdown[0].removeAttribute('disabled');
                 }
 
@@ -88,10 +88,10 @@ class KbfAreaSwitcher extends EventTarget {
         this.provinces = getProvinceNames(this.areasDictionary);
 
         // Inicjalizuj dropdown wojewodztw
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie', ...this.provinces], this.scrollBlock, true);
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Województwo', ...this.provinces], this.scrollBlock, true);
 
         // Inicjalizuj dropdown powiatow
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie', ...this.areas], this.scrollBlock, true);
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Powiat', ...this.areas], this.scrollBlock, true);
 
         // Element dropdown powiatow
         this.$areasDropdown = $('#' + this.areasId).find('button');
@@ -117,9 +117,9 @@ class KbfAreaSwitcher extends EventTarget {
 
     // Resetuje dropdown'y
     resetDropdowns() {
-        this.provincesDropdown.setActive('Wszystkie');
-        this.areasDropdown.updateOptions(['Wszystkie', ...this.areas]);
-        this.areasDropdown.setActive('Wszystkie');
+        this.provincesDropdown.setActive('Województwo');
+        this.areasDropdown.updateOptions(['Powiat', ...this.areas]);
+        this.areasDropdown.setActive('Powiat');
         this.$areasDropdown.attr('disabled', 'true');
     }
 
@@ -129,18 +129,18 @@ class KbfAreaSwitcher extends EventTarget {
         let areas;
 
         // Znajdz powiaty dla wojewodztwa
-        if (provinceName !== 'Wszystkie') {
+        if (provinceName !== 'Województwo') {
 
             areas = this.findAreas(provinceName);
 
             this.$areasDropdown[0].removeAttribute('disabled');
 
             // Zaktualizuj liste powiatow
-            if (Array.isArray(areas)) this.areasDropdown.updateOptions(['Wszystkie', ...areas]);
+            if (Array.isArray(areas)) this.areasDropdown.updateOptions(['Powiat', ...areas]);
         }
 
-        if (provinceName === 'Wszystkie') {
-            this.areasDropdown.setActive('Wszystkie');
+        if (provinceName === 'Województwo') {
+            this.areasDropdown.setActive('Powiat');
             this.$areasDropdown.attr('disabled', 'true');
         }
 
@@ -158,7 +158,7 @@ class KbfAreaSwitcher extends EventTarget {
         this.currentArea = areaName;
         this.currentProvince = provinceName;
 
-        this.areasDropdown.updateOptions(['Wszystkie', ...areas]); // Ustaw wszystkie powiaty na liscie
+        this.areasDropdown.updateOptions(['Powiat', ...areas]); // Ustaw wszystkie powiaty na liscie
 
         this.areasDropdown.setActive(this.currentArea); // Ustaw aktywny powiat
         this.provincesDropdown.setActive(this.currentProvince); // Ustaw aktywne wojewodztwo
@@ -172,7 +172,7 @@ class KbfAreaSwitcher extends EventTarget {
     // Znajduje wojewodztwo dla danego powiatu
     findProvince(areaName) {
 
-        if (areaName === 'Wszystkie') return;
+        if (areaName === 'Powiat') return;
 
         let features = window.areasGeoJSON.features;
         return features.filter(function (feature) {

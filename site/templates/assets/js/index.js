@@ -1493,6 +1493,7 @@
 
       var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      var areas = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
       _classCallCheck(this, KbfDropdown);
 
@@ -1501,6 +1502,7 @@
       if (selector === undefined) throw errors.argumentNotFound('selector');
       _this.selector = selector;
       _this.opts = opts;
+      _this.areas = areas;
       _this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
 
       _this.init(); // Inicjalizuj
@@ -1528,7 +1530,13 @@
         var dataOptions = this.$dropdowns.data('options');
         if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
 
-        this.startValue = this.$dropdowns.data('value');
+        this.startValue = this.$dropdowns.data('start-value');
+
+        if (this.startValue && !this.areas) {
+          this.startValue = this.startValue.toLowerCase();
+          this.startValue = this.startValue.substr(0, 1).toUpperCase() + this.startValue.substr(1);
+        }
+
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
@@ -1758,7 +1766,7 @@
 
         if (Array.isArray(this.opts) === false && _typeof(this.opts) === 'object') {
           // Sprawdz czy opcja istnieje
-          if (optionName in this.opts === false) throw new Error("Option ".concat(optionName, " does not exist")); // Ustaw stan
+          if (!(optionName in this.opts)) throw new Error("Option ".concat(optionName, " does not exist")); // Ustaw stan
 
           this.displayed = optionName;
           this.value = this.opts[optionName];
@@ -2639,9 +2647,9 @@
 
       _this.areas = []; // Nazwy powiatow
 
-      _this.currentProvince = 'Wszystkie'; // Aktualnie wybrane wojewodztwo
+      _this.currentProvince = 'Województwo'; // Aktualnie wybrane wojewodztwo
 
-      _this.currentArea = 'Wszystkie'; // Aktualnie wybrany powiat
+      _this.currentArea = 'Powiat'; // Aktualnie wybrany powiat
 
       _this.init(); // Inicjalizuj
 
@@ -2660,12 +2668,12 @@
         this.provincesDropdown.on('change', function (e) {
           var detail = e.detail; // Jesli wybrano wszystkie ustaw liste powiatow na wszystkie i wylacz dropdown powiatow
 
-          if (detail === 'Wszystkie') {
-            instance.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(instance.areas)));
-            instance.currentArea = 'Wszystkie';
+          if (detail === 'Województwo') {
+            instance.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(instance.areas)));
+            instance.currentArea = 'Powiat';
             instance.$areasDropdown.attr('disabled', 'true');
           } else {
-            instance.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(instance.findAreas(detail)))); // Wyswietl liste powiatow dla wojewodztwa
+            instance.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(instance.findAreas(detail)))); // Wyswietl liste powiatow dla wojewodztwa
 
             instance.$areasDropdown[0].removeAttribute('disabled');
           }
@@ -2706,9 +2714,9 @@
         this.areasDictionary = getProvinceAreaDict(areasGeoJSON);
         this.provinces = getProvinceNames(this.areasDictionary); // Inicjalizuj dropdown wojewodztw
 
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie'].concat(_toConsumableArray(this.provinces)), this.scrollBlock); // Inicjalizuj dropdown powiatow
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Województwo'].concat(_toConsumableArray(this.provinces)), this.scrollBlock, true); // Inicjalizuj dropdown powiatow
 
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie'].concat(_toConsumableArray(this.areas)), this.scrollBlock); // Element dropdown powiatow
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Powiat'].concat(_toConsumableArray(this.areas)), this.scrollBlock, true); // Element dropdown powiatow
 
         this.$areasDropdown = $('#' + this.areasId).find('button');
         this.$areasDropdown.attr('disabled', 'true'); // Pobierz dane poczatkowe dla dropdown'ow
@@ -2729,9 +2737,9 @@
     }, {
       key: "resetDropdowns",
       value: function resetDropdowns() {
-        this.provincesDropdown.setActive('Wszystkie');
-        this.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(this.areas)));
-        this.areasDropdown.setActive('Wszystkie');
+        this.provincesDropdown.setActive('Województwo');
+        this.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(this.areas)));
+        this.areasDropdown.setActive('Powiat');
         this.$areasDropdown.attr('disabled', 'true');
       } // Ustawia wojewodztwo w dropdown
 
@@ -2740,15 +2748,15 @@
       value: function updateProvince(provinceName) {
         var areas; // Znajdz powiaty dla wojewodztwa
 
-        if (provinceName !== 'Wszystkie') {
+        if (provinceName !== 'Województwo') {
           areas = this.findAreas(provinceName);
           this.$areasDropdown[0].removeAttribute('disabled'); // Zaktualizuj liste powiatow
 
-          if (Array.isArray(areas)) this.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(areas)));
+          if (Array.isArray(areas)) this.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(areas)));
         }
 
-        if (provinceName === 'Wszystkie') {
-          this.areasDropdown.setActive('Wszystkie');
+        if (provinceName === 'Województwo') {
+          this.areasDropdown.setActive('Powiat');
           this.$areasDropdown.attr('disabled', 'true');
         }
 
@@ -2766,7 +2774,7 @@
 
         this.currentArea = areaName;
         this.currentProvince = provinceName;
-        this.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(areas))); // Ustaw wszystkie powiaty na liscie
+        this.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(areas))); // Ustaw wszystkie powiaty na liscie
 
         this.areasDropdown.setActive(this.currentArea); // Ustaw aktywny powiat
 
@@ -2782,7 +2790,7 @@
     }, {
       key: "findProvince",
       value: function findProvince(areaName) {
-        if (areaName === 'Wszystkie') return;
+        if (areaName === 'Powiat') return;
         var features = window.areasGeoJSON.features;
         return features.filter(function (feature) {
           return feature.properties.name === areaName;
