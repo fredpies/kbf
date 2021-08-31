@@ -1370,12 +1370,12 @@ function get_filter($input = null, $template = "company", $pagination = true)
         }
 
         // Lokalizacja
-        if ($input->province_name && $input->province_name !== "Wszystkie") {
+        if ($input->province_name && $input->province_name !== "Województwo") {
             $province_name = $input->province_name;
             $input->whitelist("province_name", $province_name);
         }
 
-        if ($input->area_name && $input->area_name !== "Wszystkie") {
+        if ($input->area_name && $input->area_name !== "Powiat") {
             $area_name = $input->area_name;
             $input->whitelist("area_name", $area_name);
         }

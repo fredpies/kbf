@@ -1,9 +1,10 @@
 let config = {
 
-    env: 'prod',
-    url: 'https://webplanet.biz',
+    env: 'dev',
+    // url: 'https://webplanet.biz',
+    url: 'http://localhost/kbf/',
     // apiEndpoint: 'https://webplanet.biz/kbf/'
-    apiEndpoint: 'http://localhost/kbf2/'
+    apiEndpoint: 'http://localhost/kbf'
 
 };
 

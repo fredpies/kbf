@@ -110,31 +110,31 @@ class KbfDropdown extends EventTarget {
                 let $this = $(this);
 
                 // Sprawdz czy wartosci sie zmienila
-                if ($this.text() !== instance.displayed) {
+                if ($this.html() !== instance.displayed) {
 
                     // Wyswietl nowa wartosc na przycisku
-                    instance.displayed = $this.text();
-                    instance.$dropdownButtons.text(instance.displayed);
+                    instance.displayed = '<span>' + $this.text() + '</span>';
+                    instance.$dropdownButtons.html(instance.displayed);
 
                     // Ustaw ukryte pole
                     // Jeżeli opts jest obiektem
                     if (Array.isArray(instance.opts) === false && typeof instance.opts === 'object') {
                         instance.$hiddenInputs.attr({
                             name: instance.$dropdowns.data('name'),
-                            value: instance.opts[instance.displayed]
+                            value: instance.opts[$this.text()]
                         });
 
-                        instance.emit(new CustomEvent('change', {detail: instance.opts[instance.displayed]})); // Emituj nowa wartosc
+                        instance.emit(new CustomEvent('change', {detail: instance.opts[$this.text()]})); // Emituj nowa wartosc
 
                     } else
                         // Jezeli opts jest tablica
                     if (Array.isArray(instance.opts) === true) {
                         instance.$hiddenInputs.attr({
                             name: instance.$dropdowns.data('name'),
-                            value: instance.displayed
+                            value: $this.text()
                         });
 
-                        instance.emit(new CustomEvent('change', {detail: instance.displayed})); // Emituj nowa wartosc
+                        instance.emit(new CustomEvent('change', {detail: $this.text()})); // Emituj nowa wartosc
 
                     }
                 }
@@ -168,7 +168,7 @@ class KbfDropdown extends EventTarget {
             // Przygotuj elementy menu
             dropdownMenu = `<div class="dropdown-menu" aria-labelledby="${ariaLabelledBy}">`;
             do {
-                dropdownMenu += `<a class="dropdown-item" href="#">${keys[idx]}</a>`;
+                dropdownMenu += `<a class="dropdown-item" href="#"><span>${keys[idx]}</span></a>`;
             } while (idx++ < optionsLastIdx)
 
             dropdownMenu += '</div>';
@@ -190,14 +190,14 @@ class KbfDropdown extends EventTarget {
             // Przygotuj elementy menu
             dropdownMenu = `<div class="dropdown-menu" aria-labelledby="${ariaLabelledBy}">`;
             do {
-                dropdownMenu += `<a class="dropdown-item" href="#">${opts[idx]}</a>`;
+                dropdownMenu += `<a class="dropdown-item" href="#"><span>${opts[idx]}</span></a>`;
             } while (idx++ < optionsLastIdx)
 
             dropdownMenu += '</div>';
 
         }
 
-        this.$dropdownButtons.text(this.displayed); // Ustaw tekst na przycisku
+        this.$dropdownButtons.html(this.displayed); // Ustaw tekst na przycisku
         this.$dropdownButtons.on('click', function () {
             instance.initScrollBar();
 
@@ -245,7 +245,7 @@ class KbfDropdown extends EventTarget {
                 newMenuItemsHtml += `<a class="dropdown-item" href="#">${key}</a>`;
             });
 
-            this.$dropdownButtons.text(keys[0]); // Aktualizuj przycisk
+            this.$dropdownButtons.html('<span>' + keys[0] + '</span>'); // Aktualizuj przycisk
             this.$dropdownMenu.html(newMenuItemsHtml);
             this.$dropdownItems = this.$dropdownMenu.find('.dropdown-item');
             this.addListeners(); // Dodaj ponownie listenery
@@ -267,7 +267,7 @@ class KbfDropdown extends EventTarget {
                 newMenuItemsHtml += `<a class="dropdown-item" href="#">${opt}</a>`;
             });
 
-            this.$dropdownButtons.text(this.opts[0]); // Aktualizuj przycisk
+            this.$dropdownButtons.html('<span>' + this.opts[0] + '</span>'); // Aktualizuj przycisk
             this.$dropdownMenu.html(newMenuItemsHtml);
             this.$dropdownItems = this.$dropdownMenu.find('.dropdown-item');
             this.addListeners(); // Dodaj ponownie listenery
@@ -304,7 +304,7 @@ class KbfDropdown extends EventTarget {
             if (!(optionName in this.opts)) throw new Error(`Option ${optionName} does not exist`);
 
             // Ustaw stan
-            this.displayed = optionName;
+            this.displayed = '<span>' + optionName + '</span>';
             this.value = this.opts[optionName];
         }
 
@@ -315,12 +315,12 @@ class KbfDropdown extends EventTarget {
             if (this.opts.includes(optionName) === false) throw new Error(`Option ${optionName} does not exist`);
 
             // Ustaw stan
-            this.displayed = optionName;
+            this.displayed = '<span>' + optionName + '</span>';
             this.value = optionName;
 
         }
 
-        this.$dropdownButtons.text(this.displayed); // Wyswietl nowa wartosc na przycisku
+        this.$dropdownButtons.html(this.displayed); // Wyswietl nowa wartosc na przycisku
         this.updateHiddenInput(); // Aktualizuj ukryty input
 
     }
@@ -335,7 +335,7 @@ class KbfDropdown extends EventTarget {
 
             // Ustaw stan
             this.value = this.opts[keys[0]];
-            this.displayed = keys[0];
+            this.displayed = '<span>' + keys[0] + '</span>';
             this.items = keys;
 
         }
@@ -344,7 +344,7 @@ class KbfDropdown extends EventTarget {
 
             // Ustaw stan
             this.value = this.opts[0];
-            this.displayed = this.opts[0];
+            this.displayed = '<span>' + this.opts[0] + '</span>';
             this.items = this.opts;
 
         }
@@ -359,7 +359,8 @@ class KbfDropdown extends EventTarget {
 
         // Inicjuj scrollbar
         this.scrollbar = new PerfectScrollbar(this.$dropdownMenu[0], {
-            minScrollbarLength: 20
+            minScrollbarLength: 20,
+            suppressScrollX: true
         });
 
         this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');

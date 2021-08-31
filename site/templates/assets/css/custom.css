@@ -1169,9 +1169,10 @@ a.about-keywords:hover {
   width: 100%;
 }
 
-.kbf-index-area-switcher .dropdown-menu.show {
+.dropdown-menu.show {
   max-height: 200px !important;
-  overflow-y: hidden;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 @media (min-width: 900px) {
@@ -1200,8 +1201,23 @@ a.about-keywords:hover {
   position: relative;
 }
 
+.dropdown button span {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .dropdown-item {
+
   padding-left: 15px;
+}
+
+.dropdown-item span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .dropdown-menu {
