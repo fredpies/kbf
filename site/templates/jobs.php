@@ -152,7 +152,7 @@ $home_page_url = $pages->get(1)->url;
                                         <div class="kbf-index-area-switcher row">
                                             <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 WOJEWÓDZTWO</h6>
-                                            <div data-start-value="<?php if (isset($input->province_name) && $input->province_name !== 'Wszystkie') echo $input->province_name ?>"
+                                            <div data-start-value="<?php if (isset($input->province_name) && $input->province_name !== 'Województwo') echo $input->province_name ?>"
                                                  data-name="province_name" id="provinces"
                                                  class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 <button class="btn btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle w-100"
@@ -162,7 +162,7 @@ $home_page_url = $pages->get(1)->url;
                                             </div>
 
                                             <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">POWIAT</h6>
-                                            <div data-start-value="<?php if (isset($input->area_name) && $input->area_name !== 'Wszystkie') echo $input->area_name ?>" data-name="area_name" id="areas"
+                                            <div data-start-value="<?php if (isset($input->area_name) && $input->area_name !== 'Powiat') echo $input->area_name ?>" data-name="area_name" id="areas"
                                                  class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 <button class="btn btn-round btn-primary px-3 mx-0 mb-0 dropdown-toggle w-100"
                                                         type="button" id="areas-button" data-toggle="dropdown"
