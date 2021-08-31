@@ -3,8 +3,8 @@
 include_once "partials/_init.php";
 include_once "lib/functions.php";
 
-// Strona z lista firm
 $company_list_page_url = $pages->get("template=companies")->url;
+$home_page_url = $pages->get(1)->url;
 
 ?>
 
@@ -14,9 +14,9 @@ $company_list_page_url = $pages->get("template=companies")->url;
 
     <?php include_once "partials/_head.php" ?>
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="<?php echo $urls->css ?>leaflet.css">
+    <link rel="stylesheet" href="<?= $urls->css ?>leaflet.css">
     <!-- Perfect scrollbar-->
-    <link rel="stylesheet" href="<?php echo $urls->css ?>perfect-scrollbar.css">
+    <link rel="stylesheet" href="<?= $urls->css ?>perfect-scrollbar.css">
 
 </head>
 <body>
@@ -79,8 +79,8 @@ $company_list_page_url = $pages->get("template=companies")->url;
 
                 <h6 class="kbf-current-area card-title font-weight-300"></h6>
 
-                <div class="row">
-                    <div data-name="industry" id="industries" class="dropdown col-12 mb-4">
+                <div class="industries">
+                    <div data-name="industry" id="industries" class="dropdown mb-4">
                         <h6>Branża</h6>
                         <button class="btn btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle w-full"
                                 type="button"
@@ -89,11 +89,18 @@ $company_list_page_url = $pages->get("template=companies")->url;
                         </button>
                     </div>
 
-                    <div data-name="sub-industry" id="sub-industries" class="dropdown col-12 mb-4">
-                        <h6>Sub-branża</h6>
+                    <div data-name="sub-industry" id="sub-industries" class="dropdown mb-4">
                         <button class="btn btn-round btn-primary px-3 mx-0 mb-2 dropdown-toggle w-full"
                                 type="button"
                                 id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                        </button>
+                    </div>
+
+                    <div data-name="sub-sub-industry" id="sub-sub-industries" class="dropdown mb-4">
+                        <button class="btn btn-round btn-primary px-3 mx-0 mb-2 dropdown-toggle w-full"
+                                type="button"
+                                id="sub-sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                         </button>
                     </div>
@@ -109,10 +116,16 @@ $company_list_page_url = $pages->get("template=companies")->url;
     </div>
 </div>
 
+<a class="map-back-to-kbf btn btn-round btn-success mx-0 mb-3 mb-md-0"
+    href="<?= $home_page_url ?>">
+    Powrót do KBF
+</a>
+
 <!-- Show companies -->
 <form data-action="<?php echo $company_list_page_url ?>">
+
     <div class="kbf-map-show-companies">
-        <button class="btn btn-round btn-success mx-0 mb-3 mb-md-0 w-full" type="submit">
+        <button class="btn btn-round btn-primary btn-md mx-0 mb-3 mb-md-0 btn-block" type="submit">
             Pokaż listę
         </button>
     </div>

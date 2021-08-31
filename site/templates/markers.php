@@ -15,6 +15,7 @@ $provinceName = urldecode($input->get("province-name"));
 $areaName = urldecode($input->get("area-name"));
 $industry = urldecode($input->get("industry"));
 $subIndustry = urldecode($input->get("sub-industry"));
+$subSubIndustry = urldecode($input->get("sub-sub-industry"));
 
 if (!empty($provinceName) && !empty($areaName)) {
 
@@ -31,6 +32,12 @@ if (!empty($provinceName) && !empty($areaName)) {
         if (!empty($subIndustry)) {
             $subIndustry = $sanitizer->selectorValue(strtoupper($subIndustry));
             $selector .= ",sub_industry=$subIndustry";
+        }
+
+        // Sub sub branza opcjonalna
+        if (!empty($subSubIndustry)) {
+            $subSubIndustry = $sanitizer->selectorValue(strtoupper($subSubIndustry));
+            $selector .= ",sub_sub_industry=$subSubIndustry";
         }
     }
 
@@ -61,6 +68,7 @@ if (!empty($provinceName) && !empty($areaName)) {
 
                     $result["industry"] = $sanitizer->text($company->industry);
                     $result["sub-industry"] = $sanitizer->text($company->sub_industry);
+                    $result["sub-sub-industry"] = $sanitizer->text($company->sub_sub_industry);
 
                     $result["lat"] = $sanitizer->text($company->lat);
                     $result["lon"] = $sanitizer->text($company->lon);

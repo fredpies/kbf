@@ -12,7 +12,7 @@ class KbfMapPanelIndustrySwitcher extends KbfIndustrySwitcher {
         let $panel = $(selector);
         if ($panel.length === 0) throw errors.elementNotFound(selector);
 
-        super('industries', 'sub-industries');
+        super('industries', 'sub-industries', 'sub-sub-industries');
 
         this.$panel = $panel;
         this.$currentAreaInfo = $('.kbf-current-area');

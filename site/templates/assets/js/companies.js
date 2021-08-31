@@ -92818,8 +92818,8 @@
 
         $('.kbf-search-input').val(''); // Wyczysc dropdown'y
 
-        this.areaSwitcher.provincesDropdown.setActive('Wszystkie');
-        this.areaSwitcher.areasDropdown.setActive('Wszystkie');
+        this.areaSwitcher.provincesDropdown.setActive('Województwo');
+        this.areaSwitcher.areasDropdown.setActive('Powiat');
         this.industrySwitcher.industriesDropdown.setActive('Wszystkie');
         this.industrySwitcher.subIndustriesDropdown.setActive('Wszystkie');
         this.industrySwitcher.subSubIndustriesDropdown.setActive('Wszystkie');

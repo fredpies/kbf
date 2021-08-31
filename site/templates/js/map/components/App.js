@@ -47,13 +47,16 @@ class App {
         this.industrySubindustryPart = '';
         this.targetURL = '';
 
+        new KbfPreloaderButton('.map-back-to-kbf');
+
     }
 
     // Zwraca dane dla rest api dla markerow
-    getMarkersRequestData(industry, subIndustry) {
+    getMarkersRequestData(industry, subIndustry, subSubIndustry) {
         return {
             industry: industry === 'Wszystkie' ? '' : industry,
             'sub-industry': subIndustry === 'Wszystkie' ? '' : subIndustry,
+            'sub-sub-industry': subSubIndustry === 'Wszystkie' ? '' : subSubIndustry,
             'province-name': this.kbfMap.currentProvinceName,
             'area-name': this.kbfMap.currentAreaName
         };
@@ -64,6 +67,7 @@ class App {
         // Ustaw stan dla industry switcher
         this.kbfMapIndustrySwitcher.currentIndustry = 'Wszystkie';
         this.kbfMapIndustrySwitcher.currentSubIndustry = 'Wszystkie';
+        this.kbfMapIndustrySwitcher.currentSubSubIndustry = 'Wszystkie';
         this.industrySubindustryPart = '';
 
     }
@@ -78,23 +82,21 @@ class App {
             // Aktualizuj query dla branzy i sub branzy
             let currentIndustry = instance.kbfMapIndustrySwitcher.currentIndustry;
             let currentSubIndustry = instance.kbfMapIndustrySwitcher.currentSubIndustry;
+            let currentSubSubIndustry = instance.kbfMapIndustrySwitcher.currentSubSubIndustry;
 
-            if (currentIndustry == 'Wszystkie' && currentSubIndustry === 'Wszystkie') {
+            if (currentIndustry === 'Wszystkie' && currentSubIndustry === 'Wszystkie') {
                 instance.industrySubindustryPart = '';
-            }
+            } else {
+                if (currentIndustry !== 'Wszystkie') instance.industrySubindustryPart += '&industry=' + currentIndustry;
+                if (currentSubIndustry !== 'Wszystkie') instance.industrySubindustryPart += '&sub-industry=' + currentSubIndustry;
+                if (currentSubSubIndustry !== 'Wszystkie') instance.industrySubindustryPart += '&sub-sub-industry=' + currentSubSubIndustry;
 
-            if (currentIndustry !== 'Wszystkie' && currentSubIndustry === 'Wszystkie') {
-                instance.industrySubindustryPart = `industry=${currentIndustry}`;
-            }
-
-            if (currentIndustry !== 'Wszystkie' && currentSubIndustry !== 'Wszystkie') {
-                instance.industrySubindustryPart = `sub_industry=${currentSubIndustry}`;
             }
 
             instance.kbfMap.removeCompanyMarkers(); // Usun istniejace markery
             instance.$mapMiniPreloader.show(); // Pokaz preloader
 
-            let requestData = instance.getMarkersRequestData(e.detail.industry, e.detail['sub-industry']);
+            let requestData = instance.getMarkersRequestData(e.detail.industry, e.detail['sub-industry'], e.detail['sub-sub-industry']);
             try {
 
                 let companiesMarkersData = await getCompanyMarkersData(requestData);
@@ -220,7 +222,6 @@ class App {
                 // Aktualizuj liczbe markerow dodanych do mapy
                 instance.addedMarkersCount = markersData.length;
 
-
                 if (instance.addedMarkersCount > 0) {
                     instance.kbfMap.addCompanyMarkers(markersData);
                     instance.$displayCompaniesButton.show();
@@ -264,7 +265,9 @@ class App {
 
     // Ustawia target URL
     updateFormQuery() {
-        if (this.industrySubindustryPart) this.targetURL = `${this.startingFormAction}/?${this.provinceAreaQueryPart}&${this.industrySubindustryPart}`
+        if (this.industrySubindustryPart && !this.industrySubSubindustryPart) this.targetURL = `${this.startingFormAction}/?${this.provinceAreaQueryPart}&${this.industrySubindustryPart}`
+        else
+        if (this.industrySubindustryPart && this.industrySubSubindustryPart) this.targetURL = `${this.startingFormAction}/?${this.provinceAreaQueryPart}&${this.industrySubindustryPart}&${this.industrySubSubindustryPart}`
         else this.targetURL = `${this.startingFormAction}/?${this.provinceAreaQueryPart}`;
     }
 

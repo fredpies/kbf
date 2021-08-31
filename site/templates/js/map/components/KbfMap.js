@@ -35,8 +35,8 @@ class KbfMap extends EventTarget {
         this.isTouchDevice = isTouchDevice();
 
         // Ustaw wojewodztwo i powiat
-        this.currentProvinceName = 'Wszystkie';
-        this.currentAreaName = 'Wszystkie';
+        this.currentProvinceName = 'Województwo';
+        this.currentAreaName = 'Powiat';
         this.labelLayerGroup = L.layerGroup(); // Warstwa etykiet
         this.zoomedToArea = false; // Czy powiekszono do powiatu
 
@@ -249,8 +249,8 @@ class KbfMap extends EventTarget {
         this.map.scrollWheelZoom.disable(); // Wylacz scroll zoom
 
         // Ustaw nazwy wojewodztwa i powiatu
-        this.currentProvinceName = 'Wszystkie';
-        this.currentAreaName = 'Wszystkie';
+        this.currentProvinceName = 'Województwo';
+        this.currentAreaName = 'Powiat';
 
     }
 
@@ -332,7 +332,7 @@ class KbfMap extends EventTarget {
         this.removeLayers(); // Usun warstwy
         this.$nameInfo.css('zIndex', 0); // Ukryj informacje
 
-        if (provinceName !== 'Wszystkie') {
+        if (provinceName !== 'Województwo') {
 
             // Znajdz geometrie wojewodztwa
             L.geoJSON(window.provincesGeoJSON, {
@@ -419,7 +419,7 @@ class KbfMap extends EventTarget {
             this.map.removeLayer(provinceArea);
         }
 
-        if (provinceName === 'Wszystkie') this.showAll(); // Jezeli wybrano wszystkie wojewodztwa pokaz cala mape
+        if (provinceName === 'Województwo') this.showAll(); // Jezeli wybrano wszystkie wojewodztwa pokaz cala mape
 
 
     }

@@ -112,8 +112,10 @@ export async function getCompanyMarkersData(requestData) {
     let areaName = requestData['area-name'];
     let industry = requestData.industry;
     let subIndustry = requestData['sub-industry'];
+    let subSubIndustry = requestData['sub-sub-industry'];
 
     if (subIndustry.length > 0) url = `${apiEndpoint}/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}&sub-industry=${subIndustry}`;
+    if (subIndustry.length > 0 && subSubIndustry.length > 0) url = `${apiEndpoint}/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}&sub-industry=${subIndustry}&sub-sub-industry=${subSubIndustry}`;
     if (subIndustry.length === 0) url = `${apiEndpoint}/api/markers/?province-name=${provinceName}&area-name=${areaName}&industry=${industry}`;
 
     return await $.get(url).fail(function () {

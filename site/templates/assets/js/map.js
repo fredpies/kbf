@@ -167,11 +167,9 @@
 
 
       var IteratorPrototype = {};
-
-      IteratorPrototype[iteratorSymbol] = function () {
+      define(IteratorPrototype, iteratorSymbol, function () {
         return this;
-      };
-
+      });
       var getProto = Object.getPrototypeOf;
       var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
 
@@ -182,8 +180,9 @@
       }
 
       var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-      GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-      GeneratorFunctionPrototype.constructor = GeneratorFunction;
+      GeneratorFunction.prototype = GeneratorFunctionPrototype;
+      define(Gp, "constructor", GeneratorFunctionPrototype);
+      define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
       GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"); // Helper for defining the .next, .throw, and .return methods of the
       // Iterator interface in terms of a single ._invoke method.
 
@@ -288,11 +287,9 @@
       }
 
       defineIteratorMethods(AsyncIterator.prototype);
-
-      AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+      define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
         return this;
-      };
-
+      });
       exports.AsyncIterator = AsyncIterator; // Note that simple async functions are implemented on top of
       // AsyncIterator objects; they just return a Promise for the value of
       // the final result produced by the iterator.
@@ -469,13 +466,12 @@
       // object to not be returned from this call. This ensures that doesn't happen.
       // See https://github.com/facebook/regenerator/issues/274 for more details.
 
-      Gp[iteratorSymbol] = function () {
+      define(Gp, iteratorSymbol, function () {
         return this;
-      };
-
-      Gp.toString = function () {
+      });
+      define(Gp, "toString", function () {
         return "[object Generator]";
-      };
+      });
 
       function pushTryEntry(locs) {
         var entry = {
@@ -787,14 +783,19 @@
     } catch (accidentalStrictMode) {
       // This module should not be running in strict mode, so the above
       // assignment should always work unless something is misconfigured. Just
-      // in case runtime.js accidentally runs in strict mode, we can escape
+      // in case runtime.js accidentally runs in strict mode, in modern engines
+      // we can explicitly access globalThis. In older engines we can escape
       // strict mode using a global Function call. This could conceivably fail
       // if a Content Security Policy forbids using Function, but in that case
       // the proper solution is to fix the accidental strict mode problem. If
       // you've misconfigured your bundler to force strict mode and applied a
       // CSP to forbid Function, and you're not willing to fix either of those
       // problems, please detail your unique predicament in a GitHub issue.
-      Function("r", "regeneratorRuntime = r")(runtime);
+      if ((typeof globalThis === "undefined" ? "undefined" : _typeof(globalThis)) === "object") {
+        globalThis.regeneratorRuntime = runtime;
+      } else {
+        Function("r", "regeneratorRuntime = r")(runtime);
+      }
     }
   });
 
@@ -944,9 +945,10 @@
 
   var config = {
     env: 'dev',
-    url: 'https://webplanet.biz',
-    apiEndpoint: 'https://webplanet.biz/kbf/' // apiEndpoint: 'http://localhost/kbf2/'
-
+    // url: 'https://webplanet.biz',
+    url: 'http://localhost/kbf/',
+    // apiEndpoint: 'https://webplanet.biz/kbf/'
+    apiEndpoint: 'http://localhost/kbf'
   };
 
   function _arrayLikeToArray(arr, len) {
@@ -1035,7 +1037,7 @@
   } // Przygotowuje opcje dla dropdown branz
 
   function getIndustriesOptions(industries) {
-    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    var ellipsis = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     // Utworz tablice branz
     var capitalizedIndustries = [];
     industries.forEach(function (industry) {
@@ -1081,7 +1083,7 @@
 
   function getSubIndustries(_x) {
     return _getSubIndustries.apply(this, arguments);
-  } // Pobiera dane do markerow dla mapy
+  } // Pobiera nazwy sub-sub branz z rest api dla danej sub-branzy
 
   function _getSubIndustries() {
     _getSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(industryName) {
@@ -1107,16 +1109,44 @@
     return _getSubIndustries.apply(this, arguments);
   }
 
-  function getCompanyMarkersData(_x2) {
+  function getSubSubIndustries(_x2) {
+    return _getSubSubIndustries.apply(this, arguments);
+  } // Pobiera dane do markerow dla mapy
+
+  function _getSubSubIndustries() {
+    _getSubSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(subIndustryName) {
+      var $;
+      return regenerator.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              $ = window.$;
+              _context3.next = 3;
+              return $.get("".concat(apiEndpoint$1, "/api/sub-sub-industries/?sub-industry=").concat(subIndustryName));
+
+            case 3:
+              return _context3.abrupt("return", _context3.sent);
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+    return _getSubSubIndustries.apply(this, arguments);
+  }
+
+  function getCompanyMarkersData(_x3) {
     return _getCompanyMarkersData.apply(this, arguments);
   } // Zamienia placeholders w stringu
 
   function _getCompanyMarkersData() {
-    _getCompanyMarkersData = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(requestData) {
-      var $, url, provinceName, areaName, industry, subIndustry;
-      return regenerator.wrap(function _callee3$(_context3) {
+    _getCompanyMarkersData = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee4(requestData) {
+      var $, url, provinceName, areaName, industry, subIndustry, subSubIndustry;
+      return regenerator.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               $ = window.$;
               url = '';
@@ -1124,22 +1154,24 @@
               areaName = requestData['area-name'];
               industry = requestData.industry;
               subIndustry = requestData['sub-industry'];
+              subSubIndustry = requestData['sub-sub-industry'];
               if (subIndustry.length > 0) url = "".concat(apiEndpoint$1, "/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry, "&sub-industry=").concat(subIndustry);
+              if (subIndustry.length > 0 && subSubIndustry.length > 0) url = "".concat(apiEndpoint$1, "/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry, "&sub-industry=").concat(subIndustry, "&sub-sub-industry=").concat(subSubIndustry);
               if (subIndustry.length === 0) url = "".concat(apiEndpoint$1, "/api/markers/?province-name=").concat(provinceName, "&area-name=").concat(areaName, "&industry=").concat(industry);
-              _context3.next = 10;
+              _context4.next = 12;
               return $.get(url).fail(function () {
                 $('.kbf-mini-preloader').hide();
               });
 
-            case 10:
-              return _context3.abrupt("return", _context3.sent);
+            case 12:
+              return _context4.abrupt("return", _context4.sent);
 
-            case 11:
+            case 13:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3);
+      }, _callee4);
     }));
     return _getCompanyMarkersData.apply(this, arguments);
   }
@@ -1181,8 +1213,8 @@
 
       _this.isTouchDevice = isTouchDevice(); // Ustaw wojewodztwo i powiat
 
-      _this.currentProvinceName = 'Wszystkie';
-      _this.currentAreaName = 'Wszystkie';
+      _this.currentProvinceName = 'Województwo';
+      _this.currentAreaName = 'Powiat';
       _this.labelLayerGroup = L.layerGroup(); // Warstwa etykiet
 
       _this.zoomedToArea = false; // Czy powiekszono do powiatu
@@ -1392,8 +1424,8 @@
         this.map.scrollWheelZoom.disable(); // Wylacz scroll zoom
         // Ustaw nazwy wojewodztwa i powiatu
 
-        this.currentProvinceName = 'Wszystkie';
-        this.currentAreaName = 'Wszystkie';
+        this.currentProvinceName = 'Województwo';
+        this.currentAreaName = 'Powiat';
       } // Pokazuje etykiety wojewodztw
 
     }, {
@@ -1490,7 +1522,7 @@
 
         this.$nameInfo.css('zIndex', 0); // Ukryj informacje
 
-        if (provinceName !== 'Wszystkie') {
+        if (provinceName !== 'Województwo') {
           // Znajdz geometrie wojewodztwa
           L.geoJSON(window.provincesGeoJSON, {
             filter: function filter(feature) {
@@ -1569,7 +1601,7 @@
           this.map.removeLayer(provinceArea);
         }
 
-        if (provinceName === 'Wszystkie') this.showAll(); // Jezeli wybrano wszystkie wojewodztwa pokaz cala mape
+        if (provinceName === 'Województwo') this.showAll(); // Jezeli wybrano wszystkie wojewodztwa pokaz cala mape
       } // Event handler dla skalowania do powiatu
 
     }, {
@@ -1759,8 +1791,8 @@
   }
 
   /*!
-   * perfect-scrollbar v1.5.0
-   * Copyright 2020 Hyunje Jun, MDBootstrap and Contributors
+   * perfect-scrollbar v1.5.2
+   * Copyright 2021 Hyunje Jun, MDBootstrap and Contributors
    * Licensed under MIT
    */
   function get(element) {
@@ -2054,8 +2086,8 @@
     var element = i.element;
     var roundedScrollTop = Math.floor(element.scrollTop);
     var rect = element.getBoundingClientRect();
-    i.containerWidth = Math.ceil(rect.width);
-    i.containerHeight = Math.ceil(rect.height);
+    i.containerWidth = Math.round(rect.width);
+    i.containerHeight = Math.round(rect.height);
     i.contentWidth = element.scrollWidth;
     i.contentHeight = element.scrollHeight;
 
@@ -2485,10 +2517,10 @@
       if (deltaX !== deltaX && deltaY !== deltaY
       /* NaN checks */
       ) {
-          // IE in some mouse drivers
-          deltaX = 0;
-          deltaY = e.wheelDelta;
-        }
+        // IE in some mouse drivers
+        deltaX = 0;
+        deltaY = e.wheelDelta;
+      }
 
       if (e.shiftKey) {
         // reverse axis with shift key
@@ -2769,6 +2801,11 @@
             return;
           }
 
+          if (!i.element) {
+            clearInterval(easingLoop);
+            return;
+          }
+
           applyTouchMove(speed.x * 30, speed.y * 30);
           speed.x *= 0.8;
           speed.y *= 0.8;
@@ -3035,6 +3072,7 @@
 
       var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var scrollBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      var areas = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
       _classCallCheck(this, KbfDropdown);
 
@@ -3043,6 +3081,7 @@
       if (selector === undefined) throw errors.argumentNotFound('selector');
       _this.selector = selector;
       _this.opts = opts;
+      _this.areas = areas;
       _this.scrollBlock = scrollBlock; // Czy blokowac scroll po otwarciu dropdown
 
       _this.init(); // Inicjalizuj
@@ -3070,7 +3109,13 @@
         var dataOptions = this.$dropdowns.data('options');
         if (dataOptions) this.opts = dataOptions.split(','); // Wartosc poczatkowa
 
-        this.startValue = this.$dropdowns.data('value');
+        this.startValue = this.$dropdowns.data('start-value');
+
+        if (this.startValue && !this.areas) {
+          this.startValue = this.startValue.toLowerCase();
+          this.startValue = this.startValue.substr(0, 1).toUpperCase() + this.startValue.substr(1);
+        }
+
         if (this.$dropdowns.length === 0) throw errors.elementNotFound(this.selector);
         this.$dropdownButtons = this.$dropdowns.find('button'); // Przyciski dropdown
         // Wstaw ukryte pole formularza
@@ -3140,28 +3185,28 @@
           e.preventDefault();
           var $this = $(this); // Sprawdz czy wartosci sie zmienila
 
-          if ($this.text() !== instance.displayed) {
+          if ($this.html() !== instance.displayed) {
             // Wyswietl nowa wartosc na przycisku
-            instance.displayed = $this.text();
-            instance.$dropdownButtons.text(instance.displayed); // Ustaw ukryte pole
+            instance.displayed = '<span>' + $this.text() + '</span>';
+            instance.$dropdownButtons.html(instance.displayed); // Ustaw ukryte pole
             // Jeżeli opts jest obiektem
 
             if (Array.isArray(instance.opts) === false && _typeof(instance.opts) === 'object') {
               instance.$hiddenInputs.attr({
                 name: instance.$dropdowns.data('name'),
-                value: instance.opts[instance.displayed]
+                value: instance.opts[$this.text()]
               });
               instance.emit(new CustomEvent('change', {
-                detail: instance.opts[instance.displayed]
+                detail: instance.opts[$this.text()]
               })); // Emituj nowa wartosc
             } else // Jezeli opts jest tablica
               if (Array.isArray(instance.opts) === true) {
                 instance.$hiddenInputs.attr({
                   name: instance.$dropdowns.data('name'),
-                  value: instance.displayed
+                  value: $this.text()
                 });
                 instance.emit(new CustomEvent('change', {
-                  detail: instance.displayed
+                  detail: $this.text()
                 })); // Emituj nowa wartosc
               }
           }
@@ -3189,7 +3234,7 @@
           dropdownMenu = "<div class=\"dropdown-menu\" aria-labelledby=\"".concat(ariaLabelledBy, "\">");
 
           do {
-            dropdownMenu += "<a class=\"dropdown-item\" href=\"#\">".concat(keys[idx], "</a>");
+            dropdownMenu += "<a class=\"dropdown-item\" href=\"#\"><span>".concat(keys[idx], "</span></a>");
           } while (idx++ < optionsLastIdx);
 
           dropdownMenu += '</div>';
@@ -3205,13 +3250,13 @@
             dropdownMenu = "<div class=\"dropdown-menu\" aria-labelledby=\"".concat(ariaLabelledBy, "\">");
 
             do {
-              dropdownMenu += "<a class=\"dropdown-item\" href=\"#\">".concat(opts[idx], "</a>");
+              dropdownMenu += "<a class=\"dropdown-item\" href=\"#\"><span>".concat(opts[idx], "</span></a>");
             } while (idx++ < optionsLastIdx);
 
             dropdownMenu += '</div>';
           }
 
-        this.$dropdownButtons.text(this.displayed); // Ustaw tekst na przycisku
+        this.$dropdownButtons.html(this.displayed); // Ustaw tekst na przycisku
 
         this.$dropdownButtons.on('click', function () {
           instance.initScrollBar(); // Scrollbar fix !
@@ -3251,7 +3296,7 @@
           keys.forEach(function (key) {
             newMenuItemsHtml += "<a class=\"dropdown-item\" href=\"#\">".concat(key, "</a>");
           });
-          this.$dropdownButtons.text(keys[0]); // Aktualizuj przycisk
+          this.$dropdownButtons.html('<span>' + keys[0] + '</span>'); // Aktualizuj przycisk
 
           this.$dropdownMenu.html(newMenuItemsHtml);
           this.$dropdownItems = this.$dropdownMenu.find('.dropdown-item');
@@ -3268,7 +3313,7 @@
             this.opts.forEach(function (opt) {
               newMenuItemsHtml += "<a class=\"dropdown-item\" href=\"#\">".concat(opt, "</a>");
             });
-            this.$dropdownButtons.text(this.opts[0]); // Aktualizuj przycisk
+            this.$dropdownButtons.html('<span>' + this.opts[0] + '</span>'); // Aktualizuj przycisk
 
             this.$dropdownMenu.html(newMenuItemsHtml);
             this.$dropdownItems = this.$dropdownMenu.find('.dropdown-item');
@@ -3300,9 +3345,9 @@
 
         if (Array.isArray(this.opts) === false && _typeof(this.opts) === 'object') {
           // Sprawdz czy opcja istnieje
-          if (optionName in this.opts === false) throw new Error("Option ".concat(optionName, " does not exist")); // Ustaw stan
+          if (!(optionName in this.opts)) throw new Error("Option ".concat(optionName, " does not exist")); // Ustaw stan
 
-          this.displayed = optionName;
+          this.displayed = '<span>' + optionName + '</span>';
           this.value = this.opts[optionName];
         } // Jezeli opts jest tablica
 
@@ -3311,11 +3356,11 @@
           // Sprawdz czy opcja istnieje
           if (this.opts.includes(optionName) === false) throw new Error("Option ".concat(optionName, " does not exist")); // Ustaw stan
 
-          this.displayed = optionName;
+          this.displayed = '<span>' + optionName + '</span>';
           this.value = optionName;
         }
 
-        this.$dropdownButtons.text(this.displayed); // Wyswietl nowa wartosc na przycisku
+        this.$dropdownButtons.html(this.displayed); // Wyswietl nowa wartosc na przycisku
 
         this.updateHiddenInput(); // Aktualizuj ukryty input
       } // Ustawia stan
@@ -3328,7 +3373,7 @@
           var keys = Object.keys(this.opts); // Ustaw stan
 
           this.value = this.opts[keys[0]];
-          this.displayed = keys[0];
+          this.displayed = '<span>' + keys[0] + '</span>';
           this.items = keys;
         } // Jezeli opts jest tablica
 
@@ -3336,7 +3381,7 @@
         if (Array.isArray(this.opts) === true) {
           // Ustaw stan
           this.value = this.opts[0];
-          this.displayed = this.opts[0];
+          this.displayed = '<span>' + this.opts[0] + '</span>';
           this.items = this.opts;
         }
       } // Aktywuje scrollbar
@@ -3348,7 +3393,8 @@
         if (this.scrollbar) this.scrollbar.destroy(); // Inicjuj scrollbar
 
         this.scrollbar = new PerfectScrollbar(this.$dropdownMenu[0], {
-          minScrollbarLength: 20
+          minScrollbarLength: 20,
+          suppressScrollX: true
         });
         this.$psRail = this.$dropdowns.find('[class*="ps__rail-y"]');
         this.$psThumb = this.$dropdowns.find('[class*="ps__thumb-y"]'); // Wylacz pan mapy gdy kursor znajduje sie na scrollbar i mapa istnieje
@@ -3427,9 +3473,9 @@
 
       _this.areas = []; // Nazwy powiatow
 
-      _this.currentProvince = 'Wszystkie'; // Aktualnie wybrane wojewodztwo
+      _this.currentProvince = 'Województwo'; // Aktualnie wybrane wojewodztwo
 
-      _this.currentArea = 'Wszystkie'; // Aktualnie wybrany powiat
+      _this.currentArea = 'Powiat'; // Aktualnie wybrany powiat
 
       _this.init(); // Inicjalizuj
 
@@ -3448,12 +3494,12 @@
         this.provincesDropdown.on('change', function (e) {
           var detail = e.detail; // Jesli wybrano wszystkie ustaw liste powiatow na wszystkie i wylacz dropdown powiatow
 
-          if (detail === 'Wszystkie') {
-            instance.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(instance.areas)));
-            instance.currentArea = 'Wszystkie';
+          if (detail === 'Województwo') {
+            instance.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(instance.areas)));
+            instance.currentArea = 'Powiat';
             instance.$areasDropdown.attr('disabled', 'true');
           } else {
-            instance.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(instance.findAreas(detail)))); // Wyswietl liste powiatow dla wojewodztwa
+            instance.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(instance.findAreas(detail)))); // Wyswietl liste powiatow dla wojewodztwa
 
             instance.$areasDropdown[0].removeAttribute('disabled');
           }
@@ -3494,9 +3540,9 @@
         this.areasDictionary = getProvinceAreaDict(areasGeoJSON);
         this.provinces = getProvinceNames(this.areasDictionary); // Inicjalizuj dropdown wojewodztw
 
-        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Wszystkie'].concat(_toConsumableArray(this.provinces)), this.scrollBlock); // Inicjalizuj dropdown powiatow
+        this.provincesDropdown = new KbfDropdown('#' + this.provincesId, ['Województwo'].concat(_toConsumableArray(this.provinces)), this.scrollBlock, true); // Inicjalizuj dropdown powiatow
 
-        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Wszystkie'].concat(_toConsumableArray(this.areas)), this.scrollBlock); // Element dropdown powiatow
+        this.areasDropdown = new KbfDropdown('#' + this.areasId, ['Powiat'].concat(_toConsumableArray(this.areas)), this.scrollBlock, true); // Element dropdown powiatow
 
         this.$areasDropdown = $('#' + this.areasId).find('button');
         this.$areasDropdown.attr('disabled', 'true'); // Pobierz dane poczatkowe dla dropdown'ow
@@ -3517,9 +3563,9 @@
     }, {
       key: "resetDropdowns",
       value: function resetDropdowns() {
-        this.provincesDropdown.setActive('Wszystkie');
-        this.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(this.areas)));
-        this.areasDropdown.setActive('Wszystkie');
+        this.provincesDropdown.setActive('Województwo');
+        this.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(this.areas)));
+        this.areasDropdown.setActive('Powiat');
         this.$areasDropdown.attr('disabled', 'true');
       } // Ustawia wojewodztwo w dropdown
 
@@ -3528,15 +3574,15 @@
       value: function updateProvince(provinceName) {
         var areas; // Znajdz powiaty dla wojewodztwa
 
-        if (provinceName !== 'Wszystkie') {
+        if (provinceName !== 'Województwo') {
           areas = this.findAreas(provinceName);
           this.$areasDropdown[0].removeAttribute('disabled'); // Zaktualizuj liste powiatow
 
-          if (Array.isArray(areas)) this.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(areas)));
+          if (Array.isArray(areas)) this.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(areas)));
         }
 
-        if (provinceName === 'Wszystkie') {
-          this.areasDropdown.setActive('Wszystkie');
+        if (provinceName === 'Województwo') {
+          this.areasDropdown.setActive('Powiat');
           this.$areasDropdown.attr('disabled', 'true');
         }
 
@@ -3554,7 +3600,7 @@
 
         this.currentArea = areaName;
         this.currentProvince = provinceName;
-        this.areasDropdown.updateOptions(['Wszystkie'].concat(_toConsumableArray(areas))); // Ustaw wszystkie powiaty na liscie
+        this.areasDropdown.updateOptions(['Powiat'].concat(_toConsumableArray(areas))); // Ustaw wszystkie powiaty na liscie
 
         this.areasDropdown.setActive(this.currentArea); // Ustaw aktywny powiat
 
@@ -3570,7 +3616,7 @@
     }, {
       key: "findProvince",
       value: function findProvince(areaName) {
-        if (areaName === 'Wszystkie') return;
+        if (areaName === 'Powiat') return;
         var features = window.areasGeoJSON.features;
         return features.filter(function (feature) {
           return feature.properties.name === areaName;
@@ -3688,24 +3734,22 @@
 
     var _super = _createSuper$2(KbfIndustrySwitcher);
 
-    function KbfIndustrySwitcher(industriesId, subIndustriesId) {
+    function KbfIndustrySwitcher(industriesId, subIndustriesId, subSubIndustriesId) {
       var _this;
 
-      var firstOption = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Wszystkie';
-      var ellipsis = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-      var scrollBlock = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+      var firstOption = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'Wszystkie';
+      var scrollBlock = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : true;
 
       _classCallCheck(this, KbfIndustrySwitcher);
 
       // Sprawdz czy podano argumenty
       if (!industriesId) throw errors.argumentNotFound(industriesId);
       if (!subIndustriesId) throw errors.argumentNotFound(subIndustriesId);
+      if (!subSubIndustriesId) throw errors.argumentNotFound(subSubIndustriesId);
       _this = _super.call(this);
       _this.firstOption = firstOption; // Pierwsza opcja
 
       _this.scrollBlock = scrollBlock; // Czy blokowac scroll
-
-      _this.ellipsis = ellipsis; // Czy stosowac skroty
       // Aliasy
 
       _this.on = _this.addEventListener;
@@ -3717,13 +3761,21 @@
 
       _this.industriesId = industriesId;
       _this.subIndustriesId = subIndustriesId;
+      _this.subSubIndustriesId = subSubIndustriesId;
+      _this.industriesDropdownElement = document.getElementById(_this.industriesId).querySelector('button');
+      _this.subIndustriesDropdownElement = document.getElementById(_this.subIndustriesId).querySelector('button');
+      _this.subSubIndustriesDropdownElement = document.getElementById(_this.subSubIndustriesId).querySelector('button');
       _this.industries = []; // Lista branz
 
       _this.subIndustries = []; // Aktualna lista sub branz
 
+      _this.subSubIndustries = []; // Aktualna lista sub-sub branz
+
       _this.currentIndustry = _this.firstOption; // Aktualnie wybrana branza
 
       _this.currentSubIndustry = _this.firstOption; // Aktualnie wybrana sub branza
+
+      _this.currentSubSubIndustry = _this.firstOption; // Aktualnie wybrana sub-sub branza
       // Inicjalizuj
 
       _this.init().then(function () {
@@ -3731,57 +3783,179 @@
       });
 
       return _this;
-    } // Dodaje listenery
-
+    }
 
     _createClass(KbfIndustrySwitcher, [{
+      key: "fetchSubIndustries",
+      value: function () {
+        var _fetchSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(currentIndustry) {
+          var _yield$getSubIndustri, sub_industries;
+
+          return regenerator.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return getSubIndustries(currentIndustry);
+
+                case 2:
+                  _yield$getSubIndustri = _context.sent;
+                  sub_industries = _yield$getSubIndustri.sub_industries;
+                  return _context.abrupt("return", sub_industries);
+
+                case 5:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        function fetchSubIndustries(_x) {
+          return _fetchSubIndustries.apply(this, arguments);
+        }
+
+        return fetchSubIndustries;
+      }()
+    }, {
+      key: "fetchSubSubIndustries",
+      value: function () {
+        var _fetchSubSubIndustries = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(currentSubIndustry) {
+          var _yield$getSubSubIndus, sub_sub_industries;
+
+          return regenerator.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.next = 2;
+                  return getSubSubIndustries(currentSubIndustry);
+
+                case 2:
+                  _yield$getSubSubIndus = _context2.sent;
+                  sub_sub_industries = _yield$getSubSubIndus.sub_sub_industries;
+                  return _context2.abrupt("return", sub_sub_industries);
+
+                case 5:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2);
+        }));
+
+        function fetchSubSubIndustries(_x2) {
+          return _fetchSubSubIndustries.apply(this, arguments);
+        }
+
+        return fetchSubSubIndustries;
+      }()
+    }, {
+      key: "updateIndustryDropdowns",
+      value: function updateIndustryDropdowns() {
+        if (this.currentIndustry === 'Wszystkie') {
+          this.subIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+          this.subSubIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+        }
+
+        if (this.currentIndustry !== 'Wszystkie') {
+          this.subIndustriesDropdownElement.removeAttribute('disabled');
+          if (this.currentSubIndustry !== 'Wszystkie') this.subSubIndustriesDropdownElement.removeAttribute('disabled');
+          if (this.currentSubIndustry === 'Wszystkie') this.subSubIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+        }
+      } // Dodaje listenery
+
+    }, {
       key: "addListeners",
       value: function addListeners() {
         var instance = this;
         this.industriesDropdown.on('change', /*#__PURE__*/function () {
-          var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(e) {
-            var subIndustriesResult;
-            return regenerator.wrap(function _callee$(_context) {
+          var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(e) {
+            var subIndustriesopts;
+            return regenerator.wrap(function _callee3$(_context3) {
               while (1) {
-                switch (_context.prev = _context.next) {
+                switch (_context3.prev = _context3.next) {
                   case 0:
                     instance.currentIndustry = e.detail;
+                    instance.updateIndustryDropdowns();
 
                     if (!(instance.currentIndustry !== instance.firstOption)) {
-                      _context.next = 7;
+                      _context3.next = 8;
                       break;
                     }
 
-                    _context.next = 4;
-                    return getSubIndustries(instance.currentIndustry);
+                    _context3.next = 5;
+                    return instance.fetchSubIndustries(instance.currentIndustry);
 
-                  case 4:
-                    subIndustriesResult = _context.sent;
-                    instance.subIndustries = subIndustriesResult.sub_industries; // Pobierz liste sub-branz
+                  case 5:
+                    instance.subIndustries = _context3.sent;
+                    subIndustriesopts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(instance.subIndustries));
+                    instance.subIndustriesDropdown.updateOptions(subIndustriesopts);
 
-                    instance.updateEllipsis(); // Aktualizuj skroty
+                  case 8:
+                    instance.subSubIndustriesDropdown.updateOptions([instance.firstOption]);
 
-                  case 7:
                     if (instance.currentIndustry === instance.firstOption) {
                       instance.subIndustriesDropdown.updateOptions([instance.firstOption]);
                     }
 
                     instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
 
-                  case 9:
+                  case 11:
                   case "end":
-                    return _context.stop();
+                    return _context3.stop();
                 }
               }
-            }, _callee);
+            }, _callee3);
           }));
 
-          return function (_x) {
+          return function (_x3) {
             return _ref.apply(this, arguments);
           };
         }());
-        this.subIndustriesDropdown.on('change', function (e) {
-          instance.currentSubIndustry = e.detail;
+        this.subIndustriesDropdown.on('change', /*#__PURE__*/function () {
+          var _ref2 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee4(e) {
+            var subSubIndustriesopts;
+            return regenerator.wrap(function _callee4$(_context4) {
+              while (1) {
+                switch (_context4.prev = _context4.next) {
+                  case 0:
+                    instance.currentSubIndustry = e.detail;
+                    instance.updateIndustryDropdowns();
+
+                    if (!(instance.currentSubIndustry !== instance.firstOption)) {
+                      _context4.next = 8;
+                      break;
+                    }
+
+                    _context4.next = 5;
+                    return instance.fetchSubSubIndustries(instance.currentSubIndustry);
+
+                  case 5:
+                    instance.subSubIndustries = _context4.sent;
+                    subSubIndustriesopts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(instance.subSubIndustries));
+                    instance.subSubIndustriesDropdown.updateOptions(subSubIndustriesopts);
+
+                  case 8:
+                    if (instance.currentSubIndustry === instance.firstOption) {
+                      instance.subSubIndustriesDropdown.updateOptions([instance.firstOption]);
+                    }
+
+                    instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
+
+                  case 10:
+                  case "end":
+                    return _context4.stop();
+                }
+              }
+            }, _callee4);
+          }));
+
+          return function (_x4) {
+            return _ref2.apply(this, arguments);
+          };
+        }());
+        this.subSubIndustriesDropdown.on('change', function (e) {
+          instance.currentSubSubIndustry = e.detail;
           instance.emitCurrentIndustries(); // Emituj aktualne ustawienie branz
         });
       } // Inicjalizuje
@@ -3789,38 +3963,84 @@
     }, {
       key: "init",
       value: function () {
-        var _init = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2() {
-          var instance, $, opts;
-          return regenerator.wrap(function _callee2$(_context2) {
+        var _init = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee5() {
+          var instance, $, industriesOpts, subIndustriesOpts, subSubIndustriesOpts, industriesStartValue, subIndustriesStartValue, subSubIndustriesStartValue;
+          return regenerator.wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
                   instance = this; // Ustaw kontekst
 
                   $ = window.$; // Pobierz nazwy branz z rest api a nastepnie inicjuj dropdown z nazwami branz
 
-                  _context2.next = 4;
+                  _context5.next = 4;
                   return getIndustries();
 
                 case 4:
-                  this.industries = _context2.sent;
-                  // Przygotuj opcje dropdown branz jako obiekt opts
-                  opts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries, this.ellipsis)); // Inicjuj dropdowny
+                  this.industries = _context5.sent;
+                  // Przygotuj opcje dropdown
+                  industriesOpts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.industries));
+                  subIndustriesOpts = [this.firstOption];
+                  subSubIndustriesOpts = [this.firstOption];
+                  industriesStartValue = $('#' + this.industriesId).data('start-value');
+                  subIndustriesStartValue = $('#' + this.subIndustriesId).data('start-value');
+                  subSubIndustriesStartValue = $('#' + this.subSubIndustriesId).data('start-value'); // Ustaw domyslne stany dla sub i sub-sub branz
 
-                  this.industriesDropdown = new KbfDropdown('#' + this.industriesId, opts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
+                  if (!subIndustriesStartValue) {
+                    this.subIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+                    this.subSubIndustriesDropdownElement.setAttribute('disabled', 'disabled');
+                  }
 
-                  this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, [this.firstOption], this.scrollBlock); // Inicjalizuj dropdown dla sub branz
+                  if (!industriesStartValue) {
+                    _context5.next = 19;
+                    break;
+                  }
+
+                  this.subIndustriesDropdownElement.removeAttribute('disabled', 'disabled');
+                  this.currentIndustry = industriesStartValue.toLowerCase().substr(0, 1).toUpperCase() + industriesStartValue.substr(1);
+                  _context5.next = 17;
+                  return this.fetchSubIndustries(this.currentIndustry.toUpperCase());
+
+                case 17:
+                  this.subIndustries = _context5.sent;
+                  subIndustriesOpts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.subIndustries));
+
+                case 19:
+                  if (!subIndustriesStartValue) {
+                    _context5.next = 24;
+                    break;
+                  }
+
+                  this.currentSubIndustry = subIndustriesStartValue;
+                  _context5.next = 23;
+                  return this.fetchSubSubIndustries(this.currentSubIndustry);
+
+                case 23:
+                  this.subSubIndustries = _context5.sent;
+
+                case 24:
+                  if (subSubIndustriesStartValue) {
+                    this.currentSubSubIndustry = subSubIndustriesStartValue;
+                    subSubIndustriesOpts = _objectSpread(_defineProperty({}, instance.firstOption, instance.firstOption), getIndustriesOptions(this.subSubIndustries));
+                  } // Inicjuj dropdowny
+
+
+                  this.industriesDropdown = new KbfDropdown('#' + this.industriesId, industriesOpts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
+
+                  this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, subIndustriesOpts, this.scrollBlock); // Inicjalizuj dropdown dla sub branz
+
+                  this.subSubIndustriesDropdown = new KbfDropdown('#' + this.subSubIndustriesId, subSubIndustriesOpts, this.scrollBlock); // Inicjalizuj dropdown dla sub branz
                   // Ustaw responsywnosc dropdown'ow
 
                   $(window).off('resize', instance.resetDropdowns);
                   $(window).on('resize', instance.resetDropdowns.bind(instance));
 
-                case 10:
+                case 30:
                 case "end":
-                  return _context2.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee5, this);
         }));
 
         function init() {
@@ -3828,15 +4048,7 @@
         }
 
         return init;
-      }()
-    }, {
-      key: "updateEllipsis",
-      value: function updateEllipsis() {
-        var opts = _objectSpread(_defineProperty({}, this.firstOption, this.firstOption), getIndustriesOptions(this.subIndustries, this.ellipsis));
-
-        this.subIndustriesDropdown.updateOptions(opts);
-        this.currentSubIndustry = this.firstOption;
-      } // Emituje aktualne ustawienie branz
+      }() // Emituje aktualne ustawienie branz
 
     }, {
       key: "emitCurrentIndustries",
@@ -3845,7 +4057,8 @@
         this.emit(new CustomEvent('industries-changed', {
           detail: {
             industry: instance.currentIndustry,
-            'sub-industry': instance.currentSubIndustry
+            'sub-industry': instance.currentSubIndustry,
+            'sub-sub-industry': instance.currentSubSubIndustry
           }
         }));
       } // Resetuje dropdown'y
@@ -3855,8 +4068,11 @@
       value: function resetDropdowns() {
         this.industriesDropdown.setActive(this.firstOption);
         this.subIndustries = [];
+        this.subsubIndustries = [];
         this.subIndustriesDropdown.updateOptions([this.firstOption].concat(_toConsumableArray(this.subIndustries)));
         this.subIndustriesDropdown.setActive(this.firstOption);
+        this.subSubIndustriesDropdown.updateOptions([this.firstOption].concat(_toConsumableArray(this.subIndustries)));
+        this.subSubIndustriesDropdown.setActive(this.firstOption);
       } // Usuwa komponent
 
     }, {
@@ -3870,6 +4086,11 @@
         if (this.subIndustriesDropdown) {
           this.subIndustriesDropdown.destroy();
           this.subIndustriesDropdown = undefined;
+        }
+
+        if (this.subSubIndustriesDropdown) {
+          this.subSubIndustriesDropdown.destroy();
+          this.subSubIndustriesDropdown = undefined;
         }
       }
     }]);
@@ -3896,7 +4117,7 @@
       if (selector === undefined) throw errors.argumentNotFound('selector');
       var $panel = $(selector);
       if ($panel.length === 0) throw errors.elementNotFound(selector);
-      _this = _super.call(this, 'industries', 'sub-industries');
+      _this = _super.call(this, 'industries', 'sub-industries', 'sub-sub-industries');
       _this.$panel = $panel;
       _this.$currentAreaInfo = $('.kbf-current-area');
       return _this;
@@ -93291,14 +93512,16 @@
         this.provinceAreaQueryPart = '';
         this.industrySubindustryPart = '';
         this.targetURL = '';
+        new KbfPreloaderButton('.map-back-to-kbf');
       } // Zwraca dane dla rest api dla markerow
 
     }, {
       key: "getMarkersRequestData",
-      value: function getMarkersRequestData(industry, subIndustry) {
+      value: function getMarkersRequestData(industry, subIndustry, subSubIndustry) {
         return {
           industry: industry === 'Wszystkie' ? '' : industry,
           'sub-industry': subIndustry === 'Wszystkie' ? '' : subIndustry,
+          'sub-sub-industry': subSubIndustry === 'Wszystkie' ? '' : subSubIndustry,
           'province-name': this.kbfMap.currentProvinceName,
           'area-name': this.kbfMap.currentAreaName
         };
@@ -93310,6 +93533,7 @@
         // Ustaw stan dla industry switcher
         this.kbfMapIndustrySwitcher.currentIndustry = 'Wszystkie';
         this.kbfMapIndustrySwitcher.currentSubIndustry = 'Wszystkie';
+        this.kbfMapIndustrySwitcher.currentSubSubIndustry = 'Wszystkie';
         this.industrySubindustryPart = '';
       }
     }, {
@@ -93320,7 +93544,7 @@
 
         this.kbfMapIndustrySwitcher.on('industries-changed', /*#__PURE__*/function () {
           var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(e) {
-            var currentIndustry, currentSubIndustry, requestData, companiesMarkersData;
+            var currentIndustry, currentSubIndustry, currentSubSubIndustry, requestData, companiesMarkersData;
             return regenerator.wrap(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
@@ -93328,29 +93552,26 @@
                     // Aktualizuj query dla branzy i sub branzy
                     currentIndustry = instance.kbfMapIndustrySwitcher.currentIndustry;
                     currentSubIndustry = instance.kbfMapIndustrySwitcher.currentSubIndustry;
+                    currentSubSubIndustry = instance.kbfMapIndustrySwitcher.currentSubSubIndustry;
 
-                    if (currentIndustry == 'Wszystkie' && currentSubIndustry === 'Wszystkie') {
+                    if (currentIndustry === 'Wszystkie' && currentSubIndustry === 'Wszystkie') {
                       instance.industrySubindustryPart = '';
-                    }
-
-                    if (currentIndustry !== 'Wszystkie' && currentSubIndustry === 'Wszystkie') {
-                      instance.industrySubindustryPart = "industry=".concat(currentIndustry);
-                    }
-
-                    if (currentIndustry !== 'Wszystkie' && currentSubIndustry !== 'Wszystkie') {
-                      instance.industrySubindustryPart = "sub_industry=".concat(currentSubIndustry);
+                    } else {
+                      if (currentIndustry !== 'Wszystkie') instance.industrySubindustryPart += '&industry=' + currentIndustry;
+                      if (currentSubIndustry !== 'Wszystkie') instance.industrySubindustryPart += '&sub-industry=' + currentSubIndustry;
+                      if (currentSubSubIndustry !== 'Wszystkie') instance.industrySubindustryPart += '&sub-sub-industry=' + currentSubSubIndustry;
                     }
 
                     instance.kbfMap.removeCompanyMarkers(); // Usun istniejace markery
 
                     instance.$mapMiniPreloader.show(); // Pokaz preloader
 
-                    requestData = instance.getMarkersRequestData(e.detail.industry, e.detail['sub-industry']);
-                    _context.prev = 8;
-                    _context.next = 11;
+                    requestData = instance.getMarkersRequestData(e.detail.industry, e.detail['sub-industry'], e.detail['sub-sub-industry']);
+                    _context.prev = 7;
+                    _context.next = 10;
                     return getCompanyMarkersData(requestData);
 
-                  case 11:
+                  case 10:
                     companiesMarkersData = _context.sent;
                     // Aktualizuj liczbe markerow dodanych do mapy
                     instance.addedMarkersCount = companiesMarkersData.length;
@@ -93364,19 +93585,19 @@
                     } else instance.$displayCompaniesButton.hide();
 
                     instance.$mapMiniPreloader.hide();
-                    _context.next = 19;
+                    _context.next = 18;
                     break;
 
-                  case 17:
-                    _context.prev = 17;
-                    _context.t0 = _context["catch"](8);
+                  case 16:
+                    _context.prev = 16;
+                    _context.t0 = _context["catch"](7);
 
-                  case 19:
+                  case 18:
                   case "end":
                     return _context.stop();
                 }
               }
-            }, _callee, null, [[8, 17]]);
+            }, _callee, null, [[7, 16]]);
           }));
 
           return function (_x) {
@@ -93560,7 +93781,7 @@
     }, {
       key: "updateFormQuery",
       value: function updateFormQuery() {
-        if (this.industrySubindustryPart) this.targetURL = "".concat(this.startingFormAction, "/?").concat(this.provinceAreaQueryPart, "&").concat(this.industrySubindustryPart);else this.targetURL = "".concat(this.startingFormAction, "/?").concat(this.provinceAreaQueryPart);
+        if (this.industrySubindustryPart && !this.industrySubSubindustryPart) this.targetURL = "".concat(this.startingFormAction, "/?").concat(this.provinceAreaQueryPart, "&").concat(this.industrySubindustryPart);else if (this.industrySubindustryPart && this.industrySubSubindustryPart) this.targetURL = "".concat(this.startingFormAction, "/?").concat(this.provinceAreaQueryPart, "&").concat(this.industrySubindustryPart, "&").concat(this.industrySubSubindustryPart);else this.targetURL = "".concat(this.startingFormAction, "/?").concat(this.provinceAreaQueryPart);
       }
     }]);
 

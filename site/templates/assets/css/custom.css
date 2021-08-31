@@ -80,7 +80,7 @@
 }
 
 #kbf-map-panel .card {
-  height: 375px;
+  height: 400px;
 }
 
 #kbf-map-panel #areas {
@@ -114,14 +114,19 @@
   overflow-y: hidden;
 }
 
-.kbf-map-show-companies {
+.kbf-map-show-companies, .map-back-to-kbf {
   position: absolute;
-  width: 12rem;
+  width: 12rem !important;
   z-index: 5000;
-  bottom: 2rem;
+  bottom: 1rem;
+  color: white !important;
   left: 50vw;
   -webkit-transform: translate3d(-50%, 0, 0);
   transform: translate3d(-50%, 0, 0);
+}
+
+.map-back-to-kbf {
+  bottom: 4rem;
 }
 
 @media (max-width: 320px) {
