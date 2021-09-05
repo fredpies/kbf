@@ -472,7 +472,11 @@ function render_company_list_item($company_data)
 
     // Czy www firmy istnieje
     if (!empty($company_data["company_www"])) {
-        $company_www_markup = "<div class='send-message-anchor my-2 h6 font-weight-300'><a href='" . $company_data["company_www"] . "'>" . $company_data["company_www"] . "</a></div>";
+        $company_www_markup = "
+                    <a href='http://" . $company_data["company_www"] . "' class='d-inline-block d-sm-block text-dark tooltip-btn ml-1' data-toggle='tooltip' data-placement='left' title='Strona WWW' data-original-title='Wyślij wiadomość'>
+                        <img width='20' height='22' class='d-inline-block mx-auto' src='" . $urls->images . "world-wide-web.svg' alt='email-image'>
+                    </a>
+                ";
     } else $company_www_markup = "";
 
     $company_phone_1 = filter_phone_fax_number($company_data["company_phone_1"]);
@@ -521,31 +525,33 @@ function render_company_list_item($company_data)
     $company_address = $filtered_company["company_address"];
     $company_city = $filtered_company["company_city"];
 
+    $column_width = $user->isLoggedin() ? 'col-xl-6' : 'col-xl-5';
+
     // Renderuj markup
     echo "
         
-        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 company-list-item'>
+        <div class='row bg-white rounded-lg shadow-sm p-4 mb-3 company-list-item'>
             
-            <div class='col-12 col-sm-2 p-xl-4'>
-                <img src='" . $logo_url . "' alt='image' class='company-logo d-block mx-auto img-fluid mt-xl-0'>
+            <div class='col-12 col-sm-2'>
+                <img src='" . $logo_url . "' alt='image' class='company-logo d-block mx-auto img-fluid mt-xl-2'>
             </div>
             
-            <div class='col-12 col-sm-5 col-xl-6 text-center text-sm-left'>
-                <a class='company-name text-dark d-block mt-3 mb-2 font-weight-500' href='" . $company_data["company_url"] . "'><span>" . $company_name . "</span></a>
+            <div class='col-12 col-sm-5 " . $column_width . " text-center text-sm-left'>
+                <a class='company-name text-dark d-block mt-1 mb-2 font-weight-500' href='" . $company_data["company_url"] . "'><span>" . $company_name . "</span></a>
                 <div class='company-street h6 font-weight-300'>" . $company_address . "</div>
-                <div class='company-zip-city mb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] . " </span><span class='company-city'>" . $company_city . "</span></div>
-                $company_www_markup
+                <div class='company-zip-city pb-2 mb-sm-0 h6 font-weight-300'><span class='company-zip'>" . $company_data["company_zip"] . " </span><span class='company-city'>" . $company_city . "</span></div>
             </div>
-            
+
             <div class='col-12 col-sm-4 col-xl-3 text-center text-sm-left" . $margin_left . "'>
-                    <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-3' title='Telefon kontaktowy' href='tel:" . $company_phone_1 . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_phone_1 . "</a>
+                    <a class='company-phone text-dark font-weight-300 d-block text-nowrap mt-1' title='Telefon kontaktowy' href='tel:" . $company_phone_1 . "'><i class='fas fa-phone-alt mr-2'></i>" . $company_phone_1 . "</a>
                     $second_phone_markup
                     $fax_markup
             </div>
             
-                <div class='d-flex justify-content-center d-sm-block justify-content-end col-12 col-sm-1 px-0 p-xl-3 mt-2 mt-sm-3 mt-xl-0'>
+                <div class='d-flex justify-content-center d-sm-block justify-content-end col-12 mb-4 mb-sm-0 px-0 pt-xl-1 mt-2 mt-sm-1 col-sm-1 mt-xl-0'>
                     $like_markup
                     $email_markup
+                    $company_www_markup
                 </div>
                 
             </div>
@@ -567,7 +573,7 @@ function render_job_list_item($job_data)
     else $company_logo_url = $company_logo->url;
 
     echo "
-        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 job-list-item'>
+        <div class='row bg-white rounded-lg shadow-sm px-4 py-2 mb-2 job-list-item'>
 
             <div class='col-12 col-sm-2 p-xl-4'>
                 <img src='" . $company_logo_url . "' alt='image' class='company-logo d-block mx-auto img-fluid mt-xl-0'>
@@ -647,7 +653,7 @@ function render_product_list_item($product_data)
     // Renderuj markup
     echo "
     
-        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+        <div class='row bg-white rounded-lg shadow-sm px-4 py-2 mb-2 product-list-item'>
             <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
                 <img src='" . $product_image_url . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
             </div>
@@ -655,7 +661,7 @@ function render_product_list_item($product_data)
             <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
                 <a class='product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left' href='" . $product_data["product_url"] . "'><span>" . $product_data["product_name"] . "</span></a>
                 <div class='product-description font-weight-300 text-sm-left'>
-                    <p>" . get_excerpt($product_data["product_description"], 120) . "</p>
+                    ". $product_data["product_description"] . "
                 </div>
             </div>
         
@@ -684,7 +690,7 @@ function render_service_list_item($service_data)
     }
 
     echo " 
-        <div class='row bg-white rounded-lg shadow-sm p-4 mb-4 product-list-item'>
+        <div class='row bg-white rounded-lg shadow-sm px-4 py-2 mb-2 product-list-item'>
 
             <div class='col-12 col-sm-3 col-xl-2 pt-xl-0 pl-xl-2 pr-xl-2 pb-xl-2'>
                 <img src='" . "$service_image_url" . "' alt='image' class='product-image d-block mx-auto img-fluid mt-xl-0 img-thumbnail'>
@@ -692,7 +698,7 @@ function render_service_list_item($service_data)
             
             <div class='col-12 col-sm-5 col-xl-6 pt-sm-0 text-center text-lg-left'>
                 <a class='product-name text-dark d-block mt-3 mt-sm-0 mb-2 font-weight-500 text-sm-left'  href='" . $service_data["service_url"] . "'><span>" . $service_data["service_name"] . "</span></a>
-                <div class='product-description font-weight-300 text-sm-left'>" . get_excerpt($service_data["service_description"], 120) . "</div>
+                <div class='product-description font-weight-300 text-sm-left'>" . $service_data["service_description"] . "</div>
             </div>
             
             <div class='mt-1 mt-sm-0 col-12 col-sm-3 text-center font-weight-600 text-sm-left'>
@@ -1341,7 +1347,7 @@ function get_filter($input = null, $template = "company", $pagination = true)
     $sanitizer = wire("sanitizer");
 
     $query = "template=" . $template;
-    if ($pagination) $query = $query . ", limit=7";
+    if ($pagination) $query = $query . ", limit=6";
 
 // Ustaw dane z get
     if ($input) {

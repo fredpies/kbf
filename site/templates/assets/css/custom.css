@@ -396,6 +396,22 @@ body#home {
 /*  3. Produkty i usługi      */
 /******************************/
 
+.product-list-item {
+  max-height: 12rem;
+  overflow: hidden;
+}
+
+.product-description {
+  overflow: hidden;
+  max-height: 4rem;
+  text-overflow: ellipsis;
+}
+
+.product-description p {
+  margin-bottom: 0 !important;
+
+}
+
 .company-service-info, .product-service-info {
   position: relative;
 }
@@ -622,8 +638,13 @@ input[name*="sub-industry"] + .error {
 /* 6. Listy                   */
 /******************************/
 
+.company-list-item {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .company-list-item .company-logo, .job-list-item .company-logo {
-  width: 18%;
+  max-width: 70px;
 }
 
 .company-list-item .company-name, .job-list-item .job-name {
@@ -646,14 +667,13 @@ input[name*="sub-industry"] + .error {
 
   }
 
-
   .company-list-item .company-street, .company-list-item .company-zip, .company-list-item .company-zip-city, .company-list-item .send-message-anchor {
     font-size: 0.8rem;
   }
 
   .company-list-item .company-logo, .job-list-item .company-logo {
     width: auto;
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
   }
 
   .company-list-item .company-phone {

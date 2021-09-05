@@ -74,7 +74,7 @@ class KbfIndustryFilter extends EventTarget {
         let $ = window.$;
 
         // Wyczysc pole wyszukiwania
-        $('.kbf-search-input').val('');
+        $('[name=keywords]').val('');
 
         // Wyczysc dropdown'y
         this.areaSwitcher.provincesDropdown.setActive('Województwo');

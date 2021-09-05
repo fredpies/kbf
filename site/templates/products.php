@@ -108,15 +108,12 @@ $home_page_url = $pages->get(1)->url;
                                     </button>
                                 </div>
 
-                                <div class="my-2 px-5 d-lg-none" style="font-size: 0.75rem;"><span class="text-right"><i
-                                                class="fas fa-info text-primary mr-2"></i></span>
-                                    Użyj powyższego przycisku filtrowania w celu ograniczenia liczby wyników według zadanych kryteriów.
-                                </div>
+
 
                                 <div id="sidebarMenu" class="d-lg-block collapse">
 
                                     <!-- Industries switcher-->
-                                    <div class="row">
+                                    <div class="flex">
                                         <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">BRANŻA</h6>
 
                                         <div data-start-value="<?php if (isset($input->industry) && $input->industry !== 'Wszystkie') echo $input->industry ?>" data-name="industry" id="industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
@@ -138,7 +135,7 @@ $home_page_url = $pages->get(1)->url;
                                         <div data-start-value="<?php if ($input->get('sub-sub-industry') !== null && $input->get('sub-sub-industry') !== 'Wszystkie') echo $input->get('sub-sub-industry') ?>" data-name="sub-sub-industry" id="sub-sub-industries" class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                             <button class="btn btn-round btn-primary px-3 mx-0 mb-2 dropdown-toggle btn-block"
                                                     type="button"
-                                                    id="sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
+                                                    id="sub-sub-industries-button" data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="false">
                                             </button>
                                         </div>
@@ -148,10 +145,10 @@ $home_page_url = $pages->get(1)->url;
 
                                     <!-- Provinces area switcher-->
                                     <div class="list-group list-group-flush py-0">
-                                        <div class="kbf-index-area-switcher row">
+                                        <div class="kbf-index-area-switcher flex">
                                             <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
-                                                WOJEWÓDZTWO</h6>
-                                            <div data-start-value="<?php if (isset($input->province_name) && $input->province_name !== 'Województow') echo $input->province_name ?>"
+                                                LOKALIZACJA</h6>
+                                            <div data-start-value="<?php if (isset($input->province_name) && $input->province_name !== 'Województwo') echo $input->province_name ?>"
                                                  data-name="province_name" id="provinces"
                                                  class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 <button class="btn btn-round btn-primary px-3 mx-0 mb-3 mb-md-0 dropdown-toggle w-100"
@@ -160,7 +157,6 @@ $home_page_url = $pages->get(1)->url;
                                                         aria-expanded="false"></button>
                                             </div>
 
-                                            <h6 class="font-weight-700 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">POWIAT</h6>
                                             <div data-start-value="<?php if (isset($input->area_name) && $input->area_name !== 'Powiat') echo $input->area_name ?>" data-name="area_name" id="areas"
                                                  class="dropdown col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2 mb-3">
                                                 <button class="btn btn-round btn-primary px-3 mx-0 mb-0 dropdown-toggle w-100"
@@ -173,7 +169,7 @@ $home_page_url = $pages->get(1)->url;
                                     </div>
                                     <!-- End of provinces area switcher-->
 
-                                    <div class="row">
+                                    <div class="flex">
                                         <div class="col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-5">
                                             <button type="submit" class="kbf-filter-button btn btn-round btn-warning btn-block">Filtruj</button>
                                         </div>
@@ -181,8 +177,8 @@ $home_page_url = $pages->get(1)->url;
 
                             </form>
 
-                            <form method="get" action="<?= $pages->get("template=companies")->url; ?>" role="form">
-                                <div class="row">
+                            <form method="get" action="<?= $pages->get('template=products')->url; ?>" role="form">
+                                <div class="flex">
                                     <div class="col-12 px-4 px-md-5 px-lg-4 px-xl-5 mt-2">
                                         <button type="submit" class="kbf-reset-button btn btn-round btn-danger btn-block">Wyczyść</button>
                                     </div>
@@ -191,8 +187,6 @@ $home_page_url = $pages->get(1)->url;
                             </form>
 
                         </div>
-
-
                     </div>
                 </div>
                 <!-- End of sidebar-->
@@ -224,15 +218,6 @@ $home_page_url = $pages->get(1)->url;
                                 <div class="col-12 col-xl-5"></div>
 
                             </div>
-
-
-                            <nav class="mt-3" aria-label="Companies navigation">
-                                <?php
-
-                                // Paginacja
-                                echo $pagination
-                                ?>
-                            </nav>
 
                             <?php
                                 // Lista produktów

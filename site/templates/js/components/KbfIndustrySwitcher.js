@@ -133,8 +133,6 @@ class KbfIndustrySwitcher extends EventTarget {
         let instance = this; // Ustaw kontekst
         let $ = window.$;
 
-
-
         // Pobierz nazwy branz z rest api a nastepnie inicjuj dropdown z nazwami branz
         this.industries = await getIndustries();
 
@@ -178,7 +176,6 @@ class KbfIndustrySwitcher extends EventTarget {
         this.industriesDropdown = new KbfDropdown('#' + this.industriesId, industriesOpts, this.scrollBlock); // Inicjalizuj dropdown z nazwami branz
         this.subIndustriesDropdown = new KbfDropdown('#' + this.subIndustriesId, subIndustriesOpts, this.scrollBlock); // Inicjalizuj dropdown dla sub branz
         this.subSubIndustriesDropdown = new KbfDropdown('#' + this.subSubIndustriesId, subSubIndustriesOpts, this.scrollBlock); // Inicjalizuj dropdown dla sub branz
-
 
         // Ustaw responsywnosc dropdown'ow
         $(window).off('resize', instance.resetDropdowns);

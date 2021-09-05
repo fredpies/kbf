@@ -149,7 +149,7 @@ $home_page_url = $pages->get(1)->url;
 <script src="<?php echo $urls->js ?>vendor/leaflet.js"></script>
 
 <!-- Leaflet Providers js -->
-<script src="<?php echo $urls->js ?>vendor/leaflet-providers.js"></script>
+<script src="<?php echo $urls->js ?>vendor/leaflet-providers.min.js"></script>
 
 <!-- Main script -->
 <script src="<?php echo $urls->js ?>map.js"></script>

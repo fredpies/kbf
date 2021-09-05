@@ -97,7 +97,7 @@ jQuery(document).ready(function() {
 
     animateViewport();
 
-    // Animum progress gdy znajdzie sie w viewport
+    // Animuj progress gdy znajdzie sie w viewport
     function progressBarViewport() {
         $('.progress-bar').each(function() {
         var progressCount1 = $(this).parent('.progress').prev('.progress-label').find('.progress-count'),
@@ -254,12 +254,12 @@ jQuery(document).ready(function() {
     /* ==================================================
     Ustawienia Fancybox  - [data-fancybox]
     ================================================== */
-    $('[data-fancybox]').fancybox({
-        loop: true,
-        protect: true,
-        transitionEffect: "circular",
-        transitionDuration: 500
-    });
+    // $('[data-fancybox]').fancybox({
+    //     loop: true,
+    //     protect: true,
+    //     transitionEffect: "circular",
+    //     transitionDuration: 500
+    // });
 
     /* =====================================================
     Zmien ustawienia dla owl carousel - .carousel-component

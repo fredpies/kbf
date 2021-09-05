@@ -50,7 +50,7 @@ $config->useFunctionsAPI = true;
  * Installer: Database Configuration
  * 
  */
-$config->dbHost = 'localhost';
+$config->dbHost = '127.0.0.1';
 $config->dbName = 'kbf';
 $config->dbUser = 'root';
 $config->dbPass = '';
